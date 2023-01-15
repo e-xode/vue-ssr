@@ -1,0 +1,105 @@
+{
+    "description": "e-xode.vue-ssr",
+    "name": "e-xode.vue-ssr",
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/vue-ssr.umd.cjs",
+    "module": "./dist/vue-ssr.umd.cjs",
+    "type": "module",
+    "license": "MIT",
+    "version": "0.0.1",
+    "scripts": {
+        "build": "vite --config vite.config.mjs build src",
+        "dev": "vite --host --config vite.config.mjs src",
+        "lint": "eslint --ext .js,.vue src",
+        "preview": "vite --config vite.config.mjs preview src",
+        "test:unit": "jest --clearCache && jest",
+        "test:unit:coverage": "jest --clearCache && jest --coverage",
+        "test:unit:watch": "jest --clearCache && jest --watch"
+    },
+    "babel": {
+        "presets": [
+            [
+                "@babel/preset-env",
+                {
+                    "targets": {
+                        "node": "current"
+                    }
+                }
+            ]
+        ]
+    },
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "eslint:recommended",
+            "plugin:vue/vue3-recommended"
+        ],
+        "rules": {
+            "vue/multi-word-component-names": "off",
+            "vue/html-indent": [
+                "error",
+                4
+            ]
+        }
+    },
+    "jest": {
+        "moduleFileExtensions": [
+            "js",
+            "mjs",
+            "json",
+            "vue"
+        ],
+        "moduleNameMapper": {
+            "^@/(.*)$": "<rootDir>/src/$1"
+        },
+        "setupFiles": [],
+        "testEnvironment": "jsdom",
+        "testEnvironmentOptions": {
+            "customExportConditions": [
+                "node",
+                "node-addons"
+            ]
+        },
+        "testMatch": [
+            "**/?(*.)+(spec).mjs"
+        ],
+        "transform": {
+            "^.+\\.m?js$": "babel-jest",
+            "^.+\\.vue$": "@vue/vue3-jest"
+        },
+        "transformIgnorePatterns": [
+            "/node_modules/"
+        ]
+    },
+    "dependencies": {
+        "@babel/preset-env": "7.20.2",
+        "@e-xode/vui": "latest",
+        "@fortawesome/fontawesome-free": "6.2.1",
+        "@vitejs/plugin-vue": "^4.0.0",
+        "@vue/test-utils": "2.2.7",
+        "@vue/vue3-jest": "29.2.2",
+        "dayjs": "^1.11.7",
+        "eslint": "8.31.0",
+        "eslint-plugin-vue": "9.8.0",
+        "express": "^4.18.2",
+        "highlight.js": "11.7.0",
+        "jest": "29.3.1",
+        "jest-environment-jsdom": "29.3.1",
+        "jsdom": "20.0.3",
+        "mitt": "3.0.0",
+        "ramda": "0.28.0",
+        "sass": "1.57.1",
+        "vite": "^4.0.4",
+        "vite-plugin-linter": "2.0.2",
+        "vite-plugin-rewrite-all": "1.0.1",
+        "vue": "^3.2.45",
+        "vue-i18n": "9.2.2",
+        "vue-router": "4.1.6",
+        "vuex": "^4.1.0"
+    }
+}

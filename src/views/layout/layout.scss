@@ -1,0 +1,41 @@
+.vui-page.layout-default {
+    max-width: 1199px;
+    margin: 0 auto;
+
+    .vui-page-header {
+        padding: 0;
+
+        .vui-header {
+            text-align: right;
+            background-color: #3d4f58;
+
+            a {
+                color: white;
+                border-color: rgba(white, .5);
+            }
+        }
+    }
+
+    .vui-page-body {
+        .view-index {
+        }
+    }
+
+    .vui-page-footer {
+        padding: 0;
+
+        .vui-footer {
+            text-align: right;
+            background-color: #3d4f58;
+
+            span {
+                font-size: .8rem;
+                color: white;
+
+                a {
+                    color: white;
+                }
+            }
+        }
+    }
+}
