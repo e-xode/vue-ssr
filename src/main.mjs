@@ -7,4 +7,4 @@ if (storeInitialState) {
     store.replaceState(storeInitialState)
 }
 
-router.isReady().then(() => app.mount('.app', true))
+router.isReady().then(() => app.mount('#app', true))

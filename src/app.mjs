@@ -1,15 +1,13 @@
 import { createSSRApp, createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
-import dayjs from 'dayjs'
-import vui from '@e-xode/vui'
+import vui from '@e-xode/vui/dist/vui.es.js'
 
-import { router } from '@/router.mjs'
-import store from '@/store/store.mjs'
-import { en, fr } from '@/translate/index.mjs'
+import store from '/src/store/store.mjs'
+import { router } from '/src/router.mjs'
+import { en, fr } from '/src/translate/index.mjs'
+import App from '/src/app.vue'
 
-import App from '@/app.vue'
-
-export default function buildApp() {
+export default function build() {
     const i18n = new createI18n({
         legacy: false,
         locale: 'en',
@@ -18,12 +16,9 @@ export default function buildApp() {
     const app = typeof window === 'undefined'
         ? createSSRApp(App)
         : createApp(App)
-
     app.use(router)
-    app.use(store)
     app.use(i18n)
+    app.use(store)
     app.use(vui)
-    app.config.globalProperties.dayjs = dayjs
-
     return { app, router, store }
 }
