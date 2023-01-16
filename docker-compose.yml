@@ -1,14 +1,14 @@
 version: '3'
 services:
     node:
-        container_name: e-xode.app
+        container_name: e-xode.vue-ssr
         build:
             context: 'docker/dev'
         volumes:
             - '.:/app'
         ports:
             - 3002:3002
-            - 443:443
+            - 24678:24678
         env_file:
             - ./.env
         networks:

@@ -1,5 +1,5 @@
 import { renderToString } from '@vue/server-renderer'
-import build from '/src//app.mjs'
+import build from '/src/app.mjs'
 
 const renderCss = async(vite) => {
     const mod = await vite.moduleGraph.getModuleByUrl('/src/app.vue')
