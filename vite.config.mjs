@@ -5,16 +5,24 @@ import vue from '@vitejs/plugin-vue'
 const __dirname = dirname('./')
 
 export default defineConfig({
-    publicDir: resolve(__dirname, 'public'),
     resolve: {
-        alias: {
-            '@': resolve(__dirname, 'src'),
-            '/src': resolve(__dirname, 'src'),
-            'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js'
-        }
+        alias: [
+            {
+                find: '@',
+                replacement: resolve(__dirname, 'src'),
+            },
+            {
+                find: '/src',
+                replacement: resolve(__dirname, 'src'),
+            },
+            {
+                find: 'vue-i18n',
+                replacement: 'vue-i18n/dist/vue-i18n.cjs.js'
+            }
+        ]
     },
     build: {
-        outDir: resolve(__dirname, 'dist'),
+        outDir: resolve(__dirname, 'dist/client'),
         emptyOutDir: true
     },
     plugins: [
