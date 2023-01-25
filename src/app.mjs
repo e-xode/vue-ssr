@@ -1,5 +1,6 @@
 import { createSSRApp, createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
+import dayjs from 'dayjs'
 import vui from '@e-xode/vui/dist/vui.esm.js'
 
 import store from '@/store/store.mjs'
@@ -16,9 +17,12 @@ export default function build() {
     const app = typeof window === 'undefined'
         ? createSSRApp(App)
         : createApp(App)
+
     app.use(router)
     app.use(i18n)
     app.use(store)
     app.use(vui)
+    app.config.globalProperties.dayjs = dayjs
+
     return { app, router, store }
 }
