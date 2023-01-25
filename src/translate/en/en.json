@@ -1,4 +1,16 @@
 {
     "component.header.home": "Home",
-    "page.index.h1": "Index"
+    "page.index.h1": "Index",
+    "page.index.login": "Login",
+    "page.index.register": "Register",
+    "page.login.h1": "Login",
+    "page.login.captcha": "Captcha",
+    "page.login.email": "Email",
+    "page.login.password": "Password",
+    "page.login.submit": "Submit",
+    "page.register.captcha": "Captcha",
+    "page.register.email": "Email",
+    "page.register.password": "Password",
+    "page.register.submit": "Submit",
+    "page.register.h1": "Register"
 }
