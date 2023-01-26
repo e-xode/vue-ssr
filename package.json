@@ -4,10 +4,11 @@
     "files": [
         "dist"
     ],
-    "main": "./dist/server.js",
-    "type": "module",
+    "imports": {
+        "#src/*": "./src/*"
+    },
     "license": "MIT",
-    "version": "0.0.1",
+    "main": "./dist/server.js",
     "scripts": {
         "build": "npm run build:client && npm run build:server",
         "build:client": "vite --config vite.config.mjs build src/",
@@ -15,6 +16,8 @@
         "dev": "node src/server/server.mjs",
         "lint": "eslint --ext .js,.vue src"
     },
+    "type": "module",
+    "version": "0.0.1",
     "babel": {
         "presets": [
             [

@@ -14,6 +14,6 @@ WORKDIR /app
 RUN mkdir /home/node/.npm-global
 RUN npm install -g npm@latest
 
-EXPOSE 3002 24678
+EXPOSE 3002
 
 CMD ["/bin/sh", "/scripts/run.sh"]

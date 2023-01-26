@@ -1,5 +1,5 @@
-import en from '/src/translate/en/en.json'
-import fr from '/src/translate/fr/fr.json'
+import en from '@/translate/en/en.json'
+import fr from '@/translate/fr/fr.json'
 
 export {
     en,

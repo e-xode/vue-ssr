@@ -28,14 +28,14 @@ ENV NODE_ENV=production
 RUN apk update
 RUN apk --no-cache add supervisor
 
-EXPOSE 3002 24678
+EXPOSE 3002
 
 WORKDIR /app/dist
 
 COPY --from=builder /app/dist/ /app/dist/
 COPY --from=builder /app/node_modules /app/dist/node_modules
 COPY --from=builder /app/package.json /app/dist/
-COPY --from=builder /app/src/server /app/dist/
+COPY --from=builder /app/src/server /app/dist/src/server/
 COPY ./docker/build/config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
