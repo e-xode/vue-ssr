@@ -1,4 +1,4 @@
-import { log } from '../shared/index.mjs'
+import { log } from '../shared/log.mjs'
 
 const socket = ({ io, db }) => {
     io.on('disconnect', (socket) => {
