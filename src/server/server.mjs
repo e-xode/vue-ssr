@@ -8,8 +8,9 @@ import sharedsession from "express-socket.io-session"
 import { createServer } from 'vite'
 import { Server } from 'socket.io'
 
-import { renderCSS } from './shared/index.mjs'
-import { log, mongo } from './shared/index.mjs'
+import { cssModules, cssExtract } from './shared/css.mjs'
+import { log } from './shared/log.mjs'
+import { mongo } from './shared/db.mjs'
 import { socket } from './socket/socket.mjs'
 
 import { APP_PORT, IS_PROD, VITE_OPTS } from './shared/constant.mjs'
@@ -20,6 +21,8 @@ mongo(async (db, err) => {
         return process.exit()
     }
     const app = express()
+    const httpServer = http.Server(app)
+    const io = new Server(httpServer, { cors: { origin: '*' }})
     const fileStore = sessionFileStore(session)
     const sessionMiddleware = session({
         store: new fileStore({ path: 'data/tmp' }),
@@ -28,10 +31,12 @@ mongo(async (db, err) => {
         resave: true,
         saveUninitialized: true
     })
-    const io = new Server(http.Server(app), { cors: { origin: '*' }})
     const vite = IS_PROD
         ? null
         : await createServer(VITE_OPTS)
+    const index = IS_PROD
+        ? fs.readFileSync('/app/dist/client/index.html', 'utf-8')
+        : fs.readFileSync('./src/index.html', 'utf-8')
     if (!IS_PROD) {
         app.use(vite.middlewares)
     }
@@ -40,13 +45,6 @@ mongo(async (db, err) => {
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
     app.use(sessionMiddleware)
-    io.use(sharedsession(sessionMiddleware))
-    socket({ io, db })
-
-    const index = IS_PROD
-        ? fs.readFileSync('/app/dist/client/index.html', 'utf-8')
-        : fs.readFileSync('./src/index.html', 'utf-8')
-
     app.use('*', async (req, res) => {
         try {
             const template = IS_PROD
@@ -57,9 +55,10 @@ mongo(async (db, err) => {
                 ? await import('/app/dist/server/ssr.js')
                 : await vite.ssrLoadModule('/src/server/ssr.mjs')
 
-            const { html } = await render({ db, req, template })
-            const { css } = await renderCSS(vite)
-
+            const { html, paths } = await render({ db, req, template })
+            const css = !IS_PROD
+                ? cssExtract(cssModules(paths, vite))
+                : ''
             res
                 .status(200)
                 .set({ 'Content-Type': 'text/html' })
@@ -72,6 +71,8 @@ mongo(async (db, err) => {
             res.status(500).end(e.stack)
         }
     })
-    app.listen(APP_PORT)
+    io.use(sharedsession(sessionMiddleware))
+    socket({ db, io})
+    httpServer.listen(APP_PORT)
     log(`http://localhost:${APP_PORT}`)
 })

@@ -9,11 +9,20 @@ const render = async({ db, req, template }) => {
     await router.isReady()
 
     const ctx = {}
+    const { currentRoute } = router
     const html = await renderToString(app, ctx)
 
+    const components = currentRoute.value.matched.reduce((array, route) => {
+        return array.concat(route.components)
+    }, [])
+
+    const paths = components.reduce((array, component) =>
+        [...array, component.default.__file]
+    , ['/home/christophe/workspace/e-xode.vue-ssr/src/app.vue'])
+
     return {
-        ctx,
-        html: template.replace(`<!--app-html-->`, html)
+        html: template.replace(`<!--app-html-->`, html),
+        paths
     }
 }
 
