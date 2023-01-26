@@ -12,7 +12,7 @@ if (storeInitialState) {
 }
 
 app.config.globalProperties.$socket = io(
-    'localhost:3002',
+    '0.0.0.0:3002',
     { secure:  process.env.NODE_ENV !== 'development' }
 )
 

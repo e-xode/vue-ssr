@@ -12,6 +12,10 @@ export default defineConfig({
                 replacement: resolve(__dirname, 'src'),
             },
             {
+                find: '#src',
+                replacement: resolve(__dirname, 'src'),
+            },
+            {
                 find: '/src',
                 replacement: resolve(__dirname, 'src'),
             },
@@ -22,8 +26,9 @@ export default defineConfig({
         ]
     },
     build: {
-        outDir: resolve(__dirname, 'dist/client'),
-        emptyOutDir: true
+        emptyOutDir: true,
+        manifest: true,
+        outDir: resolve(__dirname, 'dist/client')
     },
     plugins: [
         vue()

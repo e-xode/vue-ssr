@@ -1,5 +1,4 @@
 const {
-    APP_PORT = 3002,
     NODE_ENV = 'production'
 } = process.env
 
@@ -21,7 +20,6 @@ const VITE_OPTS = {
 }
 
 export {
-    APP_PORT,
     IS_PROD,
     VITE_OPTS
 }

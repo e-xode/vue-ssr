@@ -8,12 +8,12 @@ import sharedsession from "express-socket.io-session"
 import { createServer } from 'vite'
 import { Server } from 'socket.io'
 
-import { cssModules, cssExtract } from './shared/css.mjs'
-import { log } from './shared/log.mjs'
-import { mongo } from './shared/db.mjs'
-import { socket } from './socket/socket.mjs'
+import { cssModules, cssExtract } from '#src/server/shared/css.mjs'
+import { log } from '#src/server/shared/log.mjs'
+import { mongo } from '#src/server/shared/db.mjs'
+import { socket } from '#src/server/socket/socket.mjs'
 
-import { APP_PORT, IS_PROD, VITE_OPTS } from './shared/constant.mjs'
+import { IS_PROD, VITE_OPTS } from '#src/server/shared/constant.mjs'
 
 mongo(async (db, err) => {
     if (!db || err) {
@@ -73,6 +73,6 @@ mongo(async (db, err) => {
     })
     io.use(sharedsession(sessionMiddleware))
     socket({ db, io})
-    httpServer.listen(APP_PORT)
-    log(`http://localhost:${APP_PORT}`)
+    httpServer.listen(3002)
+    log(`http://localhost:3002`)
 })

@@ -1,5 +1,5 @@
 import { renderToString } from '@vue/server-renderer'
-import build from '/src/app.mjs'
+import build from '#src/app.mjs'
 
 const render = async({ db, req, template }) => {
 
@@ -18,7 +18,7 @@ const render = async({ db, req, template }) => {
 
     const paths = components.reduce((array, component) =>
         [...array, component.default.__file]
-    , ['/home/christophe/workspace/e-xode.vue-ssr/src/app.vue'])
+    , ['/app/src/app.vue'])
 
     return {
         html: template.replace(`<!--app-html-->`, html),
