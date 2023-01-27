@@ -1,5 +1,4 @@
 import { io } from 'socket.io-client'
-import { cssRemove } from '@/server/shared/css.mjs'
 import buildApp from '@/app.mjs'
 
 
@@ -17,4 +16,3 @@ app.config.globalProperties.$socket = io(
 )
 
 router.isReady().then(() => app.mount('#app', true))
-cssRemove()

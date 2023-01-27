@@ -58,10 +58,14 @@ mongo(async (db, err) => {
             const css = !IS_PROD
                 ? cssExtract(cssModules(paths, vite))
                 : ''
+
             res
                 .status(200)
                 .set({ 'Content-Type': 'text/html' })
-                .end(html.replace('<!--dev-css-->', css))
+                .end(html.replace(
+                    /(<!--css-->)*(<!--css-->)/,
+                    `<!--css-->${css}<!--css-->`
+                ))
 
         } catch (e) {
             if (!IS_PROD) {

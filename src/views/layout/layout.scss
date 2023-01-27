@@ -4,10 +4,12 @@
 
     .vui-page-header {
         padding: 0;
+        margin: 0 -1px;
 
         .vui-header {
-            text-align: right;
+            text-align: left;
             background-color: #3d4f58;
+            border: none;
 
             a {
                 color: white;
@@ -23,17 +25,21 @@
 
     .vui-page-footer {
         padding: 0;
+        margin: 0 -1px;
 
         .vui-footer {
             text-align: right;
             background-color: #3d4f58;
+            border: none;
 
             span {
-                font-size: .8rem;
+                font-size: .85rem;
                 color: white;
 
                 a {
                     color: white;
+                    text-decoration: none;
+                    border-bottom: 1px solid white;
                 }
             }
         }

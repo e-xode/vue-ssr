@@ -36,22 +36,7 @@ const cssExtract = ( modules, styles = [], checked = [] ) => {
     }, '')
 }
 
-const cssRemove = () => {
-    if (import.meta.hot) {
-        import.meta.hot.on("vite:beforeUpdate", (module) => {
-            module.updates.forEach(({ acceptedPath }) => {
-                const selector = `[css-id="${hash(acceptedPath)}"]`
-                const style = document.querySelector(selector)
-                if (style) {
-                    style.remove()
-                }
-            })
-        })
-    }
-}
-
 export {
     cssExtract,
-    cssModules,
-    cssRemove
+    cssModules
 }
