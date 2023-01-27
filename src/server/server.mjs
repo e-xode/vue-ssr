@@ -5,7 +5,6 @@ import http from 'http'
 import session from 'express-session'
 import sessionFileStore from 'session-file-store'
 import sharedsession from "express-socket.io-session"
-import { createServer } from 'vite'
 import { Server } from 'socket.io'
 
 import { cssModules, cssExtract } from '#src/server/shared/css.mjs'
@@ -33,7 +32,7 @@ mongo(async (db, err) => {
     })
     const vite = IS_PROD
         ? null
-        : await createServer(VITE_OPTS)
+        : await import('vite').then(({ createServer }) => createServer(VITE_OPTS))
     const index = IS_PROD
         ? fs.readFileSync('/app/dist/client/index.html', 'utf-8')
         : fs.readFileSync('./src/index.html', 'utf-8')
