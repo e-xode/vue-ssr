@@ -1,13 +1,18 @@
 .view-index {
+    text-align: center;
+
     h1 {
         padding: 0 0 1rem 0;
+        text-align: left;
     }
     .links {
         display: flex;
+        padding-bottom: 2rem;
         justify-content: center;
 
         a {
             padding: 0 1rem;
+            margin: 0 1rem;
         }
     }
 }

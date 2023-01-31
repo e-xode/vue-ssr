@@ -8,6 +8,17 @@
                 >
                     {{ $t('component.header.home') }}
                 </router-link>
+                <vui-dropdown
+                    item-label="label"
+                    item-value="value"
+                    :placeholder="email"
+                    :items="[
+                        {
+                            label: $t('component.header.logout'),
+                            value: 'logout'
+                        }
+                    ]"
+                />
             </vui-header>
         </template>
         <template #body>
