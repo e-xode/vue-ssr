@@ -1,4 +1,4 @@
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     name: 'DefaultLayout',
@@ -11,6 +11,17 @@ export default {
     computed: {
         ...mapGetters('user', ['email'])
     },
-    components: {
+    methods: {
+        ...mapActions('user', ['auth']),
+        onDropdown ({ value }) {
+            switch (value) {
+                case 'logout':
+                    return this.logout()
+            }
+        },
+        logout () {
+            this.auth({ _id: null, email: null })
+            this.$router.push({ name: 'ViewLogin' })
+        }
     }
 }

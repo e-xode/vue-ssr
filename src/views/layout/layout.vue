@@ -9,6 +9,7 @@
                     {{ $t('component.header.home') }}
                 </router-link>
                 <vui-dropdown
+                    v-if="email"
                     item-label="label"
                     item-value="value"
                     :placeholder="email"
@@ -18,6 +19,7 @@
                             value: 'logout'
                         }
                     ]"
+                    @input="onDropdown"
                 />
             </vui-header>
         </template>

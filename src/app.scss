@@ -1,6 +1,31 @@
 @import "@e-xode/vui/dist/style.css";
 @import "@fortawesome/fontawesome-free/css/all.css";
 
+@font-face {
+    font-family: 'Font Awesome 5 Brands';
+    font-style: normal;
+    font-weight: 400;
+    src:
+    url('@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2') format('woff2'),
+    url('@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf') format('truetype')
+}
+@font-face {
+    font-family: 'Font Awesome 5 Regular';
+    font-style: normal;
+    font-weight: 400;
+    src:
+    url('@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2') format('woff2'),
+    url('@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf') format('truetype')
+}
+@font-face {
+    font-family: 'Font Awesome 5 Solid';
+    font-style: normal;
+    font-weight: 900;
+    src:
+    url('@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2') format('woff2'),
+    url('@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf') format('truetype')
+}
+
 * {
     border: none;
     box-sizing: border-box;
