@@ -15,10 +15,10 @@ export default {
                 case 201:
                     const { email } = this.form
                     this.auth({ _id, email })
-                    this.$router.push({ name: 'index' })
+                    this.$router.push({ name: 'ViewIndex' })
                     break
                 case 400:
-                        this.error = error
+                    this.error = error
                     break
             }
         })

@@ -68,6 +68,15 @@
                     @click.prevent="login"
                 />
             </section>
+            <section>
+                <vui-alert
+                    v-if="error"
+                    icon="fa-solid fa-warning"
+                    layout="error"
+                >
+                    {{  $t(error) }}
+                </vui-alert>
+            </section>
         </vui-form>
     </vui-card>
 </template>

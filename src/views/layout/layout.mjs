@@ -1,3 +1,5 @@
+import { mapGetters } from 'vuex'
+
 export default {
     name: 'DefaultLayout',
     mounted() {
@@ -7,6 +9,7 @@ export default {
         }
     },
     computed: {
+        ...mapGetters('user', ['email'])
     },
     components: {
     }

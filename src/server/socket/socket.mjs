@@ -1,5 +1,7 @@
+import captcha from '#src/server/socket/user/captcha.mjs'
+import login from '#src/server/socket/user/login.mjs'
+import register from '#src/server/socket/user/register.mjs'
 import { log } from '#src/server/shared/log.mjs'
-import socketCaptcha from '#src/server/socket/user/captcha.mjs'
 
 const socket = ({ io, db }) => {
     io.on('disconnect', (socket) => {
@@ -16,7 +18,11 @@ const socket = ({ io, db }) => {
             log(`socket:${socket.handshake.session.id} msg=${message}`)
             switch(message) {
                 case 'captcha':
-                    return socketCaptcha({ data, db, socket })
+                    return captcha({ data, db, socket })
+                case 'login':
+                    return login({ data, db, socket })
+                case 'register':
+                    return register({ data, db, socket })
             }
         })
     })
