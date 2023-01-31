@@ -7,7 +7,8 @@
         margin: 0 -1px;
 
         .vui-header {
-            text-align: left;
+            display: flex;
+            justify-content: space-between;
             background-color: #3d4f58;
             border: none;
 
