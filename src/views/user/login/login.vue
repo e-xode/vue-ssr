@@ -48,6 +48,10 @@
                     <div class="fieldset-item">
                         <label for="captcha">
                             {{ $t('page.login.captcha') }}
+                            <div
+                                v-if="captcha"
+                                v-html="captcha"
+                            />
                         </label>
                         <div class="input">
                             <vui-input

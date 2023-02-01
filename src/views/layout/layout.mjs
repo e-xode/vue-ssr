@@ -2,7 +2,18 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
     name: 'DefaultLayout',
+    beforeUnmount() {
+        this.$socket.off('me')
+    },
     mounted() {
+        this.$socket.on('me', ({ _id, email}) => {
+            console.log(['me', _id, email])
+            this.auth({
+                _id,
+                email
+            })
+        })
+        this.$socket.emit('me')
     },
     data() {
         return {
@@ -15,6 +26,8 @@ export default {
         ...mapActions('user', ['auth']),
         onDropdown ({ value }) {
             switch (value) {
+                case 'account':
+                    return this.$router.push({ name: 'ViewAccount' })
                 case 'logout':
                     return this.logout()
             }

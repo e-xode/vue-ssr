@@ -15,6 +15,10 @@
                     :placeholder="email"
                     :items="[
                         {
+                            label: $t('component.header.account'),
+                            value: 'account'
+                        },
+                        {
                             label: $t('component.header.logout'),
                             value: 'logout'
                         }

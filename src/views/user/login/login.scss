@@ -1,0 +1,16 @@
+.card--login {
+    .vui-card-body {
+        .vui-form {
+            section {
+                .fieldset-item {
+
+                    label[for="captcha"] {
+                        display: flex;
+                        justify-content: space-between;
+                        padding-right: 1rem;
+                    }
+                }
+            }
+        }
+    }
+}

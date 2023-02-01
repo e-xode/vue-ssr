@@ -16,14 +16,21 @@ const routes = [
         children: [
             {
                 component: () => import(
-                    '@/views/login/login.vue'
+                    '@/views/user/account/account.vue'
+                ),
+                name: 'ViewAccount',
+                path: 'account'
+            },
+            {
+                component: () => import(
+                    '@/views/user/login/login.vue'
                 ),
                 name: 'ViewLogin',
                 path: 'login'
             },
             {
                 component: () => import(
-                    '@/views/register/register.vue'
+                    '@/views/user/register/register.vue'
                 ),
                 name: 'ViewRegister',
                 path: 'register'

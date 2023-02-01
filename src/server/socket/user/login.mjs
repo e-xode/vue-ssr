@@ -10,6 +10,13 @@ export default  async ({ data, db, socket  }) => {
             error: 'page.login.error.missing-fields'
         })
     }
+    log(`captcha check ${captcha}/${socket.handshake.session.captcha}`)
+    if (captcha !== socket.handshake.session.captcha) {
+        return socket.emit('login', {
+            status: 400,
+            error: 'page.login.error.captcha-incorrect'
+        })
+    }
 
     const user = await db.collection('user').findOne({ email })
     if (!user?._id) {
@@ -27,10 +34,13 @@ export default  async ({ data, db, socket  }) => {
         })
     }
 
-    socket.handshake.session.email = email
+    socket.handshake.session.user = {
+        _id: user._id,
+        email
+    }
     socket.handshake.session.save()
     return socket.emit('login', {
-        _id: user._id,
+        ...socket.handshake.session.user,
         status: 200,
     })
 }
