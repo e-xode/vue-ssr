@@ -15,6 +15,13 @@ export default async ({ data, db, socket  }) => {
         })
     }
 
+    if (captcha !== socket.handshake.session.captcha) {
+        return socket.emit('login', {
+            status: 400,
+            error: 'page.register.error.captcha-incorrect'
+        })
+    }
+
     const check = await db.collection('user').findOne({ email })
     if (check?._id) {
         return socket.emit('register', {
@@ -42,10 +49,13 @@ export default async ({ data, db, socket  }) => {
         })
     }
 
-    socket.handshake.session.email = email
+    socket.handshake.session.user = {
+        _id: user._id,
+        email
+    }
     socket.handshake.session.save()
     return socket.emit('register', {
-        _id,
+        ...socket.handshake.session.user,
         status: 201,
     })
 
