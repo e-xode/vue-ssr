@@ -1,3 +1,4 @@
+import account from '#src/server/socket/user/account.mjs'
 import captcha from '#src/server/socket/user/captcha.mjs'
 import login from '#src/server/socket/user/login.mjs'
 import me from '#src/server/socket/user/me.mjs'
@@ -18,6 +19,8 @@ const socket = ({ io, db }) => {
         socket.onAny((message, data) => {
             log(`socket:${socket.handshake.session.id} msg=${message}`)
             switch(message) {
+                case 'account':
+                    return account({ data, db, socket })
                 case 'captcha':
                     return captcha({ data, db, socket })
                 case 'login':
@@ -26,6 +29,9 @@ const socket = ({ io, db }) => {
                     return me({ data, db, socket })
                 case 'register':
                     return register({ data, db, socket })
+
+                default:
+                    return socket.emit(404)
             }
         })
     })

@@ -14,7 +14,10 @@
         "build:client": "vite --config vite.config.mjs build src/",
         "build:server": "vite --ssr --config vite.server.mjs build",
         "dev": "nodemon src/server/server.mjs",
-        "lint": "eslint --ext .js,.vue src"
+        "lint": "eslint --ext .js,.vue src",
+        "test:unit": "jest --clearCache && jest",
+        "test:unit:coverage": "jest --clearCache && jest --coverage",
+        "test:unit:watch": "jest --clearCache && jest --watch"
     },
     "type": "module",
     "version": "0.0.1",
@@ -40,11 +43,14 @@
             "plugin:vue/vue3-recommended"
         ],
         "rules": {
+            "comma-dangle": ["error", "never"],
+            "no-console": ["error"],
+            "quotes": ["error", "single"],
+            "semi": ["error", "never"],
+            "vue/html-closing-bracket-newline": ["error"],
+            "vue/html-indent": ["error", 4],
             "vue/multi-word-component-names": "off",
-            "vue/html-indent": [
-                "error",
-                4
-            ]
+            "vue/no-v-html": "off"
         }
     },
     "jest": {

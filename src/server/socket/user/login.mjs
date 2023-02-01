@@ -10,7 +10,7 @@ export default  async ({ data, db, socket  }) => {
             error: 'page.login.error.missing-fields'
         })
     }
-    log(`captcha check ${captcha}/${socket.handshake.session.captcha}`)
+
     if (captcha !== socket.handshake.session.captcha) {
         return socket.emit('login', {
             status: 400,

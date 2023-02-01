@@ -15,17 +15,17 @@
                         </label>
                         <div class="input">
                             <vui-input
+                                id="email"
                                 v-model="form.email"
                                 type="email"
                                 name="email"
-                                id="email"
                                 required
                             />
                         </div>
                     </div>
                 </fieldset>
             </section>
-            <section >
+            <section>
                 <fieldset>
                     <div class="fieldset-item">
                         <label for="password">
@@ -33,10 +33,10 @@
                         </label>
                         <div class="input">
                             <vui-input
+                                id="password"
                                 v-model="form.password"
                                 type="password"
                                 name="password"
-                                id="password"
                                 required
                             />
                         </div>
@@ -51,10 +51,10 @@
                         </label>
                         <div class="input">
                             <vui-input
+                                id="captcha"
                                 v-model="form.captcha"
                                 type="text"
                                 name="captcha"
-                                id="captcha"
                                 required
                             />
                         </div>
@@ -74,7 +74,7 @@
                     icon="fa-solid fa-warning"
                     layout="error"
                 >
-                    {{  $t(error) }}
+                    {{ $t(error) }}
                 </vui-alert>
             </section>
         </vui-form>

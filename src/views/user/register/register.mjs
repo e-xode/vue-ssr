@@ -10,10 +10,9 @@ export default {
         this.$socket.on('captcha', (data) => {
             this.captcha = data
         })
-        this.$socket.on('register', ({ _id, error, status }) => {
+        this.$socket.on('register', ({ _id, email, error, status }) => {
             switch (status) {
                 case 201:
-                    const { email } = this.form
                     this.auth({ _id, email })
                     this.$router.push({ name: 'ViewIndex' })
                     break

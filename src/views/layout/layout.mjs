@@ -7,7 +7,6 @@ export default {
     },
     mounted() {
         this.$socket.on('me', ({ _id, email}) => {
-            console.log(['me', _id, email])
             this.auth({
                 _id,
                 email
