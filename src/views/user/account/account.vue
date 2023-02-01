@@ -29,14 +29,32 @@
                 <fieldset>
                     <div class="fieldset-item">
                         <label for="password">
-                            {{ $t('page.account.password') }}
+                            {{ $t('page.account.old-password') }}
                         </label>
                         <div class="input">
                             <vui-input
-                                v-model="form.password"
+                                id="oldpassword"
+                                v-model="form.oldpassword"
                                 type="password"
-                                name="password"
-                                id="password"
+                                name="oldpassword"
+                                required
+                            />
+                        </div>
+                    </div>
+                </fieldset>
+            </section>
+            <section>
+                <fieldset>
+                    <div class="fieldset-item">
+                        <label for="password">
+                            {{ $t('page.account.new-password') }}
+                        </label>
+                        <div class="input">
+                            <vui-input
+                                id="newpassword"
+                                v-model="form.newpassword"
+                                type="password"
+                                name="newpassword"
                                 required
                             />
                         </div>
@@ -56,7 +74,14 @@
                     icon="fa-solid fa-warning"
                     layout="error"
                 >
-                    {{  $t(error) }}
+                    {{ $t(error) }}
+                </vui-alert>
+                <vui-alert
+                    v-if="success"
+                    icon="fa-solid fa-check"
+                    layout="success"
+                >
+                    {{ $t('page.account.success') }}
                 </vui-alert>
             </section>
         </vui-form>

@@ -22,7 +22,7 @@
             </router-link>
         </div>
         <p>
-            {{  $t('page.index.welcome') }}
+            {{ $t('page.index.welcome') }}
             <a
                 href="https://github.com/e-xode/vue-ssr"
                 target="_blank"
