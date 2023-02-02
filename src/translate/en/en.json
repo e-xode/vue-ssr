@@ -22,13 +22,13 @@
     "page.login.error.missing-fields": "Fields are missing, check your values and submit form again",
     "page.login.error.user-not-found": "Invalid credentials, check your values and submit form again ",
     "page.login.password": "Password",
-    "page.login.submit": "Submit",
+    "page.login.submit": "Login",
     "page.register.captcha": "Captcha",
     "page.register.email": "Email",
     "page.register.error.captcha-incorrect": "Captcha code is incorrect, check your values and submit form again",
     "page.register.error.missing-fields": "Fields are missing, check your values and submit form again",
     "page.register.error.email-already-exists": "User already exists, check your values and submit form again",
     "page.register.password": "Password",
-    "page.register.submit": "Submit",
+    "page.register.submit": "Register",
     "page.register.h1": "Register"
 }

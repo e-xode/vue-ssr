@@ -6,7 +6,10 @@
                     :to="{ name: 'ViewIndex' }"
                     class="home"
                 >
-                    {{ $t('component.header.home') }}
+                    <i class="fa-solid fa-house" />
+                    <span>
+                        {{ $t('component.header.home') }}
+                    </span>
                 </router-link>
                 <vui-dropdown
                     v-if="email"
@@ -15,10 +18,12 @@
                     :placeholder="email"
                     :items="[
                         {
+                            icon: 'fa-solid fa-sliders',
                             label: $t('component.header.account'),
                             value: 'account'
                         },
                         {
+                            icon: 'fa-solid fa-door-open',
                             label: $t('component.header.logout'),
                             value: 'logout'
                         }

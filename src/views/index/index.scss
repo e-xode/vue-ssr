@@ -5,14 +5,19 @@
         padding: 0 0 1rem 0;
         text-align: left;
     }
-    .links {
+    .buttons {
         display: flex;
         padding-bottom: 2rem;
         justify-content: center;
 
-        a {
-            padding: 0 1rem;
+        .vui-button {
             margin: 0 1rem;
+        }
+    }
+
+    p {
+        a {
+            text-decoration: underline;
         }
     }
 }
