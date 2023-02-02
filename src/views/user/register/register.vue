@@ -48,6 +48,10 @@
                     <div class="fieldset-item">
                         <label for="captcha">
                             {{ $t('page.register.captcha') }}
+                            <img
+                                v-if="captcha"
+                                :src="svg"
+                            >
                         </label>
                         <div class="input">
                             <vui-input
@@ -63,20 +67,19 @@
             </section>
             <section class="section--submit">
                 <vui-button
+                    icon="fa-solid fa-list-check"
                     type="submit"
                     :text="$t('page.register.submit')"
                     @click.prevent="register"
                 />
             </section>
-            <section>
-                <vui-alert
-                    v-if="error"
-                    icon="fa-solid fa-warning"
-                    layout="error"
-                >
-                    {{ $t(error) }}
-                </vui-alert>
-            </section>
+            <vui-alert
+                v-if="error"
+                icon="fa-solid fa-warning"
+                layout="error"
+            >
+                {{ $t(error) }}
+            </vui-alert>
         </vui-form>
     </vui-card>
 </template>

@@ -35,6 +35,9 @@ export default {
         }
     },
     computed: {
+        svg () {
+            return `data:image/svg+xml,${this.captcha}`
+        }
     },
     methods: {
         ...mapActions('user', ['auth']),
