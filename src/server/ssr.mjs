@@ -9,8 +9,9 @@ const render = async({ db, req, template }) => {
     await router.isReady()
 
     const ctx = {}
-    const { currentRoute } = router
     const html = await renderToString(app, ctx)
+    const { currentRoute } = router
+    const { description, title, keywords } = store.getters['metas/get']
 
     const components = currentRoute.value.matched.reduce((array, route) => {
         return array.concat(route.components)
@@ -21,7 +22,17 @@ const render = async({ db, req, template }) => {
     , ['/app/src/app.vue'])
 
     return {
-        html: template.replace(`<!--app-html-->`, html),
+        html: template.replace(
+            `<!--app-html-->`,
+            html
+        ).replace(
+            /(<!--meta-->)*(<!--meta-->)/,
+            `<!--meta-->
+                <meta name="description" content="${description}" />
+                <meta name="keywords" content="${keywords}" />
+                <title>${title}</title>
+            <!--meta-->`
+        ),
         paths
     }
 }

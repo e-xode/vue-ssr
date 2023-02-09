@@ -43,8 +43,10 @@ html {
 }
 
 body {
-    background-color: rgba(grey, .1);
     padding: 1rem;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    background-color: rgba(grey, .1);
 }
 
 h1, h2, h3, h4, h5 {

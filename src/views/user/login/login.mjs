@@ -6,6 +6,12 @@ export default {
         this.$socket.off('captcha')
         this.$socket.off('login')
     },
+    created() {
+        const { commit } = this.$store
+        commit('metas/setDescription', this.$t('page.login.metas.description'))
+        commit('metas/setKeywords', this.$t('page.login.metas.keywords'))
+        commit('metas/setTitle', this.$t('page.login.metas.title'))
+    },
     mounted() {
         this.$socket.on('captcha', (data) => {
             this.captcha = data
