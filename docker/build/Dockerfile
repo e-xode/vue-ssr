@@ -1,6 +1,7 @@
 FROM node:19-alpine3.15 AS builder
 
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
+ENV NODE_PORT=3002
 ENV NODE_ENV=production
 ENV PATH=/home/node/.npm-global/bin:$PATH
 
@@ -32,7 +33,7 @@ ENV NODE_ENV=production
 RUN apk update
 RUN apk --no-cache add supervisor
 
-EXPOSE 3002
+EXPOSE $NODE_PORT
 
 WORKDIR /app/dist
 

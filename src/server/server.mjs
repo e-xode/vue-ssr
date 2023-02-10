@@ -12,7 +12,11 @@ import { log } from '#src/server/shared/log.mjs'
 import { mongo } from '#src/server/shared/db.mjs'
 import { socket } from '#src/server/socket/socket.mjs'
 
-import { IS_PROD, VITE_OPTS } from '#src/server/shared/constant.mjs'
+import {
+    IS_PROD,
+    NODE_PORT,
+    VITE_OPTS
+} from '#src/server/shared/constant.mjs'
 
 mongo(async (db, err) => {
     if (!db || err) {
@@ -76,6 +80,6 @@ mongo(async (db, err) => {
     })
     io.use(sharedsession(sessionMiddleware))
     socket({ db, io})
-    httpServer.listen(3002)
-    log(`http://localhost:3002`)
+    httpServer.listen(NODE_PORT)
+    log(`http://localhost:${NODE_PORT}`)
 })

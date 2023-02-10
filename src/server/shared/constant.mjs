@@ -1,5 +1,6 @@
 const {
-    NODE_ENV = 'production'
+    NODE_ENV = 'production',
+    NODE_PORT = 3002
 } = process.env
 
 const IS_PROD = NODE_ENV === 'production'
@@ -21,5 +22,6 @@ const VITE_OPTS = {
 
 export {
     IS_PROD,
+    NODE_PORT,
     VITE_OPTS
 }

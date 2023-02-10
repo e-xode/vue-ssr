@@ -12,7 +12,7 @@ if (storeInitialState) {
 
 app.config.globalProperties.$socket = io(
     process.env.NODE_ENV !== 'production'
-        ? 'http://localhost:3002'
+        ? `http://localhost:${process.env.NODE_PORT}`
         : `https://${location.hostname}`
 )
 
