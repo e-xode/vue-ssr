@@ -24,7 +24,7 @@ mongo(async (db, err) => {
     const io = new Server(httpServer, { cors: { origin: '*' }})
     const fileStore = sessionFileStore(session)
     const sessionMiddleware = session({
-        store: new fileStore({ path: 'data/tmp' }),
+        store: new fileStore({ path: '/app/data/tmp' }),
         cookie: { maxAge: 24 * 60 * 60 * 1000 },
         secret: 'e-xode.vue-ssr',
         resave: true,
@@ -35,7 +35,7 @@ mongo(async (db, err) => {
         : await import('vite').then(({ createServer }) => createServer(VITE_OPTS))
     const index = IS_PROD
         ? fs.readFileSync('/app/dist/client/index.html', 'utf-8')
-        : fs.readFileSync('./src/index.html', 'utf-8')
+        : fs.readFileSync('/app/src/index.html', 'utf-8')
     if (!IS_PROD) {
         app.use(vite.middlewares)
     }

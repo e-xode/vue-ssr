@@ -4,6 +4,7 @@
         class="card--login"
     >
         <h1>
+            <i class="fa-solid fa-key" />
             {{ $t('page.login.h1') }}
         </h1>
         <vui-form>
@@ -19,6 +20,7 @@
                                 v-model="form.email"
                                 type="email"
                                 name="email"
+                                :placeholder="$t('page.login.email.placeholder')"
                                 required
                             />
                         </div>
@@ -37,6 +39,7 @@
                                 v-model="form.password"
                                 type="password"
                                 name="password"
+                                :placeholder="$t('page.login.password.placeholder')"
                                 required
                             />
                         </div>
@@ -59,6 +62,7 @@
                                 v-model="form.captcha"
                                 type="text"
                                 name="captcha"
+                                :placeholder="$t('page.login.captcha.placeholder')"
                                 required
                             />
                         </div>

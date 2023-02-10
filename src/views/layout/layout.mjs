@@ -32,6 +32,7 @@ export default {
             }
         },
         logout () {
+            this.$socket.emit('logout')
             this.auth({ _id: null, email: null })
             this.$router.push({ name: 'ViewLogin' })
         }

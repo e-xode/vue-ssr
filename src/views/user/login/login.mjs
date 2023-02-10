@@ -1,10 +1,10 @@
 import { mapActions } from 'vuex'
 
 export default {
-    name: 'LoginView',
+    name: 'ViewLogin',
     beforeUnmount() {
         this.$socket.off('captcha')
-        this.$socket.off('login')
+        this.$socket.off('auth')
     },
     created() {
         const { commit } = this.$store
@@ -16,14 +16,14 @@ export default {
         this.$socket.on('captcha', (data) => {
             this.captcha = data
         })
-        this.$socket.on('login', ({ _id, email, error, status }) => {
+        this.$socket.on('auth', ({ _id, email, error, status }) => {
             switch (status) {
                 case 200:
                     this.auth({ _id, email })
-                    this.$router.push({ name: 'ViewIndex' })
+                    this.$router.push({ name: 'ViewAuth' })
                     break
                 case 400:
-                        this.error = error
+                    this.error = error
                     break
             }
         })

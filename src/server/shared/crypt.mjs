@@ -13,6 +13,10 @@ const hash = (password, salt) => {
     return (Buffer.from(digest, 'binary')).toString('base64')
 }
 
+const rand = () => {
+    return (Math.floor(100000 + Math.random() * 900000))
+}
+
 const salt = () => {
     const random = crypto.randomBytes(32).toString('base64')
     return random.replace('+', '.').replace(/.$/, '')
@@ -25,6 +29,7 @@ const tokenize = () => {
 
 export {
     hash,
+    rand,
     salt,
     tokenize
 }

@@ -1,5 +1,6 @@
+import { mail } from '#src/server/shared/email.mjs'
+import { hash, rand } from '#src/server/shared/crypt.mjs'
 import { log } from '#src/server/shared/log.mjs'
-import { hash } from '#src/server/shared/crypt.mjs'
 
 export default  async ({ data, db, socket  }) => {
 
@@ -34,12 +35,24 @@ export default  async ({ data, db, socket  }) => {
         })
     }
 
+    const authcode = rand()
+    socket.handshake.session.auth = {
+        code: authcode,
+        status: 'pending'
+    }
     socket.handshake.session.user = {
         _id: user._id,
         email
     }
     socket.handshake.session.save()
-    return socket.emit('login', {
+
+    await mail('/app/src/server/templates/email/en/authcode.html', {
+        authcode,
+        to: email,
+        subject: 'e-xode-vue-ssr-auth-code'
+    })
+
+    return socket.emit('auth', {
         ...socket.handshake.session.user,
         status: 200,
     })

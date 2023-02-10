@@ -23,6 +23,13 @@ const routes = [
             },
             {
                 component: () => import(
+                    '@/views/user/auth/auth.vue'
+                ),
+                name: 'ViewAuth',
+                path: 'auth'
+            },
+            {
+                component: () => import(
                     '@/views/user/login/login.vue'
                 ),
                 name: 'ViewLogin',

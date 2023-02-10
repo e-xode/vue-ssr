@@ -1,9 +1,5 @@
-import { log } from '#src/server/shared/log.mjs'
-import {
-    hash,
-    salt,
-    tokenize
-} from '#src/server/shared/crypt.mjs'
+import { mail } from '#src/server/shared/email.mjs'
+import { hash, rand, salt } from '#src/server/shared/crypt.mjs'
 
 export default async ({ data, db, socket  }) => {
 
@@ -37,8 +33,7 @@ export default async ({ data, db, socket  }) => {
         email,
         hash,
         password: hash(password, salted),
-        salt: salted,
-        token: tokenize()
+        salt: salted
     })
 
     const { _id } = await db.collection('user').findOne({ email })
@@ -48,15 +43,19 @@ export default async ({ data, db, socket  }) => {
             error: 'page.register.error.user-not-created'
         })
     }
-
+    socket.handshake.session.auth = {
+        code: rand(),
+        status: 'pending'
+    }
     socket.handshake.session.user = {
-        _id: user._id,
+        _id,
+        auth: 'pending',
         email
     }
     socket.handshake.session.save()
-    return socket.emit('register', {
+    return socket.emit('auth', {
         ...socket.handshake.session.user,
-        status: 201,
+        status: 200,
     })
 
 }
