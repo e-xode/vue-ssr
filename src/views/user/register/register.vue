@@ -4,6 +4,7 @@
         class="card--register"
     >
         <h1>
+            <i class="fa-solid fa-user-plus" />
             {{ $t('page.register.h1') }}
         </h1>
         <vui-form>
@@ -19,6 +20,7 @@
                                 v-model="form.email"
                                 type="email"
                                 name="email"
+                                :placeholder="$t('page.register.email.placeholder')"
                                 required
                             />
                         </div>
@@ -37,6 +39,7 @@
                                 v-model="form.password"
                                 type="password"
                                 name="password"
+                                :placeholder="$t('page.register.password.placeholder')"
                                 required
                             />
                         </div>
@@ -59,6 +62,7 @@
                                 v-model="form.captcha"
                                 type="text"
                                 name="captcha"
+                                :placeholder="$t('page.register.captcha.placeholder')"
                                 required
                             />
                         </div>

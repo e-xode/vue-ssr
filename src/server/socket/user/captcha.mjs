@@ -1,9 +1,9 @@
 import TextToSVG from 'text-to-svg-path'
-import { log } from '#src/server/shared/log.mjs'
+import { rand } from '#src/server/shared/crypt.mjs'
 
-export default ({ data, socket }) => {
+export default ({ socket }) => {
     const textToSVG = TextToSVG.loadSync()
-    const captcha = (Math.floor(100000 + Math.random() * 900000))
+    const captcha = rand()
     const svg = textToSVG.getSVG(`${captcha}`, {
         anchor: 'top',
         attributes: { fill: 'black', stroke: 'black' },

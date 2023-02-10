@@ -1,9 +1,15 @@
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-    name: 'AccountView',
+    name: 'ViewAccount',
     beforeUnmount() {
         this.$socket.off('account')
+    },
+    created() {
+        const { commit } = this.$store
+        commit('metas/setDescription', this.$t('page.account.metas.description'))
+        commit('metas/setKeywords', this.$t('page.account.metas.keywords'))
+        commit('metas/setTitle', this.$t('page.account.metas.title'))
     },
     mounted() {
         this.$socket.on('account', ({ _id, email, status }) => {

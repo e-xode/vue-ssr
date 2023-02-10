@@ -1,23 +1,25 @@
 import { mapActions } from 'vuex'
 
 export default {
-    name: 'ViewRegister',
+    name: 'ViewAuth',
     beforeUnmount() {
-        this.$socket.off('captcha')
         this.$socket.off('auth')
     },
+    created() {
+        const { commit } = this.$store
+        commit('metas/setDescription', this.$t('page.auth.metas.description'))
+        commit('metas/setKeywords', this.$t('page.auth.metas.keywords'))
+        commit('metas/setTitle', this.$t('page.auth.metas.title'))
+    },
     mounted() {
-        this.$socket.on('captcha', (data) => {
-            this.captcha = data
-        })
         this.$socket.on('auth', ({ _id, email, error, status }) => {
             switch (status) {
                 case 200:
                     this.auth({ _id, email })
-                    this.$router.push({ name: 'ViewAuth' })
+                    this.$router.push({ name: 'ViewIndex' })
                     break
                 case 400:
-                    this.error = error
+                        this.error = error
                     break
             }
         })
@@ -25,24 +27,18 @@ export default {
     },
     data() {
         return {
-            captcha: null,
             error: null,
             form: {
-                captcha: null,
-                email: null,
-                password: null
+                code: null
             }
         }
     },
     computed: {
-        svg () {
-            return `data:image/svg+xml,${this.captcha}`
-        }
     },
     methods: {
         ...mapActions('user', ['auth']),
-        register () {
-            this.$socket.emit('register', this.form)
+        auth () {
+            this.$socket.emit('auth', this.form)
         }
     },
     components: {
