@@ -8,7 +8,7 @@ const mail = async(file, data) => {
     const smtp = mailer.createTransport({
         host: process.env.MAILER_HOST,
         port: process.env.MAILER_PORT,
-        secure: process.env.MAILER_SSL,
+        secure: process.env.MAILER_SSL === 'true',
         auth: {
             user: process.env.MAILER_LOGIN,
             pass: process.env.MAILER_PASSWORD
