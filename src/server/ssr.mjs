@@ -4,14 +4,15 @@ import build from '#src/app.mjs'
 const render = async({ db, req, template }) => {
 
     const { app, router, store } = build()
+    const ctx = {}
 
     await router.push(req.originalUrl)
     await router.isReady()
 
-    const ctx = {}
     const html = await renderToString(app, ctx)
     const { currentRoute } = router
     const { description, title, keywords } = store.getters['metas/get']
+    const state = encodeURIComponent(JSON.stringify(store.state))
 
     const components = currentRoute.value.matched.reduce((array, route) => {
         return array.concat(route.components)
@@ -25,6 +26,13 @@ const render = async({ db, req, template }) => {
         html: template.replace(
             `<!--app-html-->`,
             html
+        ).replace(
+            /(<!--store-->)*(<!--store-->)/,
+            `<!--store-->
+                <script>
+                    __INITIAL_STATE__="${state}"
+                </script>
+            <!--store-->`
         ).replace(
             /(<!--meta-->)*(<!--meta-->)/,
             `<!--meta-->
