@@ -6,14 +6,14 @@ export default  async ({ data, db, socket  }) => {
 
     const { email, password, captcha } = data
     if (!captcha || !email || !password) {
-        return socket.emit('login', {
+        return socket.emit('auth', {
             status: 400,
             error: 'page.login.error.missing-fields'
         })
     }
 
     if (captcha !== socket.handshake.session.captcha) {
-        return socket.emit('login', {
+        return socket.emit('auth', {
             status: 400,
             error: 'page.login.error.captcha-incorrect'
         })
@@ -21,7 +21,7 @@ export default  async ({ data, db, socket  }) => {
 
     const user = await db.collection('user').findOne({ email })
     if (!user?._id) {
-        return socket.emit('login', {
+        return socket.emit('auth', {
             status: 400,
             error: 'page.login.error.user-not-found'
         })
@@ -29,7 +29,7 @@ export default  async ({ data, db, socket  }) => {
 
     const hashed = hash(password, user.salt)
     if (hashed !== user.password) {
-        return socket.emit('login', {
+        return socket.emit('auth', {
             status: 400,
             error: 'page.login.error.password-incorrect'
         })
