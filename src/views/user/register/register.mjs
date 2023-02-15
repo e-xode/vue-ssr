@@ -1,10 +1,15 @@
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
     name: 'ViewRegister',
     beforeUnmount() {
         this.$socket.off('captcha')
         this.$socket.off('auth')
+    },
+    created() {
+        this.setDescription(this.$t('page.register.metas.description'))
+        this.setKeywords(this.$t('page.register.metas.keywords'))
+        this.setTitle(this.$t('page.register.metas.title'))
     },
     mounted() {
         this.$socket.on('captcha', (data) => {
@@ -41,6 +46,7 @@ export default {
     },
     methods: {
         ...mapActions('user', ['auth']),
+        ...mapMutations('metas', ['setDescription', 'setKeywords', 'setTitle']),
         register () {
             this.$socket.emit('register', this.form)
         }

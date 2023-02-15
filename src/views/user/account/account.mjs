@@ -1,4 +1,4 @@
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
     name: 'ViewAccount',
@@ -6,10 +6,9 @@ export default {
         this.$socket.off('account')
     },
     created() {
-        const { commit } = this.$store
-        commit('metas/setDescription', this.$t('page.account.metas.description'))
-        commit('metas/setKeywords', this.$t('page.account.metas.keywords'))
-        commit('metas/setTitle', this.$t('page.account.metas.title'))
+        this.setDescription(this.$t('page.account.metas.description'))
+        this.setKeywords(this.$t('page.account.metas.keywords'))
+        this.setTitle(this.$t('page.account.metas.title'))
     },
     mounted() {
         this.$socket.on('account', ({ _id, email, status }) => {
@@ -39,6 +38,7 @@ export default {
     },
     methods: {
         ...mapActions('user', ['auth']),
+        ...mapMutations('metas', ['setDescription', 'setKeywords', 'setTitle']),
         onSubmit() {
             this.$socket.emit('account', this.form)
         }

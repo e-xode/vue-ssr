@@ -5,14 +5,14 @@ export default async ({ data, db, socket  }) => {
 
     const { email, password, captcha } = data
     if (!captcha || !email || !password) {
-        return socket.emit('register', {
+        return socket.emit('auth', {
             status: 400,
             error: 'page.register.error.missing-fields'
         })
     }
 
     if (captcha !== socket.handshake.session.captcha) {
-        return socket.emit('login', {
+        return socket.emit('auth', {
             status: 400,
             error: 'page.register.error.captcha-incorrect'
         })
@@ -20,7 +20,7 @@ export default async ({ data, db, socket  }) => {
 
     const check = await db.collection('user').findOne({ email })
     if (check?._id) {
-        return socket.emit('register', {
+        return socket.emit('auth', {
             status: 400,
             error: 'page.register.error.email-already-exists'
         })
@@ -38,7 +38,7 @@ export default async ({ data, db, socket  }) => {
 
     const { _id } = await db.collection('user').findOne({ email })
     if (!_id) {
-        return socket.emit('register', {
+        return socket.emit('auth', {
             status: 500,
             error: 'page.register.error.user-not-created'
         })
@@ -53,6 +53,7 @@ export default async ({ data, db, socket  }) => {
         email
     }
     socket.handshake.session.save()
+
     return socket.emit('auth', {
         ...socket.handshake.session.user,
         status: 200,

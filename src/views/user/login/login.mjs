@@ -1,4 +1,4 @@
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
     name: 'ViewLogin',
@@ -7,10 +7,9 @@ export default {
         this.$socket.off('auth')
     },
     created() {
-        const { commit } = this.$store
-        commit('metas/setDescription', this.$t('page.login.metas.description'))
-        commit('metas/setKeywords', this.$t('page.login.metas.keywords'))
-        commit('metas/setTitle', this.$t('page.login.metas.title'))
+        this.setDescription(this.$t('page.login.metas.description'))
+        this.setKeywords(this.$t('page.login.metas.keywords'))
+        this.setTitle(this.$t('page.login.metas.title'))
     },
     mounted() {
         this.$socket.on('captcha', (data) => {
@@ -47,6 +46,7 @@ export default {
     },
     methods: {
         ...mapActions('user', ['auth']),
+        ...mapMutations('metas', ['setDescription', 'setKeywords', 'setTitle']),
         login () {
             this.$socket.emit('login', this.form)
         }
