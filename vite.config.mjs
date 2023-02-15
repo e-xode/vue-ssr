@@ -5,6 +5,9 @@ import vue from '@vitejs/plugin-vue'
 const __dirname = dirname('./')
 
 export default defineConfig({
+    define: {
+        'process.env': process.env
+    },
     resolve: {
         alias: [
             {
