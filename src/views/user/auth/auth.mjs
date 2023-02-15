@@ -1,4 +1,4 @@
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
     name: 'ViewAuth',
@@ -6,10 +6,9 @@ export default {
         this.$socket.off('auth')
     },
     created() {
-        const { commit } = this.$store
-        commit('metas/setDescription', this.$t('page.auth.metas.description'))
-        commit('metas/setKeywords', this.$t('page.auth.metas.keywords'))
-        commit('metas/setTitle', this.$t('page.auth.metas.title'))
+        this.setDescription(this.$t('page.auth.metas.description'))
+        this.setKeywords(this.$t('page.auth.metas.keywords'))
+        this.setTitle(this.$t('page.auth.metas.title'))
     },
     mounted() {
         this.$socket.on('auth', ({ _id, email, error, status }) => {
@@ -37,6 +36,7 @@ export default {
     },
     methods: {
         ...mapActions('user', ['auth']),
+        ...mapMutations('metas', ['setDescription', 'setKeywords', 'setTitle']),
         auth () {
             this.$socket.emit('auth', this.form)
         }

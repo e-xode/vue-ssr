@@ -1,10 +1,11 @@
+import { mapMutations } from 'vuex'
+
 export default {
     name: 'ViewIndex',
     created() {
-        const { commit } = this.$store
-        commit('metas/setDescription', this.$t('page.index.metas.description'))
-        commit('metas/setKeywords', this.$t('page.index.metas.keywords'))
-        commit('metas/setTitle', this.$t('page.index.metas.title'))
+        this.setDescription(this.$t('page.index.metas.description'))
+        this.setKeywords(this.$t('page.index.metas.keywords'))
+        this.setTitle(this.$t('page.index.metas.title'))
     },
     mounted() {
     },
@@ -15,5 +16,6 @@ export default {
     computed: {
     },
     methods: {
+        ...mapMutations('metas', ['setDescription', 'setKeywords', 'setTitle'])
     }
 }
