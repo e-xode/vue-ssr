@@ -1,35 +1,38 @@
 const state = {
-    description: null,
-    keywords: null,
-    title: null
+    metas: {
+        description: null,
+        image: null,
+        keywords: null,
+        title: null
+    }
 }
 const getters = {
-    get ({ description, keywords, title }) {
-        return {
-            description,
-            keywords,
-            title
-        }
+    metas ({ metas }) {
+        return metas
     }
 }
 
 const mutations = {
     setDescription (state, description) {
-        state.description = description
+        state.metas.description = description
+    },
+    setImage (state, image) {
+        state.metas.image = image
     },
     setKeywords(state, keywords) {
-        state.keywords = keywords
+        state.metas.keywords = keywords
+    },
+    setMetas (state, metas) {
+        state.metas = metas
     },
     setTitle (state, title) {
-        state.title = title
+        state.metas.title = title
     }
 }
 
 const actions = {
-    set ({ commit }, { description,  keywords, title }) {
-        commit('setDescription', description)
-        commit('setKeywords', keywords)
-        commit('setTitle', title)
+    setMetas ({ commit }, metas) {
+        commit('setMetas', metas)
     }
 }
 

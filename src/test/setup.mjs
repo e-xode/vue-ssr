@@ -7,6 +7,10 @@ import {
     RouterLinkStub
 } from '@vue/test-utils'
 
+document.querySelector = jest.fn(() => ({
+    setAttribute: jest.fn()
+}))
+
 const i18n = createI18n({
     legacy: false,
     missingWarn: false,
@@ -22,6 +26,10 @@ export default {
         provide: {
         },
         mocks: {
+            $route: {
+                params: {},
+                query: {}
+            },
             $socket: {
                 on: jest.fn(),
                 emit: jest.fn()

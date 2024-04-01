@@ -7,9 +7,11 @@
             <i class="fa-regular fa-envelope" />
             {{ $t('page.auth.h1') }}
         </h1>
-        <p>
-            {{ $t('page.auth.description') }}
-        </p>
+        <vui-alert
+            icon="fa-solid fa-warning"
+        >
+            {{ $t('page.auth.code-has-been-sent') }}
+        </vui-alert>
         <vui-form>
             <section>
                 <fieldset>
@@ -35,7 +37,7 @@
                     icon="fa-solid fa-key"
                     type="submit"
                     :text="$t('page.auth.submit')"
-                    @click.prevent="auth"
+                    @click.prevent="onSubmit"
                 />
             </section>
             <vui-alert

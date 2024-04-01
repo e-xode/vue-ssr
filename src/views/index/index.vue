@@ -1,37 +1,39 @@
 <template>
     <div class="view-index">
-        <h1>
-            {{ $t('page.index.h1') }}
-        </h1>
-        <div class="buttons">
+        <ComponentCategories />
+        <vui-loader
+            v-if="isLoading"
+            :text="$t('app.loading')"
+        />
+        <div
+            v-if="!isLoading"
+            class="items"
+        >
             <router-link
-                class="vui-button vui-button--with-icon"
-                :to="{ name: 'ViewLogin' }"
+                v-for="item in items"
+                :key="`item--${item.id}`"
+                :to="{
+                    name: 'ViewItem',
+                    params: {
+                        locale,
+                        collection: collection.name,
+                        slug: item.slug
+                    }
+                }"
+                :style="{
+                    backgroundImage: `url(${item.files && item.files[0].path})`
+                }"
+                class="item"
             >
-                <span class="vui-button-holder">
-                    <i class="vui-button-icon fa-solid fa-key" />
-                    {{ $t('page.index.login') }}
+                <span class="label">
+                    {{ item.name }}
                 </span>
-            </router-link>
-            <router-link
-                class="vui-button vui-button--with-icon"
-                :to="{ name: 'ViewRegister' }"
-            >
-                <span class="vui-button-holder">
-                    <i class="vui-button-icon fa-solid fa-list-check" />
-                    {{ $t('page.index.register') }}
+                <span class="price">
+                    {{ item.price }}
+                    {{ $t('app.currency') }}
                 </span>
             </router-link>
         </div>
-        <p>
-            {{ $t('page.index.welcome') }}
-            <a
-                href="https://github.com/e-xode/vue-ssr"
-                target="_blank"
-            >
-                {{ $t('page.index.github-link') }}
-            </a>
-        </p>
     </div>
 </template>
 

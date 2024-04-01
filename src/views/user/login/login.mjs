@@ -1,10 +1,11 @@
 import { mapActions, mapMutations } from 'vuex'
+import dayjs from 'dayjs'
 
 export default {
     name: 'ViewLogin',
     beforeUnmount() {
-        this.$socket.off('captcha')
-        this.$socket.off('auth')
+        this.$socket.off('user.captcha')
+        this.$socket.off('user.auth')
     },
     created() {
         this.setDescription(this.$t('page.login.metas.description'))
@@ -12,21 +13,26 @@ export default {
         this.setTitle(this.$t('page.login.metas.title'))
     },
     mounted() {
-        this.$socket.on('captcha', (data) => {
-            this.captcha = data
-        })
-        this.$socket.on('auth', ({ _id, email, error, status }) => {
-            switch (status) {
-                case 200:
-                    this.auth({ _id, email })
-                    this.$router.push({ name: 'ViewAuth' })
+        this.$socket.on('user.auth', (user) => {
+            switch (user.status) {
+                case 100:
+                    this.auth(user)
+                    this.$router.push({
+                        name: 'ViewAuth',
+                        params: {
+                            locale: this.locale
+                        }
+                    })
                     break
                 case 400:
-                    this.error = error
+                    this.error = user.error
                     break
             }
         })
-        this.$socket.emit('captcha')
+        this.$socket.on('user.captcha', (data) => {
+            this.captcha = data
+        })
+        this.$socket.emit('user.captcha')
     },
     data() {
         return {
@@ -40,6 +46,9 @@ export default {
         }
     },
     computed: {
+        locale () {
+            return this.$i18n.locale
+        },
         svg () {
             return `data:image/svg+xml,${this.captcha}`
         }
@@ -47,10 +56,12 @@ export default {
     methods: {
         ...mapActions('user', ['auth']),
         ...mapMutations('metas', ['setDescription', 'setKeywords', 'setTitle']),
-        login () {
-            this.$socket.emit('login', this.form)
+        onSubmit () {
+            this.error = null
+            this.$socket.emit('user.login', {
+                ...this.form,
+                route: this.$route.query.route
+            })
         }
-    },
-    components: {
     }
 }

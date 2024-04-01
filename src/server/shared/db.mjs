@@ -9,20 +9,21 @@ const {
     MONGO_USER
 } = process.env
 
-const url = `${MONGO_TYPE}://${MONGO_USER}:${MONGO_PWD}@${MONGO_HOST}/${MONGO_DB}`
+const mongo = async () => {
+    const url = `${MONGO_TYPE}://${MONGO_USER}:${MONGO_PWD}@${MONGO_HOST}/${MONGO_DB}`
+    const client = new MongoClient(url)
+    let error = null
 
-const mongo = (callback) => {
-    MongoClient.connect(url, (err, client) => {
-        if (err) {
-            log(`DB connexion error=${err.toString()}`)
-            callback(null, err)
-        } else {
-            log('DB connexion successful')
-            callback(client.db(MONGO_DB), null)
-        }
-    })
+    try {
+        await client.connect()
+        log('DB connexion successful')
+        return { db: client.db(MONGO_DB), error: null }
+    } catch (e) {
+        error = e.toString()
+        log(`DB connexion error=${error}`)
+        return { db: null, error }
+    }
 }
-
 
 export {
     mongo

@@ -5,8 +5,7 @@ import ViewAccount from '@/views/user/account/account.vue'
 
 describe('views/user/ViewAccount', () => {
 
-    const propsData = {
-    }
+    const propsData = {}
 
     const mountComponent = () => {
         return shallowMount(ViewAccount, {

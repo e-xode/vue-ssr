@@ -18,15 +18,41 @@
                                 id="email"
                                 type="email"
                                 name="email"
-                                :value="email"
-                                :disabled="true"
+                                :value="user.email"
+                                disabled
+                                required
+                            />
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="fieldset-item">
+                        <label for="email">
+                            {{ $t('page.account.country') }}
+                        </label>
+                        <div class="input">
+                            <vui-dropdown
+                                id="country"
+                                v-model="form.country"
+                                type="text"
+                                name="country"
+                                item-label="name"
+                                item-value="_id"
+                                :items="countries"
+                                required
+                                return-object
+                                :disable-filtering="true"
+                                @input="(v) => onCountryKeyword(v)"
                             />
                         </div>
                     </div>
                 </fieldset>
             </section>
+            <h2>
+                {{ $t('page.account.h2-password') }}
+            </h2>
             <section>
-                <fieldset>
+                <fieldset v-if="user.status !== 449">
                     <div class="fieldset-item">
                         <label for="password">
                             {{ $t('page.account.old-password') }}
@@ -42,8 +68,6 @@
                         </div>
                     </div>
                 </fieldset>
-            </section>
-            <section>
                 <fieldset>
                     <div class="fieldset-item">
                         <label for="password">
@@ -62,11 +86,13 @@
                 </fieldset>
             </section>
             <section class="section--submit">
-                <vui-button
-                    type="submit"
-                    :text="$t('page.account.submit')"
-                    @click.prevent="onSubmit()"
-                />
+                <fieldset>
+                    <vui-button
+                        type="submit"
+                        :text="$t('page.account.submit')"
+                        @click.prevent="onSubmit()"
+                    />
+                </fieldset>
             </section>
             <section>
                 <vui-alert

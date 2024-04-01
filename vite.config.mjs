@@ -12,25 +12,22 @@ export default defineConfig({
         alias: [
             {
                 find: '@',
-                replacement: resolve(__dirname, 'src'),
+                replacement: resolve(__dirname, 'src')
             },
             {
                 find: '#src',
-                replacement: resolve(__dirname, 'src'),
+                replacement: resolve(__dirname, 'src')
             },
             {
                 find: '/src',
-                replacement: resolve(__dirname, 'src'),
-            },
-            {
-                find: 'vue-i18n',
-                replacement: 'vue-i18n/dist/vue-i18n.cjs.js'
+                replacement: resolve(__dirname, 'src')
             }
         ]
     },
     build: {
         emptyOutDir: true,
         manifest: true,
+        cssCodeSplit: false,
         outDir: resolve(__dirname, 'dist/client')
     },
     plugins: [

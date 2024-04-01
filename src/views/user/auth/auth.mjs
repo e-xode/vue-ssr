@@ -3,7 +3,7 @@ import { mapActions, mapMutations } from 'vuex'
 export default {
     name: 'ViewAuth',
     beforeUnmount() {
-        this.$socket.off('auth')
+        this.$socket.off('user.auth')
     },
     created() {
         this.setDescription(this.$t('page.auth.metas.description'))
@@ -11,18 +11,27 @@ export default {
         this.setTitle(this.$t('page.auth.metas.title'))
     },
     mounted() {
-        this.$socket.on('auth', ({ _id, email, error, status }) => {
-            switch (status) {
+        this.$socket.on('user.auth', (user) => {
+            switch (user.status) {
                 case 200:
-                    this.auth({ _id, email })
-                    this.$router.push({ name: 'ViewIndex' })
+                case 449:
+                    this.auth(user)
+                    if(user.route) {
+                        this.$router.push(user.route)
+                    } else {
+                        this.$router.push({
+                            name: 'ViewIndex',
+                            params: {
+                                locale: this.$i18n.locale
+                            }
+                        })
+                    }
                     break
                 case 400:
-                        this.error = error
+                    this.error = user.error
                     break
             }
         })
-        this.$socket.emit('captcha')
     },
     data() {
         return {
@@ -37,8 +46,9 @@ export default {
     methods: {
         ...mapActions('user', ['auth']),
         ...mapMutations('metas', ['setDescription', 'setKeywords', 'setTitle']),
-        auth () {
-            this.$socket.emit('auth', this.form)
+        onSubmit () {
+            this.error = null
+            this.$socket.emit('user.auth', this.form)
         }
     },
     components: {

@@ -1,0 +1,67 @@
+{
+    "name": "country",
+    "label": "Countries",
+    "public": true,
+    "model": [
+        {
+            "editable": false,
+            "html": "text",
+            "isLabel": false,
+            "multiple": false,
+            "name": "_id",
+            "required": false,
+            "tableHeader": true,
+            "type": "string"
+        },
+        {
+            "editable": true,
+            "html": "text",
+            "isLabel": true,
+            "multiple": false,
+            "name": "name",
+            "required": true,
+            "tableHeader": false,
+            "type": "string"
+        },
+        {
+            "editable": true,
+            "html": "text",
+            "isLabel": false,
+            "multiple": false,
+            "required": true,
+            "name": "country-code",
+            "tableHeader": true,
+            "type": "string"
+        },
+        {
+            "editable": true,
+            "html": "text",
+            "isLabel": false,
+            "multiple": false,
+            "required": true,
+            "name": "region",
+            "tableHeader": true,
+            "type": "string"
+        },
+        {
+            "editable": true,
+            "html": "number",
+            "isLabel": false,
+            "multiple": false,
+            "name": "shippingfee",
+            "required": true,
+            "tableHeader": true,
+            "type": "number"
+        }
+    ],
+    "store": {
+        "name": "countries",
+        "getItem": "getCountry",
+        "getItems": "getCountries",
+        "getItemsPaging": "getCountriesPaging",
+        "setItemsPaginated": "setCountriesPaginated",
+        "setItem": "setCountry",
+        "setItems": "setCountries",
+        "setItemPaging": "setCountriesPaging"
+    }
+}

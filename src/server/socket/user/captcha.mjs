@@ -13,5 +13,5 @@ export default ({ socket }) => {
     })
     socket.handshake.session.captcha = `${captcha}`
     socket.handshake.session.save()
-    socket.emit('captcha', svg)
+    socket.emit('user.captcha', svg)
 }

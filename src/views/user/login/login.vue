@@ -1,7 +1,7 @@
 <template>
     <vui-card
         flat
-        class="card--login"
+        class="view-login"
     >
         <h1>
             <i class="fa-solid fa-key" />
@@ -48,7 +48,7 @@
             </section>
             <section>
                 <fieldset>
-                    <div class="fieldset-item">
+                    <div class="fieldset-item fieldset-item--captcha">
                         <label for="captcha">
                             {{ $t('page.login.captcha') }}
                             <img
@@ -72,10 +72,39 @@
             <section class="section--submit">
                 <vui-button
                     icon="fa-solid fa-key"
-                    type="submit"
+                    type="button"
                     :text="$t('page.login.submit')"
-                    @click.prevent="login"
+                    @click.stop="onSubmit"
                 />
+                <div class="links">
+                    <router-link
+                        :to="{
+                            name: 'ViewReset',
+                            params: {
+                                locale
+                            },
+                            query:  {
+                                route: $route.query.route
+                            }
+                        }"
+                    >
+                        {{ $t('page.login.reset-password') }}
+                    </router-link>
+                    /
+                    <router-link
+                        :to="{
+                            name: 'ViewRegister',
+                            params: {
+                                locale
+                            },
+                            query:  {
+                                route: $route.query.route
+                            }
+                        }"
+                    >
+                        {{ $t('page.login.register') }}
+                    </router-link>
+                </div>
             </section>
             <vui-alert
                 v-if="error"

@@ -1,30 +1,75 @@
 const state = {
-    _id: null,
-    email: null,
-    url: null
+    locale: null,
+    user: {
+        email: null,
+        error: null,
+        isadmin: false,
+        orders: [],
+        status: null
+    }
 }
 const getters = {
-    email ({ email }) {
-        return email
+    email ({ user }) {
+        return user.email
     },
-    _id ({ _id }) {
-        return _id
+    error ({ error }) {
+        return error
+    },
+    isAdmin ({ user }) {
+        return user?.isadmin
+    },
+    isAuthenticated({ user }) {
+        return user?._id && user.status === 200
+    },
+    locale({ locale }) {
+        return locale
+    },
+    orders({ user }) {
+        return user.orders
+    },
+    status({ user }) {
+        return user.status
+    },
+    user({ user }) {
+        return user
     }
 }
 
 const mutations = {
     setEmail (state, email) {
-        state.email = email
+        state.user.email = email
     },
-    setId (state, _id) {
-        state._id = _id
+    setError (state, error) {
+        state.user.error = error
+    },
+    setIsAdmin (state, isadmin) {
+        state.user.isadmin = isadmin
+    },
+    setLocale (state, locale) {
+        state.locale = locale
+    },
+    setOrders (state, orders) {
+        state.user.orders = orders
+    },
+    setStatus (state, status) {
+        state.user.status = status
+    },
+    setUser (state, user) {
+        state.user = user
     }
 }
-
 const actions = {
-    auth ({ commit }, { email, _id }) {
-        commit('setEmail', email)
-        commit('setId', _id)
+    auth ({ commit }, user) {
+        commit('setUser', user)
+    },
+    logout ({ dispatch }) {
+        dispatch('auth', {
+            email: null,
+            error: null,
+            isadmin: false,
+            orders: [],
+            status: null
+        })
     }
 }
 

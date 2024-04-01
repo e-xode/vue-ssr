@@ -1,5 +1,5 @@
-const log = (param) => {
-    console.log(`< SSR > ${param}`)
+const log = (str) => {
+    console.log(`< SSR > ${str}`)
 }
 export {
     log

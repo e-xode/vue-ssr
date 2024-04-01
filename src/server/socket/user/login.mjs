@@ -1,19 +1,32 @@
-import { mail } from '#src/server/shared/email.mjs'
+import { omit } from 'ramda'
+import { logindb } from '#src/server/shared/logindb.mjs'
 import { hash, rand } from '#src/server/shared/crypt.mjs'
-import { log } from '#src/server/shared/log.mjs'
+import { mail } from '#src/server/shared/email.mjs'
 
 export default  async ({ data, db, socket  }) => {
 
-    const { email, password, captcha } = data
+    const { captcha, email, password, route  } = data
     if (!captcha || !email || !password) {
-        return socket.emit('auth', {
+        await logindb({
+            email: email || socket.session.id,
+            details: 'page.login.error.missing-fields',
+            event: 'user.login',
+            status: 400
+        }, db)
+        return socket.emit('user.auth', {
             status: 400,
             error: 'page.login.error.missing-fields'
         })
     }
 
     if (captcha !== socket.handshake.session.captcha) {
-        return socket.emit('auth', {
+        await logindb({
+            email,
+            details: 'page.login.error.captcha-incorrect',
+            event: 'user.login',
+            status: 400
+        }, db)
+        return socket.emit('user.auth', {
             status: 400,
             error: 'page.login.error.captcha-incorrect'
         })
@@ -21,7 +34,13 @@ export default  async ({ data, db, socket  }) => {
 
     const user = await db.collection('user').findOne({ email })
     if (!user?._id) {
-        return socket.emit('auth', {
+        await logindb({
+            email,
+            details: 'page.login.error.user-not-found',
+            event: 'user.login',
+            status: 400
+        }, db)
+        return socket.emit('user.auth', {
             status: 400,
             error: 'page.login.error.user-not-found'
         })
@@ -29,31 +48,43 @@ export default  async ({ data, db, socket  }) => {
 
     const hashed = hash(password, user.salt)
     if (hashed !== user.password) {
-        return socket.emit('auth', {
+        await logindb({
+            email,
+            details: 'page.login.error.password-incorrect',
+            event: 'user.login',
+            status: 400
+        }, db)
+        return socket.emit('user.auth', {
             status: 400,
             error: 'page.login.error.password-incorrect'
         })
     }
 
     const authcode = rand()
-    socket.handshake.session.auth = {
-        code: authcode,
-        status: 'pending'
-    }
     socket.handshake.session.user = {
-        _id: user._id,
-        email
+        ...omit(['password', 'salt'], user),
+        code: authcode,
+        route,
+        status: 100
     }
     socket.handshake.session.save()
 
-    await mail('/app/src/server/templates/email/en/authcode.html', {
+    await logindb({
+        email,
+        details: 'page.login.email-authentication-code',
+        event: 'user.login',
+        status: 100
+    }, db)
+
+    await mail(socket, 'authcode.html', {
         authcode,
         to: email,
-        subject: 'e-xode-vue-ssr-auth-code'
+        subject: 'app.email.authcode'
     })
 
-    return socket.emit('auth', {
-        ...socket.handshake.session.user,
-        status: 200,
+    socket.emit('user.auth', {
+        ...omit(['password', 'salt'], user),
+        route,
+        status: 100
     })
 }

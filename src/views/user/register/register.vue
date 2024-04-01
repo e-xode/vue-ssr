@@ -1,7 +1,7 @@
 <template>
     <vui-card
         flat
-        class="card--register"
+        class="view-register"
     >
         <h1>
             <i class="fa-solid fa-user-plus" />
@@ -30,6 +30,30 @@
             <section>
                 <fieldset>
                     <div class="fieldset-item">
+                        <label for="email">
+                            {{ $t('page.register.country') }}
+                        </label>
+                        <div class="input">
+                            <vui-dropdown
+                                id="country"
+                                v-model="form.country"
+                                name="country"
+                                item-label="name"
+                                item-value="_id"
+                                :items="getCountries"
+                                :placeholder="$t('page.register.country.placeholder')"
+                                required
+                                return-object
+                                :disable-filtering="true"
+                                @input="(v) => onCountryKeyword(v)"
+                            />
+                        </div>
+                    </div>
+                </fieldset>
+            </section>
+            <section>
+                <fieldset>
+                    <div class="fieldset-item">
                         <label for="password">
                             {{ $t('page.register.password') }}
                         </label>
@@ -48,9 +72,9 @@
             </section>
             <section>
                 <fieldset>
-                    <div class="fieldset-item">
+                    <div class="fieldset-item fieldset-item--captcha">
                         <label for="captcha">
-                            {{ $t('page.register.captcha') }}
+                            {{ $t('page.login.captcha') }}
                             <img
                                 v-if="captcha"
                                 :src="svg"
@@ -62,7 +86,7 @@
                                 v-model="form.captcha"
                                 type="text"
                                 name="captcha"
-                                :placeholder="$t('page.register.captcha.placeholder')"
+                                :placeholder="$t('page.login.captcha.placeholder')"
                                 required
                             />
                         </div>
@@ -74,8 +98,23 @@
                     icon="fa-solid fa-list-check"
                     type="submit"
                     :text="$t('page.register.submit')"
-                    @click.prevent="register"
+                    @click.prevent="onSubmit"
                 />
+                <div class="links">
+                    <router-link
+                        :to="{
+                            name: 'ViewLogin',
+                            params: {
+                                locale
+                            },
+                            query:  {
+                                route: $route.query.route
+                            }
+                        }"
+                    >
+                        {{ $t('page.register.login') }}
+                    </router-link>
+                </div>
             </section>
             <vui-alert
                 v-if="error"

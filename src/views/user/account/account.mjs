@@ -1,24 +1,31 @@
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import * as R from 'ramda'
+import { pages } from '#src/shared/page'
+import mixinCollections from '#src/mixins/collections'
+import mixinMetas from '#src/mixins/metas'
 
 export default {
     name: 'ViewAccount',
+    mixins: [
+        mixinCollections,
+        mixinMetas
+    ],
     beforeUnmount() {
-        this.$socket.off('account')
+        this.$socket.off('user.account')
     },
     created() {
-        this.setDescription(this.$t('page.account.metas.description'))
-        this.setKeywords(this.$t('page.account.metas.keywords'))
-        this.setTitle(this.$t('page.account.metas.title'))
+        this.onReset()
     },
     mounted() {
-        this.$socket.on('account', ({ _id, email, status }) => {
-            switch (status) {
+        this.$socket.on('user.account', (user) => {
+            switch (user.status) {
                 case 200:
-                    this.auth({ _id, email })
-                    this.success = status
+                    this.auth(user)
+                    this.success = user.status
+                    this.onReset()
                     break
                 case 400:
-                        this.error = error
+                    this.error = user.error
                     break
             }
         })
@@ -26,21 +33,65 @@ export default {
     data() {
         return {
             error: null,
+            form: {},
             success: null,
-            form: {
-                newpassword: null,
-                oldpassword: null
-            }
+            timeout: null
         }
     },
     computed: {
-        ...mapGetters('user', ['email'])
+        ...mapGetters('user', ['user']),
+        countries() {
+            return R.uniqBy(R.prop('_id'))([
+                ...this.getCountries,
+                ...(this.user?.country
+                    ? [this.user.country]
+                    : []
+                )
+            ])
+        },
+        page () {
+            return pages.find((p) => p.route.name === 'ViewAccount')
+        }
     },
     methods: {
         ...mapActions('user', ['auth']),
-        ...mapMutations('metas', ['setDescription', 'setKeywords', 'setTitle']),
+        onCountryKeyword ({ target }) {
+            clearTimeout(this.timeout)
+            this.timeout = setTimeout(() => {
+                this.$socket.emit('data.collection', {
+                    collection: 'country',
+                    name: 'country',
+                    params: {
+                        field: 'name',
+                        keyword: target?.value
+                    },
+                    type: 'findAll'
+                })
+            }, 500)
+        },
+        onMetas () {
+            const { description, keywords, title } = this.page.metas
+            this.onMetasChange({
+                description: this.$t(description),
+                image: null,
+                keywords: this.$t(keywords),
+                title: this.$t(title)
+            })
+        },
         onSubmit() {
-            this.$socket.emit('account', this.form)
+            this.error = null
+            this.success = null
+            this.$socket.emit('user.account', {
+                ...this.user,
+                ...this.form
+            })
+        },
+        onReset() {
+            this.form = {
+                country: this.user.country,
+                newpassword: null,
+                oldpassword: null
+            }
         }
     }
 }

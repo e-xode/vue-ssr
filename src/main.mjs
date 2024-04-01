@@ -1,14 +1,10 @@
 import { io } from 'socket.io-client'
-import buildApp from '@/app.mjs'
+import mount from '@/app.mjs'
 import { cssRemove } from '@/server/shared/css.mjs'
 
-
-const { app, router, store } = buildApp()
-const storeInitialState = window.INITIAL_DATA
-
-if (storeInitialState) {
-    store.replaceState(storeInitialState)
-}
+const data = JSON.parse(decodeURIComponent(window.__INITIAL_STATE__))
+const { app, router, store } = mount(data.user.locale)
+store.replaceState(data)
 
 app.config.globalProperties.$socket = io(
     process.env.NODE_ENV !== 'production'

@@ -1,5 +1,6 @@
 @import "@e-xode/vui/dist/style.css";
 @import "@fortawesome/fontawesome-free/css/all.css";
+@import "@/scss/import.scss";
 
 @font-face {
     font-family: 'Font Awesome 5 Brands';
@@ -63,7 +64,7 @@ h1 {
 }
 
 a {
-    color: blue;
+    color: $pink-color;
 
 }
 

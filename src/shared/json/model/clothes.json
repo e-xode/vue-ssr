@@ -1,0 +1,168 @@
+{
+    "label": "Clothes",
+    "name": "clothe",
+    "public": true,
+    "model": [
+        {
+            "editable": false,
+            "html": "text",
+            "isLabel": false,
+            "multiple": false,
+            "name": "_id",
+            "required": false,
+            "tableHeader": true,
+            "type": "string"
+        },
+        {
+            "editable": false,
+            "html": "text",
+            "isLabel": false,
+            "multiple": false,
+            "name": "slug",
+            "required": true,
+            "tableHeader": false,
+            "type": "string"
+        },
+        {
+            "editable": true,
+            "html": "text",
+            "isLabel": true,
+            "name": "name",
+            "multiple": false,
+            "required": true,
+            "tableHeader": false,
+            "type": "string"
+        },
+        {
+            "editable": true,
+            "html": "text",
+            "isLabel": false,
+            "name": "color",
+            "multiple": true,
+            "required": true,
+            "tableHeader": false,
+            "type": "string"
+        },
+        {
+            "editable": true,
+            "html": "select",
+            "isLabel": false,
+            "name": "size",
+            "required": true,
+            "tableHeader": false,
+            "type": "string",
+            "options": [
+                {
+                    "label": "Free",
+                    "value": "free"
+                },
+                {
+                    "label": "XS",
+                    "value": "xs"
+                },
+                {
+                    "label": "S",
+                    "value": "s"
+                },
+                {
+                    "label": "M",
+                    "value": "m"
+                },
+                {
+                    "label": "L",
+                    "value": "l"
+                },
+                {
+                    "label": "XL",
+                    "value": "xl"
+                },
+                {
+                    "label": "XXL",
+                    "value": "xxl"
+                },
+                {
+                    "label": "XXXL",
+                    "value": "xxxl"
+                }
+            ]
+        },
+        {
+            "collection": "category",
+            "editable": true,
+            "html": "select",
+            "isLabel": false,
+            "itemLabel": "name",
+            "itemValue": "_id",
+            "name": "category",
+            "required": true,
+            "tableHeader": true,
+            "type": "string",
+            "multiple": false
+        },
+        {
+            "editable": true,
+            "html": "textarea",
+            "isLabel": false,
+            "multiple": true,
+            "name": "description",
+            "required": true,
+            "tableHeader": false,
+            "type": "string"
+        },
+        {
+            "editable": true,
+            "html": "number",
+            "isLabel": false,
+            "multiple": false,
+            "name": "quantity",
+            "required": true,
+            "tableHeader": true,
+            "type": "number"
+        },
+        {
+            "editable": true,
+            "html": "number",
+            "isLabel": false,
+            "multiple": false,
+            "name": "price",
+            "required": true,
+            "tableHeader": true,
+            "type": "number"
+        },
+        {
+            "editable": true,
+            "html": "file",
+            "isLabel": false,
+            "multiple": true,
+            "name": "images",
+            "required": true,
+            "tableHeader": false,
+            "type": "string"
+        },
+        {
+            "editable": true,
+            "html": "checkbox",
+            "isLabel": false,
+            "multiple": false,
+            "name": "enabled",
+            "required": false,
+            "tableHeader": true,
+            "type": "boolean"
+        }
+    ],
+    "params": {
+        "sort": {
+            "name": 1
+        }
+    },
+    "store": {
+        "name": "clothes",
+        "getItems": "getClothes",
+        "getItemsPaging": "getClothesPaging",
+        "getItem": "getClothe",
+        "setItemsPaginated": "setClothesPaginated",
+        "setItem": "setClothe",
+        "setItems": "setClothes",
+        "setItemPaging": "setClothesPaging"
+    }
+}
