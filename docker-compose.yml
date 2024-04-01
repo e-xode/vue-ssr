@@ -1,13 +1,35 @@
 version: '3'
 services:
     node:
-        container_name: e-xode.app
+        container_name: e-xode.vue-ssr
         build:
-            context: 'docker/dev'
+            context: 'docker/dev/node'
+        depends_on:
+            mongo:
+                condition: service_healthy
         volumes:
             - '.:/app'
         ports:
-            - 3002:3002
+            - ${NODE_PORT}:${NODE_PORT}
+            - 24678:24678
+        env_file:
+            - ./.env
+        networks:
+            - e-xode
+    mongo:
+        container_name: e-xode.mongo.vue-ssr
+        build:
+            context: 'docker/dev/mongo'
+        healthcheck:
+            test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/vuessr --quiet
+            interval: 10s
+            timeout: 10s
+            retries: 10
+        volumes:
+            - './data:/data'
+        ports:
+            - 27017:27017
+            - 28017:28017
         env_file:
             - ./.env
         networks:

@@ -1,0 +1,47 @@
+{
+    "label": "Posts",
+    "name": "post",
+    "public": true,
+    "model": [
+        {
+            "editable": false,
+            "html": "text",
+            "isLabel": false,
+            "multiple": false,
+            "name": "_id",
+            "required": false,
+            "tableHeader": true,
+            "type": "string"
+        },
+        {
+            "editable": true,
+            "html": "text",
+            "isLabel": true,
+            "multiple": false,
+            "name": "title",
+            "required": true,
+            "tableHeader": true,
+            "type": "string"
+        },
+        {
+            "editable": true,
+            "html": "html",
+            "isLabel": false,
+            "multiple": false,
+            "name": "html",
+            "required": true,
+            "tableHeader": false,
+            "type": "string"
+        }
+    ],
+    "store": {
+        "name": "posts",
+        "getItem": "getPost",
+        "getItems": "getPosts",
+        "getItemsPaging": "getPostsPaging",
+        "setItemsPaginated": "setPostsPaginated",
+        "setItem": "setPost",
+        "setItems": "setPosts",
+        "setPaginatedItems": "setPostsPaging"
+    }
+}

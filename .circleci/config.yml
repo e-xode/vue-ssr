@@ -1,0 +1,24 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@4.7
+
+jobs:
+  test:
+    docker:
+      - image: cimg/node:19.5.0
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: run front-end lint
+          command: npm run lint
+      - run:
+          name: run front-end unit tests
+          command: npm run test:unit
+
+workflows:
+  unit-testing:
+    jobs:
+      - test

@@ -1,0 +1,28 @@
+.card--auth,
+.card--login,
+.card--register {
+    .vui-card-body {
+        .vui-form {
+            section {
+                .fieldset-item {
+
+                    label[for="captcha"] {
+                        display: flex;
+                        justify-content: space-between;
+                        padding-right: 1rem;
+
+                        img {
+                            filter:
+                                invert(46%)
+                                sepia(7%)
+                                saturate(566%)
+                                hue-rotate(150deg)
+                                brightness(89%)
+                                contrast(88%);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

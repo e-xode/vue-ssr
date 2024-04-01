@@ -1,5 +1,73 @@
 @import "@e-xode/vui/dist/style.css";
+@import "@fortawesome/fontawesome-free/css/all.css";
+@import "@/scss/import.scss";
 
-.app {
+@font-face {
+    font-family: 'Font Awesome 5 Brands';
+    font-style: normal;
+    font-weight: 400;
+    src:
+    url('@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2') format('woff2'),
+    url('@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf') format('truetype')
+}
+@font-face {
+    font-family: 'Font Awesome 5 Regular';
+    font-style: normal;
+    font-weight: 400;
+    src:
+    url('@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2') format('woff2'),
+    url('@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf') format('truetype')
+}
+@font-face {
+    font-family: 'Font Awesome 5 Solid';
+    font-style: normal;
+    font-weight: 900;
+    src:
+    url('@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2') format('woff2'),
+    url('@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf') format('truetype')
+}
 
+* {
+    border: none;
+    box-sizing: border-box;
+    color: black;
+    font-size: 1rem;
+    line-height: 1rem;
+    list-style-type: none;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    padding: 1rem;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    background-color: rgba(grey, .1);
+}
+
+h1, h2, h3, h4, h5 {
+    padding: .5rem 0;
+    font-size: 1.15rem;
+    line-height: 1.2rem;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+h1 {
+    padding: 1rem 0 2rem .5rem;
+    font-weight: 600;
+}
+
+a {
+    color: $pink-color;
+
+}
+
+p {
+    padding: .5rem 0;
 }

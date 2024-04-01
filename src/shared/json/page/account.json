@@ -1,0 +1,29 @@
+{
+    "queries": [
+        {
+            "collection": "country",
+            "name": "country",
+            "params": {},
+            "store": {
+                "name": "countries",
+                "getItems": "getCountries",
+                "getItemsPaging": "getCountriesPaging",
+                "getItem": "getClothe",
+                "setItemsPaginated": "setCountriesPaginated",
+                "setItem": "setCountry",
+                "setItems": "setCountries",
+                "setItemPaging": "setCountriesPaging"
+            },
+            "type": "findAll"
+        }
+    ],
+    "metas": {
+        "description": "page.register.metas.description",
+        "title": "page.register.metas.title",
+        "keywords": "page.register.metas.keywords"
+    },
+    "name": "ViewAccount",
+    "route": {
+        "name": "ViewAccount"
+    }
+}

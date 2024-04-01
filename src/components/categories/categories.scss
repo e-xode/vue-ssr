@@ -1,0 +1,29 @@
+.component-categories {
+    padding: 0 2rem 0 2rem;
+
+    .categories {
+        display: flex;
+        flex-flow: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+
+        .category {
+            flex: 0 0 auto;
+            display: block;
+            padding: .5rem .5rem;
+            margin: 0 .25rem .25rem 0;
+            min-width: 65px;
+            color: white;
+            font-size: .9rem;;
+            text-align: center;
+            text-transform: uppercase;
+            border-radius: .25rem;
+            background-color: black;
+        }
+    }
+}
+@media (max-width: 768px) {
+    .component-categories {
+        padding: 0 0 1rem 0;
+    }
+}

@@ -1,0 +1,59 @@
+@import "@/views/user/user.scss";
+.view-login {
+    .vui-card-body {
+        .vui-form {
+            section {
+                fieldset {
+                    .fieldset-item {
+
+                        &.fieldset-item--captcha {
+
+                            label {
+                                display: flex;
+                                justify-content: space-between;
+                                padding-right: 1rem;
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            .section--submit {
+                .links {
+                    display: block;
+                    margin-top: 1rem;
+                    padding: 1rem 0;
+
+                    a {
+                        font-size: .9rem;
+                        border-bottom: 1px solid red;
+                    }
+                }
+            }
+        }
+    }
+}
+@media (max-width: 768px) {
+    .view-login {
+        .vui-card-body {
+            .vui-form {
+                section {
+                    fieldset {
+                        .fieldset-item {
+
+                            &.fieldset-item--captcha {
+                                flex-flow: column;
+
+                                label {
+                                    padding: 0 0 1rem 0;
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

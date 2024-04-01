@@ -1,12 +1,42 @@
 <template>
     <vui-page class="layout-default">
         <template #header>
-            <vui-header>
+            <vui-header
+                :class="{ 'vui-header--connected': isAuthenticated }"
+            >
                 <router-link
-                    :to="{ name: 'ViewIndex' }"
+                    :to="{
+                        name: 'ViewIndex',
+                        params: {
+                            locale
+                        }
+                    }"
                     class="home"
                 >
-                    {{ $t('component.header.home') }}
+                    <span>
+                        {{ $t('component.header.home') }}
+                    </span>
+                </router-link>
+                <vui-dropdown
+                    v-if="isAuthenticated"
+                    item-label="label"
+                    item-value="value"
+                    :items="dropdownItems"
+                    :placeholder="email"
+                    :value="email"
+                    @update:modelValue="onDropdown"
+                />
+                <router-link
+                    v-if="!isAuthenticated"
+                    :to="{
+                        name: 'ViewLogin',
+                        params: {
+                            locale
+                        }
+                    }"
+                    class="login"
+                >
+                    <i class="fa-solid fa-user-plus" />
                 </router-link>
             </vui-header>
         </template>
@@ -16,8 +46,8 @@
         <template #footer>
             <vui-footer>
                 <span class="copyright">
-                    <a href="https://www.e-xode.net">
-                        www.e-xode.net
+                    <a href="https://ssr.e-xode.net">
+                        vue-ssr.e-xode.net
                     </a>
                 </span>
             </vui-footer>
