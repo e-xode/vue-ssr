@@ -24,7 +24,7 @@
                     :items="dropdownItems"
                     :placeholder="email"
                     :value="email"
-                    @update:modelValue="onDropdown"
+                    @update:model-value="onDropdown"
                 />
                 <router-link
                     v-if="!isAuthenticated"

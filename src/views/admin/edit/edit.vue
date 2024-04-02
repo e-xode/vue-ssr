@@ -143,7 +143,7 @@
                                     <img
                                         :src="file.path"
                                     />
-                            </a>
+                                </a>
                             </template>
                         </div>
                     </template>
@@ -163,7 +163,7 @@
                     class="vui-button--delete"
                     @click="onDelete"
                 >
-                    {{  $t('page.admin.edit.delete') }}
+                    {{ $t('page.admin.edit.delete') }}
                 </vui-button>
                 <vui-button
                     type="button"

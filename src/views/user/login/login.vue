@@ -83,7 +83,7 @@
                             params: {
                                 locale
                             },
-                            query:  {
+                            query: {
                                 route: $route.query.route
                             }
                         }"
@@ -97,7 +97,7 @@
                             params: {
                                 locale
                             },
-                            query:  {
+                            query: {
                                 route: $route.query.route
                             }
                         }"

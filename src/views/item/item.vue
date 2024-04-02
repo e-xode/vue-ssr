@@ -149,7 +149,7 @@
                         target="_blank"
                         class="facebook"
                     >
-                        {{  $t('page.item.share') }}
+                        {{ $t('page.item.share') }}
                         <i class="fa-brands fa-square-facebook" />
                     </a>
                 </div>
