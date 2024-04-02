@@ -27,7 +27,7 @@ mongo().then(async({ db, error }) => {
         const sessionMiddleware = session({
             store: new fileStore({ path: '/app/data/tmp' }),
             cookie: { maxAge: 24 * 60 * 60 * 1000 },
-            secret: 'e-xode.vue-ssr',
+            secret: process.env.COOKIE_SECRET,
             resave: true,
             saveUninitialized: true
         })
