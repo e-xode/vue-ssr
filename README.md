@@ -24,7 +24,7 @@
 ```sh
 cp .env_sample .env
 ```
-- edit .env file and update with your node, mongo, smtp variables
+(optional: edit .env file and update with your node, mongo, smtp variables )
 
 Then to run application:
 
