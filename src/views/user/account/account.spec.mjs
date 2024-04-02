@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import setup from '@/test/setup.mjs'
+import main from '@/test/main.mjs'
 
 import ViewAccount from '@/views/user/account/account.vue'
 
@@ -9,15 +9,12 @@ describe('views/user/ViewAccount', () => {
 
     const mountComponent = () => {
         return shallowMount(ViewAccount, {
-            ...setup,
+            ...main,
             propsData
         })
     }
 
     afterEach(() => {
-        jest.restoreAllMocks()
-        jest.resetAllMocks()
-        jest.clearAllTimers()
         jest.useRealTimers()
     })
 

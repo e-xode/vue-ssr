@@ -1,15 +1,15 @@
 import { shallowMount } from '@vue/test-utils'
 import main from '@/test/main.mjs'
 
-import ViewIndex from '@/views/index/index.vue'
+import ViewItem from '@/views/item/item.vue'
 
-describe('views/ViewIndex', () => {
+describe('views/ViewItem', () => {
 
     const propsData = {
     }
 
     const mountComponent = () => {
-        return shallowMount(ViewIndex, {
+        return shallowMount(ViewItem, {
             ...main,
             propsData
         })
