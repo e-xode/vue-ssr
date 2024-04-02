@@ -143,7 +143,7 @@
                                     <img
                                         :src="file.path"
                                     />
-                                </a>
+                            </a>
                             </template>
                         </div>
                     </template>
