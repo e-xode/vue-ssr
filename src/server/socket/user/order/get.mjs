@@ -6,10 +6,9 @@ export default async ({ data, db, socket  }) => {
 
     if (!user?._id) {
         await logindb({
-            email: user.email,
+            email: socket.handshake.session.id,
             details: 'page.auth.error.user-not-authenticated',
             event: 'user.get.orders',
-            user: user._id,
             status: 401
         }, db)
         return socket.emit('user.auth', {

@@ -8,7 +8,7 @@ export default  async ({ data, db, socket  }) => {
     const { captcha, email, password, route  } = data
     if (!captcha || !email || !password) {
         await logindb({
-            email: email || socket.session.id,
+            email: email || socket.handshake.session.id,
             details: 'page.login.error.missing-fields',
             event: 'user.login',
             status: 400
