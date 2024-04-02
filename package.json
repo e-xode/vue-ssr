@@ -16,6 +16,7 @@
         "build:server": "vite --ssr --config vite.server.mjs build",
         "dev": "nodemon src/server/server.mjs",
         "lint": "eslint --ext .js,.vue src",
+        "lint:fix": "eslint --fix --ext .js,.vue src",
         "test:unit": "jest --clearCache && jest",
         "test:unit:coverage": "jest --clearCache && jest --coverage",
         "test:unit:watch": "jest --clearCache && jest --watch"

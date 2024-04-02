@@ -4,7 +4,10 @@ import queries from '#src/server/db/index.mjs'
 const route = async({ db, req, res, router, store }) => {
     const { currentRoute } = router
     const { query: { offset = 0, max = 25 }, session: { locale, user } } = req
-    const page = pages.find((p) => p.route.name === currentRoute.value.name)
+    const match = pages.find((p) => p.route.name === currentRoute.value.name)
+    const page =  match
+        ? match
+        : { queries: [] }
 
     if (user?._id) {
         const dbuser = await queries.findUser({ db, _id: user._id })

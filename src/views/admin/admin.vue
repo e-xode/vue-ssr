@@ -76,7 +76,7 @@
                             <td
                                 :data-label="$t('page.admin.table.date')"
                             >
-                                {{ dayjs(item.createdAt).format(this.$t('app.date-full')) }}
+                                {{ dayjs(item.createdAt).format($t('app.date-full')) }}
                             </td>
                         </template>
                     </vui-table>
