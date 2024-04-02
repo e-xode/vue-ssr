@@ -81,7 +81,12 @@
         "moduleNameMapper": {
             "^@/(.*)$": "<rootDir>/src/$1"
         },
-        "setupFiles": [],
+        "setupFiles": [
+
+        ],
+        "setupFilesAfterEnv": [
+            "<rootDir>/src/test/setup.mjs"
+        ],
         "testEnvironment": "jsdom",
         "testEnvironmentOptions": {
             "customExportConditions": [

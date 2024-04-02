@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import setup from '@/test/setup.mjs'
+import main from '@/test/main.mjs'
 
 import DefaultLayout from '@/views/layout/layout.vue'
 
@@ -10,15 +10,12 @@ describe('views/DefaultLayout', () => {
 
     const mountComponent = () => {
         return shallowMount(DefaultLayout, {
-            ...setup,
+            ...main,
             propsData
         })
     }
 
     afterEach(() => {
-        jest.restoreAllMocks()
-        jest.resetAllMocks()
-        jest.clearAllTimers()
         jest.useRealTimers()
     })
 

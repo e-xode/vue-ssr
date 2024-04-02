@@ -1,15 +1,15 @@
 import { shallowMount } from '@vue/test-utils'
 import main from '@/test/main.mjs'
 
-import ViewIndex from '@/views/index/index.vue'
+import ViewError from '@/views/error/error.vue'
 
-describe('views/ViewIndex', () => {
+describe('views/ViewError', () => {
 
     const propsData = {
     }
 
     const mountComponent = () => {
-        return shallowMount(ViewIndex, {
+        return shallowMount(ViewError, {
             ...main,
             propsData
         })
