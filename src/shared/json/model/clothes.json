@@ -38,7 +38,7 @@
             "html": "text",
             "isLabel": false,
             "name": "color",
-            "multiple": true,
+            "multiple": false,
             "required": true,
             "tableHeader": false,
             "type": "string"

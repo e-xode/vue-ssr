@@ -41,7 +41,7 @@
                                     {{ $t('page.item.size') }}
                                 </label>
                                 <span class="value">
-                                    {{ item.size }}
+                                    {{ item.size.value }}
                                 </span>
                             </li>
                             <li>

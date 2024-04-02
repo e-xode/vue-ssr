@@ -127,22 +127,24 @@
                                     :name="field.name"
                                     :required="field.required"
                                     multiple="multiple"
-                                    @update:model-value="onFileChange"
+                                    @change="onFileChange"
                                 />
                             </div>
                         </div>
                         <div class="preview">
-                            <a
-                                v-for="file in form.files"
-                                :key="file.path"
-                                :href="file.path"
-                                target="_blank"
-                                class="file-container"
-                            >
-                                <img
-                                    :src="file.path"
-                                />
+                            <template v-for="file in form.files">
+                                <a
+                                    v-if="file?.path"
+                                    :key="file.path"
+                                    :href="file.path"
+                                    target="_blank"
+                                    class="file-container"
+                                >
+                                    <img
+                                        :src="file.path"
+                                    />
                             </a>
+                            </template>
                         </div>
                     </template>
                     <template v-if="['html'].includes(field.html)">
