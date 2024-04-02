@@ -61,7 +61,10 @@
                     <router-link
                         :to="{
                             name: 'ViewRegister',
-                            parpagery: {
+                            params: {
+                                locale
+                            },
+                            query: {
                                 route: $route.query.route
                             }
                         }"
