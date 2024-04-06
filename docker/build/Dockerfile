@@ -29,8 +29,9 @@ ENV MONGO_PWD=
 ENV MONGO_TYPE=
 ENV MONGO_USER=
 
-RUN apk update
-RUN apk --no-cache add supervisor
+RUN apt-get update -y && \
+  apt-get upgrade -y && \
+  apt-get install -y supervisor
 
 EXPOSE $NODE_PORT
 
