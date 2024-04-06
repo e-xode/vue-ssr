@@ -46,13 +46,11 @@ export default async ({ data, db, socket  }) => {
     }
 
     const createAt = new Date(Date.now())
-    const salted = salt()
     await db.collection('user').insertOne({
         ...data,
         createAt,
         hash,
-        password: hash(password, salted),
-        salt: salted
+        password: hash(password)
     })
 
     const { _id } = await db.collection('user').findOne({ email })

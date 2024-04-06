@@ -105,22 +105,20 @@
                     />
                 </fieldset>
             </section>
-            <section>
-                <vui-alert
-                    v-if="error"
-                    icon="fa-solid fa-warning"
-                    layout="error"
-                >
-                    {{ $t(error) }}
-                </vui-alert>
-                <vui-alert
-                    v-if="success"
-                    icon="fa-solid fa-check"
-                    layout="success"
-                >
-                    {{ $t('page.account.success') }}
-                </vui-alert>
-            </section>
+            <vui-alert
+                v-if="error"
+                icon="fa-solid fa-warning"
+                layout="error"
+            >
+                {{ $t(error) }}
+            </vui-alert>
+            <vui-alert
+                v-if="success"
+                icon="fa-solid fa-check"
+                layout="success"
+            >
+                {{ $t('page.account.success') }}
+            </vui-alert>
         </vui-form>
     </vui-card>
 </template>
