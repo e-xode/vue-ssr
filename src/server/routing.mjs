@@ -33,7 +33,7 @@ const route = async({ db, req, res, router, store }) => {
             break
         }
         case 'ViewAccount': {
-            if (![200,449].includes(user.status)) {
+            if (![200,449].includes(user?.status)) {
                 return res.status(307).redirect(`/${locale}/error`)
             }
             break
