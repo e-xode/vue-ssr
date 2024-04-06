@@ -39,38 +39,43 @@ const route = async({ db, req, res, router, store }) => {
             break
         }
         default: {
-            for(let i = 0; i < page.queries.length; i++) {
-                const query = page.queries[i]
-                if (query.type === 'findOne') {
-                    const { collection, slug } = currentRoute.value.params
-                    const query = page.queries.find((q) => q.collection === collection)
-                    const item = await queries[query.type]({
-                        collection: query.collection,
-                        db,
-                        params: { ...query.params, slug },
-                        query: { ...req.query }
-                    })
-                    const set = `${query.store.name}/${query.store.setItem}`
-                    await store.commit(set, item)
-                } else {
-                    const { items, total }  = await queries[query.type]({
-                        collection: query.collection,
-                        db,
-                        field: query.field,
-                        params: query.params,
-                        query: query.main
-                            ? { ...req.query, max, offset }
-                            : {}
-                    })
-                    const set = `${query.store.name}/${query.store.setItemsPaginated}`
-                    await store.dispatch(set, {
-                        items,
-                        paging: query.main
-                            ? { max, offset, total }
-                            : { max: total, offset: 0, total }
-                    })
+            page.queries.forEach(async(query) => {
+                switch(query.type) {
+                    case 'findOne': {
+                        const item = await queries[query.type]({
+                            collection: query.collection,
+                            db,
+                            params: {
+                                ...currentRoute.value.params,
+                                ...query.params
+                            },
+                            query: { ...req.query }
+                        })
+                        const set = `${query.store.name}/${query.store.setItem}`
+                        await store.commit(set, item)
+                        break
+                    }
+                    default: {
+                        const { items, total }  = await queries[query.type]({
+                            collection: query.collection,
+                            db,
+                            field: query.field,
+                            params: query.params,
+                            query: query.main
+                                ? { ...req.query, max, offset }
+                                : {}
+                        })
+                        const set = `${query.store.name}/${query.store.setItemsPaginated}`
+                        await store.dispatch(set, {
+                            items,
+                            paging: query.main
+                                ? { max, offset, total }
+                                : { max: total, offset: 0, total }
+                        })
+                        break
+                    }
                 }
-            }
+            })
             break
         }
     }

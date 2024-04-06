@@ -26,14 +26,14 @@ const routes = [
                     '@/views/admin/admin.vue'
                 ),
                 name: 'ViewAdmin',
-                path: ':locale/admin/:collection?',
+                path: ':locale/admin/:collection?'
             },
             {
                 component: () => import(
                     '@/views/admin/edit/edit.vue'
                 ),
                 name: 'ViewAdminEdit',
-                path: ':locale/admin/:collection/:_id',
+                path: ':locale/admin/:collection/:_id'
             },
             {
                 component: () => import(
@@ -54,7 +54,7 @@ const routes = [
                     '@/views/item/item.vue'
                 ),
                 name: 'ViewItem',
-                path: ':locale/:collection/:slug?',
+                path: ':locale/:collection/:slug?'
             },
             {
                 component: () => import(

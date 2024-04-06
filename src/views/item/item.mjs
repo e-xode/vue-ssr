@@ -38,8 +38,8 @@ export default {
     computed: {
         ...mapGetters('user', ['user']),
         fb () {
-            const { collection, item, locale } = this
-            const path = `${locale}/${collection.name}/${item.slug}`
+            const { collection, item: { slug } = { slug: ''}, locale } = this
+            const path = `${locale}/${collection?.name}/${slug}`
             const link =  `https://ssr.e-xode.net/${path}`
             const u = `${encodeURI(link)}`
             const t = `${encodeURI(this.metas.title)}`
@@ -55,7 +55,9 @@ export default {
             return false
         },
         item () {
-            return this[this.collection.store.getItem]
+            return this.collection
+                ? this[this.collection.store.getItem]
+                : {}
         },
         nav () {
             const index = [{
@@ -95,11 +97,12 @@ export default {
             })
         },
         onMetas () {
+            const { files = [], name = '' } = this.item
             this.onMetasChange({
                 description: '',
-                image: this.item?.files?.[0]?.path,
+                image: files?.[0]?.path,
                 keywords: '',
-                title: `${this.item?.name} - ${this.$t('component.header.home')}`
+                title: `${name} ${this.$t('component.header.home')}`
             })
         }
     },
