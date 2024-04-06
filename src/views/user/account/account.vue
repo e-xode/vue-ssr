@@ -52,7 +52,7 @@
                 {{ $t('page.account.h2-password') }}
             </h2>
             <section>
-                <fieldset v-if="user.status !== 449">
+                <fieldset v-if="user.status === 200">
                     <div class="fieldset-item">
                         <label for="password">
                             {{ $t('page.account.old-password') }}
@@ -80,9 +80,20 @@
                                 type="password"
                                 name="newpassword"
                                 required
+                                :class="{
+                                    error: user.status === 449
+                                }"
                             />
                         </div>
                     </div>
+                    <vui-alert
+                        v-if="user.status === 449"
+                        icon="fa-solid fa-warning"
+                        layout="warning"
+                        class="alert--449"
+                    >
+                        {{ $t('page.account.new-password.449') }}
+                    </vui-alert>
                 </fieldset>
             </section>
             <section class="section--submit">

@@ -9,16 +9,6 @@ export default {
     beforeUnmount() {
         this.$socket.off('user.me')
     },
-    mounted() {
-        // this.$socket.on('user.me', (user) => {
-        //     this.auth(user)
-        // })
-        // this.$socket.emit('user.me')
-    },
-    data() {
-        return {
-        }
-    },
     computed: {
         ...mapGetters('user', ['email','isAdmin', 'isAuthenticated']),
         dropdownItems () {

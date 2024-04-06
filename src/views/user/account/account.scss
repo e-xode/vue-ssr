@@ -1,11 +1,25 @@
+@import "@/scss/import.scss";
+
 .card--account {
 
     h2 {
         padding-top: 2rem;
     }
 
-    form {
-        section {
+    .fieldset-item {
+        .input {
+            .vui-input.error {
+                border-color: $pink-color;
+
+                ::placeholder {
+                    color: $pink-color;
+                    opacity: 1;
+                  }
+            }
         }
+    }
+
+    .alert--449 {
+        margin-top: 1rem;
     }
 }

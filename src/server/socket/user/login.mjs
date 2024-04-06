@@ -1,6 +1,7 @@
 import { omit } from 'ramda'
+import bcrypt from 'bcrypt'
 import { logindb } from '#src/server/shared/logindb.mjs'
-import { hash, rand } from '#src/server/shared/crypt.mjs'
+import { rand } from '#src/server/shared/crypt.mjs'
 import { mail } from '#src/server/shared/email.mjs'
 
 export default  async ({ data, db, socket  }) => {
@@ -46,8 +47,7 @@ export default  async ({ data, db, socket  }) => {
         })
     }
 
-    const hashed = hash(password, user.salt)
-    if (hashed !== user.password) {
+    if (!bcrypt.compareSync(password, user.password)) {
         await logindb({
             email,
             details: 'page.login.error.password-incorrect',
