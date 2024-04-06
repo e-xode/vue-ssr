@@ -3,16 +3,17 @@ import { route } from '#src/server/routing.mjs'
 import mount from '#src/app.mjs'
 
 const render = async({ db, req, res, template }) => {
-    const rLocale = req.session.locale
+    const defaultLocale = req.session.locale
         ? req.session.locale
         : req.acceptsLanguages()[0]
-    const locale = ['en'].includes(rLocale)
-        ? rLocale
+    const locale = ['en'].includes(defaultLocale)
+        ? defaultLocale
         : 'en'
     req.session.locale = locale
     await req.session.save()
 
     const { app, router, store } = mount(locale)
+    // store.commit('metas/setTitle', 'test')
     store.commit('user/setLocale', locale)
 
     await router.push(req.originalUrl)

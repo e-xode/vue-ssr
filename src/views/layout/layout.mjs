@@ -1,11 +1,12 @@
 import { mapActions, mapGetters } from 'vuex'
-import {
-    dropdownAdminItems,
-    dropdownitems
-} from './layout.constants.mjs'
+import mixinMetas from '#src/mixins/metas'
+import { dropdownAdminItems, dropdownitems } from './layout.constants.mjs'
 
 export default {
     name: 'DefaultLayout',
+    mixins: [
+        mixinMetas
+    ],
     beforeUnmount() {
         this.$socket.off('user.me')
     },
@@ -31,11 +32,6 @@ export default {
     },
     methods: {
         ...mapActions('user', ['auth', 'logout']),
-        onDropdown (value) {
-            if (value === 'logout') {
-                this.disconnect()
-            }
-        },
         disconnect () {
             this.$socket.emit('user.logout')
             this.logout()
@@ -44,6 +40,19 @@ export default {
                 params: {
                     locale: this.locale
                 }
+            })
+        },
+        onDropdown (value) {
+            if (value === 'logout') {
+                this.disconnect()
+            }
+        },
+        onMetas () {
+            this.onMetasChange({
+                description: '',
+                image: '',
+                keywords: '',
+                title: this.$t('page.index.metas.title')
             })
         }
     }
