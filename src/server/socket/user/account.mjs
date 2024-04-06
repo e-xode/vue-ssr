@@ -1,4 +1,5 @@
 import { omit } from 'ramda'
+import bcrypt from 'bcrypt'
 import { hash } from '#src/server/shared/crypt.mjs'
 import { logindb } from '#src/server/shared/logindb.mjs'
 
@@ -35,7 +36,7 @@ export default async ({ data, db, socket  }) => {
                     error: 'page.account.error.missing-fields'
                 })
             }
-            password = hash(newpassword, user.salt)
+            password = hash(newpassword)
             break
         }
         default: {
@@ -56,9 +57,10 @@ export default async ({ data, db, socket  }) => {
                 })
             }
             const hashed = oldpassword?.length && newpassword?.length
-                ? hash(newpassword, user.salt)
+                ? hash(newpassword)
                 : user.password
-            if (hashed !== user.password) {
+
+            if (!bcrypt.compareSync(oldpassword, user.password)) {
                 await logindb({
                     email,
                     details: 'page.account.error.password-incorrect',

@@ -1,4 +1,4 @@
-FROM node:21-alpine3.18 AS builder
+FROM node:21-slim AS builder
 
 ENV NODE_ENV=production
 ENV NODE_PORT=3002
@@ -17,7 +17,7 @@ RUN npm run build
 
 # ----------------------------------------
 
-FROM node:21-alpine3.18 AS runner
+FROM node:21-slim AS runner
 
 ENV NODE_ENV=production
 ENV PATH=/home/node/.npm-global/bin:$PATH

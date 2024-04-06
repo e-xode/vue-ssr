@@ -1,4 +1,4 @@
-FROM node:21-alpine3.18
+FROM node:21-slim
 
 ENV NODE_ENV=development
 ENV NODE_PORT=3002
