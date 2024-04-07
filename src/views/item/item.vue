@@ -6,7 +6,7 @@
             :text="$t('app.loading')"
         />
         <template
-            v-if="!isLoading"
+            v-if="!isLoading && status[collection.name] === 200"
         >
             <vui-nav
                 flat
@@ -17,9 +17,7 @@
             <h1>
                 {{ item.name }}
             </h1>
-            <div
-                class="item"
-            >
+            <div class="item">
                 <div class="card-container">
                     <div
                         v-if="item.files && item.files[0]"
@@ -155,6 +153,18 @@
                 </div>
             </div>
         </template>
+        <div
+            v-if="!isLoading && status[collection.name] !== 200"
+            class="item"
+        >
+            <div class="card-container">
+                <vui-alert
+                    layout="warning"
+                >
+                    {{ $t('page.item.not-found') }}
+                </vui-alert>
+            </div>
+        </div>
     </div>
 </template>
 

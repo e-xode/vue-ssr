@@ -8,8 +8,8 @@ import newOrder from '#src/server/socket/user/order/create.mjs'
 import register from '#src/server/socket/user/register.mjs'
 import resetPassword from '#src/server/socket/user/reset.mjs'
 
-import collection from '#src/server/socket/admin/collection.mjs'
-import collectionItem from '#src/server/socket/admin/item.mjs'
+import collection from '#src/server/socket/shared/collection.mjs'
+import collectionItem from '#src/server/socket/shared/collection.item.mjs'
 
 const socket = ({ io, db }) => {
     io.on('disconnect', (socket) => {

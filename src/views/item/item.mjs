@@ -21,9 +21,8 @@ export default {
             }
         })
         this.$socket.on('user.new.order', ({ error, status }) => {
-            if (status >= 400) {
-                this.error = error
-            }
+            this.orderError = error
+            this.orderStatus = status
         })
         this.$socket.emit(
             'user.get.orders',
@@ -32,14 +31,15 @@ export default {
     },
     data() {
         return {
-            error: null
+            orderError: null,
+            orderStatus: null
         }
     },
     computed: {
         ...mapGetters('user', ['user']),
         fb () {
             const { collection, item: { slug } = { slug: ''}, locale } = this
-            const path = `${locale}/${collection?.name}/${slug}`
+            const path = `${locale}/${collection.name}/${slug}`
             const link =  `https://ssr.e-xode.net/${path}`
             const u = `${encodeURI(link)}`
             const t = `${encodeURI(this.metas.title)}`
@@ -55,7 +55,7 @@ export default {
             return false
         },
         item () {
-            return this.collection
+            return this.collection?.store
                 ? this[this.collection.store.getItem]
                 : {}
         },
@@ -97,13 +97,15 @@ export default {
             })
         },
         onMetas () {
-            const { files = [], name = '' } = this.item
-            this.onMetasChange({
-                description: '',
-                image: files?.[0]?.path,
-                keywords: '',
-                title: `${name} ${this.$t('component.header.home')}`
-            })
+            const { item } = this
+            if (item?._id) {
+                this.onMetasChange({
+                    description: '',
+                    image: item.files?.[0]?.path,
+                    keywords: '',
+                    title: `${item.name} ${this.$t('component.header.home')}`
+                })
+            }
         }
     },
     components: {

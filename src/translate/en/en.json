@@ -82,6 +82,7 @@
     "page.index.metas.title": "Vue SSR e-xode.net",
     "page.index.register": "Register",
     "page.item.authenticate-to-get-a-quote": "Log-in and request an order",
+    "page.item.not-found": "The requested page has not been found",
     "page.item.color": "Color",
     "page.item.size": "Size",
     "page.item.price": "Price",

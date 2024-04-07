@@ -2,7 +2,7 @@
     "queries": [
         {
             "collection": "clothe",
-            "main": true,
+            "default": true,
             "name": "clothe",
             "params": {
                 "enabled": true,
@@ -23,7 +23,7 @@
         {
             "collection": "clothe",
             "field": "category.name",
-            "main": false,
+            "default": false,
             "name": "category",
             "params": {
                 "enabled": true,

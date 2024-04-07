@@ -51,8 +51,10 @@ const route = async({ db, req, res, router, store }) => {
                             },
                             query: { ...req.query }
                         })
-                        const set = `${query.store.name}/${query.store.setItem}`
-                        await store.commit(set, item)
+                        if (item?._id) {
+                            const set = `${query.store.name}/${query.store.setItem}`
+                            await store.commit(set, item)
+                        }
                         break
                     }
                     default: {
@@ -65,13 +67,15 @@ const route = async({ db, req, res, router, store }) => {
                                 ? { ...req.query, max, offset }
                                 : {}
                         })
-                        const set = `${query.store.name}/${query.store.setItemsPaginated}`
-                        await store.dispatch(set, {
-                            items,
-                            paging: query.main
-                                ? { max, offset, total }
-                                : { max: total, offset: 0, total }
-                        })
+                        if(items?.length) {
+                            const set = `${query.store.name}/${query.store.setItemsPaginated}`
+                            await store.dispatch(set, {
+                                items,
+                                paging: query.main
+                                    ? { max, offset, total }
+                                    : { max: total, offset: 0, total }
+                            })
+                        }
                         break
                     }
                 }
