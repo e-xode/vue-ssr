@@ -8,18 +8,29 @@ export default {
     },
     mounted () {
         this.$socket.on('data.collection', (data) => {
-            const collection = this.page.queries.find((q) => q.name === data.name)
-            this[collection.store.setItemsPaginated](data)
-            this.onMetas()
+            this.status[data.name] = data.status
+            if ( this.status[data.name] === 200) {
+                const collection = this.page.queries.find((q) => q.name === data.name)
+                this[collection.store.setItemsPaginated](data)
+                this.onMetas()
+            }
             this.endLoading()
         })
-        this.$socket.on('data.collection.item', ({ item, name }) => {
-            const collection = this.page.queries.find((q) => q.name === name)
-            this[collection.store.setItem](item)
-            this.onMetas()
+        this.$socket.on('data.collection.item', ({ item, name, status }) => {
+            this.status[name] = status
+            if (this.status[name] === 200) {
+                const collection = this.page.queries.find((q) => q.name === name)
+                this[collection.store.setItem](item)
+                this.onMetas()
+            }
             this.endLoading()
         })
         this.queries()
+    },
+    data() {
+        return {
+            status: {}
+        }
     },
     computed: {
         ...mapGetters('context', ['isLoading']),
@@ -32,11 +43,8 @@ export default {
             ])
         }), {}),
         collection () {
-            if (this.$route.params.collection) {
-                return collections.find((c) => c.name == this.$route.params.collection)
-            }
-            const main  = this.page.queries.find((c) => c.main)
-            return collections.find((c) => c.name === main.collection)
+            const query = this.page.queries.find((c) => c.default)
+            return collections.find((c) => c.name === query.name)
         },
         locale () {
             return this.$i18n.locale

@@ -22,7 +22,9 @@ export default {
     },
     computed: {
         items () {
-            return this[this.collection.store.getItems]
+            return this.collection?.store
+                ? this[this.collection.store.getItems]
+                : []
         },
         page () {
             return pages.find((p) => p.route.name === 'ViewIndex')

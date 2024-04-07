@@ -26,10 +26,7 @@ export default  async ({ data, db, socket  }) => {
     socket.emit('data.collection', {
         ...data,
         items,
-        paging: {
-            offset: 0,
-            max: 25,
-            total
-        }
+        paging: { offset: 0, max: 25, total },
+        status: items?.length ? 200 : 404
     })
 }

@@ -86,6 +86,7 @@ export default async ({ data, db, socket  }) => {
             })
             socket.emit('data.collection.item', {
                 ...data,
+                status: item?._id ? 200 : 404,
                 item
             })
         }
