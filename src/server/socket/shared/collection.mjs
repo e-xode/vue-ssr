@@ -6,14 +6,23 @@ export default  async ({ data, db, socket  }) => {
     const { user } = socket.handshake.session
     const { field, query, params, type = 'findAll' } = data
     const collection = collections.find(({ name }) => name === data.collection)
-
     if (!collection) {
-        return socket.emit(404)
+        return socket.emit('data.collection', {
+            ...data,
+            items: [],
+            paging: { offset: 0, max: 25, total: 0 },
+            status: 404
+        })
     }
 
     if (!collection.public && !user?.isadmin) {
         log(`403: ${user.email} requesting collection: ${collection.name}`)
-        return socket.emit(403)
+        return socket.emit('data.collection', {
+            ...data,
+            items: [],
+            paging: { offset: 0, max: 25, total: 0 },
+            status: 403
+        })
     }
 
     const { items, total } = await queries[type]({
@@ -27,6 +36,6 @@ export default  async ({ data, db, socket  }) => {
         ...data,
         items,
         paging: { offset: 0, max: 25, total },
-        status: items?.length ? 200 : 404
+        status: 200
     })
 }
