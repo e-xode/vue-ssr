@@ -1,6 +1,7 @@
 .vui-page.layout-default {
     max-width: 1199px;
     margin: 0 auto;
+    border: none;
 
     .vui-loader {
         background-color: white;
@@ -9,14 +10,13 @@
 
     .vui-page-header {
         padding: 0;
-        margin: 0 -1px;
+        margin: 0;
 
         .vui-header {
             display: flex;
             padding-left: 5.5rem;
             justify-content: space-between;
             background-color: #d33100;
-            // background-image: url('/images/logo-small.png');
             background-repeat: no-repeat;
             background-size: 3rem auto;
             background-position: 2rem center;
@@ -66,7 +66,7 @@
 
     .vui-page-footer {
         padding: 0;
-        margin: 0 -1px;
+        margin: 0;
 
         .vui-footer {
             text-align: right;

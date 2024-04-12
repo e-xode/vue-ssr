@@ -111,7 +111,7 @@
         ]
     },
     "dependencies": {
-        "@e-xode/vui": "0.6.6",
+        "@e-xode/vui": "latest",
         "@tiptap/pm": "^2.2.6",
         "@tiptap/starter-kit": "^2.3.0",
         "@tiptap/vue-3": "^2.3.0",
