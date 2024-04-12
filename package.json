@@ -112,7 +112,7 @@
     },
     "dependencies": {
         "@e-xode/vui": "0.6.6",
-        "@tiptap/pm": "^2.2.5",
+        "@tiptap/pm": "^2.2.6",
         "@tiptap/starter-kit": "^2.2.5",
         "@tiptap/vue-3": "^2.2.5",
         "bcrypt": "5.1.1",
