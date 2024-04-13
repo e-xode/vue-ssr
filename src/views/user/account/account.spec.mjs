@@ -15,9 +15,11 @@ describe('views/user/ViewAccount', () => {
     }
 
     afterEach(() => {
+        main.global.mocks.$route.name = null
     })
 
     beforeEach(() => {
+        main.global.mocks.$route.name = 'ViewAccount'
     })
 
     it('Should render', () => {

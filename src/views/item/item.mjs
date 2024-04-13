@@ -1,5 +1,4 @@
 import { mapGetters, mapMutations } from 'vuex'
-import { pages } from '#src/shared/page'
 import mixinMetas from '#src/mixins/metas'
 import mixinCollections from '#src/mixins/collections'
 import ComponentCategories from '@/components/categories/categories.vue'
@@ -24,10 +23,12 @@ export default {
             this.orderError = error
             this.orderStatus = status
         })
-        this.$socket.emit(
-            'user.get.orders',
-            { slug: this.$route.params.slug }
-        )
+        if (this.isAuthenticated) {
+            this.$socket.emit(
+                'user.get.orders',
+                { slug: this.$route.params.slug }
+            )
+        }
     },
     data() {
         return {
@@ -36,7 +37,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters('user', ['user']),
+        ...mapGetters('user', ['user', 'isAuthenticated']),
         fb () {
             const { collection, item: { slug } = { slug: ''}, locale } = this
             const path = `${locale}/${collection.name}/${slug}`
@@ -83,9 +84,6 @@ export default {
                         disabled: true
                     }
                 ]
-        },
-        page () {
-            return pages.find((p) => p.route.name === 'ViewItem')
         }
     },
     methods: {

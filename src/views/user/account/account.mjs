@@ -1,6 +1,5 @@
 import { mapActions, mapGetters } from 'vuex'
 import * as R from 'ramda'
-import { pages } from '#src/shared/page'
 import mixinCollections from '#src/mixins/collections'
 import mixinMetas from '#src/mixins/metas'
 
@@ -48,9 +47,6 @@ export default {
                     : []
                 )
             ])
-        },
-        page () {
-            return pages.find((p) => p.route.name === 'ViewAccount')
         }
     },
     methods: {
