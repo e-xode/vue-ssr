@@ -3,15 +3,15 @@ import { logindb } from '#src/server/shared/logindb.mjs'
 import queries from '#src/server/db/index.mjs'
 
 export default  async ({ data, db, socket  }) => {
-    const { user } = socket.handshake.session
+    const { user = {} } = socket.handshake.session
     const { field, query, params, type = 'findAll' } = data
     const collection = collections.find(({ name }) => name === data.collection)
     if (!collection) {
         await logindb({
-            email: user.email,
+            email: user?.email || socket.handshake.session.id,
             details: 'page.admin.error.collection.not-found',
             event: 'user.account',
-            user: user._id,
+            user: user?._id,
             status: 404
         }, db)
         return socket.emit('data.collection', {
@@ -22,10 +22,10 @@ export default  async ({ data, db, socket  }) => {
 
     if (!collection.public && !user?.isadmin) {
         await logindb({
-            email: user.email,
+            email: user?.email || socket.handshake.session.id,
             details: 'page.admin.error.collection.not-authorized',
             event: 'user.account',
-            user: user._id,
+            user: user?._id,
             status: 403
         }, db)
         return socket.emit('data.collection', {
