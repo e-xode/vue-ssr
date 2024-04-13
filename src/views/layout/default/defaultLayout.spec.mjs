@@ -1,14 +1,15 @@
 import { shallowMount } from '@vue/test-utils'
 import main from '@/test/main.mjs'
 
-import ViewAccount from '@/views/user/account/account.vue'
+import DefaultLayout from './defaultLayout.vue'
 
-describe('views/user/ViewAccount', () => {
+describe('views/layout/default', () => {
 
-    const propsData = {}
+    const propsData = {
+    }
 
     const mountComponent = () => {
-        return shallowMount(ViewAccount, {
+        return shallowMount(DefaultLayout, {
             ...main,
             propsData
         })

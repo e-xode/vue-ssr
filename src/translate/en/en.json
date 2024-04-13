@@ -97,6 +97,7 @@
     "page.item.shipping-fee": "Shipping fee",
     "page.item.shipping-fee.description": "Shipping fee has been evaluated from your country's profile: {countryName}, ",
     "page.item.shipping-fee.account": "check my account",
+    "page.layout.footer.copyright": "vue-ssr.e-xode.net",
     "page.login.h1": "Login",
     "page.login.captcha": "Captcha",
     "page.login.captcha.placeholder": "Type the captcha code",

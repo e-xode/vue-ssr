@@ -84,8 +84,8 @@
                         <vui-pager
                             v-model="page"
                             flat
-                            :count="paging?.total"
-                            :size="paging?.max"
+                            :count="paging.total"
+                            :size="paging.max"
                             @update:model-value="onPage"
                         />
                     </div>

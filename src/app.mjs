@@ -8,7 +8,7 @@ import { router } from '@/router.mjs'
 import { messages } from '@/translate/index.mjs'
 import App from '@/app.vue'
 
-export default function mount(locale = 'en') {
+export function mount(locale = 'en') {
     const i18n = new createI18n({
         legacy: false,
         locale,

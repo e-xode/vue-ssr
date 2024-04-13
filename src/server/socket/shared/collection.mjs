@@ -1,5 +1,5 @@
-import { log } from '#src/server/shared/log.mjs'
 import { collections } from '#src/shared/model.mjs'
+import { logindb } from '#src/server/shared/logindb.mjs'
 import queries from '#src/server/db/index.mjs'
 
 export default  async ({ data, db, socket  }) => {
@@ -7,20 +7,29 @@ export default  async ({ data, db, socket  }) => {
     const { field, query, params, type = 'findAll' } = data
     const collection = collections.find(({ name }) => name === data.collection)
     if (!collection) {
+        await logindb({
+            email: user.email,
+            details: 'page.admin.error.collection.not-found',
+            event: 'user.account',
+            user: user._id,
+            status: 404
+        }, db)
         return socket.emit('data.collection', {
             ...data,
-            items: [],
-            paging: { offset: 0, max: 25, total: 0 },
             status: 404
         })
     }
 
     if (!collection.public && !user?.isadmin) {
-        log(`403: ${user.email} requesting collection: ${collection.name}`)
+        await logindb({
+            email: user.email,
+            details: 'page.admin.error.collection.not-authorized',
+            event: 'user.account',
+            user: user._id,
+            status: 403
+        }, db)
         return socket.emit('data.collection', {
             ...data,
-            items: [],
-            paging: { offset: 0, max: 25, total: 0 },
             status: 403
         })
     }
