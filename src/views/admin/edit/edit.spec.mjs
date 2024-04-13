@@ -1,23 +1,28 @@
 import { shallowMount } from '@vue/test-utils'
 import main from '@/test/main.mjs'
 
-import ViewAccount from '@/views/user/account/account.vue'
+import AdminEditComponent from './edit.vue'
 
-describe('views/user/ViewAccount', () => {
+describe('views/admin/edit', () => {
 
-    const propsData = {}
+    const propsData = {
+    }
 
     const mountComponent = () => {
-        return shallowMount(ViewAccount, {
+        return shallowMount(AdminEditComponent, {
             ...main,
             propsData
         })
     }
 
     afterEach(() => {
+        main.global.mocks.$route.params = {}
     })
 
     beforeEach(() => {
+        main.global.mocks.$route.params = {
+            collection: 'category'
+        }
     })
 
     it('Should render', () => {

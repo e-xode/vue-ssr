@@ -1,14 +1,15 @@
 import { shallowMount } from '@vue/test-utils'
 import main from '@/test/main.mjs'
 
-import ViewAccount from '@/views/user/account/account.vue'
+import CategoriesComponent from './categories.vue'
 
-describe('views/user/ViewAccount', () => {
+describe('components/categories', () => {
 
-    const propsData = {}
+    const propsData = {
+    }
 
     const mountComponent = () => {
-        return shallowMount(ViewAccount, {
+        return shallowMount(CategoriesComponent, {
             ...main,
             propsData
         })

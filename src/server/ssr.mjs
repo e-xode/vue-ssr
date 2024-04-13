@@ -1,6 +1,6 @@
 import { renderToString } from '@vue/server-renderer'
 import { route } from '#src/server/routing.mjs'
-import mount from '#src/app.mjs'
+import { mount } from '#src/app.mjs'
 
 const render = async({ db, req, res, template }) => {
     const defaultLocale = req.session.locale

@@ -22,17 +22,21 @@ export default {
             locale,
             $route: { params: { _id }}
         } = this
-        this.$socket.on('data.collection', ({ items, name = [] }) => {
-            const { store } = collections.find((c) => c.name === name)
-            this[store.setItems](items)
+        this.$socket.on('data.collection', ({ items, name = [], status }) => {
             this.endLoading()
+            if (status === 200) {
+                const { store } = collections.find((c) => c.name === name)
+                this[store.setItems](items)
+            }
         })
-        this.$socket.on('data.collection.item', ({ item, name }) => {
-            const { store } = collections.find((c) => c.name === name)
-            this[store.setItem](item)
-            this.form = { ...item }
+        this.$socket.on('data.collection.item', ({ item, name, status }) => {
             this.endLoading()
-            this.onMetas()
+            if (status === 200) {
+                const { store } = collections.find((c) => c.name === name)
+                this[store.setItem](item)
+                this.form = { ...item }
+                this.onMetas()
+            }
         })
         this.$socket.on('data.collection.item.deleted', () => {
             this.$router.push({

@@ -9,7 +9,7 @@ export default {
     mounted () {
         this.$socket.on('data.collection', (data) => {
             this.status[data.name] = data.status
-            if ( this.status[data.name] === 200) {
+            if (this.status[data.name] === 200) {
                 const collection = this.page.queries.find((q) => q.name === data.name)
                 this[collection.store.setItemsPaginated](data)
                 this.onMetas()

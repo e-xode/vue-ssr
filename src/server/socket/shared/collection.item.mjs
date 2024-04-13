@@ -2,8 +2,10 @@ import fs from 'fs'
 import { ObjectId } from 'mongodb'
 import { convert } from 'url-slug'
 import * as R from 'ramda'
-import { log } from '#src/server/shared/log.mjs'
+
 import { collections } from '#src/shared/model.mjs'
+import { log } from '#src/server/shared/log.mjs'
+import { logindb } from '#src/server/shared/logindb.mjs'
 import queries from '#src/server/db/index.mjs'
 
 const upload = async ({ form }) => {
@@ -27,12 +29,31 @@ export default async ({ data, db, socket  }) => {
     const collection = collections.find(({ name }) => name === data.collection)
 
     if (!collection) {
-        return socket.emit(404)
+        await logindb({
+            email: user.email,
+            details: 'page.admin.error.collection-item.not-found',
+            event: 'user.account',
+            user: user._id,
+            status: 404
+        }, db)
+        return socket.emit('data.collection.item', {
+            ...data,
+            status: 404
+        })
     }
 
     if (!collection.public && !user?.isadmin) {
-        log(`403: ${user.email} requesting item from collection: ${collection.name}`)
-        return socket.emit(403)
+        await logindb({
+            email: user.email,
+            details: 'page.admin.error.collection-item.not-authorized',
+            event: 'user.account',
+            user: user._id,
+            status: 403
+        }, db)
+        return socket.emit('data.collection.item', {
+            ...data,
+            status: 403
+        })
     }
 
     switch(method) {

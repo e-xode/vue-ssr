@@ -1,26 +1,24 @@
 import { shallowMount } from '@vue/test-utils'
 import main from '@/test/main.mjs'
 
-import DefaultLayout from '@/views/layout/layout.vue'
+import EditorComponent from './editor.vue'
 
-describe('views/DefaultLayout', () => {
+describe('components/editor', () => {
 
     const propsData = {
     }
 
     const mountComponent = () => {
-        return shallowMount(DefaultLayout, {
+        return shallowMount(EditorComponent, {
             ...main,
             propsData
         })
     }
 
     afterEach(() => {
-        jest.useRealTimers()
     })
 
     beforeEach(() => {
-        jest.useFakeTimers()
     })
 
     it('Should render', () => {

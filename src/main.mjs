@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client'
-import mount from '@/app.mjs'
+import { mount } from '@/app.mjs'
 import { cssRemove } from '@/server/shared/css.mjs'
 
 const data = JSON.parse(decodeURIComponent(window.__INITIAL_STATE__))
@@ -14,3 +14,5 @@ app.config.globalProperties.$socket = io(
 
 router.isReady().then(() => app.mount('#app', true))
 cssRemove()
+
+export default app

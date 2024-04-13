@@ -12,7 +12,7 @@ const routes = [
     {
         path: '/',
         name: 'ViewBase',
-        component: () => import('@/views/layout/layout.vue'),
+        component: () => import('@/views/layout/default/defaultLayout.vue'),
         children: [
             {
                 component: () => import(
@@ -20,20 +20,6 @@ const routes = [
                 ),
                 name: 'ViewAccount',
                 path: ':locale/account'
-            },
-            {
-                component: () => import(
-                    '@/views/admin/admin.vue'
-                ),
-                name: 'ViewAdmin',
-                path: ':locale/admin/:collection?'
-            },
-            {
-                component: () => import(
-                    '@/views/admin/edit/edit.vue'
-                ),
-                name: 'ViewAdminEdit',
-                path: ':locale/admin/:collection/:_id'
             },
             {
                 component: () => import(
@@ -83,6 +69,27 @@ const routes = [
                 ),
                 name: 'ViewIndex',
                 path: ':locale?'
+            }
+        ]
+    },
+    {
+        path: '/:locale/admin/',
+        name: 'ViewAdminBase',
+        component: () => import('@/views/layout/admin/adminLayout.vue'),
+        children: [
+            {
+                component: () => import(
+                    '@/views/admin/admin.vue'
+                ),
+                name: 'ViewAdmin',
+                path: ':collection?'
+            },
+            {
+                component: () => import(
+                    '@/views/admin/edit/edit.vue'
+                ),
+                name: 'ViewAdminEdit',
+                path: ':collection/:_id'
             }
         ]
     }

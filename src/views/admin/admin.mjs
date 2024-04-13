@@ -14,8 +14,10 @@ export default {
     mounted() {
         const { collection: { name, params, query } } = this
         this.$socket.on('data.collection', (data) => {
-            this[this.collection.store.setItemsPaginated](data)
             this.endLoading()
+            if(data.status === 200) {
+                this[this.collection.store.setItemsPaginated](data)
+            }
         })
         this.startLoading()
         this.$socket.emit('data.collection', {
@@ -58,8 +60,9 @@ export default {
             }
         }, {}),
         collection () {
-            return this.$route.params.collection
-                ? this.collections.find((c) => c.name == this.$route.params.collection)
+            const match = this.collections.find((c) => c.name == this.$route.params.collection)
+            return match
+                ? match
                 : this.collections[0]
         },
         collections () {

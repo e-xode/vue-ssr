@@ -1,5 +1,5 @@
 <template>
-    <vui-page class="layout-default">
+    <vui-page class="layout-admin">
         <template #header>
             <vui-header
                 :class="{ 'vui-header--connected': isAuthenticated }"
@@ -47,7 +47,7 @@
             <vui-footer>
                 <span class="copyright">
                     <a href="https://ssr.e-xode.net">
-                        vue-ssr.e-xode.net
+                        {{ $t('page.layout.footer.copyright') }}
                     </a>
                 </span>
             </vui-footer>
@@ -56,10 +56,10 @@
 </template>
 
 <script
-    src="./layout.mjs"
+    src="./adminLayout.mjs"
 />
 
 <style
     lang="scss"
-    src="./layout.scss"
+    src="./adminLayout.scss"
 />
