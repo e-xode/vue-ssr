@@ -16,11 +16,11 @@ describe('views/ViewItem', () => {
     }
 
     afterEach(() => {
-        jest.useRealTimers()
+        main.global.mocks.$route.name = null
     })
 
     beforeEach(() => {
-        jest.useFakeTimers()
+        main.global.mocks.$route.name = 'ViewItem'
     })
 
     it('Should render', () => {

@@ -1,5 +1,4 @@
 import { mapActions } from 'vuex'
-import { pages } from '#src/shared/page'
 import mixinMetas from '#src/mixins/metas'
 import mixinCollections from '#src/mixins/collections'
 
@@ -25,9 +24,6 @@ export default {
             return this.collection?.store
                 ? this[this.collection.store.getItems]
                 : []
-        },
-        page () {
-            return pages.find((p) => p.route.name === 'ViewIndex')
         }
     },
     methods: {

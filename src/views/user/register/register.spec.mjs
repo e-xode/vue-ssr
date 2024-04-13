@@ -16,11 +16,11 @@ describe('views/user/ViewRegister', () => {
     }
 
     afterEach(() => {
-        jest.useRealTimers()
+        main.global.mocks.$route.name = null
     })
 
     beforeEach(() => {
-        jest.useFakeTimers()
+        main.global.mocks.$route.name = 'ViewRegister'
     })
 
     it('Should render', () => {

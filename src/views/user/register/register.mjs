@@ -1,5 +1,4 @@
 import { mapActions, mapMutations } from 'vuex'
-import { pages } from '#src/shared/page'
 import mixinCollections from '#src/mixins/collections'
 import mixinMetas from '#src/mixins/metas'
 
@@ -50,9 +49,6 @@ export default {
     computed: {
         locale () {
             return this.$i18n.locale
-        },
-        page () {
-            return pages.find((p) => p.route.name === 'ViewRegister')
         },
         svg () {
             return `data:image/svg+xml,${this.captcha}`

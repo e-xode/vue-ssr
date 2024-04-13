@@ -1,4 +1,5 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { pages } from '#src/shared/page'
 import { collections } from '#src/shared/model'
 
 export default {
@@ -51,6 +52,9 @@ export default {
         },
         locale () {
             return this.$i18n.locale
+        },
+        page () {
+            return pages.find((p) => p.route.name === this.$route.name)
         }
     },
     methods: {

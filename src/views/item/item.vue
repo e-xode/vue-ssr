@@ -154,7 +154,7 @@
             </div>
         </template>
         <div
-            v-if="!isLoading && status[collection.name] !== 200"
+            v-if="!isLoading && status[collection.name] >= 400"
             class="item"
         >
             <div class="card-container">
