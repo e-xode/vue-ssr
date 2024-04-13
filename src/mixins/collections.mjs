@@ -44,7 +44,10 @@ export default {
         }), {}),
         collection () {
             const query = this.page.queries.find((c) => c.default)
-            return collections.find((c) => c.name === query.name)
+            const match = collections.find((c) => c.name === query.name)
+            return match
+                ? match
+                : {}
         },
         locale () {
             return this.$i18n.locale
