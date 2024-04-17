@@ -42,7 +42,7 @@ export default async ({ data, db, socket  }) => {
         })
     }
 
-    if (!collection.public && !user?.isadmin) {
+    if ((method || !collection.public) && !user?.isadmin) {
         await logindb({
             email: user?.email || socket.handshake.session.id,
             details: 'page.admin.error.collection-item.not-authorized',

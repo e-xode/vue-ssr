@@ -45,7 +45,7 @@ export default {
         }), {}),
         collection () {
             const query = this.page.queries.find((c) => c.default)
-            const match = collections.find((c) => c.name === query.name)
+            const match = collections.find((c) => c.name === query?.name)
             return match
                 ? match
                 : {}
