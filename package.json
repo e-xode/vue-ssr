@@ -131,7 +131,7 @@
         "socket.io-client": "4.7.5",
         "text-to-svg-path": "3.1.5",
         "url-slug": "4.0.1",
-        "vue": "^3.4.21",
+        "vue": "^3.4.26",
         "vue-i18n": "^9.13.1",
         "vue-router": "4.3.2",
         "vuex": "^4.1.0"
