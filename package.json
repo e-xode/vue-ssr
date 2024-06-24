@@ -124,7 +124,7 @@
         "mitt": "3.0.1",
         "mongodb": "6.5.0",
         "mustache": "4.2.0",
-        "nodemailer": "6.9.13",
+        "nodemailer": "6.9.14",
         "ramda": "0.30.0",
         "session-file-store": "1.5.0",
         "socket.io": "4.7.5",
