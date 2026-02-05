@@ -1,4 +1,4 @@
-FROM node:21-slim AS builder
+FROM node:22-alpine3.19 AS builder
 
 ENV NODE_ENV=production
 ENV NODE_PORT=3002
@@ -17,7 +17,7 @@ RUN npm run build
 
 # ----------------------------------------
 
-FROM node:21-slim AS runner
+FROM node:22-slim AS runner
 
 ENV NODE_ENV=production
 ENV PATH=/home/node/.npm-global/bin:$PATH
@@ -33,8 +33,6 @@ RUN apt-get update -y && \
   apt-get upgrade -y && \
   apt-get install -y supervisor
 
-EXPOSE $NODE_PORT
-
 WORKDIR /app/dist
 
 COPY --from=builder /app/dist/client /app/dist/client
@@ -46,6 +44,8 @@ COPY ./docker/build/config/supervisord.conf /etc/supervisor/conf.d/supervisord.c
 
 RUN mkdir /home/node/.npm-global
 RUN npm install -g npm@latest
-RUN npm install
+RUN npm install --production=true
+
+EXPOSE $NODE_PORT
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
