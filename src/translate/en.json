@@ -1,0 +1,82 @@
+{
+  "a11y": {
+    "closeMenu": "Close menu",
+    "externalLink": "Opens in a new tab",
+    "footerNavigation": "Footer navigation",
+    "languageSelector": "Language selector",
+    "loading": "Loading...",
+    "mainNavigation": "Main navigation",
+    "openMenu": "Open menu",
+    "skipToContent": "Skip to main content",
+    "userMenu": "User menu"
+  },
+  "app": {
+    "name": "App",
+    "byAuthor": "By Author"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "signin": "Sign In",
+    "signup": "Sign Up",
+    "signout": "Sign Out"
+  },
+  "footer": {
+    "copyright": "© 2026. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "meta": {
+    "index": {
+      "title": "Home",
+      "description": "Welcome"
+    },
+    "signup": {
+      "title": "Sign Up",
+      "description": "Create a new account"
+    },
+    "signin": {
+      "title": "Sign In",
+      "description": "Sign in to your account"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Your dashboard"
+    },
+    "notFound": {
+      "title": "Page Not Found"
+    }
+  },
+  "error": {
+    "unauthorized": "Unauthorized",
+    "server": "Server error",
+    "auth": {
+      "missingFields": "Missing required fields",
+      "emailAlreadyUsed": "Email already in use",
+      "signupFailed": "Sign up failed",
+      "emailAndPasswordRequired": "Email and password required",
+      "invalidCredentials": "Invalid credentials",
+      "signinFailed": "Sign in failed",
+      "userNotFound": "User not found",
+      "codeExpired": "Code expired",
+      "tooManyAttempts": "Too many attempts",
+      "invalidCode": "Invalid code",
+      "emailRequired": "Email required"
+    }
+  },
+  "form": {
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "code": "Code",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "loading": "Loading..."
+  },
+  "message": {
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Info"
+  }
+}

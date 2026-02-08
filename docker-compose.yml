@@ -1,7 +1,7 @@
 version: '3'
 services:
     node:
-        container_name: e-xode.vue-ssr
+        container_name: e-xode-vue-ssr
         build:
             context: 'docker/dev/node'
         depends_on:
@@ -14,27 +14,40 @@ services:
             - 24678:24678
         env_file:
             - ./.env
+        environment:
+            - NODE_OPTIONS=--unhandled-rejections=warn
+        cap_add:
+            - SYS_ADMIN
+        security_opt:
+            - seccomp=unconfined
+        shm_size: '2gb'
+        tty: false
+        stdin_open: false
         networks:
             - e-xode
     mongo:
-        container_name: e-xode.mongo.vue-ssr
+        container_name: e-xode-mongo-vue-ssr
         build:
             context: 'docker/dev/mongo'
+        env_file:
+            - ./.env
+        environment:
+            - MONGO_INITDB_DATABASE=${MONGO_DB}
+            - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+            - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PWD}
+        volumes:
+            - ./docker/dev/mongo/init-scripts:/docker-entrypoint-initdb.d
+            - ./src/json:/json
         healthcheck:
-            test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/vuessr --quiet
+            test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/rom --quiet
             interval: 10s
             timeout: 10s
             retries: 10
-        volumes:
-            - './data:/data'
         ports:
             - 27017:27017
-            - 28017:28017
-        env_file:
-            - ./.env
         networks:
             - e-xode
 networks:
-  e-xode:
-    driver: bridge
-    external: true
+    e-xode:
+        driver: bridge
+        external: true

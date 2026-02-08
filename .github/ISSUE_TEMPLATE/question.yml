@@ -1,0 +1,92 @@
+name: Question / Help
+description: Posez une question ou demandez de l'aide
+title: "[QUESTION] "
+labels: ["question", "documentation"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Avez-vous une question sur comment utiliser e-xode-vue-ssr?
+
+        Avant de poser une question, vérifiez:
+        - ReadME.en.md ou README.fr.md
+        - [Troubleshooting Guide](../../docs/TROUBLESHOOTING.md)
+        - [FAQ](../../docs/TROUBLESHOOTING.md#faq)
+        - Discussions existantes
+
+  - type: textarea
+    attributes:
+      label: Votre Question
+      description: Quelle est votre question? Soyez aussi spécifique que possible
+      placeholder: "Je voudrais savoir comment... J'essaie de... Comment puis-je...?"
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Contexte / Ce que vous avez essayé
+      description: Quelle est votre situation? Que vous avez déjà essayé?
+      placeholder: |
+        J'ai essayé de...
+        J'ai cherché dans la documentation...
+        Voici ce que j'ai trouvé...
+        Mais je ne comprends toujours pas comment...
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Environment
+      description: Détails pertinents de votre setup
+      value: |
+        - Node: (ex: 18.0.0)
+        - npm: (ex: 9.0.0)
+        - OS: (ex: macOS, Windows, Linux)
+        - MongoDB: (local ou Atlas)
+        - Framework/Extensions: (ex: TypeScript, Docker)
+
+  - type: dropdown
+    attributes:
+      label: Catégorie
+      description: Quelle catégorie correspond le mieux?
+      options:
+        - "Setup / Installation"
+        - "Development"
+        - "API Usage"
+        - "Authentication"
+        - "Database"
+        - "Deployment"
+        - "Performance"
+        - "Error / Bug (should create bug report)"
+        - "Documentation"
+        - "Autre"
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Documentation Référencée
+      description: Avez-vous consulté une documentation spécifique? Laquelle?
+      placeholder: |
+        - [QUICK_START.md](../../docs/QUICK_START.en.md)
+        - [DEVELOPER_GUIDE.md](../../docs/DEVELOPER_GUIDE.md)
+        - [API.md](../../docs/API.md)
+        Mais je n'ai pas trouvé...
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        **Tips pour une meilleure réponse:**
+        - Soyez spécifique plutôt que vague
+        - Incluez des liens vers doc/issues pertinentes
+        - Partagez les erreurs ou output réel
+        - Décrivez ce que vous essayez d'accomplir (votre but final)
+
+        **Liens utiles:**
+        - [Documentation](../../docs/INDEX.md)
+        - [Discussions Existantes](https://github.com/e-xode/e-xode-vue-ssr/discussions)
+        - [Stack Overflow tag: vue-ssr](https://stackoverflow.com/questions/tagged/vue-ssr)

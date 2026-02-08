@@ -1,0 +1,131 @@
+name: Bug Report
+description: Signalez un bug dans e-xode-vue-ssr
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de signaler un bug! Veuillez compléter les détails ci-dessous pour aider à identifier et corriger le problème rapidement.
+
+  - type: checkboxes
+    attributes:
+      label: Avez-vous vérifié?
+      options:
+        - label: J'ai cherché un bug report similaire dans les issues existantes
+          required: true
+        - label: Ce bug n'est pas lié à un environment local/setup (j'ai testé en production ou dans le starter kit vanilla)
+          required: false
+
+  - type: textarea
+    attributes:
+      label: Description du Bug
+      description: Description claire et concise du bug. Qu'est-ce qui ne fonctionne pas?
+      placeholder: "Exemple: Après la vérification du code, l'utilisateur n'est pas redirigé vers le dashboard..."
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Étapes pour Reproduire
+      description: Pas-à-pas pour reproduire le bug
+      value: |
+        1. Aller à...
+        2. Cliquer sur...
+        3. Entrer...
+        4. Observe l'erreur...
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Comportement Attendu
+      description: Que devrait-il se passer?
+      placeholder: "L'utilisateur devrait être redirigé vers /dashboard..."
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Screenshots/Vidéos
+      description: Si applicable, ajouter des screenshots ou vidéos
+      placeholder: Drag and drop images or paste video links here
+
+  - type: textarea
+    attributes:
+      label: Messages d'Erreur
+      description: Si erreur en console, copier le message complet
+      render: shell
+      placeholder: |
+        TypeError: Cannot read property 'email' of undefined
+          at EmailForm.vue:45
+          at processTicksAndRejections...
+
+  - type: dropdown
+    attributes:
+      label: Environnement
+      options:
+        - "npm run dev (développement)"
+        - "npm run prod (production local)"
+        - "Docker development"
+        - "Docker production"
+        - "Heroku"
+        - "AWS EC2"
+        - "Autre (veuillez spécifier)"
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Autre environment (si applicable)
+      description: Si vous avez sélectionné "Autre", spécifiez ici
+
+  - type: textarea
+    attributes:
+      label: Environment Details
+      description: Détails de votre environment
+      value: |
+        - Node version: (ex: 18.0.0)
+        - npm version: (ex: 9.0.0)
+        - OS: (ex: macOS 13.0, Windows 11, Ubuntu 22.04)
+        - Browser: (ex: Chrome 120, Firefox 121)
+        - MongoDB version: (ex: 6.0, sur Atlas)
+
+  - type: textarea
+    attributes:
+      label: Logs Relevants
+      description: Copier les logs serveur ou console pertinents
+      render: shell
+      placeholder: |
+        npm run dev
+        > node server.js
+        [APP] Server running on port 5173
+        [APP] MongoDB connected
+        [ERROR] Unexpected token in JSON
+
+  - type: textarea
+    attributes:
+      label: Configuration ou Setup Spécifique
+      description: Y a-t-il quelque chose d'inusuel dans votre setup?
+      placeholder: "Exemple: Je n'ai pas changé .env, j'utilise MongoDB Atlas, etc."
+
+  - type: textarea
+    attributes:
+      label: Contexte Additionnel
+      description: Autre information qui pourrait aider?
+      placeholder: "Exemple: J'ai essayé X mais ça n'a pas marché, j'ai remarqué aussi..."
+
+  - type: checkboxes
+    attributes:
+      label: Je peux contribuer un fix
+      options:
+        - label: Je serais heureux de submitter une PR pour corriger ce bug
+          required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        **Merci!** Nous allons explorer ce bug dès que possible. Si des détails manquent, nous vous les demanderons.

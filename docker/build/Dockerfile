@@ -1,7 +1,11 @@
 FROM node:22-alpine3.19 AS builder
 
+ARG NODE_HOST=https://www.mywebsite.com
+ARG NODE_PORT=3006
+
 ENV NODE_ENV=production
-ENV NODE_PORT=3002
+ENV NODE_PORT=$NODE_PORT
+ENV NODE_HOST=$NODE_HOST
 ENV PATH=/home/node/.npm-global/bin:$PATH
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 
@@ -19,30 +23,28 @@ RUN npm run build
 
 FROM node:22-slim AS runner
 
+ARG NODE_HOST=https://www.mywebsite.com
+ARG NODE_PORT=3006
+
 ENV NODE_ENV=production
+ENV NODE_PORT=$NODE_PORT
+ENV NODE_HOST=$NODE_HOST
 ENV PATH=/home/node/.npm-global/bin:$PATH
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 
-ENV MONGO_DB=
-ENV MONGO_HOST=
-ENV MONGO_PWD=
-ENV MONGO_TYPE=
-ENV MONGO_USER=
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    supervisor \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update -y && \
-  apt-get upgrade -y && \
-  apt-get install -y supervisor
+WORKDIR /app
 
-WORKDIR /app/dist
-
-COPY --from=builder /app/dist/client /app/dist/client
-COPY --from=builder /app/dist/server/ssr.js /app/dist/server/ssr.js
-COPY --from=builder /app/dist/server/assets /app/dist/server/assets
-COPY --from=builder /app/package.json /app/dist/
-COPY --from=builder /app/src /app/dist/src
+COPY --from=builder /app/dist/ /app/dist/
+COPY  ./server.js /app/server.js
+COPY  ./src/ /app/src/
+COPY  ./package.json /app/package.json
 COPY ./docker/build/config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-RUN mkdir /home/node/.npm-global
 RUN npm install -g npm@latest
 RUN npm install --production=true
 

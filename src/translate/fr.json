@@ -1,0 +1,82 @@
+{
+  "a11y": {
+    "closeMenu": "Fermer le menu",
+    "externalLink": "Ouvre dans un nouvel onglet",
+    "footerNavigation": "Navigation du pied de page",
+    "languageSelector": "Sélecteur de langue",
+    "loading": "Chargement...",
+    "mainNavigation": "Navigation principale",
+    "openMenu": "Ouvrir le menu",
+    "skipToContent": "Passer au contenu principal",
+    "userMenu": "Menu utilisateur"
+  },
+  "app": {
+    "name": "App",
+    "byAuthor": "Par l'auteur"
+  },
+  "nav": {
+    "home": "Accueil",
+    "dashboard": "Tableau de bord",
+    "signin": "Connexion",
+    "signup": "S'inscrire",
+    "signout": "Déconnexion"
+  },
+  "footer": {
+    "copyright": "© 2026. Tous droits réservés.",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation"
+  },
+  "meta": {
+    "index": {
+      "title": "Accueil",
+      "description": "Bienvenue"
+    },
+    "signup": {
+      "title": "S'inscrire",
+      "description": "Créer un nouveau compte"
+    },
+    "signin": {
+      "title": "Connexion",
+      "description": "Connectez-vous à votre compte"
+    },
+    "dashboard": {
+      "title": "Tableau de bord",
+      "description": "Votre tableau de bord"
+    },
+    "notFound": {
+      "title": "Page non trouvée"
+    }
+  },
+  "error": {
+    "unauthorized": "Non autorisé",
+    "server": "Erreur serveur",
+    "auth": {
+      "missingFields": "Champs obligatoires manquants",
+      "emailAlreadyUsed": "Email déjà utilisé",
+      "signupFailed": "L'inscription a échoué",
+      "emailAndPasswordRequired": "Email et mot de passe requis",
+      "invalidCredentials": "Identifiants invalides",
+      "signinFailed": "La connexion a échoué",
+      "userNotFound": "Utilisateur non trouvé",
+      "codeExpired": "Code expiré",
+      "tooManyAttempts": "Trop de tentatives",
+      "invalidCode": "Code invalide",
+      "emailRequired": "Email requis"
+    }
+  },
+  "form": {
+    "email": "Email",
+    "password": "Mot de passe",
+    "name": "Nom",
+    "code": "Code",
+    "submit": "Envoyer",
+    "cancel": "Annuler",
+    "loading": "Chargement..."
+  },
+  "message": {
+    "success": "Succès",
+    "error": "Erreur",
+    "warning": "Avertissement",
+    "info": "Information"
+  }
+}

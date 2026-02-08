@@ -1,0 +1,126 @@
+name: Feature Request
+description: Proposer une nouvelle feature ou amélioration
+title: "[FEATURE] "
+labels: ["enhancement", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci pour la suggestion! Nous aimons les idées pour améliorer e-xode-vue-ssr. Veuillez donner autant de contexte que possible.
+
+  - type: checkboxes
+    attributes:
+      label: Avez-vous vérifié?
+      options:
+        - label: Cette feature n'existe pas déjà
+          required: true
+        - label: Pas de feature request similaire dans les issues existantes
+          required: true
+
+  - type: textarea
+    attributes:
+      label: Description de la Feature
+      description: Description claire de la feature proposée
+      placeholder: "Je voudrais que le système d'authentification supporte l'authentification par SMS en plus de l'email..."
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Cas d'Usage / Motivation
+      description: Pourquoi cette feature serait-elle utile? Quel problème résout-elle?
+      placeholder: |
+        - Cela permettrait aux utilisateurs sans email valide de...
+        - Améliore l'expérience utilisateur pour...
+        - Rendent le starter kit compatible avec...
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Solution Proposée
+      description: Comment devrait-on implémenter cette feature?
+      placeholder: |
+        Option 1: Ajouter un SMS provider (Twilio)
+        Option 2: Utiliser une API existante
+        Option 3: Autre approche...
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Solutions Alternatives Considérées
+      description: Y a-t-il d'autres façons de résoudre ce problème?
+      placeholder: |
+        Alternative 1: Utiliser une 2FA existante
+        Alternative 2: Ignorer ce cas et faire autrement
+        Pourquoi je préfère ma solution proposée...
+
+  - type: textarea
+    attributes:
+      label: Contexte Additionnel
+      description: Autre información que pourrait aider?
+      placeholder: |
+        - Links vers projets similaires
+        - POC code ou prototypes
+        - Références de docs
+        - Nombre d'utilisateurs affectés
+
+  - type: dropdown
+    attributes:
+      label: Priorité
+      description: Quelle importance pour votre use case?
+      options:
+        - "Nice to have (pas urgent)"
+        - "Important (aimerait voir bientôt)"
+        - "Critical (bloque ma production)"
+    validations:
+      required: true
+
+  - type: dropdown
+    attributes:
+      label: Domaine Affecté
+      description: Quel partie du projet est affectée?
+      options:
+        - "Frontend / UI / Components"
+        - "Backend / API / Routes"
+        - "Database / Schema"
+        - "Authentication / Security"
+        - "Deployment / DevOps"
+        - "Documentation"
+        - "Testing"
+        - "Performance"
+        - "Accessibilité"
+        - "i18n / Localization"
+        - "Autre"
+    validations:
+      required: false
+
+  - type: checkboxes
+    attributes:
+      label: Je peux aider
+      options:
+        - label: Je serais heureux de collaborer ou de développer cette feature
+          required: false
+        - label: Je peux fournir un financement/ressources si nécessaire
+          required: false
+
+  - type: textarea
+    attributes:
+      label: Taille d'Effort Estimée
+      description: Avez-vous une idée de la taille d'effort?
+      options:
+        - "Petit (< 4 heures) - simple fix"
+        - "Moyen (4-16 heures) - peut être divisé en 2-3 PRs"
+        - "Grand (16-40 heures) - plusieurs jours de travail"
+        - "Très Grand (> 40 heures) - projet majeur"
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        **Merci!** Nous examinerons cette suggestion et fournirons des retours dès que possible.
+
+        Pour plus d'informations, voir [CONTRIBUTING.md](../../CONTRIBUTING.md#proposer-une-feature).

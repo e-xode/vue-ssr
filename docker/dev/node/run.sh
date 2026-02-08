@@ -1,3 +1,4 @@
 #!/bin/sh
-npm install
+npm install --production=false
+echo "🚀 Starting development server..."
 npm run dev

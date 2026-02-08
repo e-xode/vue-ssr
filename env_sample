@@ -1,0 +1,15 @@
+NODE_ENV=development
+NODE_PORT=5173
+NODE_HOST=http://localhost:5173
+MAILER_HOST=smtp.example.com
+MAILER_FROM=noreply@example.com
+MAILER_LOGIN=your_email@example.com
+MAILER_PASSWORD=your_app_password
+MAILER_PORT=587
+MAILER_SSL=false
+MONGO_DB=app
+MONGO_HOST=localhost:27017
+MONGO_USER=user
+MONGO_PWD=password
+MONGO_TYPE=mongodb
+COOKIE_SECRET=your-secret-key-change-in-production

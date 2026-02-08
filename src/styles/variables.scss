@@ -1,0 +1,28 @@
+$spacing-unit: 8px;
+$spacing-xs: $spacing-unit * 0.5;
+$spacing-sm: $spacing-unit;
+$spacing-md: $spacing-unit * 2;
+$spacing-lg: $spacing-unit * 3;
+$spacing-xl: $spacing-unit * 4;
+$spacing-2xl: $spacing-unit * 6;
+
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+$border-radius-xl: 16px;
+
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+$transition-fast: 150ms;
+$transition-base: 300ms;
+$transition-slow: 500ms;
+
+$breakpoint-xs: 0;
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+$breakpoint-2xl: 1536px;
