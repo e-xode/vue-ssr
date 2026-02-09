@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongodb'
 import bcrypt from 'bcryptjs'
 import { sendSecurityCodeEmail, generateSecurityCode, hashCode } from '#src/shared/email.js'
 

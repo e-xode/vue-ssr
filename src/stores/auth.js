@@ -9,6 +9,28 @@ export const useAuthStore = defineStore('auth', () => {
   const verificationContext = ref(null)
 
   const isAuthenticated = computed(() => !!user.value)
+  const email = computed(() => user.value?.email || null)
+
+  function setUser(newUser) {
+    user.value = newUser
+  }
+
+  function clearUser() {
+    user.value = null
+  }
+
+  function setError(errorMsg) {
+    error.value = errorMsg
+  }
+
+  function clearError() {
+    error.value = null
+  }
+
+  async function initializeUser() {
+    if (user.value) return // Already initialized
+    await fetchUser()
+  }
 
   async function fetchUser() {
     loading.value = true
@@ -128,12 +150,18 @@ export const useAuthStore = defineStore('auth', () => {
 
   return {
     user,
+    email,
     loading,
     error,
     isAuthenticated,
     pendingEmail,
     verificationContext,
     fetchUser,
+    setUser,
+    clearUser,
+    setError,
+    clearError,
+    initializeUser,
     signup,
     signin,
     verifyCode,

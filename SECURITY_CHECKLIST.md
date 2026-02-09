@@ -139,7 +139,7 @@ Use this checklist before deploying to production or publishing the project.
    ```bash
    # Generate COOKIE_SECRET
    node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-   
+
    # Generate MongoDB root password (minimum 12 chars, special chars)
    openssl rand -base64 20
    ```

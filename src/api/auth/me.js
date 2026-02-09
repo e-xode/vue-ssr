@@ -14,6 +14,10 @@ export function setupMeRoute(app, db) {
 
       res.json({ user })
     } catch (err) {
+      // Log error for debugging but don't expose to client
+      if (process.env.NODE_ENV !== 'production') {
+        console.error('Me endpoint error:', err)
+      }
       res.status(500).json({ error: 'error.server' })
     }
   })

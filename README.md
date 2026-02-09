@@ -17,6 +17,8 @@ A comprehensive Vue 3 Server-Side Rendering (SSR) starter kit with authenticatio
 - **SCSS** - Advanced styling with variables and mixins
 - **Express.js** - Server framework
 - **Session Management** - File-based session storage
+- **Testing** - Vitest with 50+ unit tests and comprehensive test suites
+- **Linting** - ESLint + Prettier for code quality and consistency
 
 ## Project Structure
 
@@ -87,6 +89,36 @@ npm run dev
 ```
 
 The app will be available at `http://localhost:5173`
+
+### Running Tests
+
+```bash
+# Run tests in watch mode
+npm test
+
+# Run tests once (CI/CD)
+npm run test:run
+
+# View interactive test interface
+npm run test:ui
+
+# Generate coverage report
+npm run test:coverage
+```
+
+See [TESTING.md](./TESTING.md) for more details on writing and running tests.
+
+### Code Quality & Linting
+
+```bash
+# Check linting issues
+npm run lint:check
+
+# Fix linting issues automatically
+npm run lint
+```
+
+The project uses ESLint + Prettier for code quality with Vue 3 best practices.
 
 ## Building
 
@@ -168,6 +200,16 @@ Edit `src/plugins/vuetify.js` to customize Vuetify theme colors.
 - [ ] Add error logging/monitoring
 - [ ] Configure backup strategy for MongoDB
 - [ ] Review and update security policies
+- [ ] Run all tests: `npm run test:run`
+- [ ] Check code quality: `npm run lint:check`
+- [ ] Generate coverage report: `npm run test:coverage`
+
+## Additional Resources
+
+- **[Testing Guide](./TESTING.md)** - Comprehensive testing setup and examples
+- **[Contributing Guide](./CONTRIBUTING.md)** - Code standards and contribution process
+- **[Security Checklist](./SECURITY_CHECKLIST.md)** - Security best practices
+- **[Complete Documentation](./DOCUMENTATION.md)** - Full architecture and API reference
 
 ## License
 

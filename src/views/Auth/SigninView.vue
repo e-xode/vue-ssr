@@ -67,10 +67,10 @@ async function handleSubmit() {
               :label="t('form.password')"
               :type="showPassword ? 'text' : 'password'"
               :append-icon="showPassword ? 'mdiEyeOff' : 'mdiEye'"
-              @click:append="showPassword = !showPassword"
               class="mb-6"
               :disabled="isSubmitting"
               required
+              @click:append="showPassword = !showPassword"
             />
 
             <v-btn

@@ -17,7 +17,7 @@ jobs:
           command: npm run lint
       - run:
           name: run front-end unit tests
-          command: npm run test:unit:coverage
+          command: npm run test:coverage
       - coveralls/upload:
           flag_name: unitesting
           verbose: true

@@ -16,9 +16,6 @@ if (db && !error) {
   const templateHtml = isProduction
     ? await fs.readFile('./dist/client/index.html', 'utf-8')
     : ''
-  const ssrManifest = isProduction
-    ? JSON.parse(await fs.readFile('./dist/client/.vite/ssr-manifest.json', 'utf-8'))
-    : undefined
   const fileStore = sessionFileStore(session)
   const sessionMiddleware = session({
     store: new fileStore({ path: 'logs/sessions' }),

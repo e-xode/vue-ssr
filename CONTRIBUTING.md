@@ -56,7 +56,11 @@ docker run -d -p 27017:27017 \
   -e MONGO_INITDB_ROOT_PASSWORD=password \
   mongo:latest
 
-# 7. Lancer le dev
+# 7. Vérifier que tout fonctionne
+npm run lint:check  # Check code style
+npm run test:run    # Run tests
+
+# 8. Lancer le dev
 npm run dev
 ```
 
@@ -206,7 +210,9 @@ Que fait cette PR? Quel problème résout-elle?
 2. Vérifier Y
 
 ## Checklist
-- [ ] Code stylisé (npm run lint si disponible)
+- [ ] Code stylisé (npm run lint:check passant)
+- [ ] Tests passants (npm run test:run passant)
+- [ ] Routes i18n tests (si changement UI)
 - [ ] Documentation mise à jour
 - [ ] Tests locaux passants
 - [ ] Pas de warnings de build
@@ -428,13 +434,66 @@ export default {
 - Traduire contenu important (FR + EN)
 - Vérifier les liens
 
+## ✅ Quality Checks Before Commit
+
+### Code Linting & Formatting
+
+Assurez-vous que le code respecte les standards du projet:
+
+```bash
+# Check linting issues
+npm run lint:check
+
+# Fix automatically
+npm run lint
+```
+
+Cela vérifie:
+- ✅ Vue 3 best practices
+- ✅ Code formatting consistency
+- ✅ No console.log in production code
+- ✅ Proper import statements
+
+### Running Tests
+
+Tous les changements doivent passer les tests:
+
+```bash
+# Run tests in watch mode (interactive)
+npm test
+
+# Run once (for CI/CD)
+npm run test:run
+
+# Check coverage
+npm run test:coverage
+```
+
+**For new features:**
+- ✅ Add unit tests in `tests/unit/`
+- ✅ Follow existing test patterns
+- ✅ Aim for 70%+ coverage
+- See [TESTING.md](./TESTING.md) for guidelines
+
+**PR Checklist:**
+- [ ] `npm run lint:check` passes (no errors)
+- [ ] `npm run test:run` passes (all tests green)
+- [ ] New features have tests
+- [ ] Coverage didn't decrease
+
 ## 🧪 Testing Before Submit
 
 ```bash
 # Install dépendances
 npm install
 
-# Test local
+# Run lint checks
+npm run lint:check
+
+# Run all tests
+npm run test:run
+
+# Test manualmente
 npm run dev
 # Tester manuellement: signup, signin, verify code, dashboard
 

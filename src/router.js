@@ -82,9 +82,6 @@ export const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-    const requiresAuth = to.meta?.requiresAuth
-    const isGuest = to.meta?.guest
-
     // Auth guard could go here
     // For now, just continue
     next()

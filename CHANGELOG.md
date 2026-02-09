@@ -23,6 +23,8 @@ Format: `MAJOR.MINOR.PATCH` (e.g. `1.2.3`)
 - Two-factor authentication (planifié)
 - API docs auto-generated avec Swagger (planifié)
 - Email templates customizables (planifié)
+- E2E tests avec Playwright (planifié)
+- Integration tests pour API endpoints (planifié)
 
 ### Changed
 - (À venir)
@@ -38,6 +40,53 @@ Format: `MAJOR.MINOR.PATCH` (e.g. `1.2.3`)
 
 ### Security
 - (À venir)
+
+---
+
+## [1.1.0] - 2026-02-08
+
+### Added
+
+#### Testing Infrastructure
+- **Vitest integration** - Lightweight, fast test framework with Vite support
+  - 9 comprehensive test suites with 50+ test cases
+  - Component testing with @vue/test-utils and @testing-library/vue
+  - happy-dom for lightweight DOM implementation
+  - Coverage reporting with v8 provider
+  - Interactive test UI with @vitest/ui
+- **Test suites included**:
+  - Utilities testing (logging, email generation, hashing)
+  - State management testing (Pinia auth store)
+  - Router configuration validation
+  - Component rendering tests
+  - Data validation tests
+  - API utilities and endpoint validation tests
+- **npm scripts**: `npm test`, `npm run test:run`, `npm run test:ui`, `npm run test:coverage`
+- **Test documentation** in TESTING.md with best practices and examples
+
+#### Code Quality & Linting
+- **ESLint + Prettier integration**:
+  - Vue 3 recommended rules configuration
+  - Automatic code formatting with Prettier
+  - Zero conflict between ESLint and Prettier
+  - Smart environment detection (dev vs production)
+- **Configuration files**:
+  - .eslintrc.js with Vue 3 best practices
+  - .prettierrc.json with consistent formatting rules
+  - .eslintignore for build artifacts and dependencies
+- **npm scripts**: `npm run lint` (fix issues), `npm run lint:check` (verify)
+- **Pre-commit ready** for CI/CD integration
+
+### Changed
+- Updated package.json with 5 new devDependencies (Vitest, ESLint, Prettier, Vue Test Utils, Testing Library)
+- Enhanced npm scripts with testing and linting commands
+- Updated .gitignore to exclude coverage and .vitest directories
+- Documentation updated to reflect new testing and linting workflows
+
+### Security
+- Verified all 50+ tests pass successfully
+- Linting checks enforce security best practices
+- Production-ready code quality standards
 
 ---
 

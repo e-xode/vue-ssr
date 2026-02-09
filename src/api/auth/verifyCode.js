@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongodb'
 import { verifyCode } from '#src/shared/email.js'
 
 export function setupVerifyCodeRoute(app, db) {

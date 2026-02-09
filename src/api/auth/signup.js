@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongodb'
 import bcrypt from 'bcryptjs'
 import { sendSecurityCodeEmail, generateSecurityCode, hashCode } from '#src/shared/email.js'
 
@@ -32,7 +31,7 @@ export function setupSignupRoute(app, db) {
         updatedAt: new Date()
       }
 
-      const result = await db.collection('users').insertOne(user)
+      await db.collection('users').insertOne(user)
 
       await sendSecurityCodeEmail(email, code)
 

@@ -11,7 +11,13 @@
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build --outDir dist/client --ssrManifest",
     "build:server": "vite build --ssr src/entry-server.js --outDir dist/server",
-    "prod": "cross-env NODE_ENV=production node server.js"
+    "prod": "cross-env NODE_ENV=production node server.js",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint . --fix",
+    "lint:check": "eslint ."
   },
   "dependencies": {
     "@mdi/js": "^7.4.47",
@@ -34,6 +40,15 @@
     "vuetify": "^3.10.4"
   },
   "devDependencies": {
+    "@testing-library/vue": "^8.1.0",
+    "@vitest/ui": "^3.1.0",
+    "@vue/eslint-config-prettier": "^9.0.0",
+    "@vue/test-utils": "^2.4.6",
+    "eslint": "^9.0.0",
+    "eslint-plugin-vue": "^9.0.0",
+    "happy-dom": "^14.12.3",
+    "prettier": "^3.0.0",
+    "vitest": "^3.1.0",
     "sass-embedded": "^1.90.0"
   },
   "engines": {

@@ -9,16 +9,15 @@ export async function render(url) {
     await router.isReady()
 
     const route = router.currentRoute.value
-    const locale = route.params.locale || 'en'
-    i18n.global.locale.value = locale
+    i18n.global.locale.value = route.params.locale || 'en'
 
     const html = await renderToString(app)
-    const metaTags = generateMetaTags(route, locale)
+    const metaTags = generateMetaTags(route)
 
     return { html, head: metaTags }
 }
 
-function generateMetaTags(route, locale) {
+function generateMetaTags(route) {
     const siteUrl = process.env.NODE_HOST || 'http://localhost:5173'
     const canonical = `${siteUrl}${route.path}`
 

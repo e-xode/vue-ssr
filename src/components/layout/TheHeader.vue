@@ -3,8 +3,6 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import {
-  mdiMenu,
-  mdiClose,
   mdiAccount,
   mdiLogout
 } from '@mdi/js'
@@ -12,19 +10,9 @@ import {
 const { t, locale } = useI18n()
 const authStore = useAuthStore()
 
-const drawer = ref(false)
 const scrolled = ref(false)
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
-
-const navLinks = computed(() => [
-  { title: t('nav.home'), to: '/' },
-  { title: t('nav.dashboard'), to: '/dashboard' }
-].filter(link => {
-  if (link.to === '/' && isAuthenticated.value) return false
-  if (link.to === '/dashboard' && !isAuthenticated.value) return false
-  return true
-}))
 
 function handleScroll() {
   scrolled.value = window.scrollY > 20
@@ -83,14 +71,14 @@ onUnmounted(() => {
         </template>
         <v-list>
           <v-list-item
-            @click="setLanguage('en')"
             :active="locale === 'en'"
+            @click="setLanguage('en')"
           >
             <v-list-item-title>English</v-list-item-title>
           </v-list-item>
           <v-list-item
-            @click="setLanguage('fr')"
             :active="locale === 'fr'"
+            @click="setLanguage('fr')"
           >
             <v-list-item-title>Français</v-list-item-title>
           </v-list-item>

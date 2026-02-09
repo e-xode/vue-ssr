@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars, no-undef */
 const jsonUsers = require('/json/users.json');
 const initData = async() => {
   const db = new Mongo().getDB(process.env.MONGO_INITDB_DATABASE);
