@@ -65,7 +65,7 @@ onUnmounted(() => {
       <v-spacer />
 
       <v-menu location="bottom end">
-        <template v-slot:activator="{ props }">
+        <template #activator="{ props }">
           <v-btn
             v-bind="props"
             icon
@@ -92,10 +92,9 @@ onUnmounted(() => {
 
       <template v-if="isAuthenticated">
         <v-menu location="bottom end">
-          <template v-slot:activator="{ props }">
+          <template #activator="{ props }">
             <v-btn
               v-bind="props"
-              icon
               :icon="mdiAccount"
               :aria-label="t('a11y.userMenu')"
             />
@@ -108,14 +107,14 @@ onUnmounted(() => {
               v-if="isAdmin"
               to="/admin/users"
             >
-              <template v-slot:prepend>
+              <template #prepend>
                 <v-icon :icon="mdiShieldAccount" />
               </template>
               <v-list-item-title>{{ t('nav.admin') }}</v-list-item-title>
             </v-list-item>
             <v-divider />
             <v-list-item @click="handleSignout">
-              <template v-slot:prepend>
+              <template #prepend>
                 <v-icon :icon="mdiLogout" />
               </template>
               <v-list-item-title>{{ t('nav.signout') }}</v-list-item-title>

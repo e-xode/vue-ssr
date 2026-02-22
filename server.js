@@ -23,7 +23,9 @@ if (db && !error) {
     try {
       const files = await fs.readdir('logs/sessions')
       await Promise.all(files.map(f => fs.unlink(`logs/sessions/${f}`).catch(() => {})))
-    } catch {}
+    } catch {
+      // logs/sessions directory may not exist yet
+    }
   }
 
   const sessionMiddleware = session({

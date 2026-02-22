@@ -31,7 +31,7 @@
     "express-session": "^1.18.2",
     "helmet": "^8.1.0",
     "mongodb": "^6.20.0",
-    "nodemailer": "^6.9.7",
+    "nodemailer": "^8.0.1",
     "pinia": "^3.0.3",
     "session-file-store": "1.5.0",
     "sirv": "^3.0.1",
@@ -42,16 +42,22 @@
     "vuetify": "^3.10.4"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@testing-library/vue": "^8.1.0",
     "@vitest/ui": "^3.1.0",
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/test-utils": "^2.4.6",
-    "eslint": "^9.0.0",
-    "eslint-plugin-vue": "^9.0.0",
-    "happy-dom": "^14.12.3",
+    "eslint": "^10.0.1",
+    "eslint-plugin-vue": "^10.8.0",
+    "globals": "^17.3.0",
+    "happy-dom": "^20.7.0",
     "prettier": "^3.0.0",
     "sass-embedded": "^1.90.0",
     "vitest": "^3.1.0"
+  },
+  "overrides": {
+    "bn.js": "^5.2.3",
+    "minimatch": "^10.2.2"
   },
   "engines": {
     "node": ">=18.0.0"

@@ -43,6 +43,23 @@ Format: `MAJOR.MINOR.PATCH` (e.g. `1.2.3`)
 
 ---
 
+## [1.2.1] - 2026-02-22
+
+### Security
+- **nodemailer** upgraded from `^6.9.7` to `^8.0.1` — fixes email domain interpretation conflict and addressparser DoS (GHSA-mm7p-fcc7-pg87, GHSA-rcmh-qjqh-p98v)
+- **happy-dom** upgraded from `^14.12.3` to `^20.7.0` — fixes VM context escape allowing server-side code execution (GHSA-96g7-g7g9-jxw8, GHSA-37j7-fg3j-429f)
+- **eslint** upgraded from `^9.0.0` to `^10.0.1` — fixes minimatch ReDoS via repeated wildcards (GHSA-3ppc-4f35-3m26)
+- **eslint-plugin-vue** upgraded from `^9.0.0` to `^10.8.0`
+- **bn.js** forced to `^5.2.3` via npm overrides — fixes infinite loop in transitive dependency chain `session-file-store → kruptein → asn1.js` (GHSA-378v-28hj-76wf)
+- **minimatch** forced to `^10.2.2` via npm overrides — fixes ReDoS in transitive devDependency chain `@vue/test-utils → js-beautify → editorconfig`
+
+### Changed
+- **eslint.config.js** — migrated to eslint-plugin-vue 10.x flat config format (`flat/recommended`)
+- **server.js** — added comment in empty catch block to satisfy ESLint `no-empty` rule
+- **TheHeader.vue** — removed duplicate `icon` attribute on `v-btn` (ESLint `vue/no-duplicate-attributes`)
+
+---
+
 ## [1.2.0] - 2026-02-22
 
 ### Added
