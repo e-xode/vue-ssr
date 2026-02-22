@@ -43,6 +43,15 @@ Format: `MAJOR.MINOR.PATCH` (e.g. `1.2.3`)
 
 ---
 
+## [1.2.2] - 2026-02-22
+
+### Changed
+
+- **Node.js** minimum version bumped from `>=18.0.0` to `>=22.0.0` (aligns with Docker image `node:22-slim`)
+- **package.json** version aligned to `1.2.1`
+
+---
+
 ## [1.2.1] - 2026-02-22
 
 ### Security
