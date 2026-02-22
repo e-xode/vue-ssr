@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs'
 import { sendSecurityCodeEmail, generateSecurityCode, hashCode } from '#src/shared/email.js'
+import { SECURITY_CODE_EXPIRY_MS } from '#src/shared/const.js'
 
 export function setupSigninRoute(app, db) {
   app.post('/api/auth/signin', async (req, res) => {
@@ -20,9 +21,9 @@ export function setupSigninRoute(app, db) {
         return res.status(401).json({ error: 'error.auth.invalidCredentials' })
       }
 
-      const code = await generateSecurityCode()
+      const code = generateSecurityCode()
       const codeHash = hashCode(code)
-      const codeExpires = new Date(Date.now() + 10 * 60 * 1000)
+      const codeExpires = new Date(Date.now() + SECURITY_CODE_EXPIRY_MS)
 
       await db.collection('users').updateOne(
         { _id: user._id },

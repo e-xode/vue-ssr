@@ -3,6 +3,7 @@ import {
     createMemoryHistory,
     createWebHistory
 } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 const history = typeof window === 'undefined'
     ? createMemoryHistory()
@@ -65,6 +66,35 @@ const routes = [
         }
     },
     {
+        path: '/admin',
+        name: 'Admin',
+        redirect: '/admin/users'
+    },
+    {
+        path: '/admin/users',
+        name: 'AdminUsers',
+        component: () => import('@/views/Admin/AdminUsersView.vue'),
+        meta: {
+            layout: 'app',
+            requiresAuth: true,
+            requiresAdmin: true,
+            title: 'meta.admin.users.title',
+            robots: 'noindex, nofollow'
+        }
+    },
+    {
+        path: '/admin/users/:userId',
+        name: 'AdminUserDetail',
+        component: () => import('@/views/Admin/AdminUserDetailView.vue'),
+        meta: {
+            layout: 'app',
+            requiresAuth: true,
+            requiresAdmin: true,
+            title: 'meta.admin.userDetail.title',
+            robots: 'noindex, nofollow'
+        }
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'NotFound',
         component: () => import('@/views/NotFound/NotFoundView.vue'),
@@ -78,11 +108,33 @@ const routes = [
 
 export const router = createRouter({
     history,
-    routes
+    routes,
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) return savedPosition
+        return { top: 0 }
+    }
 })
 
 router.beforeEach(async (to, from, next) => {
-    // Auth guard could go here
-    // For now, just continue
+    if (typeof window === 'undefined') return next()
+
+    const authStore = useAuthStore()
+
+    if (!authStore.user && !authStore.loading) {
+        await authStore.fetchUser()
+    }
+
+    if (to.meta.guest && authStore.isAuthenticated) {
+        return next({ name: 'Dashboard' })
+    }
+
+    if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+        return next({ name: 'Signin' })
+    }
+
+    if (to.meta.requiresAdmin && !authStore.isAdmin) {
+        return next({ name: 'Dashboard' })
+    }
+
     next()
 })

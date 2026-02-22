@@ -1,35 +1,37 @@
 <script setup>
-import { onMounted } from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { mdiShieldAccount } from '@mdi/js'
 
 const { t } = useI18n()
-const router = useRouter()
 const authStore = useAuthStore()
 
-onMounted(async () => {
-  if (!authStore.isAuthenticated && !authStore.loading) {
-    await authStore.fetchUser()
-    if (!authStore.isAuthenticated) {
-      await router.push('/signin')
-    }
-  }
-})
+const user = computed(() => authStore.user)
+const isAdmin = computed(() => authStore.isAdmin)
 </script>
 
 <template>
-  <v-container v-if="authStore.isAuthenticated" class="mt-12">
+  <v-container class="mt-8">
     <v-row>
       <v-col cols="12">
-        <v-card class="pa-6">
-          <v-card-title>{{ t('meta.dashboard.title') }}</v-card-title>
-          <v-card-text>
-            <p>{{ t('meta.dashboard.description') }}</p>
-            <p class="mt-4">
-              Welcome, <strong>{{ authStore.user?.name }}</strong>!
-            </p>
-          </v-card-text>
+        <h1 class="text-h5 font-weight-bold mb-2">
+          {{ t('dashboard.welcome') }}, {{ user?.name }}
+        </h1>
+        <p class="text-body-2 text-medium-emphasis mb-6">
+          {{ t('dashboard.subtitle', { email: user?.email }) }}
+        </p>
+      </v-col>
+
+      <v-col v-if="isAdmin" cols="12" md="4">
+        <v-card to="/admin/users" class="pa-4">
+          <div class="d-flex align-center gap-3">
+            <v-icon :icon="mdiShieldAccount" color="primary" size="32" />
+            <div>
+              <div class="text-subtitle-1 font-weight-bold">{{ t('nav.admin') }}</div>
+              <div class="text-body-2 text-medium-emphasis">{{ t('admin.users.title') }}</div>
+            </div>
+          </div>
         </v-card>
       </v-col>
     </v-row>

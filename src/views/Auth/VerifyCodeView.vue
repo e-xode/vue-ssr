@@ -66,8 +66,9 @@ async function handleResend() {
     <v-row justify="center" align="center">
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-card class="pa-6">
-          <v-card-title class="text-center mb-2">{{ t('form.code') }}</v-card-title>
-          <p class="text-center text-subtitle-2 mb-6">
+          <v-card-title class="text-center mb-2">{{ t('verify.title') }}</v-card-title>
+          <p class="text-center text-subtitle-2 mb-1">{{ t('verify.subtitle') }}</p>
+          <p class="text-center text-body-2 font-weight-bold mb-6">
             {{ email }}
           </p>
 
@@ -112,7 +113,7 @@ async function handleResend() {
               :disabled="!canResend || isSubmitting"
               @click="handleResend"
             >
-              {{ canResend ? t('form.submit') : `Resend in ${resendTimer}s` }}
+              {{ canResend ? t('verify.resend') : t('verify.resendIn', { seconds: resendTimer }) }}
             </v-btn>
           </p>
         </v-card>

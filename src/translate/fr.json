@@ -17,6 +17,7 @@
   "nav": {
     "home": "Accueil",
     "dashboard": "Tableau de bord",
+    "admin": "Administration",
     "signin": "Connexion",
     "signup": "S'inscrire",
     "signout": "Déconnexion"
@@ -26,10 +27,56 @@
     "privacy": "Politique de confidentialité",
     "terms": "Conditions d'utilisation"
   },
+  "index": {
+    "hero": {
+      "title": "Vue SSR Starter Kit",
+      "subtitle": "Boilerplate production-ready pour Vue 3, Express & MongoDB",
+      "description": "Une base complète pour construire des applications web modernes avec le rendu côté serveur, l'authentification, l'internationalisation et un panneau d'administration — tout inclus.",
+      "cta": {
+        "start": "Commencer",
+        "github": "Voir sur GitHub"
+      }
+    },
+    "features": {
+      "title": "Tout ce qu'il faut pour démarrer",
+      "ssr": {
+        "title": "Rendu Côté Serveur",
+        "description": "SSR complet avec Vite et Vue 3. Chargement initial rapide, pages optimisées pour le SEO et hydratation client transparente."
+      },
+      "auth": {
+        "title": "Authentification",
+        "description": "Flux par code de sécurité email, sessions, hachage bcryptjs et limitation de taux sur tous les endpoints d'authentification."
+      },
+      "i18n": {
+        "title": "Internationalisation",
+        "description": "Support EN/FR intégré avec Vue i18n. Facile à étendre à d'autres langues en ajoutant des fichiers JSON."
+      },
+      "admin": {
+        "title": "Panneau d'administration",
+        "description": "Gestion des utilisateurs avec contrôle d'accès par rôle (user/admin) et interface d'administration protégée."
+      },
+      "ui": {
+        "title": "Interface Vuetify",
+        "description": "Composants Material Design 3 avec support thème clair/sombre et un système de design SCSS."
+      },
+      "security": {
+        "title": "Sécurité",
+        "description": "En-têtes Helmet, liste blanche CORS, cookies de session HTTP-only, limitation de taux et validation des entrées."
+      }
+    },
+    "stack": {
+      "title": "Construit avec"
+    },
+    "opensource": {
+      "title": "Open Source",
+      "description": "Gratuit et open source. Forkez-le, personnalisez-le, construisez dessus.",
+      "cta": "Star sur GitHub"
+    }
+  },
   "meta": {
     "index": {
-      "title": "Accueil",
-      "description": "Bienvenue"
+      "title": "Vue SSR Starter Kit",
+      "description": "Boilerplate production-ready pour Vue 3, Express et MongoDB avec SSR, authentification, i18n et panneau admin."
     },
     "signup": {
       "title": "S'inscrire",
@@ -45,11 +92,21 @@
     },
     "notFound": {
       "title": "Page non trouvée"
+    },
+    "admin": {
+      "users": {
+        "title": "Utilisateurs"
+      },
+      "userDetail": {
+        "title": "Détail utilisateur"
+      }
     }
   },
   "error": {
     "unauthorized": "Non autorisé",
+    "forbidden": "Accès refusé",
     "server": "Erreur serveur",
+    "tooManyRequests": "Trop de requêtes, veuillez réessayer plus tard",
     "auth": {
       "missingFields": "Champs obligatoires manquants",
       "emailAlreadyUsed": "Email déjà utilisé",
@@ -62,6 +119,10 @@
       "tooManyAttempts": "Trop de tentatives",
       "invalidCode": "Code invalide",
       "emailRequired": "Email requis"
+    },
+    "admin": {
+      "invalidUserType": "Type d'utilisateur invalide",
+      "cannotDeleteSelf": "Vous ne pouvez pas supprimer votre propre compte"
     }
   },
   "form": {
@@ -70,7 +131,9 @@
     "name": "Nom",
     "code": "Code",
     "submit": "Envoyer",
+    "save": "Enregistrer",
     "cancel": "Annuler",
+    "delete": "Supprimer",
     "loading": "Chargement..."
   },
   "message": {
@@ -78,5 +141,36 @@
     "error": "Erreur",
     "warning": "Avertissement",
     "info": "Information"
+  },
+  "admin": {
+    "users": {
+      "title": "Utilisateurs",
+      "total": "utilisateurs",
+      "search": "Rechercher par nom ou email",
+      "type": "Type",
+      "registered": "Inscrit le",
+      "lastUpdate": "Dernière mise à jour",
+      "actions": "Actions",
+      "empty": "Aucun utilisateur trouvé",
+      "info": "Informations",
+      "edit": "Modifier",
+      "detailTitle": "Détail utilisateur",
+      "backToList": "Retour à la liste",
+      "saveSuccess": "Utilisateur mis à jour avec succès",
+      "deleteConfirm": {
+        "title": "Supprimer l'utilisateur",
+        "message": "Êtes-vous sûr de vouloir supprimer {name} ? Cette action est irréversible."
+      }
+    }
+  },
+  "dashboard": {
+    "welcome": "Bon retour",
+    "subtitle": "Vous êtes connecté en tant que {email}"
+  },
+  "verify": {
+    "title": "Vérifiez votre email",
+    "subtitle": "Nous avons envoyé un code à 6 chiffres à",
+    "resend": "Renvoyer le code",
+    "resendIn": "Renvoyer dans {seconds}s"
   }
 }

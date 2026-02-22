@@ -1,18 +1,22 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import {
   mdiAccount,
+  mdiShieldAccount,
   mdiLogout
 } from '@mdi/js'
 
 const { t, locale } = useI18n()
+const router = useRouter()
 const authStore = useAuthStore()
 
 const scrolled = ref(false)
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
+const isAdmin = computed(() => authStore.isAdmin)
 
 function handleScroll() {
   scrolled.value = window.scrollY > 20
@@ -25,6 +29,7 @@ function setLanguage(lang) {
 
 async function handleSignout() {
   await authStore.signout()
+  await router.push('/signin')
 }
 
 onMounted(() => {
@@ -98,6 +103,15 @@ onUnmounted(() => {
           <v-list>
             <v-list-item to="/dashboard">
               <v-list-item-title>{{ t('nav.dashboard') }}</v-list-item-title>
+            </v-list-item>
+            <v-list-item
+              v-if="isAdmin"
+              to="/admin/users"
+            >
+              <template v-slot:prepend>
+                <v-icon :icon="mdiShieldAccount" />
+              </template>
+              <v-list-item-title>{{ t('nav.admin') }}</v-list-item-title>
             </v-list-item>
             <v-divider />
             <v-list-item @click="handleSignout">

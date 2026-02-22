@@ -39,7 +39,22 @@ export async function sendSecurityCodeEmail(email, code, locale = 'en') {
   return sendMail(email, template.subject, template.html(code))
 }
 
-export async function generateSecurityCode() {
+export async function sendWelcomeEmail(email, name, locale = 'en') {
+  const template = getTemplate('welcome', locale)
+  if (!template) return { success: true }
+  const subject = typeof template.subject === 'function' ? template.subject(name) : template.subject
+  return sendMail(email, subject, template.html(name))
+}
+
+export async function sendContactEmail(data, locale = 'en') {
+  const template = getTemplate('contact', locale)
+  if (!template) return { success: true }
+  const to = process.env.MAILER_TO || process.env.MAILER_FROM
+  const subject = typeof template.subject === 'function' ? template.subject(data) : template.subject
+  return sendMail(to, subject, template.html(data))
+}
+
+export function generateSecurityCode() {
   return Math.floor(100000 + Math.random() * 900000).toString()
 }
 

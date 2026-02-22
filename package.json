@@ -27,7 +27,9 @@
     "cors": "2.8.5",
     "cross-env": "^10.0.0",
     "express": "^5.1.0",
+    "express-rate-limit": "^7.5.1",
     "express-session": "^1.18.2",
+    "helmet": "^8.1.0",
     "mongodb": "^6.20.0",
     "nodemailer": "^6.9.7",
     "pinia": "^3.0.3",
@@ -48,8 +50,8 @@
     "eslint-plugin-vue": "^9.0.0",
     "happy-dom": "^14.12.3",
     "prettier": "^3.0.0",
-    "vitest": "^3.1.0",
-    "sass-embedded": "^1.90.0"
+    "sass-embedded": "^1.90.0",
+    "vitest": "^3.1.0"
   },
   "engines": {
     "node": ">=18.0.0"

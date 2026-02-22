@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs'
 import { sendSecurityCodeEmail, generateSecurityCode, hashCode } from '#src/shared/email.js'
+import { USER_TYPES, SECURITY_CODE_EXPIRY_MS } from '#src/shared/const.js'
 
 export function setupSignupRoute(app, db) {
   app.post('/api/auth/signup', async (req, res) => {
@@ -16,14 +17,15 @@ export function setupSignupRoute(app, db) {
       }
 
       const hashedPassword = await bcrypt.hash(password, 10)
-      const code = await generateSecurityCode()
+      const code = generateSecurityCode()
       const codeHash = hashCode(code)
-      const codeExpires = new Date(Date.now() + 10 * 60 * 1000)
+      const codeExpires = new Date(Date.now() + SECURITY_CODE_EXPIRY_MS)
 
       const user = {
         email,
         password: hashedPassword,
         name,
+        type: USER_TYPES.USER,
         securityCode: codeHash,
         securityCodeExpires: codeExpires,
         securityCodeAttempts: 0,

@@ -43,6 +43,44 @@ Format: `MAJOR.MINOR.PATCH` (e.g. `1.2.3`)
 
 ---
 
+## [1.2.0] - 2026-02-22
+
+### Added
+- **Admin panel** — User management at `/admin/users` and `/admin/users/:userId` (list, edit, delete)
+- **Admin API** — `GET /api/admin/users`, `GET /api/admin/users/:id`, `PUT /api/admin/users/:id`, `DELETE /api/admin/users/:id`
+- **`requireAdmin` middleware** — DB-verified role check (`type === 'admin'`) on all admin routes
+- **Rate limiting** — `express-rate-limit` on all auth endpoints (10 req / 15 min)
+- **Helmet** — Security HTTP headers (`X-Frame-Options`, `X-Content-Type-Options`, etc.)
+- **`src/shared/const.js`** — Centralized constants (`SECURITY_CODE_EXPIRY_MS`, `SECURITY_CODE_MAX_ATTEMPTS`, `USER_TYPES`)
+- **`src/shared/api.js`** — Generic `apiFetch()` wrapper for frontend API calls with error handling
+- **Full router navigation guards** — `requiresAuth`, `guest`, `requiresAdmin` with automatic redirect
+- **Admin nav link** — Conditionally visible in header for admin users only (`mdiShieldAccount`)
+- **`isAdmin` computed** in `useAuthStore` Pinia store
+- **Welcome email** — `sendWelcomeEmail()` + EN/FR templates
+- **Contact email** — `sendContactEmail()` + EN/FR templates
+- **Enhanced SSR SEO** — OpenGraph, Twitter Card, hreflang, Schema.org JSON-LD, Apple meta tags
+- **`<!--app-lang-->` SSR placeholder** — Dynamic `lang` attribute injection in `index.html`
+- **Admin i18n keys** — Full EN/FR translations for admin UI (`admin.*`)
+- **`verify.*` i18n keys** — Proper i18n for verify-code view
+- **`dashboard.*` i18n keys** — Welcome message and subtitle
+- **`form.save`, `form.delete`** — Added missing form keys
+- **`error.forbidden`, `error.tooManyRequests`, `error.admin.*`** — New error keys
+- **`IndexView.vue`** — Rich landing page: hero section, 6 feature cards (SSR/Auth/i18n/Admin/UI/Security), tech stack chips, open source section with GitHub link
+- **`index.*` i18n keys** — Full EN/FR translations for the landing page (hero, features, stack, opensource)
+- **`CLAUDE.md`** — Complete project reference guide for AI-assisted development sessions
+
+### Changed
+- **`generateSecurityCode()`** — Changed from `async` to synchronous
+- **`signup.js`** — User document now includes `type: 'user'` at creation
+- **`signin.js`, `resendCode.js`** — Use `SECURITY_CODE_EXPIRY_MS` constant
+- **`requireAuth` middleware** — Now also sets `req.userId` as `ObjectId`
+- **`server.js`** — Cookie name `app.sid`, `saveUninitialized: false`, session cleanup on production start
+- **`TheHeader.vue`** — Admin menu item, signout redirects to `/signin`
+- **`DashboardView.vue`** — Improved with welcome message and admin quick-access card
+- **`VerifyCodeView.vue`** — Resend button uses `verify.*` i18n keys
+
+---
+
 ## [1.1.0] - 2026-02-08
 
 ### Added

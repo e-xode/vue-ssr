@@ -17,6 +17,7 @@
   "nav": {
     "home": "Home",
     "dashboard": "Dashboard",
+    "admin": "Admin",
     "signin": "Sign In",
     "signup": "Sign Up",
     "signout": "Sign Out"
@@ -26,10 +27,56 @@
     "privacy": "Privacy Policy",
     "terms": "Terms of Service"
   },
+  "index": {
+    "hero": {
+      "title": "Vue SSR Starter Kit",
+      "subtitle": "Production-ready boilerplate for Vue 3, Express & MongoDB",
+      "description": "A complete foundation for building modern web applications with Server-Side Rendering, authentication, internationalization, and an admin panel — all included.",
+      "cta": {
+        "start": "Get Started",
+        "github": "View on GitHub"
+      }
+    },
+    "features": {
+      "title": "Everything you need to start",
+      "ssr": {
+        "title": "Server-Side Rendering",
+        "description": "Full SSR with Vite and Vue 3. Fast initial load, SEO-optimized pages, and seamless client hydration."
+      },
+      "auth": {
+        "title": "Authentication",
+        "description": "Email security code flow, sessions, bcryptjs password hashing, and rate limiting on all auth endpoints."
+      },
+      "i18n": {
+        "title": "Internationalization",
+        "description": "Built-in EN/FR support with Vue i18n. Easily extend to more languages by adding JSON files."
+      },
+      "admin": {
+        "title": "Admin Panel",
+        "description": "User management with role-based access control (user/admin) and a protected admin interface."
+      },
+      "ui": {
+        "title": "Vuetify UI",
+        "description": "Material Design 3 components with light/dark theme support and a SCSS design system."
+      },
+      "security": {
+        "title": "Security",
+        "description": "Helmet headers, CORS whitelist, HTTP-only session cookies, rate limiting, and input validation."
+      }
+    },
+    "stack": {
+      "title": "Built with"
+    },
+    "opensource": {
+      "title": "Open Source",
+      "description": "Free and open source. Fork it, customize it, build on it.",
+      "cta": "Star on GitHub"
+    }
+  },
   "meta": {
     "index": {
-      "title": "Home",
-      "description": "Welcome"
+      "title": "Vue SSR Starter Kit",
+      "description": "Production-ready boilerplate for Vue 3, Express and MongoDB with SSR, authentication, i18n, and admin panel."
     },
     "signup": {
       "title": "Sign Up",
@@ -45,11 +92,21 @@
     },
     "notFound": {
       "title": "Page Not Found"
+    },
+    "admin": {
+      "users": {
+        "title": "Users"
+      },
+      "userDetail": {
+        "title": "User Detail"
+      }
     }
   },
   "error": {
     "unauthorized": "Unauthorized",
+    "forbidden": "Access denied",
     "server": "Server error",
+    "tooManyRequests": "Too many requests, please try again later",
     "auth": {
       "missingFields": "Missing required fields",
       "emailAlreadyUsed": "Email already in use",
@@ -62,6 +119,10 @@
       "tooManyAttempts": "Too many attempts",
       "invalidCode": "Invalid code",
       "emailRequired": "Email required"
+    },
+    "admin": {
+      "invalidUserType": "Invalid user type",
+      "cannotDeleteSelf": "You cannot delete your own account"
     }
   },
   "form": {
@@ -70,7 +131,9 @@
     "name": "Name",
     "code": "Code",
     "submit": "Submit",
+    "save": "Save",
     "cancel": "Cancel",
+    "delete": "Delete",
     "loading": "Loading..."
   },
   "message": {
@@ -78,5 +141,36 @@
     "error": "Error",
     "warning": "Warning",
     "info": "Info"
+  },
+  "admin": {
+    "users": {
+      "title": "Users",
+      "total": "users",
+      "search": "Search by name or email",
+      "type": "Type",
+      "registered": "Registered",
+      "lastUpdate": "Last update",
+      "actions": "Actions",
+      "empty": "No users found",
+      "info": "Information",
+      "edit": "Edit",
+      "detailTitle": "User Detail",
+      "backToList": "Back to users",
+      "saveSuccess": "User updated successfully",
+      "deleteConfirm": {
+        "title": "Delete user",
+        "message": "Are you sure you want to delete {name}? This action cannot be undone."
+      }
+    }
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "subtitle": "You are signed in as {email}"
+  },
+  "verify": {
+    "title": "Verify your email",
+    "subtitle": "We sent a 6-digit code to",
+    "resend": "Resend code",
+    "resendIn": "Resend in {seconds}s"
   }
 }

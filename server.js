@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises'
 import cors from 'cors'
+import helmet from 'helmet'
 import express from 'express'
 import session from 'express-session'
 import sessionFileStore from 'session-file-store'
@@ -17,6 +18,14 @@ if (db && !error) {
     ? await fs.readFile('./dist/client/index.html', 'utf-8')
     : ''
   const fileStore = sessionFileStore(session)
+
+  if (isProduction) {
+    try {
+      const files = await fs.readdir('logs/sessions')
+      await Promise.all(files.map(f => fs.unlink(`logs/sessions/${f}`).catch(() => {})))
+    } catch {}
+  }
+
   const sessionMiddleware = session({
     store: new fileStore({ path: 'logs/sessions' }),
     cookie: {
@@ -26,13 +35,20 @@ if (db && !error) {
       httpOnly: true,
       path: '/'
     },
-    name: 'ssr.sid',
+    name: 'app.sid',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     secret: process.env.COOKIE_SECRET || 'change-me-in-production'
   })
+
   const app = express()
   app.set('trust proxy', 1)
+
+  app.use(helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false
+  }))
+
   app.use(sessionMiddleware)
   app.use(cors({
     origin: (origin, callback) => {
@@ -68,6 +84,7 @@ if (db && !error) {
     app.use(compression())
     app.use(base, sirv('./dist/client', { extensions: [] }))
   }
+
   app.use('*all', async (req, res) => {
     try {
       const url = req.originalUrl.replace(base, '')
@@ -83,6 +100,7 @@ if (db && !error) {
       }
       const rendered = await render(url)
       const html = template
+        .replace(`<!--app-lang-->`, rendered.locale || 'en')
         .replace(`<!--app-head-->`, rendered.head ?? '')
         .replace(`<!--app-html-->`, rendered.html ?? '')
 

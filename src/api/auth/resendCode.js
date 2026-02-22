@@ -1,4 +1,5 @@
 import { sendSecurityCodeEmail, generateSecurityCode, hashCode } from '#src/shared/email.js'
+import { SECURITY_CODE_EXPIRY_MS } from '#src/shared/const.js'
 
 export function setupResendCodeRoute(app, db) {
   app.post('/api/auth/resend-code', async (req, res) => {
@@ -14,9 +15,9 @@ export function setupResendCodeRoute(app, db) {
         return res.status(400).json({ error: 'error.auth.userNotFound' })
       }
 
-      const code = await generateSecurityCode()
+      const code = generateSecurityCode()
       const codeHash = hashCode(code)
-      const codeExpires = new Date(Date.now() + 10 * 60 * 1000)
+      const codeExpires = new Date(Date.now() + SECURITY_CODE_EXPIRY_MS)
 
       await db.collection('users').updateOne(
         { _id: user._id },
