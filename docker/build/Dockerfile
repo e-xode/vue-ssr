@@ -1,7 +1,7 @@
 FROM node:22-alpine3.19 AS builder
 
 ARG NODE_HOST=https://www.mywebsite.com
-ARG NODE_PORT=3006
+ARG NODE_PORT=3002
 
 ENV NODE_ENV=production
 ENV NODE_PORT=$NODE_PORT

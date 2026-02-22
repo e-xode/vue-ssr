@@ -10,15 +10,33 @@ const { t } = useI18n()
     padless
   >
     <v-container>
-      <v-row dense justify="center">
-        <v-col cols="12" class="text-center py-4">
-          <p class="mb-2">{{ t('footer.copyright') }}</p>
+      <v-row
+        dense
+        justify="center"
+      >
+        <v-col
+          cols="12"
+          class="text-center py-4"
+        >
+          <p class="mb-2">
+            {{ t('footer.copyright') }}
+          </p>
           <div class="footer-links">
-            <router-link to="/">{{ t('nav.home') }}</router-link>
+            <router-link to="/">
+              {{ t('nav.home') }}
+            </router-link>
             <span class="mx-2">•</span>
-            <a href="#" target="_blank" rel="noopener noreferrer">{{ t('footer.privacy') }}</a>
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+            >{{ t('footer.privacy') }}</a>
             <span class="mx-2">•</span>
-            <a href="#" target="_blank" rel="noopener noreferrer">{{ t('footer.terms') }}</a>
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+            >{{ t('footer.terms') }}</a>
           </div>
         </v-col>
       </v-row>

@@ -89,7 +89,9 @@ onMounted(fetchUser)
           {{ t('admin.users.backToList') }}
         </v-btn>
 
-        <h1 class="text-h5 font-weight-bold mb-6">{{ t('admin.users.detailTitle') }}</h1>
+        <h1 class="text-h5 font-weight-bold mb-6">
+          {{ t('admin.users.detailTitle') }}
+        </h1>
 
         <v-alert
           v-if="error"
@@ -111,13 +113,22 @@ onMounted(fetchUser)
           {{ successMessage }}
         </v-alert>
 
-        <div v-if="loading" class="text-center py-12">
-          <v-progress-circular indeterminate color="primary" />
+        <div
+          v-if="loading"
+          class="text-center py-12"
+        >
+          <v-progress-circular
+            indeterminate
+            color="primary"
+          />
         </div>
 
         <template v-else-if="user">
           <v-row>
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <v-card class="mb-4">
                 <v-card-title>{{ t('admin.users.info') }}</v-card-title>
                 <v-card-text>
@@ -139,7 +150,10 @@ onMounted(fetchUser)
               </v-card>
             </v-col>
 
-            <v-col cols="12" md="6">
+            <v-col
+              cols="12"
+              md="6"
+            >
               <v-card>
                 <v-card-title>{{ t('admin.users.edit') }}</v-card-title>
                 <v-card-text>

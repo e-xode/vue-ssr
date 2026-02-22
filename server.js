@@ -12,7 +12,7 @@ const { db, error } = await mongoConnect()
 if (db && !error) {
 
   const isProduction = process.env.NODE_ENV === 'production'
-  const port = process.env.NODE_PORT || 5173
+  const port = process.env.NODE_PORT || 3002
   const base = process.env.BASE || '/'
   const templateHtml = isProduction
     ? await fs.readFile('./dist/client/index.html', 'utf-8')
@@ -55,7 +55,7 @@ if (db && !error) {
   app.use(cors({
     origin: (origin, callback) => {
       const allowedOrigins = [
-        'http://localhost:3000',
+        `http://localhost:${port}`,
         process.env.NODE_HOST
       ].filter(Boolean)
       if (!origin || allowedOrigins.includes(origin)) {

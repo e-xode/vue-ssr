@@ -6,9 +6,9 @@ Project reference guide for AI-assisted development sessions.
 
 **Purpose**: Boilerplate/starter kit for Vue 3 + Express SSR applications with authentication, i18n, Vuetify, admin panel, and MongoDB.
 
-**Version**: 1.2.0
+**Version**: 1.2.2
 **License**: MIT
-**Node**: >=18.0.0
+**Node**: >=22.0.0
 
 ---
 
@@ -16,18 +16,18 @@ Project reference guide for AI-assisted development sessions.
 
 | Layer | Technology |
 |---|---|
-| Frontend | Vue 3 (Composition API) + Pinia + Vue Router |
-| SSR | Vite SSR + `renderToString` + Express middleware |
+| Frontend | Vue 3 (Composition API) + Pinia + Vue Router 4 |
+| SSR | Vite 7 + `renderToString` + Express middleware |
 | UI | Vuetify 3 (Material Design 3) + MDI icons (`@mdi/js`) |
 | i18n | Vue i18n v11 (EN/FR, Composition API `legacy: false`) |
 | Backend | Express 5 + express-session + session-file-store |
 | Database | MongoDB 6 (driver direct, no ODM) |
-| Email | Nodemailer |
+| Email | Nodemailer 8 |
 | Auth | Email security code (6-digit, 10 min expiry, bcryptjs) |
 | Security | Helmet + express-rate-limit + CORS whitelist |
 | Build | Vite 7 (client + server bundles) |
-| Tests | Vitest + @vue/test-utils + happy-dom |
-| Lint | ESLint 9 + Prettier |
+| Tests | Vitest 3 + @vue/test-utils + happy-dom 20 |
+| Lint | ESLint 10 + eslint-plugin-vue 10 + Prettier |
 | Styles | SCSS (variables + mixins injected globally via Vite) |
 
 ---
@@ -39,6 +39,8 @@ Project reference guide for AI-assisted development sessions.
 ├── server.js                    # Express entry point (SSR + API + session)
 ├── index.html                   # HTML template with <!--app-head--> <!--app-html--> <!--app-lang-->
 ├── vite.config.js               # Vite config (SCSS inject, SSR noExternal vuetify)
+├── eslint.config.js             # ESLint flat config (ESLint 10 + eslint-plugin-vue 10)
+├── vitest.config.js             # Vitest config (happy-dom, @/ and #src/ aliases)
 ├── .env                         # Environment variables (see section below)
 ├── src/
 │   ├── entry-client.js          # Client hydration
@@ -89,9 +91,9 @@ Project reference guide for AI-assisted development sessions.
 │       └── NotFound/NotFoundView.vue
 ├── tests/
 │   ├── setup.js
-│   └── unit/                    # Vitest test suites
+│   └── unit/                    # Vitest test suites (70 tests, 9 files)
 ├── docker/
-│   ├── dev/node/                # Node dev Dockerfile + run.sh
+│   ├── dev/node/                # Node 22 dev Dockerfile + run.sh
 │   └── dev/mongo/               # MongoDB Dockerfile + init script
 └── logs/sessions/               # Session files (gitignored)
 ```
@@ -276,6 +278,11 @@ File: `src/plugins/vuetify.js`
 - Defaults: `VBtn variant: flat`, `VCard rounded: xl elevation: 0`, `VTextField variant: outlined`
 - SSR: `createApplicationVuetify(ssr)` — passes SSR flag for server-side rendering
 
+### Vuetify pitfalls
+
+- **Do not use `icon` (boolean) + `:icon="..."` on the same `v-btn`** — ESLint flags it as `vue/no-duplicate-attributes`. Use only `:icon="mdiXxx"` and remove the standalone `icon` attribute.
+- `v-slot:activator` → prefer `#activator` shorthand (eslint-plugin-vue `vue/v-slot-style`)
+
 ---
 
 ## SCSS System
@@ -290,6 +297,65 @@ Injected globally via Vite `additionalData`:
 **Variables** (`_variables.scss`): `$spacing-*`, `$border-radius-*`, `$shadow-*`, `$transition-*`, `$breakpoint-*`
 
 **Mixins** (`_mixins.scss`): `flex-center`, `flex-between`, `flex-col`, `truncate`, `multiline-truncate($lines)`, `absolute-center`, `transition`, `hover-lift`, `button-reset`, `visually-hidden`, `respond-to($breakpoint)`
+
+---
+
+## ESLint Configuration
+
+File: `eslint.config.js` — **flat config format** (ESLint 10 requires this).
+
+```js
+import js from '@eslint/js'
+import vue from 'eslint-plugin-vue'
+import globals from 'globals'
+
+export default [
+  { ignores: [...] },
+  js.configs.recommended,
+  ...vue.configs['flat/recommended'],   // eslint-plugin-vue 10.x key
+  {
+    files: ['**/*.{js,mjs,cjs,jsx,vue}'],
+    languageOptions: { ecmaVersion: 'latest', sourceType: 'module', globals: { ...globals.browser, ...globals.node } },
+    rules: { ... }
+  }
+]
+```
+
+**Important**: in eslint-plugin-vue 10.x, the flat config key is `flat/recommended` (Vue 3), **not** `flat/vue3-recommended`.
+
+Required devDependencies for ESLint 10 flat config:
+- `eslint` ^10.0.1
+- `eslint-plugin-vue` ^10.8.0
+- `@eslint/js` ^10.0.1
+- `globals` ^17.x
+
+---
+
+## Dependency Management
+
+### npm overrides
+
+Used to force safe versions of transitive dependencies that can't be updated through the normal dependency tree:
+
+```json
+"overrides": {
+  "bn.js": "^5.2.3",
+  "minimatch": "^10.2.2"
+}
+```
+
+- **bn.js**: forced to 5.x to fix CVE via `session-file-store → kruptein → asn1.js`
+- **minimatch**: forced to 10.2.2+ (supports Node 22, fixes ReDoS) via `@vue/test-utils → js-beautify → editorconfig`
+
+After changing overrides, always run `npm install` to regenerate `package-lock.json`.
+
+### Checking vulnerabilities
+
+```bash
+npm audit                  # Full report
+npm audit fix              # Fix non-breaking issues
+npm audit fix --force      # Fix with breaking changes (review carefully)
+```
 
 ---
 
@@ -322,6 +388,8 @@ npm run test:coverage # Coverage report
 Config: `vitest.config.js` — environment: `happy-dom`, setup: `tests/setup.js`
 
 Tests mock `console.*`, `process.env`, MongoDB, and Nodemailer.
+
+**Current state**: 9 test files, 70 tests, all passing.
 
 ---
 
@@ -376,12 +444,18 @@ Tests mock `console.*`, `process.env`, MongoDB, and Nodemailer.
 - Auth endpoints: 10 requests per 15 minutes per IP
 - Use a different IP or wait for window to expire in tests
 
+### ESLint errors to know
+
+- **`no-empty`**: empty `catch {}` blocks must contain at least a comment
+- **`vue/no-duplicate-attributes`**: `<v-btn icon :icon="mdi...">` is invalid — remove the boolean `icon` attribute, keep only `:icon="..."`
+- **`vue/v-slot-style`**: use `#slotName` shorthand instead of `v-slot:slotName`
+
 ---
 
 ## Project Conventions
 
 - **No TypeScript** — pure ES Modules (`"type": "module"`)
-- **No comments in code** — code should be self-explanatory
+- **No comments in code** — code should be self-explanatory (except empty catch blocks: add a short comment)
 - **Imports**: use `@/` for src alias in frontend, `#src/` for Node imports
 - **Error keys**: always use i18n dot-notation keys (e.g. `'error.auth.invalidCode'`) in API responses
 - **Async/await**: preferred over `.then()` chains

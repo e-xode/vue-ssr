@@ -92,7 +92,9 @@ onMounted(fetchUsers)
     <v-row>
       <v-col cols="12">
         <div class="d-flex align-center mb-6">
-          <h1 class="text-h5 font-weight-bold">{{ t('admin.users.title') }}</h1>
+          <h1 class="text-h5 font-weight-bold">
+            {{ t('admin.users.title') }}
+          </h1>
           <v-spacer />
           <span class="text-body-2 text-medium-emphasis">{{ total }} {{ t('admin.users.total') }}</span>
         </div>
@@ -127,17 +129,28 @@ onMounted(fetchUsers)
                 <th>{{ t('form.email') }}</th>
                 <th>{{ t('admin.users.type') }}</th>
                 <th>{{ t('admin.users.registered') }}</th>
-                <th class="text-right">{{ t('admin.users.actions') }}</th>
+                <th class="text-right">
+                  {{ t('admin.users.actions') }}
+                </th>
               </tr>
             </thead>
             <tbody>
               <tr v-if="loading">
-                <td colspan="5" class="text-center py-8">
-                  <v-progress-circular indeterminate color="primary" />
+                <td
+                  colspan="5"
+                  class="text-center py-8"
+                >
+                  <v-progress-circular
+                    indeterminate
+                    color="primary"
+                  />
                 </td>
               </tr>
               <tr v-else-if="!users.length">
-                <td colspan="5" class="text-center py-8 text-medium-emphasis">
+                <td
+                  colspan="5"
+                  class="text-center py-8 text-medium-emphasis"
+                >
                   {{ t('admin.users.empty') }}
                 </td>
               </tr>
@@ -177,7 +190,10 @@ onMounted(fetchUsers)
             </tbody>
           </v-table>
 
-          <v-card-text v-if="totalPages > 1" class="d-flex align-center justify-center gap-2 pt-4">
+          <v-card-text
+            v-if="totalPages > 1"
+            class="d-flex align-center justify-center gap-2 pt-4"
+          >
             <v-btn
               :icon="mdiChevronLeft"
               :disabled="page === 1"
@@ -198,7 +214,10 @@ onMounted(fetchUsers)
       </v-col>
     </v-row>
 
-    <v-dialog v-model="deleteDialog" max-width="400">
+    <v-dialog
+      v-model="deleteDialog"
+      max-width="400"
+    >
       <v-card>
         <v-card-title>{{ t('admin.users.deleteConfirm.title') }}</v-card-title>
         <v-card-text>
@@ -206,8 +225,17 @@ onMounted(fetchUsers)
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn variant="text" @click="deleteDialog = false">{{ t('form.cancel') }}</v-btn>
-          <v-btn color="error" :loading="deleteLoading" @click="executeDelete">
+          <v-btn
+            variant="text"
+            @click="deleteDialog = false"
+          >
+            {{ t('form.cancel') }}
+          </v-btn>
+          <v-btn
+            color="error"
+            :loading="deleteLoading"
+            @click="executeDelete"
+          >
             {{ t('form.delete') }}
           </v-btn>
         </v-card-actions>

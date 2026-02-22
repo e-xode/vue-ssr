@@ -40,8 +40,16 @@ const stack = [
   <div class="index-page">
     <section class="hero">
       <v-container>
-        <v-row justify="center" align="center">
-          <v-col cols="12" md="9" lg="7" class="text-center">
+        <v-row
+          justify="center"
+          align="center"
+        >
+          <v-col
+            cols="12"
+            md="9"
+            lg="7"
+            class="text-center"
+          >
             <v-chip
               color="primary"
               variant="tonal"
@@ -51,11 +59,17 @@ const stack = [
               {{ t('app.name') }}
             </v-chip>
 
-            <h1 class="hero__title mb-4">{{ t('index.hero.title') }}</h1>
+            <h1 class="hero__title mb-4">
+              {{ t('index.hero.title') }}
+            </h1>
 
-            <p class="hero__subtitle mb-4">{{ t('index.hero.subtitle') }}</p>
+            <p class="hero__subtitle mb-4">
+              {{ t('index.hero.subtitle') }}
+            </p>
 
-            <p class="hero__description mb-8">{{ t('index.hero.description') }}</p>
+            <p class="hero__description mb-8">
+              {{ t('index.hero.description') }}
+            </p>
 
             <div class="d-flex gap-4 justify-center flex-wrap">
               <v-btn
@@ -88,9 +102,17 @@ const stack = [
 
     <section class="features py-16">
       <v-container>
-        <v-row justify="center" class="mb-10">
-          <v-col cols="12" class="text-center">
-            <h2 class="text-h5 font-weight-bold">{{ t('index.features.title') }}</h2>
+        <v-row
+          justify="center"
+          class="mb-10"
+        >
+          <v-col
+            cols="12"
+            class="text-center"
+          >
+            <h2 class="text-h5 font-weight-bold">
+              {{ t('index.features.title') }}
+            </h2>
           </v-col>
         </v-row>
         <v-row>
@@ -101,7 +123,10 @@ const stack = [
             sm="6"
             md="4"
           >
-            <v-card class="pa-5 h-100" border>
+            <v-card
+              class="pa-5 h-100"
+              border
+            >
               <v-icon
                 :icon="feature.icon"
                 :color="feature.color"
@@ -122,14 +147,23 @@ const stack = [
 
     <section class="stack py-12">
       <v-container>
-        <v-row justify="center" class="mb-8">
-          <v-col cols="12" class="text-center">
+        <v-row
+          justify="center"
+          class="mb-8"
+        >
+          <v-col
+            cols="12"
+            class="text-center"
+          >
             <h2 class="text-h6 font-weight-bold text-medium-emphasis text-uppercase">
               {{ t('index.stack.title') }}
             </h2>
           </v-col>
         </v-row>
-        <v-row justify="center" class="gap-2">
+        <v-row
+          justify="center"
+          class="gap-2"
+        >
           <v-col
             v-for="item in stack"
             :key="item.label"
@@ -139,8 +173,12 @@ const stack = [
               variant="tonal"
               size="large"
             >
-              <template v-slot:prepend>
-                <v-icon :icon="item.icon" :color="item.color" class="mr-1" />
+              <template #prepend>
+                <v-icon
+                  :icon="item.icon"
+                  :color="item.color"
+                  class="mr-1"
+                />
               </template>
               {{ item.label }}
             </v-chip>
@@ -152,10 +190,22 @@ const stack = [
     <section class="opensource py-16">
       <v-container>
         <v-row justify="center">
-          <v-col cols="12" md="7" class="text-center">
-            <v-icon :icon="mdiGithub" size="48" class="mb-4" />
-            <h2 class="text-h5 font-weight-bold mb-3">{{ t('index.opensource.title') }}</h2>
-            <p class="text-body-1 text-medium-emphasis mb-6">{{ t('index.opensource.description') }}</p>
+          <v-col
+            cols="12"
+            md="7"
+            class="text-center"
+          >
+            <v-icon
+              :icon="mdiGithub"
+              size="48"
+              class="mb-4"
+            />
+            <h2 class="text-h5 font-weight-bold mb-3">
+              {{ t('index.opensource.title') }}
+            </h2>
+            <p class="text-body-1 text-medium-emphasis mb-6">
+              {{ t('index.opensource.description') }}
+            </p>
             <v-btn
               :href="GITHUB_URL"
               target="_blank"

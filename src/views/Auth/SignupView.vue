@@ -40,10 +40,20 @@ async function handleSubmit() {
 
 <template>
   <v-container class="fill-height">
-    <v-row justify="center" align="center">
-      <v-col cols="12" sm="8" md="6" lg="4">
+    <v-row
+      justify="center"
+      align="center"
+    >
+      <v-col
+        cols="12"
+        sm="8"
+        md="6"
+        lg="4"
+      >
         <v-card class="pa-6">
-          <v-card-title class="text-center mb-6">{{ t('meta.signup.title') }}</v-card-title>
+          <v-card-title class="text-center mb-6">
+            {{ t('meta.signup.title') }}
+          </v-card-title>
 
           <v-alert
             v-if="errorMessage"
@@ -99,7 +109,12 @@ async function handleSubmit() {
 
           <p class="text-center mb-0">
             {{ t('meta.signin.description') }}
-            <router-link to="/signin" class="link">{{ t('nav.signin') }}</router-link>
+            <router-link
+              to="/signin"
+              class="link"
+            >
+              {{ t('nav.signin') }}
+            </router-link>
           </p>
         </v-card>
       </v-col>

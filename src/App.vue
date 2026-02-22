@@ -13,21 +13,30 @@ const showFooter = computed(() => layout.value === 'public')
 </script>
 
 <template>
-    <v-app>
-        <a href="#main-content" class="skip-link">{{ t('a11y.skipToContent') }}</a>
+  <v-app>
+    <a
+      href="#main-content"
+      class="skip-link"
+    >{{ t('a11y.skipToContent') }}</a>
 
-        <TheHeader v-if="showHeader" />
+    <TheHeader v-if="showHeader" />
 
-        <v-main id="main-content" role="main">
-            <router-view v-slot="{ Component }">
-                <transition name="fade" mode="out-in">
-                    <component :is="Component" />
-                </transition>
-            </router-view>
-        </v-main>
+    <v-main
+      id="main-content"
+      role="main"
+    >
+      <router-view v-slot="{ Component }">
+        <transition
+          name="fade"
+          mode="out-in"
+        >
+          <component :is="Component" />
+        </transition>
+      </router-view>
+    </v-main>
 
-        <TheFooter v-if="showFooter" />
-    </v-app>
+    <TheFooter v-if="showFooter" />
+  </v-app>
 </template>
 
 <style lang="scss">

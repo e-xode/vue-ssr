@@ -3,9 +3,8 @@ FROM node:22-slim
 ENV CHROME_DEVEL_SANDBOX=/usr/local/sbin/chrome-devel-sandbox
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 ENV NODE_ENV=development
-ENV NODE_PORT=3006
+ENV NODE_PORT=3002
 ENV PATH=/home/node/.npm-global/bin:$PATH
-ENV PLAYWRIGHT_BROWSERS_PATH=/home/node/.cache/ms-playwright
 
 ADD ./run.sh /scripts/run.sh
 RUN chmod +x /scripts/*
@@ -44,8 +43,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     supervisor \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p /home/node/.cache/ms-playwright && chown -R node:node /home/node/.cache
 
 USER node
 
