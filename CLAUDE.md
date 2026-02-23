@@ -15,7 +15,7 @@ Project reference guide for AI-assisted development sessions.
 ## Stack
 
 | Layer | Technology |
-|---|---|
+| --- | --- |
 | Frontend | Vue 3 (Composition API) + Pinia + Vue Router 4 |
 | SSR | Vite 7 + `renderToString` + Express middleware |
 | UI | Vuetify 3 (Material Design 3) + MDI icons (`@mdi/js`) |
@@ -34,7 +34,7 @@ Project reference guide for AI-assisted development sessions.
 
 ## Directory Structure
 
-```
+```text
 /
 ├── server.js                    # Express entry point (SSR + API + session)
 ├── index.html                   # HTML template with <!--app-head--> <!--app-html--> <!--app-lang-->
@@ -145,7 +145,7 @@ BASE=/                           # URL base path
 ### Security Code limits
 
 | Setting | Value | Constant |
-|---|---|---|
+| --- | --- | --- |
 | Expiry | 10 minutes | `SECURITY_CODE_EXPIRY_MS` |
 | Max attempts | 5 | `SECURITY_CODE_MAX_ATTEMPTS` |
 | Rate limit (auth) | 10 req / 15 min | `authLimiter` in `api/router.js` |
@@ -187,7 +187,7 @@ BASE=/                           # URL base path
 Configured via `route.meta.layout`:
 
 | Value | Header | Footer | Use case |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `'public'` | ✅ | ✅ | Landing, public pages |
 | `'minimal'` | ❌ | ❌ | Auth pages, 404 |
 | `'app'` | ✅ | ❌ | Dashboard, admin, protected pages |
@@ -256,12 +256,13 @@ Generated server-side per route:
 Templates are functions in `src/translate/emails/[locale].js`:
 
 | Key | Subject | Function signature |
-|---|---|---|
+| --- | --- | --- |
 | `securityCode` | String | `html(code: string)` |
 | `welcome` | Function(name) | `html(name: string)` |
 | `contact` | Function(data) | `html(data: {name, email, message})` |
 
 Email functions in `src/shared/email.js`:
+
 - `sendSecurityCodeEmail(email, code, locale)`
 - `sendWelcomeEmail(email, name, locale)`
 - `sendContactEmail(data, locale)` — sends to `MAILER_TO`
@@ -324,6 +325,7 @@ export default [
 **Important**: in eslint-plugin-vue 10.x, the flat config key is `flat/recommended` (Vue 3), **not** `flat/vue3-recommended`.
 
 Required devDependencies for ESLint 10 flat config:
+
 - `eslint` ^10.0.1
 - `eslint-plugin-vue` ^10.8.0
 - `@eslint/js` ^10.0.1
@@ -359,7 +361,9 @@ npm audit fix --force      # Fix with breaking changes (review carefully)
 
 ---
 
-## Docker (Development)
+## Docker
+
+### Development
 
 ```bash
 # Start all services
@@ -373,6 +377,19 @@ docker compose up
 MongoDB waits for healthy state before Node starts (`depends_on: condition: service_healthy`).
 
 Source code is volume-mounted (`- '.:/app'`), so HMR works.
+
+### Production build
+
+File: `docker/build/Dockerfile` — multi-stage build:
+
+| Stage | Image | Role |
+| --- | --- | --- |
+| `builder` | `node:22-alpine3.19` | Install deps + `npm run build` (client + server bundles) |
+| `runner` | `node:22-slim` | Copy `dist/` + `server.js` + `src/` + run with supervisord |
+
+Build args: `NODE_HOST` (default `https://www.mywebsite.com`), `NODE_PORT` (default `3002` builder / `3006` runner).
+
+The runner only installs production deps (`npm install --production=true`) and is managed by supervisord (`docker/build/config/supervisord.conf`).
 
 ---
 
@@ -462,3 +479,4 @@ Tests mock `console.*`, `process.env`, MongoDB, and Nodemailer.
 - **No default exports for stores/composables** — use named exports
 - **Security**: never log passwords, tokens, or session IDs
 - **i18n mandatory**: all user-visible text in Vue components must be externalized as i18n keys — never hardcode strings in templates; always add the key to both `src/translate/en.json` and `src/translate/fr.json`
+- **Template formatting**: each HTML attribute on its own line when an element has more than one attribute; element content on its own line (enforced by `npm run lint` auto-fix)
