@@ -48,7 +48,7 @@ Use this checklist before deploying to production or publishing the project.
 - [ ] No real email addresses
   ```bash
   grep -ri "@.*\.com\|@.*\.io" src/ | grep -v example.com
-  # Should find nothing (only docs reference security@e-xode.io)
+  # Should find nothing (only docs reference contact@e-xode.net)
   ```
 
 - [ ] No real domain names
@@ -162,7 +162,7 @@ Use this checklist before deploying to production or publishing the project.
 
 - [ ] Enable GitHub Secret Scanning
   - Settings → Code Security & Analysis → Secret scanning
-  - Alerts go to: security@e-xode.io (or configured email)
+  - Alerts go to: contact@e-xode.net (or configured email)
 
 - [ ] Set up pre-commit hooks locally
   ```bash
@@ -265,7 +265,7 @@ See [SECURITY_AUDIT.md](SECURITY_AUDIT.md) for the complete audit report.
 - Commit fixes without reporting
 
 **DO:**
-1. Email `security@e-xode.io` with:
+1. Email `contact@e-xode.net` with:
    - Description of vulnerability
    - Affected component
    - Severity level

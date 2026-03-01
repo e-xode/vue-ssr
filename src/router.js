@@ -95,6 +95,51 @@ const routes = [
         }
     },
     {
+        path: '/admin/logs',
+        name: 'AdminLogs',
+        component: () => import('@/views/Admin/AdminLogsView.vue'),
+        meta: {
+            layout: 'app',
+            requiresAuth: true,
+            requiresAdmin: true,
+            title: 'meta.admin.logs.title',
+            robots: 'noindex, nofollow'
+        }
+    },
+    {
+        path: '/forgot-password',
+        name: 'ForgotPassword',
+        component: () => import('@/views/Auth/ForgotPasswordView.vue'),
+        meta: {
+            layout: 'minimal',
+            guest: true,
+            title: 'meta.forgotPassword.title',
+            robots: 'noindex, nofollow'
+        }
+    },
+    {
+        path: '/reset-password',
+        name: 'ResetPassword',
+        component: () => import('@/views/Auth/ResetPasswordView.vue'),
+        meta: {
+            layout: 'minimal',
+            guest: true,
+            title: 'meta.resetPassword.title',
+            robots: 'noindex, nofollow'
+        }
+    },
+    {
+        path: '/account',
+        name: 'Account',
+        component: () => import('@/views/Account/AccountView.vue'),
+        meta: {
+            layout: 'app',
+            requiresAuth: true,
+            title: 'meta.account.title',
+            robots: 'noindex, nofollow'
+        }
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'NotFound',
         component: () => import('@/views/NotFound/NotFoundView.vue'),

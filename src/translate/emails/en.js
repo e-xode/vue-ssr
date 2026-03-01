@@ -35,6 +35,50 @@ export const emailTemplates = {
 </body>
 </html>`
   },
+  emailChangeCode: {
+    subject: `Confirm your new email — ${appName}`,
+    html: (code) => `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><style>${baseStyle}</style></head>
+<body>
+  <div class="container">
+    <div class="header"><h1 style="margin:0;color:#2563eb;">${appName}</h1></div>
+    <div class="content">
+      <p>Hello,</p>
+      <p>You requested to change your email address. Enter the code below to confirm:</p>
+      <div class="code-box">
+        <div class="code">${code}</div>
+        <div class="expiry">This code expires in 10 minutes</div>
+      </div>
+      <p style="margin-top:20px;">If you did not request this change, please ignore this email and your email address will remain unchanged.</p>
+    </div>
+    <div class="footer"><p>© ${year} ${appName}. All rights reserved.</p></div>
+  </div>
+</body>
+</html>`
+  },
+  resetPassword: {
+    subject: `Reset your ${appName} password`,
+    html: (code) => `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><style>${baseStyle}</style></head>
+<body>
+  <div class="container">
+    <div class="header"><h1 style="margin:0;color:#2563eb;">${appName}</h1></div>
+    <div class="content">
+      <p>Hello,</p>
+      <p>You requested to reset your password. Use the code below to proceed:</p>
+      <div class="code-box">
+        <div class="code">${code}</div>
+        <div class="expiry">This code expires in 10 minutes</div>
+      </div>
+      <p style="margin-top:20px;">If you did not request a password reset, please ignore this email. Your password will not be changed.</p>
+    </div>
+    <div class="footer"><p>© ${year} ${appName}. All rights reserved.</p></div>
+  </div>
+</body>
+</html>`
+  },
   welcome: {
     subject: (name) => `Welcome to ${appName}, ${name}!`,
     html: (name) => `<!DOCTYPE html>

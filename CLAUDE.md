@@ -6,7 +6,7 @@ Project reference guide for AI-assisted development sessions.
 
 **Purpose**: Boilerplate/starter kit for Vue 3 + Express SSR applications with authentication, i18n, Vuetify, admin panel, and MongoDB.
 
-**Version**: 1.2.2
+**Version**: 1.3.0
 **License**: MIT
 **Node**: >=22.0.0
 
@@ -16,12 +16,12 @@ Project reference guide for AI-assisted development sessions.
 
 | Layer | Technology |
 | --- | --- |
-| Frontend | Vue 3 (Composition API) + Pinia + Vue Router 4 |
+| Frontend | Vue 3 (Composition API) + Pinia + Vue Router 5 |
 | SSR | Vite 7 + `renderToString` + Express middleware |
-| UI | Vuetify 3 (Material Design 3) + MDI icons (`@mdi/js`) |
+| UI | Vuetify 4 (Material Design 3) + MDI icons (`@mdi/js`) |
 | i18n | Vue i18n v11 (EN/FR, Composition API `legacy: false`) |
 | Backend | Express 5 + express-session + session-file-store |
-| Database | MongoDB 6 (driver direct, no ODM) |
+| Database | MongoDB 7 (driver direct, no ODM) |
 | Email | Nodemailer 8 |
 | Auth | Email security code (6-digit, 10 min expiry, bcryptjs) |
 | Security | Helmet + express-rate-limit + CORS whitelist |
@@ -51,9 +51,21 @@ Project reference guide for AI-assisted development sessions.
 │   ├── api/
 │   │   ├── router.js            # registerApiRoutes() — rate limiting + route registration
 │   │   ├── middleware.js        # requireAuth, requireAdmin(db)
-│   │   ├── auth/                # signup, signin, signout, me, verifyCode, resendCode
+│   │   ├── auth/
+│   │   │   ├── signup.js        # POST /api/auth/signup
+│   │   │   ├── signin.js        # POST /api/auth/signin (+ IP blocking)
+│   │   │   ├── signout.js       # POST /api/auth/signout
+│   │   │   ├── me.js            # GET /api/auth/me
+│   │   │   ├── verifyCode.js    # POST /api/auth/verify-code
+│   │   │   ├── resendCode.js    # POST /api/auth/resend-code (30s cooldown)
+│   │   │   ├── changePassword.js  # POST /api/auth/change-password
+│   │   │   ├── changeEmail.js     # POST /api/auth/change-email + verify-email-change
+│   │   │   ├── forgotPassword.js  # POST /api/auth/forgot-password
+│   │   │   ├── resetPassword.js   # POST /api/auth/reset-password
+│   │   │   └── updateProfile.js   # PUT /api/auth/profile
 │   │   └── admin/
-│   │       └── users.js         # GET/PUT/DELETE /api/admin/users[/:id]
+│   │       ├── users.js         # GET/PUT/DELETE /api/admin/users[/:id] + block/unblock + blocked-ips
+│   │       └── logs.js          # GET/DELETE /api/admin/logs + events list
 │   ├── components/
 │   │   └── layout/
 │   │       ├── TheHeader.vue    # App bar — nav, language switcher, user menu, admin link
@@ -63,9 +75,11 @@ Project reference guide for AI-assisted development sessions.
 │   │   └── vuetify.js           # Vuetify instance (themes light/dark, defaults, MDI icons)
 │   ├── shared/
 │   │   ├── api.js               # apiFetch() frontend helper
-│   │   ├── const.js             # SECURITY_CODE_EXPIRY_MS, USER_TYPES, etc.
-│   │   ├── email.js             # sendSecurityCodeEmail, sendWelcomeEmail, sendContactEmail
+│   │   ├── const.js             # SECURITY_CODE_EXPIRY_MS, BCRYPT_ROUNDS, USER_TYPES, etc.
+│   │   ├── email.js             # sendSecurityCodeEmail, sendWelcomeEmail, sendContactEmail, verifyCode
 │   │   ├── log.js               # logInfo, logWarn
+│   │   ├── logger.js            # logEvent(db, {event, userId, ip, meta}) → logs collection
+│   │   ├── security.js          # getClientIp, isIpBlocked, recordLoginIp, destroyUserSessions
 │   │   └── mongo.js             # mongoConnect() — returns { db, error }
 │   ├── stores/
 │   │   └── auth.js              # useAuthStore — user, isAuthenticated, isAdmin, signup, signin...
@@ -76,18 +90,22 @@ Project reference guide for AI-assisted development sessions.
 │   │   ├── en.json              # English translations
 │   │   ├── fr.json              # French translations
 │   │   └── emails/
-│   │       ├── en.js            # EN email templates: securityCode, welcome, contact
-│   │       └── fr.js            # FR email templates: securityCode, welcome, contact
+│   │       ├── en.js            # EN email templates: securityCode, emailChangeCode, resetPassword, welcome, contact
+│   │       └── fr.js            # FR email templates: securityCode, emailChangeCode, resetPassword, welcome, contact
 │   └── views/
 │       ├── Index/IndexView.vue
 │       ├── Auth/
 │       │   ├── SignupView.vue
 │       │   ├── SigninView.vue
-│       │   └── VerifyCodeView.vue
+│       │   ├── VerifyCodeView.vue
+│       │   ├── ForgotPasswordView.vue
+│       │   └── ResetPasswordView.vue
+│       ├── Account/AccountView.vue      # Profile / email / password tabs
 │       ├── Dashboard/DashboardView.vue
 │       ├── Admin/
-│       │   ├── AdminUsersView.vue       # User list with search + delete
-│       │   └── AdminUserDetailView.vue  # User edit (name, type)
+│       │   ├── AdminUsersView.vue       # User list with search, delete, blocked badge
+│       │   ├── AdminUserDetailView.vue  # User edit + block/unblock + recent activity
+│       │   └── AdminLogsView.vue        # Activity logs with filters, pagination, bulk delete
 │       └── NotFound/NotFoundView.vue
 ├── tests/
 │   ├── setup.js
@@ -147,8 +165,10 @@ BASE=/                           # URL base path
 | Setting | Value | Constant |
 | --- | --- | --- |
 | Expiry | 10 minutes | `SECURITY_CODE_EXPIRY_MS` |
-| Max attempts | 5 | `SECURITY_CODE_MAX_ATTEMPTS` |
+| Max attempts | 3 | `SECURITY_CODE_MAX_ATTEMPTS` |
+| Resend cooldown | 30 seconds | `RESEND_COOLDOWN_MS` |
 | Rate limit (auth) | 10 req / 15 min | `authLimiter` in `api/router.js` |
+| Rate limit (account) | 20 req / 15 min | `accountLimiter` in `api/router.js` |
 
 ---
 
@@ -157,17 +177,31 @@ BASE=/                           # URL base path
 ```js
 {
   _id: ObjectId,
-  email: String,           // unique
-  password: String,        // bcryptjs hash (10 rounds)
+  email: String,               // unique
+  password: String,            // bcryptjs hash (BCRYPT_ROUNDS = 10)
   name: String,
-  type: 'user' | 'admin',  // default: 'user'
-  securityCode: String,    // base64 hash — cleared after verify
+  type: 'user' | 'admin',      // default: 'user'
+  isBlocked: Boolean,          // set by admin via block endpoint
+  securityCode: String,        // base64 hash — cleared after verify
   securityCodeExpires: Date,
   securityCodeAttempts: Number,
+  resetPasswordPending: Boolean, // set during forgot-password flow
+  pendingEmail: String,          // set during change-email flow
+  pendingEmailCode: String,
+  pendingEmailCodeExpires: Date,
+  pendingEmailCodeAttempts: Number,
+  loginHistory: [              // last 50 login IPs (push + $slice)
+    { ip: String, date: Date }
+  ],
   createdAt: Date,
   updatedAt: Date
 }
 ```
+
+## Other MongoDB Collections
+
+- **`logs`**: `{ event, userId, ip, meta, createdAt }` — written by `logEvent()` (fire-and-forget)
+- **`blockedIps`**: `{ ip, createdAt }` — managed via `/api/admin/blocked-ips`
 
 ---
 
@@ -175,8 +209,8 @@ BASE=/                           # URL base path
 
 - User `type` field: `'user'` (default) or `'admin'`
 - **`requireAdmin(db)` middleware** — async, checks DB on each request
-- Admin routes: `/admin/users`, `/admin/users/:userId`
-- API routes: `GET/PUT/DELETE /api/admin/users[/:id]`
+- Admin routes: `/admin/users`, `/admin/users/:userId`, `/admin/logs`
+- API routes: `GET/PUT/DELETE /api/admin/users[/:id]`, `PUT /api/admin/users/:id/block`, `PUT /api/admin/users/:id/unblock`, `GET/POST/DELETE /api/admin/blocked-ips`, `GET/DELETE /api/admin/logs`
 - Frontend guard: `requiresAdmin: true` in route meta → redirects non-admins to `/dashboard`
 - Admin nav link visible in header only when `authStore.isAdmin === true`
 
@@ -258,14 +292,19 @@ Templates are functions in `src/translate/emails/[locale].js`:
 | Key | Subject | Function signature |
 | --- | --- | --- |
 | `securityCode` | String | `html(code: string)` |
+| `emailChangeCode` | String | `html(code: string)` |
+| `resetPassword` | String | `html(code: string)` |
 | `welcome` | Function(name) | `html(name: string)` |
 | `contact` | Function(data) | `html(data: {name, email, message})` |
 
 Email functions in `src/shared/email.js`:
 
 - `sendSecurityCodeEmail(email, code, locale)`
+- `sendEmailChangeCodeEmail(email, code, locale)`
+- `sendResetPasswordEmail(email, code, locale)`
 - `sendWelcomeEmail(email, name, locale)`
 - `sendContactEmail(data, locale)` — sends to `MAILER_TO`
+- `verifyCode(storedHash, providedCode)` — returns `storedHash === Buffer.from(providedCode).toString('base64')`
 
 ---
 
@@ -471,6 +510,7 @@ Tests mock `console.*`, `process.env`, MongoDB, and Nodemailer.
 
 ## Project Conventions
 
+- **Anonymization**: this is a generic boilerplate — no references to any specific product or company. Use `process.env.APP_NAME` for the app name everywhere. Cookie name is `app.sid`.
 - **No TypeScript** — pure ES Modules (`"type": "module"`)
 - **No comments in code** — code should be self-explanatory (except empty catch blocks: add a short comment)
 - **Imports**: use `@/` for src alias in frontend, `#src/` for Node imports

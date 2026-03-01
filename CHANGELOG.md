@@ -15,31 +15,90 @@ Format: `MAJOR.MINOR.PATCH` (e.g. `1.2.3`)
 
 ---
 
-## [Unreleased]
+## [1.3.0] - 2026-03-01
 
 ### Added
-- Support pour TypeScript (en travail)
-- OAuth2 integration avec Google/GitHub (planifié)
-- Two-factor authentication (planifié)
-- API docs auto-generated avec Swagger (planifié)
-- Email templates customizables (planifié)
-- E2E tests avec Playwright (planifié)
-- Integration tests pour API endpoints (planifié)
+
+#### Account Management
+
+- **`AccountView.vue`** — 3-tab page at `/account` (profile, email, password)
+- **`PUT /api/auth/profile`** — Update display name
+- **`POST /api/auth/change-password`** — Change password (requires current password)
+- **`POST /api/auth/change-email`** — Request email change (sends verification code to new address)
+- **`POST /api/auth/verify-email-change`** — Confirm email change with code
+- **Account i18n keys** — `account.*` in EN/FR (`account.profile.*`, `account.email.*`, `account.password.*`)
+
+#### Password Reset Flow
+
+- **`ForgotPasswordView.vue`** — Request a reset code via email at `/forgot-password`
+- **`ResetPasswordView.vue`** — Submit email + code + new password at `/reset-password`
+- **`POST /api/auth/forgot-password`** — Sends reset code; always returns `{ status: 'sent' }` (privacy)
+- **`POST /api/auth/reset-password`** — Validates `resetPasswordPending` flag + code, then updates password
+- **`resetPassword` email template** — EN/FR HTML email with reset code
+- **`emailChangeCode` email template** — EN/FR HTML email for email change confirmation
+- **`forgotPassword.*`, `resetPassword.*` i18n keys** — EN/FR translations
+
+#### Event Logging
+
+- **`src/shared/logger.js`** — `logEvent(db, {event, userId, ip, meta})` — fire-and-forget writes to `logs` collection
+- **`AdminLogsView.vue`** — Admin page at `/admin/logs`: filters (event type, date range, search), pagination, bulk delete
+- **`GET /api/admin/logs`** — Paginated, filterable logs list
+- **`GET /api/admin/logs/events`** — List of distinct event types (for filter dropdown)
+- **`DELETE /api/admin/logs/:id`** — Delete single log entry
+- **`DELETE /api/admin/logs`** — Bulk delete selected log entries
+- **`admin.logs.*` i18n keys** — EN/FR translations
+
+#### IP Security
+
+- **`src/shared/security.js`** — `getClientIp`, `isIpBlocked`, `recordLoginIp` (stores last 50 IPs in `user.loginHistory`), `destroyUserSessions`
+- **`blockedIps` MongoDB collection** — Managed via admin API
+- **`GET /api/admin/blocked-ips`** — List blocked IPs
+- **`POST /api/admin/blocked-ips`** — Add IP to blocklist
+- **`DELETE /api/admin/blocked-ips/:ip`** — Remove IP from blocklist
+- **IP check at signin** — Blocked IPs get 403 before password check
+- **IP check at verifyCode** — Blocked IPs get 403
+
+#### Admin Enhancements
+
+- **`PUT /api/admin/users/:id/block`** — Block user (sets `isBlocked: true`) + optionally blocks their IPs
+- **`PUT /api/admin/users/:id/unblock`** — Unblock user (sets `isBlocked: false`) + optionally unblocks IPs
+- **Block dialog in `AdminUserDetailView.vue`** — Confirmation dialog with "block IPs" checkbox
+- **Blocked badge in `AdminUsersView.vue`** — Red chip on blocked users in the list
+- **Recent activity in `AdminUserDetailView.vue`** — Last 10 events from `logs` collection for this user
+- **`admin.users.blocked`, `admin.users.block`, `admin.users.unblock`, `admin.users.blockConfirm.*`** — New i18n keys
+
+#### New i18n Keys
+
+- `nav.account`
+- `form.currentPassword`, `form.newPassword`, `form.confirmPassword`, `form.showPassword`
+- `error.auth.blocked`, `error.auth.invalidPassword`, `error.auth.passwordsDoNotMatch`, `error.auth.sameEmail`, `error.auth.invalidEmail`, `error.auth.resendTooSoon`, `error.auth.resetNotPending`
+- `meta.forgotPassword.title`, `meta.resetPassword.title`, `meta.account.title`, `meta.admin.logs.title`
+- `index.features.account.*`, `index.features.logging.*`, `index.features.ipSecurity.*`
+
+#### Landing Page
+
+- **3 new feature cards** on `IndexView.vue`: Account Management, Event Logging, IP Security
 
 ### Changed
-- (À venir)
 
-### Deprecated
-- (none)
-
-### Removed
-- (À venir)
-
-### Fixed
-- (À venir)
+- **`src/shared/const.js`** — Added `BCRYPT_ROUNDS = 10`, `RESEND_COOLDOWN_MS = 30000`, `USER_SAFE_PROJECTION = { password: 0 }`, `EMAIL_REGEX`; reduced `SECURITY_CODE_MAX_ATTEMPTS` from `5` to `3`
+- **`src/shared/email.js`** — Fixed `verifyCode` bug (was inverted: `hashCode(storedHash) === input` → now `storedHash === Buffer.from(input).toString('base64')`); added `sendEmailChangeCodeEmail`, `sendResetPasswordEmail`
+- **`signin.js`** — Added IP block check, `isBlocked` user check, `logEvent` for `auth-failed` and `user-signin`
+- **`verifyCode.js`** — Added IP block check, `isBlocked` check; uses `SECURITY_CODE_MAX_ATTEMPTS` constant; adds `recordLoginIp`; uses `USER_SAFE_PROJECTION`; logEvent
+- **`signup.js`** — Uses `BCRYPT_ROUNDS` constant instead of hardcoded `10`; logs `user-signup`
+- **`signout.js`** — Now takes `(app, db)` to support logEvent; adds `res.clearCookie('app.sid')`; logs `user-signout`
+- **`resendCode.js`** — Added 30s cooldown check (`RESEND_COOLDOWN_MS`); logs `resend-code`
+- **`api/router.js`** — Added `accountLimiter` (20 req / 15 min); registered all new auth routes + `setupAdminLogsRoute`
+- **`router.js`** — Added routes: `/forgot-password`, `/reset-password`, `/account`, `/admin/logs`
+- **`admin/users.js`** — Added block/unblock/blocked-ips endpoints, `recentLogs` in detail response, `ObjectId.isValid` guards, logEvent
+- **`CLAUDE.md`** — Updated version, stack table, directory structure, user model, security limits, email templates, conventions
+- **`package.json`** — Version bumped to `1.3.0`; updated `express-rate-limit` to `^8.2.1`, `mongodb` to `^7.1.0`, `vue-router` to `^5.0.3`, `vuetify` to `^4.0.0`; added `multer ^2.1.0`
 
 ### Security
-- (À venir)
+
+- **Fixed `verifyCode` authentication bug** — existing code made code verification always fail (comparing `hashCode(storedHash)` against raw user input instead of `storedHash` against `base64(input)`)
+- **IP tracking** — Login IPs recorded on successful authentication; blocked IPs rejected before credential check
+- **User blocking** — `isBlocked` field checked at signin and verifyCode; admin can block/unblock with optional IP block
 
 ---
 

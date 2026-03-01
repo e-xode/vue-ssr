@@ -44,7 +44,7 @@ Si vous découvrez une vulnérabilité de sécurité:
 
 ### 1. Report par Email
 
-**Envoyer à:** security@e-xode.io
+**Envoyer à:** contact@e-xode.net
 
 **Inclure:**
 - Description de la vulnérabilité
@@ -325,7 +325,7 @@ Always use parameterized queries, validate email format first.
 We appreciate security researchers who follow responsible disclosure:
 
 ✅ **Good:**
-- Report to security@e-xode.io
+- Report to contact@e-xode.net
 - Allow reasonable time to develop fix
 - Don't share details publicly
 - Help verify the patch
@@ -347,7 +347,7 @@ We appreciate security researchers who follow responsible disclosure:
 
 ## 📞 Contact
 
-**Security Email:** security@e-xode.io
+**Security Email:** contact@e-xode.net
 **Response Time:** < 24 hours for critical issues
 
 ---
