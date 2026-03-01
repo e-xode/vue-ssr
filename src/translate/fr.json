@@ -11,12 +11,13 @@
     "userMenu": "Menu utilisateur"
   },
   "app": {
-    "name": "App",
-    "byAuthor": "Par l'auteur"
+    "name": "vue-ssr",
+    "byAuthor": "par e-xode"
   },
   "nav": {
     "home": "Accueil",
     "dashboard": "Tableau de bord",
+    "account": "Mon compte",
     "admin": "Administration",
     "signin": "Connexion",
     "signup": "S'inscrire",
@@ -53,7 +54,7 @@
       },
       "admin": {
         "title": "Panneau d'administration",
-        "description": "Gestion des utilisateurs avec contrôle d'accès par rôle (user/admin) et interface d'administration protégée."
+        "description": "Gestion des utilisateurs avec contrôle d'accès par rôle (user/admin), journaux d'activité et interface d'administration protégée."
       },
       "ui": {
         "title": "Interface Vuetify",
@@ -61,7 +62,19 @@
       },
       "security": {
         "title": "Sécurité",
-        "description": "En-têtes Helmet, liste blanche CORS, cookies de session HTTP-only, limitation de taux et validation des entrées."
+        "description": "En-têtes Helmet, liste blanche CORS, cookies de session HTTP-only, limitation de taux, suivi des IPs et validation des entrées."
+      },
+      "account": {
+        "title": "Gestion du compte",
+        "description": "Les utilisateurs peuvent mettre à jour leur profil, changer leur adresse email avec vérification et modifier leur mot de passe."
+      },
+      "logging": {
+        "title": "Journal d'activité",
+        "description": "Toutes les actions d'authentification et d'administration sont enregistrées dans MongoDB. Les admins peuvent consulter, filtrer et supprimer les journaux."
+      },
+      "ipSecurity": {
+        "title": "Sécurité IP",
+        "description": "Les IPs de connexion sont suivies par utilisateur. Les admins peuvent bloquer des utilisateurs et optionnellement bloquer leurs adresses IP associées."
       }
     },
     "stack": {
@@ -86,9 +99,18 @@
       "title": "Connexion",
       "description": "Connectez-vous à votre compte"
     },
+    "forgotPassword": {
+      "title": "Mot de passe oublié"
+    },
+    "resetPassword": {
+      "title": "Réinitialiser le mot de passe"
+    },
     "dashboard": {
       "title": "Tableau de bord",
       "description": "Votre tableau de bord"
+    },
+    "account": {
+      "title": "Mon compte"
     },
     "notFound": {
       "title": "Page non trouvée"
@@ -99,6 +121,9 @@
       },
       "userDetail": {
         "title": "Détail utilisateur"
+      },
+      "logs": {
+        "title": "Journaux d'activité"
       }
     }
   },
@@ -114,11 +139,18 @@
       "emailAndPasswordRequired": "Email et mot de passe requis",
       "invalidCredentials": "Identifiants invalides",
       "signinFailed": "La connexion a échoué",
+      "blocked": "Votre compte a été bloqué",
       "userNotFound": "Utilisateur non trouvé",
       "codeExpired": "Code expiré",
       "tooManyAttempts": "Trop de tentatives",
       "invalidCode": "Code invalide",
-      "emailRequired": "Email requis"
+      "emailRequired": "Email requis",
+      "invalidEmail": "Adresse email invalide",
+      "invalidPassword": "Mot de passe actuel incorrect",
+      "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+      "sameEmail": "Le nouvel email doit être différent de votre email actuel",
+      "resendTooSoon": "Veuillez patienter avant de demander un nouveau code",
+      "resetNotPending": "Aucune réinitialisation de mot de passe en cours"
     },
     "admin": {
       "invalidUserType": "Type d'utilisateur invalide",
@@ -128,6 +160,10 @@
   "form": {
     "email": "Email",
     "password": "Mot de passe",
+    "currentPassword": "Mot de passe actuel",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le nouveau mot de passe",
+    "showPassword": "Afficher le mot de passe",
     "name": "Nom",
     "code": "Code",
     "submit": "Envoyer",
@@ -150,6 +186,7 @@
       "type": "Type",
       "registered": "Inscrit le",
       "lastUpdate": "Dernière mise à jour",
+      "lastLogin": "Dernière connexion",
       "actions": "Actions",
       "empty": "Aucun utilisateur trouvé",
       "info": "Informations",
@@ -157,9 +194,44 @@
       "detailTitle": "Détail utilisateur",
       "backToList": "Retour à la liste",
       "saveSuccess": "Utilisateur mis à jour avec succès",
+      "blocked": "Bloqué",
+      "block": "Bloquer",
+      "unblock": "Débloquer",
+      "blockSuccess": "Utilisateur bloqué avec succès",
+      "unblockSuccess": "Utilisateur débloqué avec succès",
+      "recentActivity": "Activité récente",
       "deleteConfirm": {
         "title": "Supprimer l'utilisateur",
         "message": "Êtes-vous sûr de vouloir supprimer {name} ? Cette action est irréversible."
+      },
+      "blockConfirm": {
+        "title": "Bloquer l'utilisateur",
+        "message": "Cela empêchera l'utilisateur de se connecter.",
+        "blockIps": "Bloquer également les adresses IP associées"
+      }
+    },
+    "logs": {
+      "title": "Journaux d'activité",
+      "total": "journaux",
+      "search": "Rechercher par événement ou IP",
+      "date": "Date",
+      "event": "Événement",
+      "ip": "IP",
+      "user": "Utilisateur",
+      "meta": "Détails",
+      "empty": "Aucun journal trouvé",
+      "filter": {
+        "event": "Filtrer par événement",
+        "from": "Du",
+        "to": "Au"
+      },
+      "deleteConfirm": {
+        "title": "Supprimer le journal",
+        "message": "Êtes-vous sûr de vouloir supprimer cette entrée de journal ?"
+      },
+      "bulkDeleteConfirm": {
+        "title": "Supprimer les journaux",
+        "message": "Êtes-vous sûr de vouloir supprimer {count} entrées ? Cette action est irréversible."
       }
     }
   },
@@ -172,5 +244,38 @@
     "subtitle": "Nous avons envoyé un code à 6 chiffres à",
     "resend": "Renvoyer le code",
     "resendIn": "Renvoyer dans {seconds}s"
+  },
+  "forgotPassword": {
+    "title": "Mot de passe oublié ?",
+    "subtitle": "Entrez votre adresse email et nous vous enverrons un code de réinitialisation.",
+    "submit": "Envoyer le code",
+    "sent": "Si un compte existe pour cette adresse email, un code de réinitialisation a été envoyé.",
+    "backToSignin": "Retour à la connexion"
+  },
+  "resetPassword": {
+    "title": "Réinitialiser le mot de passe",
+    "subtitle": "Entrez votre email, le code reçu et votre nouveau mot de passe.",
+    "submit": "Réinitialiser le mot de passe",
+    "success": "Mot de passe réinitialisé avec succès. Vous pouvez maintenant vous connecter.",
+    "backToSignin": "Retour à la connexion"
+  },
+  "account": {
+    "title": "Mon compte",
+    "profile": {
+      "title": "Profil",
+      "saveSuccess": "Profil mis à jour avec succès"
+    },
+    "email": {
+      "title": "Adresse email",
+      "current": "Email actuel",
+      "new": "Nouvelle adresse email",
+      "sendCode": "Envoyer le code de vérification",
+      "codeSent": "Un code de vérification a été envoyé à {email}. Entrez-le ci-dessous pour confirmer le changement.",
+      "changeSuccess": "Adresse email mise à jour avec succès"
+    },
+    "password": {
+      "title": "Mot de passe",
+      "changeSuccess": "Mot de passe mis à jour avec succès"
+    }
   }
 }

@@ -54,6 +54,16 @@ export async function sendContactEmail(data, locale = 'en') {
   return sendMail(to, subject, template.html(data))
 }
 
+export async function sendEmailChangeCodeEmail(email, code, locale = 'en') {
+  const template = getTemplate('emailChangeCode', locale)
+  return sendMail(email, template.subject, template.html(code))
+}
+
+export async function sendResetPasswordEmail(email, code, locale = 'en') {
+  const template = getTemplate('resetPassword', locale)
+  return sendMail(email, template.subject, template.html(code))
+}
+
 export function generateSecurityCode() {
   return Math.floor(100000 + Math.random() * 900000).toString()
 }
@@ -62,6 +72,6 @@ export function hashCode(code) {
   return Buffer.from(code).toString('base64')
 }
 
-export function verifyCode(code, hash) {
-  return hashCode(code) === hash
+export function verifyCode(storedHash, providedCode) {
+  return storedHash === Buffer.from(providedCode).toString('base64')
 }

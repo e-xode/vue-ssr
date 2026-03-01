@@ -11,12 +11,13 @@
     "userMenu": "User menu"
   },
   "app": {
-    "name": "App",
-    "byAuthor": "By Author"
+    "name": "vue-ssr",
+    "byAuthor": "By e-xode"
   },
   "nav": {
     "home": "Home",
     "dashboard": "Dashboard",
+    "account": "My Account",
     "admin": "Admin",
     "signin": "Sign In",
     "signup": "Sign Up",
@@ -53,7 +54,7 @@
       },
       "admin": {
         "title": "Admin Panel",
-        "description": "User management with role-based access control (user/admin) and a protected admin interface."
+        "description": "User management with role-based access control (user/admin), activity logs, and a protected admin interface."
       },
       "ui": {
         "title": "Vuetify UI",
@@ -61,7 +62,19 @@
       },
       "security": {
         "title": "Security",
-        "description": "Helmet headers, CORS whitelist, HTTP-only session cookies, rate limiting, and input validation."
+        "description": "Helmet headers, CORS whitelist, HTTP-only session cookies, rate limiting, IP tracking, and input validation."
+      },
+      "account": {
+        "title": "Account Management",
+        "description": "Users can update their profile, change their email address with verification, and change their password."
+      },
+      "logging": {
+        "title": "Event Logging",
+        "description": "All auth and admin actions are logged to MongoDB. Admins can browse, filter, and delete activity logs."
+      },
+      "ipSecurity": {
+        "title": "IP Security",
+        "description": "Login IPs are tracked per user. Admins can block users and optionally block their associated IP addresses."
       }
     },
     "stack": {
@@ -86,9 +99,18 @@
       "title": "Sign In",
       "description": "Sign in to your account"
     },
+    "forgotPassword": {
+      "title": "Forgot Password"
+    },
+    "resetPassword": {
+      "title": "Reset Password"
+    },
     "dashboard": {
       "title": "Dashboard",
       "description": "Your dashboard"
+    },
+    "account": {
+      "title": "My Account"
     },
     "notFound": {
       "title": "Page Not Found"
@@ -99,6 +121,9 @@
       },
       "userDetail": {
         "title": "User Detail"
+      },
+      "logs": {
+        "title": "Activity Logs"
       }
     }
   },
@@ -114,11 +139,18 @@
       "emailAndPasswordRequired": "Email and password required",
       "invalidCredentials": "Invalid credentials",
       "signinFailed": "Sign in failed",
+      "blocked": "Your account has been blocked",
       "userNotFound": "User not found",
       "codeExpired": "Code expired",
       "tooManyAttempts": "Too many attempts",
       "invalidCode": "Invalid code",
-      "emailRequired": "Email required"
+      "emailRequired": "Email required",
+      "invalidEmail": "Invalid email address",
+      "invalidPassword": "Invalid current password",
+      "passwordsDoNotMatch": "Passwords do not match",
+      "sameEmail": "New email must be different from your current email",
+      "resendTooSoon": "Please wait before requesting a new code",
+      "resetNotPending": "No password reset in progress"
     },
     "admin": {
       "invalidUserType": "Invalid user type",
@@ -128,6 +160,10 @@
   "form": {
     "email": "Email",
     "password": "Password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "showPassword": "Show password",
     "name": "Name",
     "code": "Code",
     "submit": "Submit",
@@ -150,6 +186,7 @@
       "type": "Type",
       "registered": "Registered",
       "lastUpdate": "Last update",
+      "lastLogin": "Last login",
       "actions": "Actions",
       "empty": "No users found",
       "info": "Information",
@@ -157,9 +194,44 @@
       "detailTitle": "User Detail",
       "backToList": "Back to users",
       "saveSuccess": "User updated successfully",
+      "blocked": "Blocked",
+      "block": "Block",
+      "unblock": "Unblock",
+      "blockSuccess": "User blocked successfully",
+      "unblockSuccess": "User unblocked successfully",
+      "recentActivity": "Recent Activity",
       "deleteConfirm": {
         "title": "Delete user",
         "message": "Are you sure you want to delete {name}? This action cannot be undone."
+      },
+      "blockConfirm": {
+        "title": "Block user",
+        "message": "This will prevent the user from signing in.",
+        "blockIps": "Also block associated IP addresses"
+      }
+    },
+    "logs": {
+      "title": "Activity Logs",
+      "total": "logs",
+      "search": "Search by event or IP",
+      "date": "Date",
+      "event": "Event",
+      "ip": "IP",
+      "user": "User",
+      "meta": "Details",
+      "empty": "No logs found",
+      "filter": {
+        "event": "Filter by event",
+        "from": "From",
+        "to": "To"
+      },
+      "deleteConfirm": {
+        "title": "Delete log",
+        "message": "Are you sure you want to delete this log entry?"
+      },
+      "bulkDeleteConfirm": {
+        "title": "Delete logs",
+        "message": "Are you sure you want to delete {count} log entries? This action cannot be undone."
       }
     }
   },
@@ -172,5 +244,38 @@
     "subtitle": "We sent a 6-digit code to",
     "resend": "Resend code",
     "resendIn": "Resend in {seconds}s"
+  },
+  "forgotPassword": {
+    "title": "Forgot your password?",
+    "subtitle": "Enter your email address and we'll send you a reset code.",
+    "submit": "Send reset code",
+    "sent": "If an account exists for this email address, a password reset code has been sent.",
+    "backToSignin": "Back to sign in"
+  },
+  "resetPassword": {
+    "title": "Reset your password",
+    "subtitle": "Enter your email, the reset code you received, and your new password.",
+    "submit": "Reset password",
+    "success": "Password reset successfully. You can now sign in.",
+    "backToSignin": "Back to sign in"
+  },
+  "account": {
+    "title": "My Account",
+    "profile": {
+      "title": "Profile",
+      "saveSuccess": "Profile updated successfully"
+    },
+    "email": {
+      "title": "Email Address",
+      "current": "Current email",
+      "new": "New email address",
+      "sendCode": "Send verification code",
+      "codeSent": "A verification code has been sent to {email}. Enter it below to confirm the change.",
+      "changeSuccess": "Email address updated successfully"
+    },
+    "password": {
+      "title": "Password",
+      "changeSuccess": "Password updated successfully"
+    }
   }
 }

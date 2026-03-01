@@ -1,6 +1,8 @@
 import bcrypt from 'bcryptjs'
 import { sendSecurityCodeEmail, generateSecurityCode, hashCode } from '#src/shared/email.js'
-import { USER_TYPES, SECURITY_CODE_EXPIRY_MS } from '#src/shared/const.js'
+import { USER_TYPES, SECURITY_CODE_EXPIRY_MS, BCRYPT_ROUNDS } from '#src/shared/const.js'
+import { getClientIp } from '#src/shared/security.js'
+import { logEvent } from '#src/shared/logger.js'
 
 export function setupSignupRoute(app, db) {
   app.post('/api/auth/signup', async (req, res) => {
@@ -11,12 +13,14 @@ export function setupSignupRoute(app, db) {
     }
 
     try {
+      const ip = getClientIp(req)
+
       const existingUser = await db.collection('users').findOne({ email })
       if (existingUser) {
         return res.status(400).json({ error: 'error.auth.emailAlreadyUsed' })
       }
 
-      const hashedPassword = await bcrypt.hash(password, 10)
+      const hashedPassword = await bcrypt.hash(password, BCRYPT_ROUNDS)
       const code = generateSecurityCode()
       const codeHash = hashCode(code)
       const codeExpires = new Date(Date.now() + SECURITY_CODE_EXPIRY_MS)
@@ -36,6 +40,8 @@ export function setupSignupRoute(app, db) {
       await db.collection('users').insertOne(user)
 
       await sendSecurityCodeEmail(email, code)
+
+      logEvent(db, { event: 'user-signup', userId: user._id, ip, meta: { email } })
 
       res.json({ status: 'verification_pending', email })
     } catch (err) {

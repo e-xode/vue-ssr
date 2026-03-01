@@ -7,6 +7,9 @@ import {
   mdiShieldAccount,
   mdiPalette,
   mdiSecurity,
+  mdiAccountCog,
+  mdiFormatListChecks,
+  mdiShieldCheck,
   mdiGithub,
   mdiVuejs,
   mdiNodejs,
@@ -24,7 +27,10 @@ const features = [
   { key: 'i18n', icon: mdiTranslate, color: 'info' },
   { key: 'admin', icon: mdiShieldAccount, color: 'warning' },
   { key: 'ui', icon: mdiPalette, color: 'success' },
-  { key: 'security', icon: mdiSecurity, color: 'error' }
+  { key: 'security', icon: mdiSecurity, color: 'error' },
+  { key: 'account', icon: mdiAccountCog, color: 'primary' },
+  { key: 'logging', icon: mdiFormatListChecks, color: 'secondary' },
+  { key: 'ipSecurity', icon: mdiShieldCheck, color: 'info' }
 ]
 
 const stack = [

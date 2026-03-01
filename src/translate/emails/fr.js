@@ -35,6 +35,50 @@ export const emailTemplates = {
 </body>
 </html>`
   },
+  emailChangeCode: {
+    subject: `Confirmez votre nouvel email — ${appName}`,
+    html: (code) => `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><style>${baseStyle}</style></head>
+<body>
+  <div class="container">
+    <div class="header"><h1 style="margin:0;color:#2563eb;">${appName}</h1></div>
+    <div class="content">
+      <p>Bonjour,</p>
+      <p>Vous avez demandé à changer votre adresse email. Entrez le code ci-dessous pour confirmer :</p>
+      <div class="code-box">
+        <div class="code">${code}</div>
+        <div class="expiry">Ce code expire dans 10 minutes</div>
+      </div>
+      <p style="margin-top:20px;">Si vous n'avez pas demandé ce changement, ignorez cet email. Votre adresse email restera inchangée.</p>
+    </div>
+    <div class="footer"><p>© ${year} ${appName}. Tous droits réservés.</p></div>
+  </div>
+</body>
+</html>`
+  },
+  resetPassword: {
+    subject: `Réinitialisation de votre mot de passe ${appName}`,
+    html: (code) => `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><style>${baseStyle}</style></head>
+<body>
+  <div class="container">
+    <div class="header"><h1 style="margin:0;color:#2563eb;">${appName}</h1></div>
+    <div class="content">
+      <p>Bonjour,</p>
+      <p>Vous avez demandé à réinitialiser votre mot de passe. Utilisez le code ci-dessous :</p>
+      <div class="code-box">
+        <div class="code">${code}</div>
+        <div class="expiry">Ce code expire dans 10 minutes</div>
+      </div>
+      <p style="margin-top:20px;">Si vous n'avez pas demandé de réinitialisation, ignorez cet email. Votre mot de passe ne sera pas modifié.</p>
+    </div>
+    <div class="footer"><p>© ${year} ${appName}. Tous droits réservés.</p></div>
+  </div>
+</body>
+</html>`
+  },
   welcome: {
     subject: (name) => `Bienvenue sur ${appName}, ${name} !`,
     html: (name) => `<!DOCTYPE html>

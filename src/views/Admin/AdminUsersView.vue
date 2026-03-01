@@ -159,7 +159,18 @@ onMounted(fetchUsers)
                 v-else
                 :key="user._id"
               >
-                <td>{{ user.name }}</td>
+                <td>
+                  {{ user.name }}
+                  <v-chip
+                    v-if="user.isBlocked"
+                    color="error"
+                    size="x-small"
+                    variant="tonal"
+                    class="ml-1"
+                  >
+                    {{ t('admin.users.blocked') }}
+                  </v-chip>
+                </td>
                 <td>{{ user.email }}</td>
                 <td>
                   <v-chip
