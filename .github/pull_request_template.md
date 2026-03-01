@@ -123,8 +123,7 @@ Pour mettre à jour depuis la version précédente:
 
 <!-- @mention specific people if needed -->
 
-@repo-owner
-@maintainer-name
+@cbragard
 
 ---
 
