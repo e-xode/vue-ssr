@@ -150,6 +150,8 @@
       "passwordsDoNotMatch": "Passwords do not match",
       "sameEmail": "New email must be different from your current email",
       "resendTooSoon": "Please wait before requesting a new code",
+      "waitBeforeResend": "Please wait {seconds} seconds before requesting a new code",
+      "noVerificationPending": "No verification in progress",
       "resetNotPending": "No password reset in progress"
     },
     "admin": {
@@ -261,6 +263,14 @@
   },
   "account": {
     "title": "My Account",
+    "tabs": {
+      "profile": "Profile",
+      "email": "Email",
+      "password": "Password"
+    },
+    "avatar": {
+      "upload": "Change photo"
+    },
     "profile": {
       "title": "Profile",
       "saveSuccess": "Profile updated successfully"
@@ -275,6 +285,7 @@
     },
     "password": {
       "title": "Password",
+      "submit": "Change password",
       "changeSuccess": "Password updated successfully"
     }
   }

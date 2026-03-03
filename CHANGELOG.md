@@ -15,6 +15,40 @@ Format: `MAJOR.MINOR.PATCH` (e.g. `1.2.3`)
 
 ---
 
+## [1.4.0] - 2026-03-02
+
+### Added
+
+#### Avatar Upload
+
+- **`src/api/auth/avatar.js`** — `POST /api/auth/avatar` (multer, 2MB limit, jpg/png/webp) + `DELETE /api/auth/avatar`
+- Avatar stored in `public/uploads/avatars/` with UUID filename; old avatar deleted on upload
+- `user.avatar` field in MongoDB — stores relative path `/uploads/avatars/[uuid].[ext]`
+- **Avatar section in `AccountView.vue`** — `v-avatar` with initials fallback, upload button, delete button (visible only when avatar exists)
+- **`account.avatar.upload`** — New i18n key EN/FR
+- `logEvent` calls: `user-update-avatar`, `user-delete-avatar`
+
+#### Shared Constants & Helpers
+
+- **`SUPPORTED_LOCALES`** — Array of `{ code, intl, og, label, flag }` objects (EN, FR)
+- **`LOCALE_CODES`** — `['en', 'fr']` derived from `SUPPORTED_LOCALES`
+- **`LOCALE_ROUTE_REGEX`** — `'en|fr'` for router pattern matching
+- **`getIntlLocale(locale)`** — Returns IETF locale string (e.g. `'fr-FR'`)
+- **`getOgLocale(locale)`** — Returns OG locale string (e.g. `'fr_FR'`)
+- **`isAdmin(user)`** — Returns `user?.type === 'admin'`
+
+### Changed
+
+- **`src/api/router.js`** — Rate limiters now disabled in development (`NODE_ENV !== 'production'`); no-op middleware `(req, res, next) => next()` replaces rate-limit in dev
+- **`AccountView.vue`** — Fixed i18n key mismatches from initial generation: `account.profile.saveSuccess` (was `success`), `account.email.changeSuccess` (was `success`), `account.email.new` (was `newEmail`), `error.auth.passwordsDoNotMatch` (was `resetPassword.passwordMismatch`)
+- **`package.json`** — Version bumped to `1.4.0`
+
+### Fixed
+
+- **AccountView.vue i18n keys** — `account.tabs.*`, `account.password.submit` were missing from translation files; added to `en.json` and `fr.json`
+
+---
+
 ## [1.3.0] - 2026-03-01
 
 ### Added

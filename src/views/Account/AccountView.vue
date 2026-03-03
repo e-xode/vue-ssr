@@ -1,12 +1,17 @@
 <script setup>
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { mdiCamera, mdiDelete } from '@mdi/js'
 import { useAuthStore } from '@/stores/auth'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
 
 const tab = ref('profile')
+
+const avatarInput = ref(null)
+const avatarLoading = ref(false)
+const avatarError = ref('')
 
 const profileForm = ref({ name: authStore.user?.name || '' })
 const profileSaving = ref(false)
@@ -25,6 +30,54 @@ const passwordSaving = ref(false)
 const passwordSuccess = ref('')
 const passwordError = ref('')
 
+async function uploadAvatar(event) {
+  const file = event.target.files?.[0]
+  if (!file) return
+  avatarError.value = ''
+  avatarLoading.value = true
+  try {
+    const form = new FormData()
+    form.append('avatar', file)
+    const response = await fetch('/api/auth/avatar', {
+      method: 'POST',
+      credentials: 'include',
+      body: form
+    })
+    const data = await response.json()
+    if (response.ok) {
+      authStore.updateUser({ avatar: data.avatar })
+    } else {
+      avatarError.value = t(data.error) || t('error.server')
+    }
+  } catch {
+    avatarError.value = t('error.server')
+  } finally {
+    avatarLoading.value = false
+    if (avatarInput.value) avatarInput.value.value = ''
+  }
+}
+
+async function deleteAvatar() {
+  avatarError.value = ''
+  avatarLoading.value = true
+  try {
+    const response = await fetch('/api/auth/avatar', {
+      method: 'DELETE',
+      credentials: 'include'
+    })
+    if (response.ok) {
+      authStore.updateUser({ avatar: null })
+    } else {
+      const data = await response.json()
+      avatarError.value = t(data.error) || t('error.server')
+    }
+  } catch {
+    avatarError.value = t('error.server')
+  } finally {
+    avatarLoading.value = false
+  }
+}
+
 async function saveProfile() {
   profileError.value = ''
   profileSuccess.value = ''
@@ -39,9 +92,9 @@ async function saveProfile() {
     const data = await response.json()
     if (response.ok) {
       authStore.updateUser({ name: profileForm.value.name })
-      profileSuccess.value = t('account.profile.success')
+      profileSuccess.value = t('account.profile.saveSuccess')
     } else {
-      profileError.value = data.error || t('error.server')
+      profileError.value = t(data.error) || t('error.server')
     }
   } catch {
     profileError.value = t('error.server')
@@ -64,7 +117,7 @@ async function requestEmailChange() {
     if (response.ok) {
       emailStep.value = 2
     } else {
-      emailError.value = data.error || t('error.server')
+      emailError.value = t(data.error) || t('error.server')
     }
   } catch {
     emailError.value = t('error.server')
@@ -86,11 +139,11 @@ async function verifyEmailChange() {
     const data = await response.json()
     if (response.ok) {
       authStore.updateUser({ email: data.email })
-      emailSuccess.value = t('account.email.success')
+      emailSuccess.value = t('account.email.changeSuccess')
       emailStep.value = 1
       emailForm.value = { newEmail: '', code: '' }
     } else {
-      emailError.value = data.error || t('error.server')
+      emailError.value = t(data.error) || t('error.server')
     }
   } catch {
     emailError.value = t('error.server')
@@ -101,7 +154,7 @@ async function verifyEmailChange() {
 
 async function changePassword() {
   if (passwordForm.value.newPassword !== passwordForm.value.confirmPassword) {
-    passwordError.value = t('resetPassword.passwordMismatch')
+    passwordError.value = t('error.auth.passwordsDoNotMatch')
     return
   }
   passwordError.value = ''
@@ -119,10 +172,10 @@ async function changePassword() {
     })
     const data = await response.json()
     if (response.ok) {
-      passwordSuccess.value = t('account.password.success')
+      passwordSuccess.value = t('account.password.changeSuccess')
       passwordForm.value = { currentPassword: '', newPassword: '', confirmPassword: '' }
     } else {
-      passwordError.value = data.error || t('error.server')
+      passwordError.value = t(data.error) || t('error.server')
     }
   } catch {
     passwordError.value = t('error.server')
@@ -160,6 +213,62 @@ async function changePassword() {
             <v-card max-width="500">
               <v-card-title>{{ t('account.profile.title') }}</v-card-title>
               <v-card-text>
+                <div class="d-flex align-center gap-4 mb-6">
+                  <v-avatar
+                    size="72"
+                    color="primary"
+                  >
+                    <v-img
+                      v-if="authStore.user?.avatar"
+                      :src="authStore.user.avatar"
+                      :alt="authStore.user?.name"
+                    />
+                    <span
+                      v-else
+                      class="text-h6"
+                    >
+                      {{ authStore.user?.name?.charAt(0)?.toUpperCase() }}
+                    </span>
+                  </v-avatar>
+                  <div class="d-flex gap-2">
+                    <v-btn
+                      :prepend-icon="mdiCamera"
+                      size="small"
+                      variant="tonal"
+                      :loading="avatarLoading"
+                      @click="avatarInput?.click()"
+                    >
+                      {{ t('account.avatar.upload') }}
+                    </v-btn>
+                    <v-btn
+                      v-if="authStore.user?.avatar"
+                      :icon="mdiDelete"
+                      size="small"
+                      variant="text"
+                      color="error"
+                      :loading="avatarLoading"
+                      @click="deleteAvatar"
+                    />
+                    <input
+                      ref="avatarInput"
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      class="d-none"
+                      @change="uploadAvatar"
+                    >
+                  </div>
+                </div>
+
+                <v-alert
+                  v-if="avatarError"
+                  type="error"
+                  class="mb-4"
+                  closable
+                  @click:close="avatarError = ''"
+                >
+                  {{ avatarError }}
+                </v-alert>
+
                 <v-alert
                   v-if="profileError"
                   type="error"
@@ -231,7 +340,7 @@ async function changePassword() {
                 >
                   <v-text-field
                     v-model="emailForm.newEmail"
-                    :label="t('account.email.newEmail')"
+                    :label="t('account.email.new')"
                     type="email"
                     class="mb-4"
                     :disabled="emailSaving"
@@ -266,7 +375,7 @@ async function changePassword() {
                       color="primary"
                       :loading="emailSaving"
                     >
-                      {{ t('account.email.verify') }}
+                      {{ t('form.submit') }}
                     </v-btn>
                     <v-btn
                       variant="text"

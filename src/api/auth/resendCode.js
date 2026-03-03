@@ -16,11 +16,16 @@ export function setupResendCodeRoute(app, db) {
         return res.status(400).json({ error: 'error.auth.userNotFound' })
       }
 
-      if (user.securityCodeExpires) {
-        const elapsed = Date.now() - (new Date(user.securityCodeExpires).getTime() - SECURITY_CODE_EXPIRY_MS)
-        if (elapsed < RESEND_COOLDOWN_MS) {
-          return res.status(429).json({ error: 'error.auth.resendTooSoon' })
-        }
+      if (!user.securityCode || !user.securityCodeExpires) {
+        return res.status(400).json({ error: 'error.auth.noVerificationPending' })
+      }
+
+      const lastCodeTime = user.securityCodeExpires.getTime() - SECURITY_CODE_EXPIRY_MS
+      const timeSinceLastCode = Date.now() - lastCodeTime
+
+      if (timeSinceLastCode < RESEND_COOLDOWN_MS) {
+        const waitSeconds = Math.ceil((RESEND_COOLDOWN_MS - timeSinceLastCode) / 1000)
+        return res.status(429).json({ error: 'error.auth.waitBeforeResend', waitSeconds })
       }
 
       const code = generateSecurityCode()
@@ -40,7 +45,7 @@ export function setupResendCodeRoute(app, db) {
 
       await sendSecurityCodeEmail(email, code)
 
-      logEvent(db, { event: 'auth-code-resent', userId: user._id, ip: req.ip, meta: { email } })
+      logEvent(db, { event: 'auth-resend-code', userId: user._id, ip: req.ip, meta: { email } })
 
       res.json({ status: 'code_sent', email })
     } catch (err) {

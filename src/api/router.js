@@ -1,4 +1,5 @@
 import { rateLimit } from 'express-rate-limit'
+import { setMiddlewareDb } from './middleware.js'
 import { setupMeRoute } from './auth/me.js'
 import { setupSignupRoute } from './auth/signup.js'
 import { setupSigninRoute } from './auth/signin.js'
@@ -10,25 +11,30 @@ import { setupChangeEmailRoute } from './auth/changeEmail.js'
 import { setupForgotPasswordRoute } from './auth/forgotPassword.js'
 import { setupResetPasswordRoute } from './auth/resetPassword.js'
 import { setupUpdateProfileRoute } from './auth/updateProfile.js'
+import { setupAvatarRoute } from './auth/avatar.js'
 import { setupAdminUsersRoutes } from './admin/users.js'
 import { setupAdminLogsRoute } from './admin/logs.js'
 
-function createLimiter(max, windowMinutes = 15) {
-  return rateLimit({
-    windowMs: windowMinutes * 60 * 1000,
-    max,
-    standardHeaders: true,
-    legacyHeaders: false,
-    handler: (req, res) => {
-      res.status(429).json({ error: 'error.tooManyRequests' })
-    }
-  })
-}
+const isProduction = process.env.NODE_ENV === 'production'
+
+const createLimiter = (max, windowMinutes = 15) => isProduction
+  ? rateLimit({
+      windowMs: windowMinutes * 60 * 1000,
+      max,
+      standardHeaders: true,
+      legacyHeaders: false,
+      handler: (req, res) => {
+        res.status(429).json({ error: 'error.tooManyRequests' })
+      }
+    })
+  : (req, res, next) => next()
 
 const authLimiter = createLimiter(10)
 const accountLimiter = createLimiter(20)
 
 export function registerApiRoutes(app, db) {
+  setMiddlewareDb(db)
+
   app.use('/api/auth/signup', authLimiter)
   app.use('/api/auth/signin', authLimiter)
   app.use('/api/auth/verify-code', authLimiter)
@@ -50,6 +56,7 @@ export function registerApiRoutes(app, db) {
   setupForgotPasswordRoute(app, db)
   setupResetPasswordRoute(app, db)
   setupUpdateProfileRoute(app, db)
+  setupAvatarRoute(app, db)
 
   setupAdminUsersRoutes(app, db)
   setupAdminLogsRoute(app, db)

@@ -150,6 +150,8 @@
       "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
       "sameEmail": "Le nouvel email doit être différent de votre email actuel",
       "resendTooSoon": "Veuillez patienter avant de demander un nouveau code",
+      "waitBeforeResend": "Veuillez patienter {seconds} secondes avant de demander un nouveau code",
+      "noVerificationPending": "Aucune vérification en cours",
       "resetNotPending": "Aucune réinitialisation de mot de passe en cours"
     },
     "admin": {
@@ -261,6 +263,14 @@
   },
   "account": {
     "title": "Mon compte",
+    "tabs": {
+      "profile": "Profil",
+      "email": "Email",
+      "password": "Mot de passe"
+    },
+    "avatar": {
+      "upload": "Changer la photo"
+    },
     "profile": {
       "title": "Profil",
       "saveSuccess": "Profil mis à jour avec succès"
@@ -275,6 +285,7 @@
     },
     "password": {
       "title": "Mot de passe",
+      "submit": "Changer le mot de passe",
       "changeSuccess": "Mot de passe mis à jour avec succès"
     }
   }
