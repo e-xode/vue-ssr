@@ -16,6 +16,14 @@ const resendTimer = ref(0)
 const email = computed(() => authStore.pendingEmail || '')
 const canResend = computed(() => resendTimer.value === 0)
 
+function startResendTimer(seconds) {
+  resendTimer.value = seconds
+  const interval = setInterval(() => {
+    resendTimer.value--
+    if (resendTimer.value === 0) clearInterval(interval)
+  }, 1000)
+}
+
 async function handleSubmit() {
   errorMessage.value = ''
   isSubmitting.value = true
@@ -43,14 +51,13 @@ async function handleResend() {
       body: JSON.stringify({ email: email.value })
     })
 
+    const data = await response.json()
+
     if (response.ok) {
-      resendTimer.value = 60
-      const interval = setInterval(() => {
-        resendTimer.value--
-        if (resendTimer.value === 0) clearInterval(interval)
-      }, 1000)
+      startResendTimer(30)
+    } else if (data.waitSeconds) {
+      startResendTimer(data.waitSeconds)
     } else {
-      const data = await response.json()
       errorMessage.value = data.error || t('error.server')
     }
   } catch (e) {

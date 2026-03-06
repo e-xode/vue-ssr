@@ -6,7 +6,7 @@ Project reference guide for AI-assisted development sessions.
 
 **Purpose**: Boilerplate/starter kit for Vue 3 + Express SSR applications with authentication, i18n, Vuetify, admin panel, and MongoDB.
 
-**Version**: 1.3.0
+**Version**: 1.5.0
 **License**: MIT
 **Node**: >=22.0.0
 
@@ -50,19 +50,20 @@ Project reference guide for AI-assisted development sessions.
 │   ├── router.js                # Vue Router + navigation guards (requiresAuth, guest, requiresAdmin)
 │   ├── api/
 │   │   ├── router.js            # registerApiRoutes() — rate limiting + route registration
-│   │   ├── middleware.js        # requireAuth, requireAdmin(db)
+│   │   ├── middleware.js        # setMiddlewareDb(db), requireAuth (async, checks isBlocked), requireAdmin(db)
 │   │   ├── auth/
 │   │   │   ├── signup.js        # POST /api/auth/signup
 │   │   │   ├── signin.js        # POST /api/auth/signin (+ IP blocking)
 │   │   │   ├── signout.js       # POST /api/auth/signout
 │   │   │   ├── me.js            # GET /api/auth/me
 │   │   │   ├── verifyCode.js    # POST /api/auth/verify-code
-│   │   │   ├── resendCode.js    # POST /api/auth/resend-code (30s cooldown)
+│   │   │   ├── resendCode.js    # POST /api/auth/resend-code (30s cooldown, returns waitSeconds)
 │   │   │   ├── changePassword.js  # POST /api/auth/change-password
 │   │   │   ├── changeEmail.js     # POST /api/auth/change-email + verify-email-change
 │   │   │   ├── forgotPassword.js  # POST /api/auth/forgot-password
 │   │   │   ├── resetPassword.js   # POST /api/auth/reset-password
-│   │   │   └── updateProfile.js   # PUT /api/auth/profile
+│   │   │   ├── updateProfile.js   # PUT /api/auth/profile
+│   │   │   └── avatar.js          # POST/DELETE /api/auth/avatar (multer, 2MB, jpg/png/webp)
 │   │   └── admin/
 │   │       ├── users.js         # GET/PUT/DELETE /api/admin/users[/:id] + block/unblock + blocked-ips
 │   │       └── logs.js          # GET/DELETE /api/admin/logs + events list
@@ -75,7 +76,7 @@ Project reference guide for AI-assisted development sessions.
 │   │   └── vuetify.js           # Vuetify instance (themes light/dark, defaults, MDI icons)
 │   ├── shared/
 │   │   ├── api.js               # apiFetch() frontend helper
-│   │   ├── const.js             # SECURITY_CODE_EXPIRY_MS, BCRYPT_ROUNDS, USER_TYPES, etc.
+│   │   ├── const.js             # SECURITY_CODE_EXPIRY_MS, BCRYPT_ROUNDS, SUPPORTED_LOCALES, isAdmin(), getIntlLocale(), getOgLocale()
 │   │   ├── email.js             # sendSecurityCodeEmail, sendWelcomeEmail, sendContactEmail, verifyCode
 │   │   ├── log.js               # logInfo, logWarn
 │   │   ├── logger.js            # logEvent(db, {event, userId, ip, meta}) → logs collection
@@ -100,7 +101,7 @@ Project reference guide for AI-assisted development sessions.
 │       │   ├── VerifyCodeView.vue
 │       │   ├── ForgotPasswordView.vue
 │       │   └── ResetPasswordView.vue
-│       ├── Account/AccountView.vue      # Profile / email / password tabs
+│       ├── Account/AccountView.vue      # Profile (+ avatar) / email / password tabs
 │       ├── Dashboard/DashboardView.vue
 │       ├── Admin/
 │       │   ├── AdminUsersView.vue       # User list with search, delete, blocked badge
