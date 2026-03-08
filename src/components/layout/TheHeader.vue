@@ -3,15 +3,19 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useLocalePath } from '@/composables/useLocalePath'
+import { SUPPORTED_LOCALES } from '@/shared/const'
 import {
   mdiAccount,
+  mdiHome,
   mdiShieldAccount,
   mdiLogout
 } from '@mdi/js'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const router = useRouter()
 const authStore = useAuthStore()
+const { locale, localePath, switchLocale } = useLocalePath()
 
 const scrolled = ref(false)
 
@@ -22,14 +26,9 @@ function handleScroll() {
   scrolled.value = window.scrollY > 20
 }
 
-function setLanguage(lang) {
-  locale.value = lang
-  localStorage.setItem('locale', lang)
-}
-
 async function handleSignout() {
   await authStore.signout()
-  await router.push('/signin')
+  await router.push(localePath('/signin'))
 }
 
 onMounted(() => {
@@ -49,14 +48,14 @@ onUnmounted(() => {
   >
     <v-container class="d-flex align-center">
       <router-link
-        to="/"
+        :to="localePath('/')"
         class="app-header__logo mr-2"
         aria-label="Home"
       >
-        <v-icon icon="mdiHome" />
+        <v-icon :icon="mdiHome" />
       </router-link>
       <router-link
-        to="/"
+        :to="localePath('/')"
         class="app-header__title"
       >
         {{ t('app.name') }}
@@ -74,18 +73,14 @@ onUnmounted(() => {
             {{ locale.toUpperCase() }}
           </v-btn>
         </template>
-        <v-list>
+        <v-list density="compact">
           <v-list-item
-            :active="locale === 'en'"
-            @click="setLanguage('en')"
+            v-for="loc in SUPPORTED_LOCALES"
+            :key="loc.code"
+            :active="locale === loc.code"
+            @click="switchLocale(loc.code)"
           >
-            <v-list-item-title>English</v-list-item-title>
-          </v-list-item>
-          <v-list-item
-            :active="locale === 'fr'"
-            @click="setLanguage('fr')"
-          >
-            <v-list-item-title>Français</v-list-item-title>
+            <v-list-item-title>{{ loc.label }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -100,12 +95,15 @@ onUnmounted(() => {
             />
           </template>
           <v-list>
-            <v-list-item to="/dashboard">
+            <v-list-item :to="localePath('/dashboard')">
               <v-list-item-title>{{ t('nav.dashboard') }}</v-list-item-title>
+            </v-list-item>
+            <v-list-item :to="localePath('/account')">
+              <v-list-item-title>{{ t('nav.account') }}</v-list-item-title>
             </v-list-item>
             <v-list-item
               v-if="isAdmin"
-              to="/admin/users"
+              :to="localePath('/admin/users')"
             >
               <template #prepend>
                 <v-icon :icon="mdiShieldAccount" />
@@ -124,14 +122,14 @@ onUnmounted(() => {
       </template>
       <template v-else>
         <v-btn
-          to="/signin"
+          :to="localePath('/signin')"
           variant="text"
           size="small"
         >
           {{ t('nav.signin') }}
         </v-btn>
         <v-btn
-          to="/signup"
+          :to="localePath('/signup')"
           variant="flat"
           color="primary"
           size="small"
@@ -143,35 +141,4 @@ onUnmounted(() => {
   </v-app-bar>
 </template>
 
-<style lang="scss" scoped>
-.app-header {
-  &__logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    background: var(--v-primary-base);
-    color: white;
-    text-decoration: none;
-    transition: all 0.2s ease;
-
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-
-  &__title {
-    font-size: 20px;
-    font-weight: 600;
-    text-decoration: none;
-    color: var(--v-on-background-base);
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: var(--v-primary-base);
-    }
-  }
-}
-</style>
+<style lang="scss" scoped src="./TheHeader.scss"></style>

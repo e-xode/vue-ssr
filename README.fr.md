@@ -29,9 +29,9 @@ Un starter kit complet et moderne pour créer des applications web avec **Vue 3*
 - ✅ **Vue 3** - Framework JavaScript progressif avec Composition API
 - ✅ **Server-Side Rendering (SSR)** - Rendu côté serveur pour une meilleure SEO
 - ✅ **Vite** - Bundler ultra-rapide et serveur de développement
-- ✅ **Vue Router 4** - Routage côté client avec support SSR
+- ✅ **Vue Router 5** - Routage côté client avec support SSR
 - ✅ **Pinia** - Gestion d'état robuste
-- ✅ **Vuetify 3** - Composants Material Design complets
+- ✅ **Vuetify 4** - Composants Material Design complets
 - ✅ **SCSS** - Variables globales, mixins et thèmes
 - ✅ **Vue i18n** - Support multi-langues (EN, FR)
 
@@ -42,6 +42,10 @@ Un starter kit complet et moderne pour créer des applications web avec **Vue 3*
 - ✅ **Sessions** - Gestion sécurisée des sessions utilisateur
 - ✅ **Nodemailer** - Envoi d'emails intégré
 - ✅ **CORS & Validation** - Configuration de sécurité
+- ✅ **Routage avec préfixe locale** - URLs SEO-friendly avec préfixe `/:locale(en|fr)/`
+- ✅ **Page de contact** - Formulaire de contact avec endpoint API, validation, rate limiting
+- ✅ **Helmet CSP** - Content Security Policy configurée
+- ✅ **Vérification de code sécurisée** - Hachage SHA-256 avec timingSafeEqual
 
 ### Infrastructure
 - ✅ **Docker & Docker Compose** - Conteneurisation complète

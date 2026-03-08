@@ -2,9 +2,11 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { useLocalePath } from '@/composables/useLocalePath'
 
 const { t } = useI18n()
 const router = useRouter()
+const { localePath } = useLocalePath()
 
 const form = ref({
   email: '',
@@ -41,7 +43,7 @@ async function handleSubmit() {
     const data = await response.json()
 
     if (response.ok) {
-      await router.push('/signin')
+      await router.push(localePath('/signin'))
     } else {
       errorMessage.value = data.error || t('error.server')
     }
@@ -135,7 +137,7 @@ async function handleSubmit() {
 
           <p class="text-center mb-0">
             <router-link
-              to="/forgot-password"
+              :to="localePath('/forgot-password')"
               class="link"
             >
               {{ t('forgotPassword.resend') }}
@@ -147,13 +149,4 @@ async function handleSubmit() {
   </v-container>
 </template>
 
-<style lang="scss" scoped>
-.link {
-  color: var(--v-primary-base);
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-</style>
+<style lang="scss" scoped src="./ResetPasswordView.scss"></style>

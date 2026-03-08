@@ -140,7 +140,7 @@ export const useAuthStore = defineStore('auth', () => {
         return { status: 'success', user: data.user }
       } else {
         error.value = data.error
-        return { status: 'error', error: data.error }
+        return { status: 'error', error: data.error, attempts: data.attempts }
       }
     } catch (e) {
       error.value = e.message

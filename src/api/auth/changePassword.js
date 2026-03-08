@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs'
 import { requireAuth } from '../middleware.js'
 import { BCRYPT_ROUNDS } from '#src/shared/const.js'
+import { destroyUserSessions } from '#src/shared/security.js'
 import { logEvent } from '#src/shared/logger.js'
 
 export function setupChangePasswordRoute(app, db) {
@@ -31,6 +32,8 @@ export function setupChangePasswordRoute(app, db) {
         { _id: req.userId },
         { $set: { password: hashedPassword } }
       )
+
+      await destroyUserSessions(req.userId, req.sessionID)
 
       logEvent(db, { event: 'user-update-password', userId: req.userId, ip: req.ip })
 

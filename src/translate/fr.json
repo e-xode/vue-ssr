@@ -16,6 +16,7 @@
   },
   "nav": {
     "home": "Accueil",
+    "contact": "Contact",
     "dashboard": "Tableau de bord",
     "account": "Mon compte",
     "admin": "Administration",
@@ -112,6 +113,10 @@
     "account": {
       "title": "Mon compte"
     },
+    "contact": {
+      "title": "Contact",
+      "description": "Contactez-nous"
+    },
     "notFound": {
       "title": "Page non trouvée"
     },
@@ -157,7 +162,10 @@
     "admin": {
       "invalidUserType": "Type d'utilisateur invalide",
       "cannotDeleteSelf": "Vous ne pouvez pas supprimer votre propre compte"
-    }
+    },
+    "invalidEmail": "Adresse email invalide",
+    "missingFields": "Veuillez remplir tous les champs obligatoires",
+    "messageTooLong": "Le message est trop long"
   },
   "form": {
     "email": "Email",
@@ -244,21 +252,32 @@
   "verify": {
     "title": "Vérifiez votre email",
     "subtitle": "Nous avons envoyé un code à 6 chiffres à",
+    "submit": "Vérifier",
+    "timerExpiring": "Expire dans {minutes}:{seconds}",
+    "codeExpired": "Code expiré. Veuillez en demander un nouveau.",
+    "attemptsRemaining": "{remaining} tentative(s) restante(s)",
+    "noCode": "Vous n'avez pas reçu de code ?",
     "resend": "Renvoyer le code",
     "resendIn": "Renvoyer dans {seconds}s"
   },
   "forgotPassword": {
     "title": "Mot de passe oublié ?",
+    "description": "Entrez votre adresse email et nous vous enverrons un code de réinitialisation.",
     "subtitle": "Entrez votre adresse email et nous vous enverrons un code de réinitialisation.",
     "submit": "Envoyer le code",
     "sent": "Si un compte existe pour cette adresse email, un code de réinitialisation a été envoyé.",
+    "sentHint": "Vérifiez votre boîte de réception (et les spams).",
+    "enterCode": "Entrer le code de réinitialisation",
+    "resend": "Renvoyer le code",
     "backToSignin": "Retour à la connexion"
   },
   "resetPassword": {
     "title": "Réinitialiser le mot de passe",
+    "description": "Entrez votre email, le code reçu et votre nouveau mot de passe.",
     "subtitle": "Entrez votre email, le code reçu et votre nouveau mot de passe.",
     "submit": "Réinitialiser le mot de passe",
     "success": "Mot de passe réinitialisé avec succès. Vous pouvez maintenant vous connecter.",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
     "backToSignin": "Retour à la connexion"
   },
   "account": {
@@ -288,5 +307,15 @@
       "submit": "Changer le mot de passe",
       "changeSuccess": "Mot de passe mis à jour avec succès"
     }
+  },
+  "contact": {
+    "title": "Nous contacter",
+    "subtitle": "Une question ou un retour ? Envoyez-nous un message.",
+    "name": "Votre nom",
+    "email": "Votre email",
+    "message": "Votre message",
+    "submit": "Envoyer le message",
+    "success": "Votre message a été envoyé. Nous vous répondrons rapidement.",
+    "error": "Échec de l'envoi du message. Veuillez réessayer."
   }
 }

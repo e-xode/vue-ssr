@@ -30,7 +30,7 @@ export async function recordLoginIp(db, userId, ip) {
   )
 }
 
-export async function destroyUserSessions(userId) {
+export async function destroyUserSessions(userId, excludeSessionId) {
   const sessionsDir = 'logs/sessions'
   const userIdStr = userId.toString()
 
@@ -43,6 +43,7 @@ export async function destroyUserSessions(userId) {
 
   for (const file of files) {
     if (!file.endsWith('.json')) continue
+    if (excludeSessionId && file === `${excludeSessionId}.json`) continue
     try {
       const content = await fs.promises.readFile(path.join(sessionsDir, file), 'utf-8')
       const session = JSON.parse(content)

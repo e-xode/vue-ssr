@@ -1,8 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useLocalePath } from '@/composables/useLocalePath'
 
 const { t } = useI18n()
+const { localePath } = useLocalePath()
 
 const email = ref('')
 const isSubmitting = ref(false)
@@ -63,7 +65,7 @@ async function handleSubmit() {
               {{ t('forgotPassword.sentHint') }}
             </p>
             <v-btn
-              to="/reset-password"
+              :to="localePath('/reset-password')"
               color="primary"
               block
               class="mt-4"
@@ -111,7 +113,7 @@ async function handleSubmit() {
 
             <p class="text-center mb-0">
               <router-link
-                to="/signin"
+                :to="localePath('/signin')"
                 class="link"
               >
                 {{ t('nav.signin') }}
@@ -124,13 +126,4 @@ async function handleSubmit() {
   </v-container>
 </template>
 
-<style lang="scss" scoped>
-.link {
-  color: var(--v-primary-base);
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-</style>
+<style lang="scss" scoped src="./ForgotPasswordView.scss"></style>

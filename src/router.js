@@ -4,14 +4,15 @@ import {
     createWebHistory
 } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { LOCALE_CODES, LOCALE_ROUTE_REGEX } from '@/shared/const'
 
 const history = typeof window === 'undefined'
     ? createMemoryHistory()
     : createWebHistory()
 
-const routes = [
+const localeRoutes = [
     {
-        path: '/',
+        path: '',
         name: 'Index',
         component: () => import('@/views/Index/IndexView.vue'),
         meta: {
@@ -21,7 +22,7 @@ const routes = [
         }
     },
     {
-        path: '/signup',
+        path: 'signup',
         name: 'Signup',
         component: () => import('@/views/Auth/SignupView.vue'),
         meta: {
@@ -33,7 +34,7 @@ const routes = [
         }
     },
     {
-        path: '/signin',
+        path: 'signin',
         name: 'Signin',
         component: () => import('@/views/Auth/SigninView.vue'),
         meta: {
@@ -45,7 +46,7 @@ const routes = [
         }
     },
     {
-        path: '/auth/verify-code',
+        path: 'auth/verify-code',
         name: 'VerifyCode',
         component: () => import('@/views/Auth/VerifyCodeView.vue'),
         meta: {
@@ -54,7 +55,7 @@ const routes = [
         }
     },
     {
-        path: '/dashboard',
+        path: 'dashboard',
         name: 'Dashboard',
         component: () => import('@/views/Dashboard/DashboardView.vue'),
         meta: {
@@ -66,12 +67,12 @@ const routes = [
         }
     },
     {
-        path: '/admin',
+        path: 'admin',
         name: 'Admin',
-        redirect: '/admin/users'
+        redirect: to => `/${to.params.locale}/admin/users`
     },
     {
-        path: '/admin/users',
+        path: 'admin/users',
         name: 'AdminUsers',
         component: () => import('@/views/Admin/AdminUsersView.vue'),
         meta: {
@@ -83,7 +84,7 @@ const routes = [
         }
     },
     {
-        path: '/admin/users/:userId',
+        path: 'admin/users/:userId',
         name: 'AdminUserDetail',
         component: () => import('@/views/Admin/AdminUserDetailView.vue'),
         meta: {
@@ -95,7 +96,7 @@ const routes = [
         }
     },
     {
-        path: '/admin/logs',
+        path: 'admin/logs',
         name: 'AdminLogs',
         component: () => import('@/views/Admin/AdminLogsView.vue'),
         meta: {
@@ -107,7 +108,7 @@ const routes = [
         }
     },
     {
-        path: '/forgot-password',
+        path: 'forgot-password',
         name: 'ForgotPassword',
         component: () => import('@/views/Auth/ForgotPasswordView.vue'),
         meta: {
@@ -118,7 +119,7 @@ const routes = [
         }
     },
     {
-        path: '/reset-password',
+        path: 'reset-password',
         name: 'ResetPassword',
         component: () => import('@/views/Auth/ResetPasswordView.vue'),
         meta: {
@@ -129,7 +130,7 @@ const routes = [
         }
     },
     {
-        path: '/account',
+        path: 'account',
         name: 'Account',
         component: () => import('@/views/Account/AccountView.vue'),
         meta: {
@@ -140,13 +141,43 @@ const routes = [
         }
     },
     {
+        path: 'contact',
+        name: 'Contact',
+        component: () => import('@/views/Contact/ContactView.vue'),
+        meta: {
+            layout: 'public',
+            title: 'meta.contact.title',
+            description: 'meta.contact.description'
+        }
+    }
+]
+
+const routes = [
+    {
+        path: `/:locale(${LOCALE_ROUTE_REGEX})`,
+        children: localeRoutes
+    },
+    {
+        path: '/',
+        redirect: () => {
+            if (typeof window !== 'undefined') {
+                const saved = localStorage.getItem('locale')
+                if (saved && LOCALE_CODES.includes(saved)) return `/${saved}`
+                const browserLang = navigator.language?.slice(0, 2)
+                if (LOCALE_CODES.includes(browserLang)) return `/${browserLang}`
+            }
+            return '/en'
+        }
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'NotFound',
         component: () => import('@/views/NotFound/NotFoundView.vue'),
         meta: {
             layout: 'minimal',
             title: 'meta.notFound.title',
-            robots: 'noindex, follow'
+            robots: 'noindex, follow',
+            statusCode: 404
         }
     }
 ]
@@ -160,8 +191,13 @@ export const router = createRouter({
     }
 })
 
-router.beforeEach(async (to, from, next) => {
-    if (typeof window === 'undefined') return next()
+router.beforeEach(async (to) => {
+    if (typeof window === 'undefined') return true
+
+    const locale = to.params.locale
+    if (locale) {
+        localStorage.setItem('locale', locale)
+    }
 
     const authStore = useAuthStore()
 
@@ -170,16 +206,16 @@ router.beforeEach(async (to, from, next) => {
     }
 
     if (to.meta.guest && authStore.isAuthenticated) {
-        return next({ name: 'Dashboard' })
+        return { name: 'Dashboard', params: { locale: locale || 'en' } }
     }
 
     if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-        return next({ name: 'Signin' })
+        return { name: 'Signin', params: { locale: locale || 'en' } }
     }
 
     if (to.meta.requiresAdmin && !authStore.isAdmin) {
-        return next({ name: 'Dashboard' })
+        return { name: 'Dashboard', params: { locale: locale || 'en' } }
     }
 
-    next()
+    return true
 })

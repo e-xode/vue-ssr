@@ -1,0 +1,27 @@
+.app-footer {
+  background: var(--v-background-base);
+  border-top: 1px solid var(--v-border-color, #e5e7eb);
+  margin-top: auto;
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--v-on-background-base);
+  }
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  a {
+    color: var(--v-primary-base);
+    text-decoration: none;
+    font-size: 14px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
