@@ -2,10 +2,12 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
+import { useLocalePath } from '@/composables/useLocalePath'
 import { mdiShieldAccount } from '@mdi/js'
 
 const { t } = useI18n()
 const authStore = useAuthStore()
+const { localePath } = useLocalePath()
 
 const user = computed(() => authStore.user)
 const isAdmin = computed(() => authStore.isAdmin)
@@ -29,7 +31,7 @@ const isAdmin = computed(() => authStore.isAdmin)
         md="4"
       >
         <v-card
-          to="/admin/users"
+          :to="localePath('/admin/users')"
           class="pa-4"
         >
           <div class="d-flex align-center gap-3">

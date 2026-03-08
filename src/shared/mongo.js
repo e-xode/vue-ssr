@@ -12,7 +12,7 @@ const mongoConnect = async() => {
         MONGO_USER
     } = process.env
 
-    const url = `${MONGO_TYPE}://${MONGO_USER}:${MONGO_PWD}@${MONGO_HOST}/${MONGO_DB}`
+    const url = `${MONGO_TYPE}://${encodeURIComponent(MONGO_USER)}:${encodeURIComponent(MONGO_PWD)}@${MONGO_HOST}/${MONGO_DB}`
     _client = new MongoClient(url)
 
     try {

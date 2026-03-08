@@ -1,0 +1,33 @@
+.code-boxes {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.code-digit {
+  width: 44px;
+  height: 54px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border: 2px solid rgba(var(--v-border-color), 0.26);
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  outline: none;
+  transition: border-color 0.15s ease;
+  caret-color: transparent;
+
+  &:focus {
+    border-color: rgb(var(--v-theme-primary));
+  }
+
+  &--error {
+    border-color: rgb(var(--v-theme-error));
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

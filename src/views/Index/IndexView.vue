@@ -1,5 +1,6 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { useLocalePath } from '@/composables/useLocalePath'
 import {
   mdiServerNetwork,
   mdiShieldLock,
@@ -18,6 +19,7 @@ import {
 } from '@mdi/js'
 
 const { t } = useI18n()
+const { localePath } = useLocalePath()
 
 const GITHUB_URL = 'https://github.com/e-xode/vue-ssr'
 
@@ -79,7 +81,7 @@ const stack = [
 
             <div class="d-flex gap-4 justify-center flex-wrap">
               <v-btn
-                to="/signup"
+                :to="localePath('/signup')"
                 variant="flat"
                 color="primary"
                 size="large"
@@ -232,41 +234,4 @@ const stack = [
   </div>
 </template>
 
-<style lang="scss" scoped>
-.index-page {
-  min-height: 100vh;
-}
-
-.hero {
-  padding: 80px 0 64px;
-
-  &__title {
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 700;
-    line-height: 1.2;
-  }
-
-  &__subtitle {
-    font-size: 1.25rem;
-    font-weight: 500;
-    opacity: 0.85;
-  }
-
-  &__description {
-    font-size: 1rem;
-    max-width: 560px;
-    margin-left: auto;
-    margin-right: auto;
-    opacity: 0.7;
-    line-height: 1.7;
-  }
-}
-
-.features {
-  background: rgba(var(--v-theme-surface-variant, 0 0 0), 0.03);
-}
-
-.opensource {
-  border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-}
-</style>
+<style lang="scss" scoped src="./IndexView.scss"></style>

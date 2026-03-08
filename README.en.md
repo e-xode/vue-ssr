@@ -29,9 +29,9 @@ A complete and modern starter kit for building web applications with **Vue 3**, 
 - ✅ **Vue 3** - Progressive JavaScript framework with Composition API
 - ✅ **Server-Side Rendering (SSR)** - Server-side rendering for better SEO
 - ✅ **Vite** - Ultra-fast bundler and dev server
-- ✅ **Vue Router 4** - Client-side routing with SSR support
+- ✅ **Vue Router 5** - Client-side routing with SSR support
 - ✅ **Pinia** - Robust state management
-- ✅ **Vuetify 3** - Complete Material Design components
+- ✅ **Vuetify 4** - Complete Material Design components
 - ✅ **SCSS** - Global variables, mixins and themes
 - ✅ **Vue i18n** - Multi-language support (EN, FR)
 
@@ -42,6 +42,10 @@ A complete and modern starter kit for building web applications with **Vue 3**, 
 - ✅ **Sessions** - Secure session management
 - ✅ **Nodemailer** - Integrated email sending
 - ✅ **CORS & Validation** - Security configuration
+- ✅ **Locale-Prefixed Routing** - SEO-friendly URLs with `/:locale(en|fr)/` prefix
+- ✅ **Contact Page** - Contact form with API endpoint, validation, rate limiting
+- ✅ **Helmet CSP** - Content Security Policy configured
+- ✅ **Secure Code Verification** - SHA-256 hashing with timingSafeEqual
 
 ### Infrastructure
 - ✅ **Docker & Docker Compose** - Complete containerization

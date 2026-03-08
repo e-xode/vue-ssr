@@ -7,13 +7,16 @@ A comprehensive Vue 3 Server-Side Rendering (SSR) starter kit with authenticatio
 - **Vue 3** - Latest Vue features with Composition API
 - **Server-Side Rendering (SSR)** - SEO-friendly with optimal performance
 - **Vite** - Fast build tool and dev server
-- **Vuetify 3** - Material Design components
-- **Vue Router 4** - Client-side routing
+- **Vuetify 4** - Material Design components
+- **Vue Router 5** - Client-side routing
 - **Pinia** - State management
 - **Vue i18n** - Internationalization (EN, FR)
 - **MongoDB** - NoSQL database
 - **Authentication** - Email/password signup, signin with security code verification
 - **Email** - Support for sending emails via Nodemailer
+- **Locale-Prefixed Routing** - SEO-friendly `/:locale/` URL prefix
+- **Contact Page** - Built-in contact form with rate limiting
+- **Security** - Helmet CSP, SHA-256 codes, timingSafeEqual, session destruction
 - **SCSS** - Advanced styling with variables and mixins
 - **Express.js** - Server framework
 - **Session Management** - File-based session storage
@@ -26,6 +29,8 @@ A comprehensive Vue 3 Server-Side Rendering (SSR) starter kit with authenticatio
 src/
 ├── api/                    # API routes
 │   ├── auth/              # Authentication endpoints
+│   ├── contact/           # Contact form endpoints
+│   │   └── send.js        # Contact form submission
 │   └── router.js          # API routes registry
 ├── components/            # Vue components
 │   └── layout/            # Layout components (Header, Footer)
@@ -34,11 +39,17 @@ src/
 ├── views/                 # Page components
 │   ├── Index/
 │   ├── Auth/              # Signup, Signin, VerifyCode
+│   ├── Account/
+│   ├── Contact/
 │   ├── Dashboard/
 │   └── NotFound/
+├── composables/           # Vue composables
+│   └── useLocalePath.js   # Locale path utility
 ├── plugins/               # Vue plugins
 │   └── vuetify.js         # Vuetify configuration
 ├── shared/                # Shared utilities
+│   ├── utils.js           # Utility functions
+│   ├── dbHelpers.js       # Database helpers
 │   ├── log.js             # Logger
 │   ├── mongo.js           # MongoDB connection
 │   └── email.js           # Email utilities

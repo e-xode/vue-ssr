@@ -28,6 +28,11 @@ if (db && !error) {
     }
   }
 
+  if (isProduction && (!process.env.COOKIE_SECRET || process.env.COOKIE_SECRET === 'change-me-in-production')) {
+    logWarn('COOKIE_SECRET is not set or uses the default value. Server cannot start in production without a secure secret.')
+    process.exit(1)
+  }
+
   const sessionMiddleware = session({
     store: new fileStore({ path: 'logs/sessions' }),
     cookie: {
@@ -47,7 +52,19 @@ if (db && !error) {
   app.set('trust proxy', 1)
 
   app.use(helmet({
-    contentSecurityPolicy: false,
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+        imgSrc: ["'self'", 'data:', 'https:'],
+        connectSrc: ["'self'", ...(isProduction ? [] : ['ws://localhost:*'])],
+        frameSrc: ["'none'"],
+        objectSrc: ["'none'"],
+        baseUri: ["'self'"]
+      }
+    },
     crossOriginEmbedderPolicy: false
   }))
 
@@ -69,6 +86,50 @@ if (db && !error) {
 
   app.use(express.json())
 
+  app.get('/sitemap.xml', (req, res) => {
+    const siteUrl = (process.env.NODE_HOST || `http://localhost:${port}`).replace(/\/$/, '')
+    const locales = ['en', 'fr']
+    const publicPaths = ['', '/contact']
+
+    const urls = publicPaths.map(path => {
+      const links = locales.map(l =>
+        `    <xhtml:link rel="alternate" hreflang="${l}" href="${siteUrl}/${l}${path}"/>`
+      ).join('\n')
+      return locales.map(l => `  <url>
+    <loc>${siteUrl}/${l}${path}</loc>
+${links}
+    <changefreq>weekly</changefreq>
+    <priority>${path === '' ? '1.0' : '0.8'}</priority>
+  </url>`).join('\n')
+    }).join('\n')
+
+    res.set('Content-Type', 'application/xml')
+    res.send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${urls}
+</urlset>`)
+  })
+
+  app.get('/robots.txt', (req, res) => {
+    const siteUrl = (process.env.NODE_HOST || `http://localhost:${port}`).replace(/\/$/, '')
+    res.set('Content-Type', 'text/plain')
+    res.send(`User-agent: *
+Allow: /
+
+Disallow: /api/
+Disallow: /*/signup
+Disallow: /*/signin
+Disallow: /*/forgot-password
+Disallow: /*/reset-password
+Disallow: /*/auth/
+Disallow: /*/dashboard
+Disallow: /*/account
+Disallow: /*/admin/
+
+Sitemap: ${siteUrl}/sitemap.xml`)
+  })
+
   registerApiRoutes(app, db)
 
   let vite
@@ -89,7 +150,7 @@ if (db && !error) {
 
   app.use('*all', async (req, res) => {
     try {
-      const url = req.originalUrl.replace(base, '')
+      const url = req.originalUrl.replace(base, '/')
       let template
       let render
       if (!isProduction) {
@@ -106,7 +167,7 @@ if (db && !error) {
         .replace(`<!--app-head-->`, rendered.head ?? '')
         .replace(`<!--app-html-->`, rendered.html ?? '')
 
-      res.status(200).set({ 'Content-Type': 'text/html' }).send(html)
+      res.status(rendered.statusCode || 200).set({ 'Content-Type': 'text/html' }).send(html)
     } catch (e) {
       vite?.ssrFixStacktrace(e)
       console.log(e.stack)

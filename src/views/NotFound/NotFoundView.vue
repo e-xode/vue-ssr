@@ -1,7 +1,9 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { useLocalePath } from '@/composables/useLocalePath'
 
 const { t } = useI18n()
+const { localePath } = useLocalePath()
 </script>
 
 <template>
@@ -24,7 +26,7 @@ const { t } = useI18n()
           {{ t('meta.notFound.title') }}
         </p>
         <v-btn
-          to="/"
+          :to="localePath('/')"
           color="primary"
           variant="flat"
         >

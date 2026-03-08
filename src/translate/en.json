@@ -16,6 +16,7 @@
   },
   "nav": {
     "home": "Home",
+    "contact": "Contact",
     "dashboard": "Dashboard",
     "account": "My Account",
     "admin": "Admin",
@@ -112,6 +113,10 @@
     "account": {
       "title": "My Account"
     },
+    "contact": {
+      "title": "Contact Us",
+      "description": "Get in touch with us"
+    },
     "notFound": {
       "title": "Page Not Found"
     },
@@ -157,7 +162,10 @@
     "admin": {
       "invalidUserType": "Invalid user type",
       "cannotDeleteSelf": "You cannot delete your own account"
-    }
+    },
+    "invalidEmail": "Invalid email address",
+    "missingFields": "Please fill in all required fields",
+    "messageTooLong": "Message is too long"
   },
   "form": {
     "email": "Email",
@@ -244,21 +252,32 @@
   "verify": {
     "title": "Verify your email",
     "subtitle": "We sent a 6-digit code to",
+    "submit": "Verify",
+    "timerExpiring": "Expires in {minutes}:{seconds}",
+    "codeExpired": "Code expired. Please request a new one.",
+    "attemptsRemaining": "{remaining} attempt(s) remaining",
+    "noCode": "Didn't receive a code?",
     "resend": "Resend code",
     "resendIn": "Resend in {seconds}s"
   },
   "forgotPassword": {
     "title": "Forgot your password?",
+    "description": "Enter your email address and we'll send you a reset code.",
     "subtitle": "Enter your email address and we'll send you a reset code.",
     "submit": "Send reset code",
     "sent": "If an account exists for this email address, a password reset code has been sent.",
+    "sentHint": "Check your inbox (and spam folder).",
+    "enterCode": "Enter reset code",
+    "resend": "Resend code",
     "backToSignin": "Back to sign in"
   },
   "resetPassword": {
     "title": "Reset your password",
+    "description": "Enter your email, the reset code you received, and your new password.",
     "subtitle": "Enter your email, the reset code you received, and your new password.",
     "submit": "Reset password",
     "success": "Password reset successfully. You can now sign in.",
+    "passwordMismatch": "Passwords do not match",
     "backToSignin": "Back to sign in"
   },
   "account": {
@@ -288,5 +307,15 @@
       "submit": "Change password",
       "changeSuccess": "Password updated successfully"
     }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Have a question or feedback? Send us a message.",
+    "name": "Your name",
+    "email": "Your email",
+    "message": "Your message",
+    "submit": "Send Message",
+    "success": "Your message has been sent. We'll get back to you soon.",
+    "error": "Failed to send your message. Please try again."
   }
 }

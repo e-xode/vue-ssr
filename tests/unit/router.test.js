@@ -11,39 +11,39 @@ describe('router.js', () => {
 
   it('should have home route', () => {
     const routes = router.getRoutes()
-    const homeRoute = routes.find(r => r.path === '/')
+    const homeRoute = routes.find(r => r.name === 'Index')
 
     expect(homeRoute).toBeDefined()
-    expect(homeRoute?.name).toBe('Index')
+    expect(homeRoute?.path).toContain('/:locale')
   })
 
   it('should have signup route', () => {
     const routes = router.getRoutes()
-    const signupRoute = routes.find(r => r.path === '/signup')
+    const signupRoute = routes.find(r => r.name === 'Signup')
 
     expect(signupRoute).toBeDefined()
-    expect(signupRoute?.name).toBe('Signup')
+    expect(signupRoute?.path).toContain('/signup')
   })
 
   it('should have signin route', () => {
     const routes = router.getRoutes()
-    const signinRoute = routes.find(r => r.path === '/signin')
+    const signinRoute = routes.find(r => r.name === 'Signin')
 
     expect(signinRoute).toBeDefined()
-    expect(signinRoute?.name).toBe('Signin')
+    expect(signinRoute?.path).toContain('/signin')
   })
 
   it('should have verify-code route', () => {
     const routes = router.getRoutes()
-    const verifyRoute = routes.find(r => r.path === '/auth/verify-code')
+    const verifyRoute = routes.find(r => r.name === 'VerifyCode')
 
     expect(verifyRoute).toBeDefined()
-    expect(verifyRoute?.name).toBe('VerifyCode')
+    expect(verifyRoute?.path).toContain('/auth/verify-code')
   })
 
   it('should have dashboard route with requiresAuth meta', () => {
     const routes = router.getRoutes()
-    const dashboardRoute = routes.find(r => r.path === '/dashboard')
+    const dashboardRoute = routes.find(r => r.name === 'Dashboard')
 
     expect(dashboardRoute).toBeDefined()
     expect(dashboardRoute?.meta?.requiresAuth).toBe(true)
@@ -56,11 +56,27 @@ describe('router.js', () => {
     expect(notFoundRoute).toBeDefined()
   })
 
+  it('should have root redirect', () => {
+    const routes = router.getRoutes()
+    const rootRoute = routes.find(r => r.path === '/')
+
+    expect(rootRoute).toBeDefined()
+    expect(rootRoute?.redirect).toBeDefined()
+  })
+
+  it('should have contact route', () => {
+    const routes = router.getRoutes()
+    const contactRoute = routes.find(r => r.name === 'Contact')
+
+    expect(contactRoute).toBeDefined()
+    expect(contactRoute?.path).toContain('/contact')
+    expect(contactRoute?.meta?.layout).toBe('public')
+  })
+
   it('routes should have valid components', () => {
     const routes = router.getRoutes()
 
     routes.forEach(route => {
-      // Skip routes without components (like the 404 redirect)
       if (route.component) {
         expect(route.component).toBeDefined()
       }
@@ -70,10 +86,10 @@ describe('router.js', () => {
   it('should have correct route meta layout', () => {
     const routes = router.getRoutes()
 
-    const homeRoute = routes.find(r => r.path === '/')
+    const homeRoute = routes.find(r => r.name === 'Index')
     expect(homeRoute?.meta?.layout).toBe('public')
 
-    const dashboardRoute = routes.find(r => r.path === '/dashboard')
+    const dashboardRoute = routes.find(r => r.name === 'Dashboard')
     expect(dashboardRoute?.meta?.layout).toBe('app')
   })
 })

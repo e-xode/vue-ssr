@@ -14,6 +14,7 @@ import { setupUpdateProfileRoute } from './auth/updateProfile.js'
 import { setupAvatarRoute } from './auth/avatar.js'
 import { setupAdminUsersRoutes } from './admin/users.js'
 import { setupAdminLogsRoute } from './admin/logs.js'
+import { setupContactRoute } from './contact/send.js'
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -31,6 +32,7 @@ const createLimiter = (max, windowMinutes = 15) => isProduction
 
 const authLimiter = createLimiter(10)
 const accountLimiter = createLimiter(20)
+const contactLimiter = createLimiter(3)
 
 export function registerApiRoutes(app, db) {
   setMiddlewareDb(db)
@@ -44,6 +46,7 @@ export function registerApiRoutes(app, db) {
   app.use('/api/auth/change-email', accountLimiter)
   app.use('/api/auth/verify-email-change', accountLimiter)
   app.use('/api/auth/change-password', accountLimiter)
+  app.use('/api/contact', contactLimiter)
 
   setupMeRoute(app, db)
   setupSignupRoute(app, db)
@@ -60,4 +63,5 @@ export function registerApiRoutes(app, db) {
 
   setupAdminUsersRoutes(app, db)
   setupAdminLogsRoute(app, db)
+  setupContactRoute(app, db)
 }

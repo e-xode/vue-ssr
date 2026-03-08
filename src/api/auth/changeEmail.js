@@ -1,6 +1,7 @@
 import { requireAuth } from '../middleware.js'
 import { EMAIL_REGEX, SECURITY_CODE_EXPIRY_MS, SECURITY_CODE_MAX_ATTEMPTS } from '#src/shared/const.js'
 import { generateSecurityCode, hashCode, verifyCode, sendEmailChangeCodeEmail } from '#src/shared/email.js'
+import { destroyUserSessions } from '#src/shared/security.js'
 import { logEvent } from '#src/shared/logger.js'
 
 export function setupChangeEmailRoute(app, db) {
@@ -119,6 +120,8 @@ export function setupChangeEmailRoute(app, db) {
           $unset: { pendingEmail: '', pendingEmailCode: '', pendingEmailCodeExpires: '', pendingEmailCodeAttempts: '' }
         }
       )
+
+      await destroyUserSessions(req.userId, req.sessionID)
 
       logEvent(db, { event: 'user-change-email-verified', userId: req.userId, ip: req.ip, meta: { newEmail: user.pendingEmail } })
 

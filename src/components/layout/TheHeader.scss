@@ -1,0 +1,30 @@
+.app-header {
+  &__logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--v-primary-base);
+    color: white;
+    text-decoration: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &__title {
+    font-size: 20px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--v-on-background-base);
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--v-primary-base);
+    }
+  }
+}

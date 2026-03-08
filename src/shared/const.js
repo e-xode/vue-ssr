@@ -6,7 +6,17 @@ export const SECURITY_CODE_MAX_ATTEMPTS = 3
 
 export const RESEND_COOLDOWN_MS = 30 * 1000
 
-export const USER_SAFE_PROJECTION = { password: 0 }
+export const DEFAULT_LOCALE = 'en'
+
+export const USER_SAFE_PROJECTION = {
+  password: 0,
+  securityCode: 0,
+  securityCodeExpires: 0,
+  securityCodeAttempts: 0,
+  pendingEmailCode: 0,
+  pendingEmailCodeExpires: 0,
+  pendingEmailCodeAttempts: 0
+}
 
 export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 

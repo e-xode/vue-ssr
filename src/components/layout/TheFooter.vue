@@ -1,17 +1,18 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { useLocalePath } from '@/composables/useLocalePath'
 
 const { t } = useI18n()
+const { localePath } = useLocalePath()
 </script>
 
 <template>
   <v-footer
-    class="app-footer"
-    padless
+    class="app-footer pa-0"
   >
     <v-container>
       <v-row
-        dense
+        density="comfortable"
         justify="center"
       >
         <v-col
@@ -22,8 +23,12 @@ const { t } = useI18n()
             {{ t('footer.copyright') }}
           </p>
           <div class="footer-links">
-            <router-link to="/">
+            <router-link :to="localePath('/')">
               {{ t('nav.home') }}
+            </router-link>
+            <span class="mx-2">•</span>
+            <router-link :to="localePath('/contact')">
+              {{ t('nav.contact') }}
             </router-link>
             <span class="mx-2">•</span>
             <a
@@ -44,32 +49,4 @@ const { t } = useI18n()
   </v-footer>
 </template>
 
-<style lang="scss" scoped>
-.app-footer {
-  background: var(--v-background-base);
-  border-top: 1px solid var(--v-border-color, #e5e7eb);
-  margin-top: auto;
-
-  p {
-    margin: 0;
-    font-size: 14px;
-    color: var(--v-on-background-base);
-  }
-}
-
-.footer-links {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  a {
-    color: var(--v-primary-base);
-    text-decoration: none;
-    font-size: 14px;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
-</style>
+<style lang="scss" scoped src="./TheFooter.scss"></style>

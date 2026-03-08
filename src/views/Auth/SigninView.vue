@@ -3,10 +3,13 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useLocalePath } from '@/composables/useLocalePath'
+import { mdiEye, mdiEyeOff } from '@mdi/js'
 
 const { t } = useI18n()
 const router = useRouter()
 const authStore = useAuthStore()
+const { localePath } = useLocalePath()
 
 const form = ref({
   email: '',
@@ -29,7 +32,7 @@ async function handleSubmit() {
   isSubmitting.value = false
 
   if (result.status === 'success') {
-    await router.push('/auth/verify-code')
+    await router.push(localePath('/auth/verify-code'))
   } else {
     errorMessage.value = result.error || t('error.auth.signinFailed')
   }
@@ -76,7 +79,7 @@ async function handleSubmit() {
               v-model="form.password"
               :label="t('form.password')"
               :type="showPassword ? 'text' : 'password'"
-              :append-icon="showPassword ? 'mdiEyeOff' : 'mdiEye'"
+              :append-inner-icon="showPassword ? mdiEyeOff : mdiEye"
               class="mb-6"
               :disabled="isSubmitting"
               required
@@ -99,7 +102,7 @@ async function handleSubmit() {
           <p class="text-center mb-0">
             {{ t('meta.signup.description') }}
             <router-link
-              to="/signup"
+              :to="localePath('/signup')"
               class="link"
             >
               {{ t('nav.signup') }}
@@ -111,13 +114,4 @@ async function handleSubmit() {
   </v-container>
 </template>
 
-<style lang="scss" scoped>
-.link {
-  color: var(--v-primary-base);
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-</style>
+<style lang="scss" scoped src="./SigninView.scss"></style>

@@ -2,11 +2,13 @@
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import { useLocalePath } from '@/composables/useLocalePath'
 import { mdiArrowLeft, mdiLock, mdiLockOpen } from '@mdi/js'
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { localePath } = useLocalePath()
 
 const user = ref(null)
 const recentLogs = ref([])
@@ -131,7 +133,7 @@ onMounted(fetchUser)
           :prepend-icon="mdiArrowLeft"
           variant="text"
           class="mb-4"
-          @click="router.push('/admin/users')"
+          @click="router.push(localePath('/admin/users'))"
         >
           {{ t('admin.users.backToList') }}
         </v-btn>

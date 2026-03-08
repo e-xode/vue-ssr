@@ -2,10 +2,12 @@
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { useLocalePath } from '@/composables/useLocalePath'
 import { mdiMagnify, mdiPencil, mdiDelete, mdiChevronLeft, mdiChevronRight } from '@mdi/js'
 
 const { t } = useI18n()
 const router = useRouter()
+const { localePath } = useLocalePath()
 
 const users = ref([])
 const total = ref(0)
@@ -187,7 +189,7 @@ onMounted(fetchUsers)
                     :icon="mdiPencil"
                     size="small"
                     variant="text"
-                    @click="router.push(`/admin/users/${user._id}`)"
+                    @click="router.push(localePath(`/admin/users/${user._id}`))"
                   />
                   <v-btn
                     :icon="mdiDelete"

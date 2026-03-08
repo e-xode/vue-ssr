@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer'
+import { randomInt, createHash, timingSafeEqual } from 'node:crypto'
 import { emailTemplates as frTemplates } from '#src/translate/emails/fr.js'
 import { emailTemplates as enTemplates } from '#src/translate/emails/en.js'
 
@@ -65,13 +66,18 @@ export async function sendResetPasswordEmail(email, code, locale = 'en') {
 }
 
 export function generateSecurityCode() {
-  return Math.floor(100000 + Math.random() * 900000).toString()
+  return randomInt(100000, 1000000).toString()
 }
 
 export function hashCode(code) {
-  return Buffer.from(code).toString('base64')
+  return createHash('sha256').update(code).digest('hex')
 }
 
 export function verifyCode(storedHash, providedCode) {
-  return storedHash === Buffer.from(providedCode).toString('base64')
+  const hash = createHash('sha256').update(providedCode).digest('hex')
+  try {
+    return timingSafeEqual(Buffer.from(storedHash), Buffer.from(hash))
+  } catch {
+    return false
+  }
 }
