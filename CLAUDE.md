@@ -358,3 +358,26 @@ CORS_ORIGIN=http://localhost:5173
 9. destroyUserSessions: Deletes session files except current (excludeSessionId).
 10. __APP_VERSION__: Defined in vite.config.js from package.json.
 11. Avatar dir: Auto-created with fs.mkdirSync recursive.
+
+---
+
+## Project Ecosystem
+
+```
+e-xode.vue-ssr    → THIS PROJECT — Generic starter kit / boilerplate
+e-xode.vitapulse  → Production SaaS (health app, Stripe, analytics) — source of patterns
+e-xode.www        → Corporate site — derived from vue-ssr + existing content
+```
+
+- New generic features should land in **vue-ssr first**, then be adapted in downstream projects
+- Cookie names are distinct per project: `app.sid` (vue-ssr), `vp.sid` (vitapulse), `www.sid` (www)
+- All three share: locale routing, auth flow, SCSS system, Vuetify 4, security code verification
+
+### SCSS Module Scoping (CRITICAL)
+- `_inject.scss` (auto-injected by Vite) must only `@forward` variables + mixins — **NO CSS rules** or they duplicate in every component
+- `_mixins.scss` needs its own `@use 'variables' as *;` (Sass `@use` creates isolated scope)
+- View/component SCSS must **NOT** have `@use '@/styles'` — conflicts with auto-injection
+- `<style>` tag **MUST** have `lang="scss"` for Vite additionalData to work
+
+### Git Conventions
+- Always include trailer: `Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>`
