@@ -268,8 +268,8 @@ getClientIp(req), isIpBlocked(db, ip), recordLoginIp(db, userId, ip), destroyUse
 
 ## API Endpoints
 
-### Auth (authLimiter: 10/15min, accountLimiter: 20/15min)
-POST /api/auth/signup, /signin, /verify-code, /resend-code, /forgot-password, /reset-password (no auth)
+### Auth (signupLimiter: 5/15min, authLimiter: 10/15min, accountLimiter: 20/15min)
+POST /api/auth/signup (5/15min), /signin, /verify-code, /resend-code, /forgot-password, /reset-password (no auth)
 POST /api/auth/signout, GET /me, PUT /profile, POST /avatar, /change-password, /change-email (auth required)
 
 ### Contact (contactLimiter: 3/15min)
@@ -358,6 +358,10 @@ CORS_ORIGIN=http://localhost:5173
 9. destroyUserSessions: Deletes session files except current (excludeSessionId).
 10. __APP_VERSION__: Defined in vite.config.js from package.json.
 11. Avatar dir: Auto-created with fs.mkdirSync recursive.
+12. reCAPTCHA v3: invisible, score-based, disabled in dev. Server: `shared/captcha.js`. Client: `composables/useCaptcha.js`. Env: `RECAPTCHA_SITE_KEY`, `RECAPTCHA_SECRET_KEY`, `RECAPTCHA_MIN_SCORE`.
+13. Auth input validation: signin/signup emails are trimmed+lowercased server-side, validated with EMAIL_REGEX. Signup validates password≥8, name≥2.
+14. Auth error messages are i18n keys (e.g. `error.auth.invalidEmail`), translated in views with `t(errorMessage)`.
+15. Signup rate limit: 5 req/15min (separate `signupLimiter`, stricter than `authLimiter` at 10/15min).
 
 ---
 
