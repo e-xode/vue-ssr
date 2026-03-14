@@ -317,5 +317,12 @@
     "submit": "Send Message",
     "success": "Your message has been sent. We'll get back to you soon.",
     "error": "Failed to send your message. Please try again."
-  }
+  },
+  "error.auth.invalidEmail": "Invalid email address",
+  "error.auth.passwordTooShort": "Password must be at least 8 characters",
+  "error.auth.nameTooShort": "Name must be at least 2 characters",
+  "error.captcha.failed": "Security verification failed. Please try again.",
+  "admin.userDetail.verified": "Verified",
+  "admin.userDetail.notVerified": "Not verified",
+  "verify.backToLogin": "Back to login"
 }

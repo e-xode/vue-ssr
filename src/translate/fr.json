@@ -317,5 +317,12 @@
     "submit": "Envoyer le message",
     "success": "Votre message a été envoyé. Nous vous répondrons rapidement.",
     "error": "Échec de l'envoi du message. Veuillez réessayer."
-  }
+  },
+  "error.auth.invalidEmail": "Adresse email invalide",
+  "error.auth.passwordTooShort": "Le mot de passe doit contenir au moins 8 caractères",
+  "error.auth.nameTooShort": "Le nom doit contenir au moins 2 caractères",
+  "error.captcha.failed": "Vérification de sécurité échouée. Veuillez réessayer.",
+  "admin.userDetail.verified": "Vérifié",
+  "admin.userDetail.notVerified": "Non vérifié",
+  "verify.backToLogin": "Retour à la connexion"
 }

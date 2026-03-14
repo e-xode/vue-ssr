@@ -62,7 +62,7 @@ async function handleSubmit() {
             class="mb-4"
             closable
           >
-            {{ errorMessage }}
+            {{ t(errorMessage) }}
           </v-alert>
 
           <v-form @submit.prevent="handleSubmit">

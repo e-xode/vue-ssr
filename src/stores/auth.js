@@ -68,7 +68,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  async function signup({ email, password, name }) {
+  async function signup({ email, password, name, captchaToken }) {
     loading.value = true
     error.value = null
     try {
@@ -76,7 +76,7 @@ export const useAuthStore = defineStore('auth', () => {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, name })
+        body: JSON.stringify({ email, password, name, captchaToken })
       })
       const data = await response.json()
       if (response.ok) {

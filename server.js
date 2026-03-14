@@ -55,12 +55,12 @@ if (db && !error) {
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "https://www.google.com/recaptcha/", "https://www.gstatic.com/recaptcha/"],
         styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
         imgSrc: ["'self'", 'data:', 'https:'],
         connectSrc: ["'self'", ...(isProduction ? [] : ['ws://localhost:*'])],
-        frameSrc: ["'none'"],
+        frameSrc: ["'self'", "https://www.google.com/recaptcha/", "https://recaptcha.google.com/"],
         objectSrc: ["'none'"],
         baseUri: ["'self'"]
       }
@@ -162,9 +162,13 @@ Sitemap: ${siteUrl}/sitemap.xml`)
         render = (await import('./dist/server/entry-server.js')).render
       }
       const rendered = await render(url)
+      const recaptchaKey = process.env.RECAPTCHA_SITE_KEY
+      const recaptchaScript = recaptchaKey
+        ? `<script>window.__RECAPTCHA_SITE_KEY__='${recaptchaKey}';</script>`
+        : ''
       const html = template
         .replace(`<!--app-lang-->`, rendered.locale || 'en')
-        .replace(`<!--app-head-->`, rendered.head ?? '')
+        .replace(`<!--app-head-->`, recaptchaScript + (rendered.head ?? ''))
         .replace(`<!--app-html-->`, rendered.html ?? '')
 
       res.status(rendered.statusCode || 200).set({ 'Content-Type': 'text/html' }).send(html)

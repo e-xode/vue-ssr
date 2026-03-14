@@ -185,13 +185,13 @@ async function handleResend() {
           <div class="text-center mb-5">
             <p
               class="text-caption mb-1"
-              :class="timerWarning ? 'text-warning' : 'text-medium-emphasis'"
+              :class="timerWarning ? 'text-warning timer-warning' : 'text-medium-emphasis'"
             >
               {{ t('verify.timerExpiring', { minutes: timerMinutes, seconds: timerSeconds }) }}
             </p>
             <v-progress-linear
               :model-value="timerProgress"
-              height="3"
+              height="4"
               rounded
               :color="timerWarning ? 'warning' : 'primary'"
             />
@@ -261,6 +261,14 @@ async function handleResend() {
               {{ canResend ? t('verify.resend') : t('verify.resendIn', { seconds: resendTimer }) }}
             </v-btn>
           </p>
+
+          <v-btn
+            variant="text"
+            :to="localePath('/signin')"
+            class="mt-4"
+          >
+            {{ t('verify.backToLogin') }}
+          </v-btn>
         </v-card>
       </v-col>
     </v-row>

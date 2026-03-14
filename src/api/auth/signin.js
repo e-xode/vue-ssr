@@ -1,15 +1,20 @@
 import bcrypt from 'bcryptjs'
 import { sendSecurityCodeEmail, generateSecurityCode, hashCode } from '#src/shared/email.js'
-import { SECURITY_CODE_EXPIRY_MS } from '#src/shared/const.js'
+import { SECURITY_CODE_EXPIRY_MS, EMAIL_REGEX } from '#src/shared/const.js'
 import { getClientIp, isIpBlocked } from '#src/shared/security.js'
 import { logEvent } from '#src/shared/logger.js'
 
 export function setupSigninRoute(app, db) {
   app.post('/api/auth/signin', async (req, res) => {
-    const { email, password } = req.body
+    const { password } = req.body
+    const email = req.body.email?.trim().toLowerCase()
 
     if (!email || !password) {
       return res.status(400).json({ error: 'error.auth.emailAndPasswordRequired' })
+    }
+
+    if (!EMAIL_REGEX.test(email)) {
+      return res.status(400).json({ error: 'error.auth.invalidCredentials' })
     }
 
     try {

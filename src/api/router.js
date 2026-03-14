@@ -31,13 +31,14 @@ const createLimiter = (max, windowMinutes = 15) => isProduction
   : (req, res, next) => next()
 
 const authLimiter = createLimiter(10)
+const signupLimiter = createLimiter(5)
 const accountLimiter = createLimiter(20)
 const contactLimiter = createLimiter(3)
 
 export function registerApiRoutes(app, db) {
   setMiddlewareDb(db)
 
-  app.use('/api/auth/signup', authLimiter)
+  app.use('/api/auth/signup', signupLimiter)
   app.use('/api/auth/signin', authLimiter)
   app.use('/api/auth/verify-code', authLimiter)
   app.use('/api/auth/resend-code', authLimiter)

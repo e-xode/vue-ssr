@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useLocalePath } from '@/composables/useLocalePath'
@@ -25,6 +25,8 @@ const form = ref({
 
 const blockDialog = ref(false)
 const blockIps = ref(false)
+
+const isVerified = computed(() => !!user.value?.loginHistory?.length)
 
 const typeOptions = [
   { value: 'user', title: 'User' },
@@ -181,13 +183,23 @@ onMounted(fetchUser)
               <v-card class="mb-4">
                 <v-card-title class="d-flex align-center justify-space-between">
                   {{ t('admin.users.info') }}
-                  <v-chip
-                    v-if="user.isBlocked"
-                    color="error"
-                    size="small"
-                  >
-                    {{ t('admin.users.blocked') }}
-                  </v-chip>
+                  <div>
+                    <v-chip
+                      :color="isVerified ? 'success' : 'grey'"
+                      size="small"
+                      class="ml-2"
+                    >
+                      {{ isVerified ? t('admin.userDetail.verified') : t('admin.userDetail.notVerified') }}
+                    </v-chip>
+                    <v-chip
+                      v-if="user.isBlocked"
+                      color="error"
+                      size="small"
+                      class="ml-2"
+                    >
+                      {{ t('admin.users.blocked') }}
+                    </v-chip>
+                  </div>
                 </v-card-title>
                 <v-card-text>
                   <v-list density="compact">
