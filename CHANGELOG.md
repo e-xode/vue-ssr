@@ -15,7 +15,7 @@ Format: `MAJOR.MINOR.PATCH` (e.g. `1.2.3`)
 
 ---
 
-## [Unreleased]
+## [2.0.1] - 2026-03-14
 
 ### Changed
 
