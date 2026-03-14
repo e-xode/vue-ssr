@@ -8,7 +8,7 @@ Project reference guide for AI-assisted development sessions. This file is the *
 
 **Version**: 2.0.0
 **License**: MIT
-**Node**: >=22.0.0
+**Node**: >=24.0.0
 
 ---
 
@@ -21,7 +21,7 @@ Project reference guide for AI-assisted development sessions. This file is the *
 5. **Factorisation shared/** — Any reusable logic goes in `src/shared/`. Never duplicate code.
 6. **catch blocks** — Always include `console.error(err)` or `console.error(e)`. Never empty catch.
 7. **ObjectId validation** — Always validate MongoDB ObjectId before queries. Use `parseObjectId()` from `dbHelpers.js`.
-8. **Never auto-commit/push/release** — Only the developer commits. Commit format: `[$branch] content`.
+8. **Auto-commit/push allowed after validation** — After changes pass tests (`npm run test:run`) and lint (`npm run lint:check`), update CHANGELOG.md, commit with format `[$branch] content`, and push. On **"release"** command: bump version in `package.json`, update CHANGELOG.md, commit, create git tag `vX.Y.Z`, and push with tags.
 9. **Composition API only** — No Options API. Use `<script setup>`.
 10. **No over-engineering** — Keep it simple. YAGNI.
 

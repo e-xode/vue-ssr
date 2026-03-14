@@ -1,9 +1,8 @@
 name: "docker-build"
 
 on:
-  push:
-    branches:
-      - master
+  release:
+    types: [created]
 
 env:
   REGISTRY: ghcr.io

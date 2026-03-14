@@ -15,6 +15,16 @@ Format: `MAJOR.MINOR.PATCH` (e.g. `1.2.3`)
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- **CLAUDE.md** — Rule #8: auto-commit/push allowed after lint+tests pass; "release" command bumps version, tags, and pushes
+- **npm-test.yml** — Runs on all branch pushes (except master) + PRs to master; uses `lint:check`; Node 24; actions v4
+- **npm-publish.yml** — Renamed; Node 24; actions v4; removed invalid `needs: build`
+- **docker-build.yml** — Triggered on release (instead of push to master)
+- **codeql.yml** — Removed unnecessary Swift conditions
+
 ## [2.0.0] - 2026-03-08
 
 ### Added
