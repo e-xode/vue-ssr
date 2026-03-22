@@ -16,6 +16,7 @@ process.env.MONGO_USER = 'test'
 process.env.MONGO_PWD = 'test'
 process.env.MONGO_TYPE = 'mongodb'
 process.env.COOKIE_SECRET = 'test-secret-key'
+process.env.APP_NAME = 'App'
 
 // Global mocks
 global.console = {

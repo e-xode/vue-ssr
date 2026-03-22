@@ -2,7 +2,11 @@
   "name": "Vue SSR Starter Kit",
   "short_name": "Vue SSR",
   "start_url": "/",
+  "description": "Vue SSR Starter Kit - A modern server-side rendered Vue.js application",
   "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "en",
   "background_color": "#ffffff",
   "theme_color": "#42b883",
   "icons": [

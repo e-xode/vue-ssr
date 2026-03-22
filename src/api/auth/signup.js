@@ -1,15 +1,34 @@
 import bcrypt from 'bcryptjs'
 import { sendSecurityCodeEmail, generateSecurityCode, hashCode } from '#src/shared/email.js'
-import { USER_TYPES, SECURITY_CODE_EXPIRY_MS, BCRYPT_ROUNDS } from '#src/shared/const.js'
+import { USER_TYPES, SECURITY_CODE_EXPIRY_MS, BCRYPT_ROUNDS, EMAIL_REGEX } from '#src/shared/const.js'
 import { getClientIp } from '#src/shared/security.js'
 import { logEvent } from '#src/shared/logger.js'
+import { verifyCaptcha } from '#src/shared/captcha.js'
 
 export function setupSignupRoute(app, db) {
   app.post('/api/auth/signup', async (req, res) => {
-    const { email, password, name } = req.body
+    const email = req.body.email?.trim().toLowerCase()
+    const { password, name, captchaToken } = req.body
 
     if (!email || !password || !name) {
       return res.status(400).json({ error: 'error.auth.missingFields' })
+    }
+
+    if (!EMAIL_REGEX.test(email)) {
+      return res.status(400).json({ error: 'error.validation.invalidEmail' })
+    }
+
+    if (!password || password.length < 8) {
+      return res.status(400).json({ error: 'error.auth.passwordTooShort' })
+    }
+
+    if (!name || name.trim().length < 2) {
+      return res.status(400).json({ error: 'error.validation.nameTooShort' })
+    }
+
+    if (captchaToken) {
+      const captchaValid = await verifyCaptcha(captchaToken)
+      if (!captchaValid) return res.status(400).json({ error: 'error.auth.captchaFailed' })
     }
 
     try {

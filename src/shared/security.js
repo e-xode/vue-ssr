@@ -30,7 +30,7 @@ export async function recordLoginIp(db, userId, ip) {
   )
 }
 
-export async function destroyUserSessions(userId, excludeSessionId) {
+export async function destroyUserSessions(userId, excludeSessionId = null) {
   const sessionsDir = 'logs/sessions'
   const userIdStr = userId.toString()
 

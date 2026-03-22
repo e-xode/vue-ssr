@@ -91,6 +91,9 @@ export function createApplicationVuetify(ssr = false) {
         rounded: 'lg',
         variant: 'tonal',
       },
+      VTooltip: {
+        location: 'bottom',
+      },
     }
   })
 }

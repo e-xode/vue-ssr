@@ -6,16 +6,20 @@ export const SECURITY_CODE_MAX_ATTEMPTS = 3
 
 export const RESEND_COOLDOWN_MS = 30 * 1000
 
-export const DEFAULT_LOCALE = 'en'
-
 export const USER_SAFE_PROJECTION = {
   password: 0,
   securityCode: 0,
+  securityCodeHash: 0,
   securityCodeExpires: 0,
   securityCodeAttempts: 0,
-  pendingEmailCode: 0,
-  pendingEmailCodeExpires: 0,
-  pendingEmailCodeAttempts: 0
+  emailChangeCode: 0,
+  emailChangeHash: 0,
+  emailChangeExpires: 0,
+  emailChangeTo: 0,
+  resetPasswordCode: 0,
+  resetPasswordHash: 0,
+  resetPasswordExpires: 0,
+  loginHistory: 0
 }
 
 export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -29,6 +33,8 @@ export const SUPPORTED_LOCALES = [
   { code: 'en', intl: 'en-US', og: 'en_US', label: 'English', flag: 'gb' },
   { code: 'fr', intl: 'fr-FR', og: 'fr_FR', label: 'Français', flag: 'fr' }
 ]
+
+export const DEFAULT_LOCALE = 'en'
 
 export const LOCALE_CODES = SUPPORTED_LOCALES.map(l => l.code)
 
@@ -45,5 +51,5 @@ export function getOgLocale(locale) {
 }
 
 export function isAdmin(user) {
-  return user?.type === 'admin'
+  return user?.type === USER_TYPES.ADMIN
 }

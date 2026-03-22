@@ -1,4 +1,4 @@
-FROM node:22-alpine3.19 AS builder
+FROM node:24-alpine AS builder
 
 ARG NODE_HOST=https://www.mywebsite.com
 ARG NODE_PORT=3002
@@ -21,7 +21,7 @@ RUN npm run build
 
 # ----------------------------------------
 
-FROM node:22-slim AS runner
+FROM node:24-slim AS runner
 
 ARG NODE_HOST=https://www.mywebsite.com
 ARG NODE_PORT=3006
@@ -39,14 +39,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-COPY --from=builder /app/dist/ /app/dist/
-COPY  ./server.js /app/server.js
-COPY  ./src/ /app/src/
-COPY  ./package.json /app/package.json
+# Only copy what's needed for production
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/server.js ./server.js
+COPY --from=builder /app/src/shared ./src/shared
+COPY --from=builder /app/src/api ./src/api
+COPY --from=builder /app/src/locales ./src/locales
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/public ./public
 COPY ./docker/build/config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-RUN npm install -g npm@latest
-RUN npm install --production=true
+RUN npm prune --production
 
 EXPOSE $NODE_PORT
 
