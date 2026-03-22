@@ -90,6 +90,7 @@ async function handleSubmit() {
               v-model="form.email"
               :label="t('form.email')"
               type="email"
+              autocomplete="email"
               class="mb-4"
               :disabled="isSubmitting"
               required
@@ -98,6 +99,7 @@ async function handleSubmit() {
             <v-text-field
               v-model="form.code"
               :label="t('form.code')"
+              autocomplete="one-time-code"
               class="mb-4"
               :disabled="isSubmitting"
               required
@@ -107,6 +109,7 @@ async function handleSubmit() {
               v-model="form.password"
               :label="t('form.newPassword')"
               :type="showPassword ? 'text' : 'password'"
+              autocomplete="new-password"
               class="mb-4"
               :disabled="isSubmitting"
               required
@@ -117,6 +120,7 @@ async function handleSubmit() {
               v-model="form.passwordConfirm"
               :label="t('form.confirmPassword')"
               :type="showPassword ? 'text' : 'password'"
+              autocomplete="new-password"
               class="mb-6"
               :disabled="isSubmitting"
               required

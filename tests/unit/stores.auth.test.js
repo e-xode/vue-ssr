@@ -1,16 +1,20 @@
 // tests/unit/stores.auth.test.js
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { createPinia, setActivePinia } from 'pinia'
-import { useAuthStore } from '#src/stores/auth'
 
-// Mock fetchAPI
-global.fetch = vi.fn()
+// Mock apiFetch from shared/api
+const mockApiFetch = vi.fn()
+vi.mock('#src/shared/api', () => ({
+  apiFetch: (...args) => mockApiFetch(...args)
+}))
+
+import { useAuthStore } from '#src/stores/auth'
 
 describe('stores/auth.js', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     vi.clearAllMocks()
-    global.fetch.mockClear()
+    mockApiFetch.mockClear()
   })
 
   describe('useAuthStore', () => {
@@ -81,10 +85,7 @@ describe('stores/auth.js', () => {
     })
 
     it('should initialize user from server on first check', async () => {
-      global.fetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ user: { _id: '1', email: 'test@example.com' } })
-      })
+      mockApiFetch.mockResolvedValueOnce({ user: { _id: '1', email: 'test@example.com' } })
 
       const store = useAuthStore()
       await store.initializeUser()
@@ -93,16 +94,13 @@ describe('stores/auth.js', () => {
     })
 
     it('should not fetch user twice', async () => {
-      global.fetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ user: { _id: '1', email: 'test@example.com' } })
-      })
+      mockApiFetch.mockResolvedValueOnce({ user: { _id: '1', email: 'test@example.com' } })
 
       const store = useAuthStore()
       await store.initializeUser()
       await store.initializeUser()
 
-      expect(global.fetch).toHaveBeenCalledTimes(1)
+      expect(mockApiFetch).toHaveBeenCalledTimes(1)
     })
   })
 })

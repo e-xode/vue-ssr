@@ -4,7 +4,7 @@ import {
     createWebHistory
 } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { LOCALE_CODES, LOCALE_ROUTE_REGEX } from '@/shared/const'
+import { LOCALE_CODES, LOCALE_ROUTE_REGEX, DEFAULT_LOCALE } from '@/shared/const'
 
 const history = typeof window === 'undefined'
     ? createMemoryHistory()
@@ -18,7 +18,8 @@ const localeRoutes = [
         meta: {
             layout: 'public',
             title: 'meta.index.title',
-            description: 'meta.index.description'
+            description: 'meta.index.description',
+            keywords: 'meta.index.keywords'
         }
     },
     {
@@ -30,6 +31,7 @@ const localeRoutes = [
             guest: true,
             title: 'meta.signup.title',
             description: 'meta.signup.description',
+            keywords: 'meta.signup.keywords',
             robots: 'noindex, follow'
         }
     },
@@ -42,6 +44,7 @@ const localeRoutes = [
             guest: true,
             title: 'meta.signin.title',
             description: 'meta.signin.description',
+            keywords: 'meta.signin.keywords',
             robots: 'noindex, follow'
         }
     },
@@ -51,6 +54,8 @@ const localeRoutes = [
         component: () => import('@/views/Auth/VerifyCodeView.vue'),
         meta: {
             layout: 'minimal',
+            title: 'meta.verifyCode.title',
+            description: 'meta.verifyCode.description',
             robots: 'noindex, nofollow'
         }
     },
@@ -63,6 +68,7 @@ const localeRoutes = [
             requiresAuth: true,
             title: 'meta.dashboard.title',
             description: 'meta.dashboard.description',
+            keywords: 'meta.dashboard.keywords',
             robots: 'noindex, nofollow'
         }
     },
@@ -147,7 +153,8 @@ const localeRoutes = [
         meta: {
             layout: 'public',
             title: 'meta.contact.title',
-            description: 'meta.contact.description'
+            description: 'meta.contact.description',
+            keywords: 'meta.contact.keywords'
         }
     }
 ]
@@ -166,7 +173,7 @@ const routes = [
                 const browserLang = navigator.language?.slice(0, 2)
                 if (LOCALE_CODES.includes(browserLang)) return `/${browserLang}`
             }
-            return '/en'
+            return `/${DEFAULT_LOCALE}`
         }
     },
     {
@@ -202,19 +209,23 @@ router.beforeEach(async (to) => {
     const authStore = useAuthStore()
 
     if (!authStore.user && !authStore.loading) {
-        await authStore.fetchUser()
+        try {
+            await authStore.fetchUser()
+        } catch (e) {
+            console.error('Auth check failed:', e)
+        }
     }
 
     if (to.meta.guest && authStore.isAuthenticated) {
-        return { name: 'Dashboard', params: { locale: locale || 'en' } }
+        return { name: 'Dashboard', params: { locale: locale || DEFAULT_LOCALE } }
     }
 
     if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-        return { name: 'Signin', params: { locale: locale || 'en' } }
+        return { name: 'Signin', params: { locale: locale || DEFAULT_LOCALE }, query: { redirect: to.fullPath } }
     }
 
     if (to.meta.requiresAdmin && !authStore.isAdmin) {
-        return { name: 'Dashboard', params: { locale: locale || 'en' } }
+        return { name: 'Dashboard', params: { locale: locale || DEFAULT_LOCALE } }
     }
 
     return true

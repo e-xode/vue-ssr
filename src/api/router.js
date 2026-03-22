@@ -18,18 +18,18 @@ import { setupContactRoute } from './contact/send.js'
 
 const isProduction = process.env.NODE_ENV === 'production'
 
-const createLimiter = (max, windowMinutes = 15) => isProduction
-  ? rateLimit({
-      windowMs: windowMinutes * 60 * 1000,
-      max,
-      standardHeaders: true,
-      legacyHeaders: false,
-      handler: (req, res) => {
-        res.status(429).json({ error: 'error.tooManyRequests' })
-      }
-    })
-  : (req, res, next) => next()
+const createLimiter = (max) =>
+  isProduction
+    ? rateLimit({
+        windowMs: 15 * 60 * 1000,
+        max,
+        standardHeaders: true,
+        legacyHeaders: false,
+        message: { error: 'error.rateLimit' }
+      })
+    : (req, res, next) => next()
 
+const signupLimiter = createLimiter(5)
 const authLimiter = createLimiter(10)
 const accountLimiter = createLimiter(20)
 const contactLimiter = createLimiter(3)
@@ -37,7 +37,7 @@ const contactLimiter = createLimiter(3)
 export function registerApiRoutes(app, db) {
   setMiddlewareDb(db)
 
-  app.use('/api/auth/signup', authLimiter)
+  app.use('/api/auth/signup', signupLimiter)
   app.use('/api/auth/signin', authLimiter)
   app.use('/api/auth/verify-code', authLimiter)
   app.use('/api/auth/resend-code', authLimiter)

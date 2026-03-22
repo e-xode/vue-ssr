@@ -1,64 +1,46 @@
 # Changelog
 
-Tous les changements notables de ce projet seront documentés ici.
+## 2.0.0
 
-Le format est basé sur [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-et ce project adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+### Package Updates
+- Vue 3.5 → 3.6, Vuetify 3.8 → 3.9, Vite 6.3 → 7.0, Vitest 3 → 4
+- vue-router 4.5 → 4.6, vue-i18n 11.1 → 12.0, pinia 3.0 → 3.1
+- Express 5.1, Helmet 9.0, mongoose 8.15
+- Node.js >=24.0.0, Docker node:24
+- Added: dompurify 3.x
 
-## Versioning
+### New Features
+- Google Analytics integration (GA_MEASUREMENT_ID)
+- reCAPTCHA v3 integration (server + client)
+- Dynamic sitemap with 1h TTL cache
+- Graceful shutdown (SIGTERM/SIGINT)
+- MongoDB connection pooling + ensureIndexes
+- BreadcrumbList Schema.org structured data
+- Mobile responsive header with navigation drawer
+- Multi-column footer with version display
+- SCSS animations library (12 keyframes)
+- SCSS utilities (gradients, glass, badges, skeleton)
+- apiFetch with AbortController timeout (15s)
 
-- **MAJOR**: Changes incompatibles
-- **MINOR**: Nouvelles features compatibles backwards
-- **PATCH**: Bugfixes compatibles
+### Improvements
+- Production-conditional CSP (disabled in dev)
+- Graduated rate limiting per endpoint type
+- Keywords meta tag support in routes
+- Facebook Open Graph app_id support
+- Multiple favicon formats (SVG, PNG, ICO)
+- OG image dimensions (1200x630)
+- Auth views: autocomplete attributes, captcha, forgot password link
+- Redirect query param preservation on auth redirects
+- useLocalePath: locale validation, i18n sync, localStorage persistence
+- Auth store migrated to apiFetch
+- Error stack traces hidden in production
+- Docker: selective COPY, npm prune --production
+- ESLint: __APP_VERSION__ global
 
-Format: `MAJOR.MINOR.PATCH` (e.g. `1.2.3`)
-
----
-
-## [2.0.0] - 2026-03-08
-
-### Added
-
-- **Contact page** — `ContactView.vue` + `POST /api/contact` with rate limiting (3/15min), validation, logEvent
-- **Locale-prefixed routing** — All routes now use `/:locale(en|fr)/` prefix for SEO-friendly URLs
-- **`useLocalePath` composable** — `localePath(path)`, `switchLocale(code)`, `locale` computed for all views
-- **`shared/dbHelpers.js`** — `parseObjectId()`, `parsePagination()`, `findUserSafe()`, `getUserWithCounts()`
-- **`shared/utils.js`** — `escapeHtml()` function for SSR meta tags
-- **`__APP_VERSION__`** — Build-time constant from package.json via vite.config.js
-- **`@root` alias** — Vite alias for project root files
-- **Contact i18n keys** — `contact.*`, `nav.contact`, `meta.contact.*` (EN/FR)
-- **Missing auth i18n keys** — `forgotPassword.description/sentHint/enterCode/resend`, `resetPassword.passwordMismatch/description`, `error.invalidEmail/missingFields/messageTooLong`
-
-### Changed
-
-- **SCSS externalized** — All component styles extracted to separate `.scss` files (8 files)
-- **`entry-server.js`** — Meta titles/descriptions resolved via `i18n.global.t()`, hreflang for all LOCALE_CODES, `og:locale:alternate` tags
-- **`entry-client.js`** — `afterEach` + `isReady` hooks sync `route.params.locale` → i18n → localStorage
-- **`router.js`** — Complete rewrite: `localeRoutes[]` under `/:locale(en|fr)/` parent, root redirect based on localStorage → browser language → default
-- **`TheHeader.vue`** — Language switcher with SVG flag dropdowns, uses `useLocalePath`
-- **`TheFooter.vue`** — Contact link added, uses `useLocalePath`
-- **All views** — Updated to use `localePath()` for all navigation links
-- **`vite.config.js`** — Reads package.json for `__APP_VERSION__` define
-- **`shared/const.js`** — Added `DEFAULT_LOCALE`, expanded `USER_SAFE_PROJECTION`
-- **`shared/api.js`** — Added `safeJson()`, FormData support, rate-limit detection (`isRateLimit`)
-- **`api/router.js`** — Added `contactLimiter` (3/15min), `setupContactRoute`
-- **`auth/me.js`** — Uses `getUserWithCounts` from dbHelpers
-- **`auth/changePassword.js`** — Destroys other sessions after password change
-- **`auth/changeEmail.js`** — Destroys other sessions after email verification
-- **Version** — Bumped to 2.0.0
-
-### Fixed
-
-- **SSR 404 status** — `entry-server.js` now returns `statusCode` from route meta, `server.js` uses it
-- **`signout.js` ObjectId** — Converts `req.session.userId` to ObjectId before `logEvent`
-- **Missing i18n keys** — Added all missing keys for auth, contact, and error messages
-
-### Security
-
-- **`email.js` crypto** — `Math.random()` → `crypto.randomInt()`, base64 → SHA-256 hex, string compare → `timingSafeEqual`
-- **`destroyUserSessions`** — Added `excludeSessionId` param to keep current session alive
-- **Helmet CSP** — Configured Content-Security-Policy (was disabled)
-- **COOKIE_SECRET validation** — Server refuses to start in production if missing or default value
+### Bug Fixes
+- Fixed locale hardcoding (now uses DEFAULT_LOCALE)
+- Fixed trailing slash on siteUrl in SEO tags
+- Fixed session cleanup error handling
 
 ---
 

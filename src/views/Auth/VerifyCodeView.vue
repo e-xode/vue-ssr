@@ -1,12 +1,13 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useLocalePath } from '@/composables/useLocalePath'
 
 const { t } = useI18n()
 const router = useRouter()
+const route = useRoute()
 const authStore = useAuthStore()
 const { localePath } = useLocalePath()
 
@@ -110,7 +111,7 @@ async function handleSubmit() {
   isSubmitting.value = false
 
   if (result.status === 'success') {
-    await router.push(localePath('/dashboard'))
+    await router.push(route.query.redirect || localePath('/dashboard'))
   } else {
     digits.value = Array(CODE_LENGTH).fill('')
     if (result.attempts !== undefined) {
@@ -261,6 +262,16 @@ async function handleResend() {
               {{ canResend ? t('verify.resend') : t('verify.resendIn', { seconds: resendTimer }) }}
             </v-btn>
           </p>
+
+          <div class="text-center">
+            <v-btn
+              variant="text"
+              :to="localePath('/signin')"
+              class="mt-2"
+            >
+              {{ t('auth.verifyCode.backToLogin') }}
+            </v-btn>
+          </div>
         </v-card>
       </v-col>
     </v-row>

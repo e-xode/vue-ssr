@@ -13,3 +13,17 @@ MONGO_USER=user
 MONGO_PWD=password
 MONGO_TYPE=mongodb
 COOKIE_SECRET=your-secret-key-change-in-production
+
+# Google Analytics
+GA_MEASUREMENT_ID=
+
+# reCAPTCHA v3
+RECAPTCHA_SITE_KEY=
+RECAPTCHA_SECRET_KEY=
+
+# Facebook
+FACEBOOK_APP_ID=
+
+# Social Media Links
+SOCIAL_FACEBOOK=
+SOCIAL_INSTAGRAM=

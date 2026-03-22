@@ -20,12 +20,16 @@
     "dashboard": "Tableau de bord",
     "account": "Mon compte",
     "admin": "Administration",
+    "language": "Langue",
     "signin": "Connexion",
     "signup": "S'inscrire",
     "signout": "Déconnexion"
   },
   "footer": {
-    "copyright": "© 2026. Tous droits réservés.",
+    "copyright": "© {year}. Tous droits réservés.",
+    "description": "Un starter kit Vue SSR moderne avec authentification, i18n et panneau d'administration.",
+    "legal": "Mentions légales",
+    "links": "Liens",
     "privacy": "Politique de confidentialité",
     "terms": "Conditions d'utilisation"
   },

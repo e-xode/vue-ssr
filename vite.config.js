@@ -36,7 +36,7 @@ export default defineConfig({
       preprocessorOptions: {
           scss: {
               api: 'modern-compiler',
-              additionalData: `@use "${srcPath.replace(/\\/g, '/')}/styles/variables" as *;\n@use "${srcPath.replace(/\\/g, '/')}/styles/mixins" as *;\n`
+              additionalData: `@use "${srcPath.replace(/\\/g, '/')}/styles/inject" as *;\n`
           }
       }
   },
