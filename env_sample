@@ -1,6 +1,6 @@
 NODE_ENV=development
-NODE_PORT=5173
-NODE_HOST=http://localhost:5173
+NODE_PORT=3002
+NODE_HOST=http://localhost:3002
 MAILER_HOST=smtp.example.com
 MAILER_FROM=noreply@example.com
 MAILER_LOGIN=your_email@example.com
