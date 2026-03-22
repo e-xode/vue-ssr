@@ -1,6 +1,6 @@
 {
   "name": "@e-xode/vue-ssr",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Vue 3 SSR Starter Kit with Authentication",
   "type": "module",
   "imports": {

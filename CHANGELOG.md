@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.1
+
+### Bug Fixes
+- Fixed Dockerfile COPY path (`src/locales` → `src/translate`)
+- Changed npm-publish workflow trigger from release to tag push (`v*`)
+- Fixed env_sample formatting
+
 ## 3.0.0
 
 ### Package Updates
