@@ -100,6 +100,13 @@ if (db && !error) {
       legacyHeaders: false,
       message: { error: 'error.rateLimit' }
     }))
+
+    app.use(rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 500,
+      standardHeaders: true,
+      legacyHeaders: false
+    }))
   }
 
   app.use(sessionMiddleware)
@@ -247,7 +254,7 @@ Sitemap: ${siteUrl}/sitemap.xml`)
     } catch (e) {
       vite?.ssrFixStacktrace(e)
       console.error(e.stack)
-      res.status(500).end(isProduction ? 'Internal Server Error' : e.stack)
+      res.status(500).set({ 'Content-Type': 'text/plain' }).end('Internal Server Error')
     }
   })
 
