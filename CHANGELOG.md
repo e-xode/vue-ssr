@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0
+## 3.0.0
 
 ### Package Updates
 - Vue 3.5 → 3.6, Vuetify 3.8 → 3.9, Vite 6.3 → 7.0, Vitest 3 → 4
