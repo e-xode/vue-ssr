@@ -1,15 +1,18 @@
 <script setup>
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useLocalePath } from '@/composables/useLocalePath'
+import { useCaptcha } from '@/composables/useCaptcha'
 import { mdiEye, mdiEyeOff } from '@mdi/js'
 
 const { t } = useI18n()
 const router = useRouter()
+const route = useRoute()
 const authStore = useAuthStore()
 const { localePath } = useLocalePath()
+const { executeRecaptcha } = useCaptcha()
 
 const form = ref({
   email: '',
@@ -24,15 +27,19 @@ async function handleSubmit() {
   errorMessage.value = ''
   isSubmitting.value = true
 
+  const captchaToken = await executeRecaptcha('signin')
+
   const result = await authStore.signin({
     email: form.value.email,
-    password: form.value.password
+    password: form.value.password,
+    captchaToken
   })
 
   isSubmitting.value = false
 
   if (result.status === 'success') {
-    await router.push(localePath('/auth/verify-code'))
+    const redirect = route.query.redirect
+    await router.push({ path: localePath('/auth/verify-code'), query: redirect ? { redirect } : {} })
   } else {
     errorMessage.value = result.error || t('error.auth.signinFailed')
   }
@@ -70,6 +77,7 @@ async function handleSubmit() {
               v-model="form.email"
               :label="t('form.email')"
               type="email"
+              autocomplete="email"
               class="mb-4"
               :disabled="isSubmitting"
               required
@@ -80,11 +88,21 @@ async function handleSubmit() {
               :label="t('form.password')"
               :type="showPassword ? 'text' : 'password'"
               :append-inner-icon="showPassword ? mdiEyeOff : mdiEye"
+              autocomplete="current-password"
               class="mb-6"
               :disabled="isSubmitting"
               required
               @click:append="showPassword = !showPassword"
             />
+
+            <div class="text-right mb-4">
+              <router-link
+                :to="localePath('/forgot-password')"
+                class="text-primary text-caption"
+              >
+                {{ t('auth.signin.forgotPassword') }}
+              </router-link>
+            </div>
 
             <v-btn
               type="submit"

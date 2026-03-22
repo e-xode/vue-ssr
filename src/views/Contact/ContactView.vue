@@ -77,8 +77,10 @@
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { apiFetch } from '@/shared/api'
+import { useCaptcha } from '@/composables/useCaptcha'
 
 const { t, locale } = useI18n()
+const { executeRecaptcha } = useCaptcha()
 
 const form = ref({ name: '', email: '', message: '' })
 const loading = ref(false)
@@ -94,9 +96,11 @@ async function handleSubmit() {
   error.value = ''
 
   try {
+    const captchaToken = await executeRecaptcha('contact')
+
     await apiFetch('/api/contact', {
       method: 'POST',
-      body: JSON.stringify({ ...form.value, locale: locale.value })
+      body: JSON.stringify({ ...form.value, locale: locale.value, captchaToken })
     })
     success.value = true
   } catch (err) {

@@ -4,12 +4,14 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useLocalePath } from '@/composables/useLocalePath'
+import { useCaptcha } from '@/composables/useCaptcha'
 import { mdiEye, mdiEyeOff } from '@mdi/js'
 
 const { t } = useI18n()
 const router = useRouter()
 const authStore = useAuthStore()
 const { localePath } = useLocalePath()
+const { executeRecaptcha } = useCaptcha()
 
 const form = ref({
   email: '',
@@ -25,10 +27,13 @@ async function handleSubmit() {
   errorMessage.value = ''
   isSubmitting.value = true
 
+  const captchaToken = await executeRecaptcha('signup')
+
   const result = await authStore.signup({
     email: form.value.email,
     password: form.value.password,
-    name: form.value.name
+    name: form.value.name,
+    captchaToken
   })
 
   isSubmitting.value = false
@@ -72,6 +77,7 @@ async function handleSubmit() {
               v-model="form.name"
               :label="t('form.name')"
               type="text"
+              autocomplete="name"
               class="mb-4"
               :disabled="isSubmitting"
               required
@@ -81,6 +87,7 @@ async function handleSubmit() {
               v-model="form.email"
               :label="t('form.email')"
               type="email"
+              autocomplete="email"
               class="mb-4"
               :disabled="isSubmitting"
               required
@@ -91,6 +98,7 @@ async function handleSubmit() {
               :label="t('form.password')"
               :type="showPassword ? 'text' : 'password'"
               :append-inner-icon="showPassword ? mdiEyeOff : mdiEye"
+              autocomplete="new-password"
               class="mb-6"
               :disabled="isSubmitting"
               required

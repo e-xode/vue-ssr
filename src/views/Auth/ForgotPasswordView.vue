@@ -93,6 +93,7 @@ async function handleSubmit() {
                 v-model="email"
                 :label="t('form.email')"
                 type="email"
+                autocomplete="email"
                 class="mb-6"
                 :disabled="isSubmitting"
                 required
