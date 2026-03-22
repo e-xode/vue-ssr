@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.2
+
+### Bug Fixes
+- Added `repository.url` in package.json for npm provenance verification
+
 ## 3.0.1
 
 ### Bug Fixes
