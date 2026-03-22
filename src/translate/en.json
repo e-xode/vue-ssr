@@ -20,12 +20,16 @@
     "dashboard": "Dashboard",
     "account": "My Account",
     "admin": "Admin",
+    "language": "Language",
     "signin": "Sign In",
     "signup": "Sign Up",
     "signout": "Sign Out"
   },
   "footer": {
-    "copyright": "© 2026. All rights reserved.",
+    "copyright": "© {year}. All rights reserved.",
+    "description": "A modern Vue SSR starter kit with authentication, i18n, and admin panel.",
+    "legal": "Legal",
+    "links": "Links",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service"
   },
