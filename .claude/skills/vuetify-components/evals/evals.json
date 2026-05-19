@@ -1,0 +1,109 @@
+{
+  "skill_name": "vuetify-components",
+  "evals": [
+    {
+      "id": 1,
+      "name": "build-login-form",
+      "prompt": "Create a login form with email and password fields, including validation and a submit button.",
+      "assertions": [
+        { "text": "Uses v-form with ref and @submit.prevent" },
+        { "text": "Uses v-text-field with variant='outlined' (or relies on project defaults)" },
+        { "text": "Includes validation rules (required, email format)" },
+        { "text": "Uses @mdi/js icons (mdiEmail, mdiLock) for field icons" },
+        { "text": "Uses v-btn with color='primary' for submit" },
+        { "text": "Calls form.value.validate() before submitting" },
+        { "text": "All user-visible text uses t() for i18n" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "data-table-pagination",
+      "prompt": "Build an admin users table with server-side pagination, sorting, and action buttons for edit and delete.",
+      "assertions": [
+        { "text": "Uses v-data-table-server (not client-side v-data-table)" },
+        { "text": "Defines headers array with title, key, sortable properties" },
+        { "text": "Implements v-model:options with page, itemsPerPage, sortBy" },
+        { "text": "Passes items-length for total count" },
+        { "text": "Uses custom slot (#item.actions) for edit/delete buttons" },
+        { "text": "Imports icons from @mdi/js (mdiPencil, mdiDelete)" },
+        { "text": "Shows loading state while fetching data" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "icon-usage",
+      "prompt": "How do I use icons in this project? I want to add a search icon to a text field and a plus icon to a button.",
+      "assertions": [
+        { "text": "Imports from @mdi/js: mdiMagnify and mdiPlus" },
+        { "text": "Uses :prepend-inner-icon or :append-inner-icon for v-text-field" },
+        { "text": "Uses :prepend-icon or :icon for v-btn" },
+        { "text": "Does NOT use string class names like 'mdi-magnify'" },
+        { "text": "Mentions https://pictogrammers.com/library/mdi/ for finding icons" }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "confirm-dialog",
+      "prompt": "Create a reusable confirmation dialog that I can use for delete confirmations across the app.",
+      "assertions": [
+        { "text": "Uses v-dialog with v-model and max-width" },
+        { "text": "Sets persistent prop to prevent outside-click dismiss" },
+        { "text": "Uses v-card with title, text, and actions slots" },
+        { "text": "Provides cancel and confirm buttons" },
+        { "text": "Uses Promise-based pattern or defineExpose for parent usage" },
+        { "text": "Accepts color parameter for destructive actions (color='error')" },
+        { "text": "All text uses t() for i18n" }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "theming-dark-mode",
+      "prompt": "How do I toggle between light and dark theme in the app? What colors are available?",
+      "assertions": [
+        { "text": "Uses useTheme() composable from vuetify" },
+        { "text": "Toggles theme.global.name.value between 'light' and 'dark'" },
+        { "text": "Lists project color tokens: primary (#2563eb), secondary (#7c3aed), accent (#06b6d4)" },
+        { "text": "Mentions dark theme overrides surface/background/on-* colors" },
+        { "text": "Explains colors are used via color='primary' prop, never hardcoded hex" }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "responsive-navigation",
+      "prompt": "Create a responsive layout with a side navigation that's a temporary drawer on mobile and a rail on desktop.",
+      "assertions": [
+        { "text": "Uses useDisplay() composable from vuetify to detect mobile" },
+        { "text": "Uses v-navigation-drawer with :temporary='mobile' and :rail='!mobile'" },
+        { "text": "Optionally uses expand-on-hover for rail mode" },
+        { "text": "Includes v-list with v-list-item for nav items" },
+        { "text": "Uses v-app-bar-nav-icon or button to toggle drawer" },
+        { "text": "Icons imported from @mdi/js" }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "snackbar-notification",
+      "prompt": "Add a toast notification that shows success or error messages after form submissions.",
+      "assertions": [
+        { "text": "Uses v-snackbar with v-model" },
+        { "text": "Sets location prop (e.g., 'bottom end')" },
+        { "text": "Sets timeout (e.g., 4000ms)" },
+        { "text": "Uses color prop for success/error variants" },
+        { "text": "Provides a function to trigger the snackbar with custom text and color" },
+        { "text": "Includes close button via #actions slot" }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "card-with-loading",
+      "prompt": "Create a card component that shows a skeleton loader while data is being fetched, then displays content.",
+      "assertions": [
+        { "text": "Uses v-skeleton-loader with appropriate type (e.g., card-heading, text)" },
+        { "text": "Conditionally renders skeleton vs content with v-if/v-else" },
+        { "text": "Uses v-card for the content container" },
+        { "text": "Card uses project defaults (rounded xl, no elevation, border)" },
+        { "text": "May use the v-card :loading prop with v-progress-linear" }
+      ]
+    }
+  ]
+}

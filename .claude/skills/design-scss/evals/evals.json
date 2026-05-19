@@ -1,0 +1,90 @@
+{
+  "skill_name": "design-scss",
+  "evals": [
+    {
+      "id": 1,
+      "name": "create-component-scss",
+      "prompt": "I'm creating a new ProfileView component at src/views/Profile/ProfileView.vue. It needs a card layout with padding, a header row, and some content. Set up the SCSS file for me.",
+      "assertions": [
+        { "text": "Creates src/views/Profile/ProfileView.scss (not inline styles)" },
+        { "text": "Uses <style lang=\"scss\" scoped src=\"./ProfileView.scss\"></style> reference" },
+        { "text": "Uses $spacing-* tokens for padding and gaps" },
+        { "text": "Uses mixins like @include flex-col or @include flex-between" },
+        { "text": "Does not include code comments in the SCSS file" },
+        { "text": "Does not add @use or @import statements (auto-injected)" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "responsive-mixin-usage",
+      "prompt": "I have a grid that should show 1 column on mobile, 2 columns on tablets, and 3 columns on desktop. How do I make it responsive?",
+      "assertions": [
+        { "text": "Uses @include respond-to('md') for tablet breakpoint" },
+        { "text": "Uses @include respond-to('lg') or respond-to('xl') for desktop" },
+        { "text": "Uses mobile-first approach (base styles are single column)" },
+        { "text": "References correct breakpoint values (md: 768px, lg: 1024px)" },
+        { "text": "Does not use raw @media queries with hardcoded pixel values" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "choose-spacing-token",
+      "prompt": "What spacing value should I use for the padding inside a card component and the gap between cards in a list?",
+      "assertions": [
+        { "text": "Recommends $spacing-md (16px) for card internal padding" },
+        { "text": "Recommends $spacing-sm (8px) or $spacing-md (16px) for gap between items" },
+        { "text": "References the spacing scale from variables.scss" },
+        { "text": "Does not suggest hardcoded pixel values" },
+        { "text": "May suggest $spacing-lg for larger sections" }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "add-entrance-animation",
+      "prompt": "I want the feature cards on my landing page to fade in one by one when the page loads. How should I do this?",
+      "assertions": [
+        { "text": "Recommends .animate-fade-up or .animate-reveal class" },
+        { "text": "Uses .delay-1, .delay-2, .delay-3 classes for staggering" },
+        { "text": "Mentions that prefers-reduced-motion is handled automatically" },
+        { "text": "Shows the class applied in the template HTML" },
+        { "text": "Does not suggest writing custom @keyframes (use existing ones)" }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "utility-class-selection",
+      "prompt": "I need a frosted glass panel with a status badge that says 'Active' and a heading with gradient text. What classes should I use?",
+      "assertions": [
+        { "text": "Uses .glass or .glass-dark for the frosted panel" },
+        { "text": "Uses .badge .badge-success for the Active status badge" },
+        { "text": "Uses .text-gradient-primary (or secondary/accent) for the heading" },
+        { "text": "References _utilities.scss as the source" },
+        { "text": "Shows correct HTML class application" }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "shadow-and-hover-choice",
+      "prompt": "I have a card that should have subtle elevation and lift slightly when hovered. What's the best approach?",
+      "assertions": [
+        { "text": "Uses $shadow-md or $shadow-sm for the base shadow" },
+        { "text": "Recommends @include hover-lift mixin OR .hover-lift utility class" },
+        { "text": "Does not use hardcoded box-shadow values" },
+        { "text": "References the transition being included in hover-lift" },
+        { "text": "May mention $shadow-lg as the hover shadow level" }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "skeleton-loading-pattern",
+      "prompt": "I need to show a loading placeholder while my API data loads. The placeholder should look like a card with a title and two lines of text.",
+      "assertions": [
+        { "text": "Uses the .skeleton utility class" },
+        { "text": "Shows multiple skeleton divs with varying widths for realistic appearance" },
+        { "text": "Mentions the shimmer animation is automatic" },
+        { "text": "Uses appropriate height/width styling for the placeholders" },
+        { "text": "Does not suggest installing a third-party skeleton library" }
+      ]
+    }
+  ]
+}

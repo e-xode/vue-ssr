@@ -1,0 +1,26 @@
+[
+  {
+    "prompt": "Add a new translation key for a 'Terms accepted' success message on the signup page",
+    "expected_behavior": "Creates key auth.signup.termsAccepted (or similar) in BOTH en.json and fr.json, placed alphabetically within the auth.signup section, with appropriate English and French values"
+  },
+  {
+    "prompt": "I need to display 'Your session expires in {minutes} minutes' on the dashboard",
+    "expected_behavior": "Adds dashboard.sessionExpiring (or similar) with {minutes} interpolation to both locale files, uses t('dashboard.sessionExpiring', { minutes }) in the template"
+  },
+  {
+    "prompt": "The French translation for error.auth.blocked is missing, fix it",
+    "expected_behavior": "Runs the parity check script or inspects fr.json, identifies the missing key, adds the French translation for error.auth.blocked in fr.json at the correct alphabetical position"
+  },
+  {
+    "prompt": "Where should I put a translation key for a new 'notifications' page title?",
+    "expected_behavior": "Recommends meta.notifications.title for the SEO title and a new notifications section (or similar) for page-specific strings, following the section inventory and naming conventions"
+  },
+  {
+    "prompt": "Check if the locale files are in sync",
+    "expected_behavior": "Runs python3 .claude/skills/translate/scripts/check_locales.py --root . and reports the result (parity OK or lists mismatched keys)"
+  },
+  {
+    "prompt": "Add a confirmation dialog message for deleting a contact submission: 'Are you sure you want to delete the message from {name}?'",
+    "expected_behavior": "Adds contact.deleteConfirm.message (or similar) with {name} interpolation to both en.json and fr.json, ensures the {name} parameter appears in both translations, places key alphabetically"
+  }
+]

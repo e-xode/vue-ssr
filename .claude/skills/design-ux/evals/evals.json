@@ -1,0 +1,83 @@
+{
+  "skill_name": "design-ux",
+  "evals": [
+    {
+      "id": 1,
+      "name": "design-direction-choice",
+      "prompt": "I'm building a pricing page. Should I use cards side-by-side or a comparison table? The page has 3 plans with 8 features each.",
+      "assertions": [
+        { "text": "Recommends cards for visual hierarchy (each plan is a focal point)" },
+        { "text": "Mentions that cards work better on mobile (stack vertically)" },
+        { "text": "Suggests highlighting the recommended plan with primary color or elevation" },
+        { "text": "Notes the table approach is acceptable on desktop but problematic on mobile" },
+        { "text": "References spacing rhythm (consistent padding within cards)" },
+        { "text": "Recommends a single prominent CTA per card" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "accessibility-audit",
+      "prompt": "I have a button that's just an icon (trash can) for deleting items. The icon is 20x20px and uses the error color. Is this accessible?",
+      "assertions": [
+        { "text": "Identifies missing aria-label as critical issue" },
+        { "text": "Notes 20x20px is below the 44x44px minimum touch target" },
+        { "text": "Mentions aria-label must use t() for i18n" },
+        { "text": "Recommends expanding the clickable area with padding" },
+        { "text": "Notes color alone is insufficient — needs text or aria context" },
+        { "text": "Suggests adding a confirmation step for destructive actions" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "responsive-layout-decision",
+      "prompt": "I have a dashboard with 4 metric cards, a chart, and a data table. How should this lay out across breakpoints?",
+      "assertions": [
+        { "text": "Recommends mobile-first: stacked single column on xs" },
+        { "text": "Suggests 2x2 grid for metric cards on sm/md, 4-across on lg+" },
+        { "text": "Mentions chart should be full-width on all breakpoints" },
+        { "text": "Recommends card view for data table on mobile, full table on lg+" },
+        { "text": "References the breakpoint values from the design system" },
+        { "text": "Discusses content priority (metrics > chart > table)" }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "micro-interaction-design",
+      "prompt": "I want to add feedback when a user successfully submits a form. What's the best approach?",
+      "assertions": [
+        { "text": "Recommends v-snackbar with success color for transient confirmation" },
+        { "text": "Mentions appropriate duration (around 3000ms)" },
+        { "text": "Suggests button loading state during submission" },
+        { "text": "Notes the button should show disabled/loading while request is in flight" },
+        { "text": "Mentions respecting prefers-reduced-motion" },
+        { "text": "May suggest optimistic UI pattern if action is quick" }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "visual-hierarchy-review",
+      "prompt": "My page has three buttons: 'Save Draft', 'Preview', and 'Publish'. They're all using the primary blue color with filled variant. Is this correct?",
+      "assertions": [
+        { "text": "Identifies the problem: all buttons competing for attention equally" },
+        { "text": "Recommends only 'Publish' (primary action) uses filled primary variant" },
+        { "text": "Suggests 'Preview' as outlined or text variant (secondary action)" },
+        { "text": "Suggests 'Save Draft' as text variant or neutral color (tertiary action)" },
+        { "text": "References size > color > weight > position hierarchy principle" },
+        { "text": "May mention positioning: primary action rightmost in button group" }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "dark-mode-color-semantics",
+      "prompt": "I'm adding a status badge component that uses green for active, red for inactive, and yellow for pending. How should this work in dark mode?",
+      "assertions": [
+        { "text": "Notes colors must maintain semantic meaning across modes" },
+        { "text": "Recommends adjusting saturation/brightness for dark backgrounds (lighter tints)" },
+        { "text": "Mentions contrast requirements still apply (3:1 minimum for UI components)" },
+        { "text": "Suggests pairing color with text label or icon (color not sole indicator)" },
+        { "text": "References project's SCSS variables rather than hardcoded hex values" },
+        { "text": "May recommend tonal variant for badges (Vuetify's default)" }
+      ]
+    }
+  ]
+}

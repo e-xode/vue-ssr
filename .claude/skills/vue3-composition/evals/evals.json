@@ -1,0 +1,95 @@
+{
+  "skill_name": "vue3-composition",
+  "evals": [
+    {
+      "id": 1,
+      "name": "composable-creation",
+      "prompt": "I need a composable that tracks whether the user has scrolled past a certain threshold. It should return a reactive boolean.",
+      "assertions": [
+        { "text": "Creates a function named useScrollThreshold or similar with use prefix" },
+        { "text": "Uses ref() for the boolean state, not reactive()" },
+        { "text": "Registers scroll listener in onMounted() (SSR-safe)" },
+        { "text": "Removes scroll listener in onUnmounted() (cleanup)" },
+        { "text": "Returns a plain object with the reactive ref" },
+        { "text": "Places file in src/composables/" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "ref-vs-reactive-decision",
+      "prompt": "Should I use reactive() for my form state object that has email, password, and remember fields?",
+      "assertions": [
+        { "text": "States that this project uses ref() exclusively, never reactive()" },
+        { "text": "Shows the pattern: ref({ email: '', password: '', remember: false })" },
+        { "text": "Explains that ref allows reassignment and consistent .value access" },
+        { "text": "Warns against destructuring ref.value (loses reactivity)" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "ssr-safe-pattern",
+      "prompt": "I want to read the user's preferred color scheme from localStorage when the component loads. How do I do this safely with SSR?",
+      "assertions": [
+        { "text": "Wraps localStorage access in onMounted() or typeof window check" },
+        { "text": "Explains that setup() runs on both server and client" },
+        { "text": "Shows code with onMounted(() => { localStorage.getItem(...) })" },
+        { "text": "Never accesses localStorage at the top level of setup" }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "lifecycle-hooks-usage",
+      "prompt": "I need to set up a WebSocket connection when my component mounts and close it when the component is destroyed.",
+      "assertions": [
+        { "text": "Uses onMounted() to establish the WebSocket connection" },
+        { "text": "Uses onUnmounted() to close the connection (cleanup)" },
+        { "text": "Stores the socket reference in a variable accessible to both hooks" },
+        { "text": "Does NOT use onBeforeMount or setup-level connection (SSR unsafe)" }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "watcher-setup",
+      "prompt": "I want to fetch new data whenever the route parameter 'id' changes. What's the correct pattern?",
+      "assertions": [
+        { "text": "Uses watch() with a getter: watch(() => route.params.id, cb)" },
+        { "text": "Does NOT use watchEffect() (project convention)" },
+        { "text": "May suggest { immediate: true } to also fetch on initial load" },
+        { "text": "Uses useRoute() from vue-router to access route" }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "define-props-emits",
+      "prompt": "I'm creating a reusable input component that receives a value prop and emits changes. Show me the correct pattern.",
+      "assertions": [
+        { "text": "Uses defineProps() with runtime declaration (type, required/default)" },
+        { "text": "Uses defineEmits(['update:modelValue']) for v-model support" },
+        { "text": "Uses <script setup> syntax exclusively" },
+        { "text": "May mention defineModel() as Vue 3.4+ alternative" }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "template-ref-pattern",
+      "prompt": "How do I programmatically focus an input element after a button click in Vue 3?",
+      "assertions": [
+        { "text": "Declares const inputEl = ref(null) for the template ref" },
+        { "text": "Uses ref=\"inputEl\" attribute in the template" },
+        { "text": "Accesses via inputEl.value.focus() (with .value)" },
+        { "text": "May wrap in nextTick() if focus depends on a state change" }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "computed-usage",
+      "prompt": "I have a list of items and want to show only active ones, plus display a count. What's the best pattern?",
+      "assertions": [
+        { "text": "Uses computed() for the filtered list (derived state)" },
+        { "text": "Uses computed() for the count (derived from filtered list)" },
+        { "text": "Does NOT use a watcher to maintain a separate filtered array" },
+        { "text": "Shows ref() for the source items array" }
+      ]
+    }
+  ]
+}

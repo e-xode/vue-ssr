@@ -1,0 +1,90 @@
+{
+  "skill_name": "claude-anthropic",
+  "evals": [
+    {
+      "id": 1,
+      "name": "new-skill-placement",
+      "prompt": "I want to create a new skill that documents how we handle email sending in the project. Where should it go and what should the folder be named?",
+      "assertions": [
+        { "text": "Proposes the path .claude/skills/vue-ssr-email/ (or similar kebab-case with vue-ssr- prefix)" },
+        { "text": "States that the skill folder name must match the frontmatter name exactly" },
+        { "text": "Mentions the domain prefix convention (vue-ssr-* for project-scoped skills)" },
+        { "text": "Requires a SKILL.md file inside the folder" },
+        { "text": "Recommends a references/ subdirectory if the skill exceeds ~200 lines" },
+        { "text": "Mentions running scripts/audit.py after creation to validate" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "claude-md-bloat-detection",
+      "prompt": "I added a 50-line section to CLAUDE.md explaining how the SSR lifecycle works step by step. Is that okay?",
+      "assertions": [
+        { "text": "States the content does NOT belong in CLAUDE.md (it is knowledge, not a hard rule)" },
+        { "text": "References the 10 KB budget" },
+        { "text": "Recommends moving the content to a skill (e.g. vue-ssr-architecture)" },
+        { "text": "Explains CLAUDE.md should only contain hard rules needed every turn" },
+        { "text": "May suggest the content already exists in the vue-ssr-architecture skill" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "agent-validation-anti-pattern",
+      "prompt": "I'm writing a new sub-agent for reviewing Vue components. In its instructions I want it to run 'npm run lint' to verify its own changes. Is that correct?",
+      "assertions": [
+        { "text": "Clearly states this is an anti-pattern / violates the sub-agent contract" },
+        { "text": "Explains that validation is centralized on the hooks agent only" },
+        { "text": "States no sub-agent (except hooks) should run npm test/lint/format" },
+        { "text": "Recommends removing the lint step from the sub-agent" },
+        { "text": "References the orchestrator's responsibility to delegate to hooks at task end" }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "skill-description-quality",
+      "prompt": "I wrote a skill with this description: 'Helps with testing in the project.' — is this good enough?",
+      "assertions": [
+        { "text": "States the description is too vague / not discriminating" },
+        { "text": "Explains the description is the primary triggering mechanism" },
+        { "text": "Recommends adding: framework (Vitest), file paths, trigger keywords" },
+        { "text": "Recommends adding a Don't use for anti-trigger clause" },
+        { "text": "Mentions the 80-char minimum length or 1536-char budget" }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "audit-run-after-change",
+      "prompt": "I just modified the vue-ssr-auth skill — changed its description and added a reference file. What should I do before considering this done?",
+      "assertions": [
+        { "text": "Instructs to run scripts/audit.py" },
+        { "text": "Mentions checking for broken links (new reference must be linked from SKILL.md)" },
+        { "text": "Mentions verifying name/folder match and description length" },
+        { "text": "Suggests walking the manual audit checklist" },
+        { "text": "Reminds to propose corrections, never auto-fix" }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "rule-vs-skill-decision",
+      "prompt": "I want to make sure that whenever someone edits a file in src/api/, they always validate ObjectId. Should I create a skill for that or is there a better option?",
+      "assertions": [
+        { "text": "Recommends a .claude/rules/ file (path-scoped rule) as the primary mechanism" },
+        { "text": "Explains rules load deterministically by path (100% hit rate)" },
+        { "text": "Notes this is a constraint/guardrail, not knowledge" },
+        { "text": "May mention the existing objectid-validation.md rule already covers this" },
+        { "text": "Mentions the complementary model: rule = guardrail, skill = knowledge" }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "rule-too-large",
+      "prompt": "I created a rule file in .claude/rules/ that's 4KB long — it documents the full SSR rendering pipeline with examples. Is that appropriate?",
+      "assertions": [
+        { "text": "States that 4KB is too large for a rule (max ~2KB)" },
+        { "text": "Explains rules should be lightweight constraints, not knowledge" },
+        { "text": "Recommends extracting to a skill (vue-ssr-architecture already has this)" },
+        { "text": "Suggests keeping only the core constraint in the rule" },
+        { "text": "May reference anti-pattern D3 (rule too large)" }
+      ]
+    }
+  ]
+}
