@@ -42,6 +42,16 @@ All scripts live in `.claude/hooks/`:
 
 `.claude/settings._json` contains the hook configuration (disabled via `._json` extension). When activated, move content to `.claude/settings.json`.
 
+## Architecture decision: why hooks are disabled
+
+The shell hooks (settings._json) are disabled due to a known Copilot bug that causes unreliable hook execution. The workaround is the `hooks` agent — the orchestrator delegates validation to it manually per the Task completion protocol in CLAUDE.md.
+
+**Do NOT re-enable** by renaming to `settings.json` until the Copilot bug is confirmed fixed.
+
+Two-path architecture:
+- **Current (active)**: Orchestrator → delegates to `hooks` agent → agent runs format/lint/test
+- **Future (when bug fixed)**: Stop event → shell scripts run automatically → no agent needed
+
 ## The `hooks` agent
 
 The `hooks` agent (model: haiku, tools: Bash) is the sole validation executor. The orchestrator delegates to it per the Task completion protocol in CLAUDE.md.

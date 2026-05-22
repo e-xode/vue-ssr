@@ -1,6 +1,6 @@
 ---
 name: vue-ssr-auth
-description: "Authentication and security reference for the Vue SSR Starter Kit: email-based security code flow (signup → verify → dashboard), 6-digit code generation (crypto.randomInt), SHA-256 hashing, timingSafeEqual verification, bcryptjs password hashing, express-session with file-store, rate limiting per endpoint type, IP blocking, session destruction, reCAPTCHA v3 integration (client composable + server verification). Trigger on any auth work: login, signup, password reset, session management, security code, rate limiting, or captcha. Don't use for: general app architecture (→ vue-ssr-architecture), Docker/CI (→ vue-ssr-deployment), post-task validation (→ vue-ssr-hooks)."
+description: "Authentication and security reference for the Vue SSR Starter Kit: email-based security code flow (signup → verify → dashboard), 6-digit code generation (crypto.randomInt), SHA-256 hashing, timingSafeEqual verification, bcryptjs password hashing, express-session with file-store, rate limiting per endpoint type, IP blocking, session destruction, reCAPTCHA v3 integration (client composable + server verification). Trigger on any auth work: login, signup, password reset, session management, security code, rate limiting, or captcha. Don't use for: general app architecture (→ vue-ssr-architecture), Docker/CI (→ vue-ssr-deployment), post-task validation (→ vue-ssr-hooks), UI/UX design (→ design agent)."
 ---
 
 # Vue SSR Auth

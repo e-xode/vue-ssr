@@ -1,0 +1,29 @@
+{
+  "skill_name": "vue-ssr-architecture",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-endpoint-placement",
+      "prompt": "Where should I put a new API endpoint?",
+      "assertions": [
+        { "text": "References the setupXRoute pattern, file structure conventions, and API endpoint placement in the project" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "trigger-ssr-lifecycle",
+      "prompt": "How does SSR work in this project?",
+      "assertions": [
+        { "text": "Explains the SSR lifecycle including entry-server, entry-client, renderToString, and Express integration" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "negative-docker-deploy",
+      "prompt": "How do I deploy to Docker?",
+      "assertions": [
+        { "text": "Does NOT trigger the architecture skill; deployment questions route to vue-ssr-deployment instead" }
+      ]
+    }
+  ]
+}

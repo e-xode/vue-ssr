@@ -54,5 +54,4 @@ Instruction text. Short, imperative, guardrail-style.
 | `testing-conventions.md` | `tests/**/*.test.js`, `src/**/*.test.js` | Vitest + happy-dom patterns |
 | `i18n-mandatory.md` | `src/views/**/*.vue`, `src/components/**/*.vue` | No hardcoded text |
 | `scss-externalized.md` | `src/views/**/*.vue`, `src/components/**/*.vue` | Separate .scss files |
-| `api-error-handling.md` | `src/api/**/*.js` | try/catch + parseObjectId |
-| `objectid-validation.md` | `src/api/**/*.js`, `src/shared/dbHelpers.js` | Validate before queries |
+| `api-error-handling.md` | `src/api/**/*.js` | try/catch + parseObjectId + rate limiters |

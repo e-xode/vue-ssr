@@ -49,20 +49,25 @@ At session start, read and apply all files in `.claude/rules/`. Each rule declar
 
 ## Agents directory
 
-2-agent fleet. Orchestrator never validates itself — always delegates to `hooks` at task end.
+6-agent fleet. Orchestrator never validates itself — always delegates to `hooks` at task end.
 
-| Agent    | Trigger (delegate when…)                                              |
-| -------- | --------------------------------------------------------------------- |
-| `hooks`  | Post-task validation only (format → lint → test battery)              |
-| `review` | User asks to review a branch / PR / diff — read-only, structured report |
+| Agent       | Trigger (delegate when…)                                              |
+| ----------- | --------------------------------------------------------------------- |
+| `hooks`     | Post-task validation only (format → lint → test battery)              |
+| `review`    | User asks to review a branch / PR / diff — read-only, structured report |
+| `translate` | Adding/editing/deleting i18n keys, locale parity audits, bulk i18n work |
+| `vue`       | Vue component creation, composables, Pinia stores, routing, unit tests |
+| `design`    | UI/UX design, SCSS styling, Vuetify theming, visual quality, accessibility, responsive layout |
+| `release`   | User says "release" — version bump, CHANGELOG, branch, commit/push/tag proposal |
 
 ---
 
 ## Sub-agent orchestration
 
-1. **Validation is centralized** — NEVER run `npm test/lint/format` yourself. Only the **`hooks` agent** validates. No other agent may run validation.
+1. **Validation is centralized** — NEVER run `npm test/lint/format` yourself. Only the **`hooks` agent** validates (workaround for Copilot bug — see `vue-ssr-hooks` skill). No other agent may run validation.
 2. **Sub-agent contract** — Scoped work → no validation → no comments → structured summary (what/files/blockers) → stay in scope.
 3. **Reuse before writing** — Search `src/shared/`, `src/composables/`, existing modules before adding utility code. Key shared: `apiFetch`, `parseObjectId`, `parsePagination`, `findUserSafe`, `generateSecurityCode`, `escapeHtml`.
+4. **Delegation routing** — Vue component/store/composable/test work → `vue` agent. i18n key operations → `translate` agent (fleet mode by default). UI/UX design, styling, Vuetify theming, responsive layout → `design` agent. Review → `review` agent. Release → `release` agent. Multiple agents can work in parallel on independent scopes.
 
 ---
 
@@ -97,9 +102,12 @@ Skills load on demand by description matching. This index aids discovery.
 | `vue-ssr-hooks`          | Post-task validation, hook scripts, format/lint/test battery         |
 | `claude-anthropic`       | Claude config rules + audit; Anthropic doctrine. Co-load with skill-creator |
 | `skill-creator`          | Authoring/editing skills (workflow, eval, iterate)                   |
+| `starter-kit-adapt`      | Post-fork/clone adaptation, customizing Claude config for new project |
 | `translate`              | i18n, translations, locale keys, vue-i18n usage, locale parity       |
 | `vue3-composition`       | Vue 3 Composition API, reactivity, composables, lifecycle, script setup, watchers |
 | `design-ux`             | UI quality, design decisions, visual hierarchy, accessibility, responsive UX, micro-interactions |
 | `design-scss`            | SCSS design system: tokens, mixins, animations, utilities, component-scoped patterns |
+| `vue-ssr-design`         | Design delegation routing, when to use design agent, mixed-task splitting, starter-kit design philosophy |
 | `vuetify-components`     | Vuetify 4 components, forms, data tables, icons, theming, dialogs, navigation |
 | `review`                 | Code review of branch / PR / diff                                    |
+| `vue-ssr-release`        | Release workflow, version bump, CHANGELOG generation, release branch  |

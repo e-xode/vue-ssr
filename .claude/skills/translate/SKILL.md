@@ -11,7 +11,7 @@ description: "i18n and translation reference for the Vue SSR Starter Kit (e-xode
 
 | Aspect | Detail |
 | --- | --- |
-| Library | vue-i18n 11.3.0, Composition API mode (`legacy: false`) |
+| Library | vue-i18n 11, Composition API mode (`legacy: false`) |
 | Locales | English (`en`), French (`fr`) |
 | Locale files | `src/translate/en.json`, `src/translate/fr.json` |
 | Fallback | `en` (always the reference locale) |
