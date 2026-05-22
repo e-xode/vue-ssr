@@ -1,5 +1,12 @@
 # Changelog
 
+## 4.0.0
+
+### New Features
+- **claude** — Added agents, skills, rules and hooks configuration for AI-assisted development workflow
+
+---
+
 ## 3.0.2
 
 ### Bug Fixes
