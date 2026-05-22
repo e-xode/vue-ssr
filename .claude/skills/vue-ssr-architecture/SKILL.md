@@ -1,6 +1,6 @@
 ---
 name: vue-ssr-architecture
-description: "Architecture reference for the Vue SSR Starter Kit (e-xode/vue-ssr): Vue 3.6 + Vite 7 + Express 5.1 + MongoDB + Vuetify 4 + Pinia + Vue Router with locale-prefixed routing. Covers file structure, SSR lifecycle (entry-server/entry-client/renderToString), locale routing system (useLocalePath, /:locale(en|fr)/), layout system (public/minimal/app), shared utilities inventory (apiFetch, parseObjectId, dbHelpers, email, security), API endpoint patterns (setupXRoute), view/component naming, Vuetify gotchas, and environment variables. Trigger on any architecture question, file placement, new feature scaffolding, routing, SSR, or shared utility usage. Don't use for: auth flow details (→ vue-ssr-auth), Docker/CI deployment (→ vue-ssr-deployment), post-task validation (→ vue-ssr-hooks)."
+description: "Architecture reference for the Vue SSR Starter Kit (e-xode/vue-ssr): Vue 3.5+ + Vite 7 + Express 5 + MongoDB 7 + Vuetify 4 + Pinia + Vue Router with locale-prefixed routing. Covers file structure, SSR lifecycle (entry-server/entry-client/renderToString), locale routing system (useLocalePath, /:locale(en|fr)/), layout system (public/minimal/app), shared utilities inventory (apiFetch, parseObjectId, dbHelpers, email, security), API endpoint patterns (setupXRoute), view/component naming, Vuetify gotchas, and environment variables. Trigger on any architecture question, file placement, new feature scaffolding, routing, SSR, or shared utility usage. Don't use for: auth flow details (→ vue-ssr-auth), Docker/CI deployment (→ vue-ssr-deployment), post-task validation (→ vue-ssr-hooks), UI/UX design (→ design agent)."
 ---
 
 # Vue SSR Architecture
@@ -11,18 +11,18 @@ description: "Architecture reference for the Vue SSR Starter Kit (e-xode/vue-ssr
 
 | Layer | Technology |
 | --- | --- |
-| Frontend | Vue 3.6 (Composition API) + Pinia 3.0 + Vue Router 5.0 |
+| Frontend | Vue 3.5+ (Composition API) + Pinia 3 + Vue Router 5 |
 | SSR | Vite 7 + renderToString + Express middleware |
-| UI | Vuetify 4.0 (Material Design 3) + MDI icons (@mdi/js) |
+| UI | Vuetify 4 (Material Design 3) + MDI icons (@mdi/js) |
 | i18n | Vue i18n v11 (EN/FR, Composition API legacy: false) |
-| Backend | Express 5.1 + express-session + session-file-store |
+| Backend | Express 5 + express-session + session-file-store |
 | Database | MongoDB 7 (native driver, connection pooling) |
 | Email | Nodemailer 8 |
-| Sanitization | DOMPurify 3.x |
+| Sanitization | DOMPurify 3 |
 | Security | Helmet 8 + CSP (production only) + express-rate-limit + CORS |
 | Build | Vite 7 (client + server bundles) |
-| Tests | Vitest 4 + @vue/test-utils + happy-dom 20 |
-| Lint | ESLint 10 + eslint-plugin-vue 10 + Prettier |
+| Tests | Vitest 4 + @vue/test-utils + happy-dom |
+| Lint | ESLint 10 + eslint-plugin-vue + Prettier |
 | SCSS | sass-embedded (modern-compiler API) |
 
 ## File structure

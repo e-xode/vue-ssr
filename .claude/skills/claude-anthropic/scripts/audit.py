@@ -28,6 +28,7 @@ CLAUDE_MD_MAX_BYTES = 10 * 1024
 SKILL_MD_WARN_BYTES = 50 * 1024
 DESCRIPTION_MIN_CHARS = 80
 DESCRIPTION_MAX_CHARS = 1536
+DESCRIPTION_WARN_CHARS = 1024
 RULE_MAX_BYTES = 2048
 FRENCH_HEURISTIC_WORDS = {
     "avec", "pour", "dans", "cette", "celui", "celle", "ceux", "celles",
@@ -129,9 +130,11 @@ def check_claude_md(root: Path, report: Report) -> None:
             "CLAUDE.md contains // or /* */ outside fenced code blocks.",
             str(path),
         )
+    else:
+        report.add("12-no-code-comments", "OK", "CLAUDE.md has no code comments outside fenced blocks.", str(path))
 
 
-def check_skills(root: Path, report: Report) -> dict[str, dict]:
+def check_skills(root: Path, report: Report, max_desc: int = DESCRIPTION_WARN_CHARS) -> dict[str, dict]:
     skills_dir = root / ".claude" / "skills"
     if not skills_dir.is_dir():
         report.add("02-skills-dir", "ERROR", ".claude/skills/ not found", str(skills_dir))
@@ -157,14 +160,20 @@ def check_skills(root: Path, report: Report) -> dict[str, dict]:
         if not desc:
             report.add("02-skill-frontmatter", "ERROR", "Missing 'description' in frontmatter", str(skill_md))
 
-        if name and name != entry.name:
+        if name and name == entry.name:
+            report.add("03-skill-name-matches-folder", "OK", f"Skill '{entry.name}' name matches folder.", str(skill_md))
+        elif name:
             report.add("03-skill-name-matches-folder", "ERROR", f"Frontmatter name '{name}' does not match folder '{entry.name}'", str(skill_md))
 
         if desc:
             if len(desc) < DESCRIPTION_MIN_CHARS:
                 report.add("04-skill-description-length", "WARN", f"Skill '{entry.name}' description is only {len(desc)} chars (min {DESCRIPTION_MIN_CHARS})", str(skill_md))
-            if len(desc) > DESCRIPTION_MAX_CHARS:
-                report.add("04-skill-description-length", "WARN", f"Skill '{entry.name}' description is {len(desc)} chars (> {DESCRIPTION_MAX_CHARS})", str(skill_md))
+            elif len(desc) > DESCRIPTION_MAX_CHARS:
+                report.add("04-skill-description-length", "ERROR", f"Skill '{entry.name}' description is {len(desc)} chars (> hard max {DESCRIPTION_MAX_CHARS})", str(skill_md))
+            elif len(desc) > max_desc:
+                report.add("04-skill-description-length", "WARN", f"Skill '{entry.name}' description is {len(desc)} chars (> recommended max {max_desc})", str(skill_md))
+            else:
+                report.add("04-skill-description-length", "OK", f"Skill '{entry.name}' description is {len(desc)} chars.", str(skill_md))
             if not re.search(r"Don'?t use|Anti-?trigger", desc, re.IGNORECASE):
                 report.add("04-skill-description-antitrigger", "WARN", f"Skill '{entry.name}' description has no anti-trigger clause", str(skill_md))
 
@@ -207,6 +216,8 @@ def check_agents(root: Path, report: Report) -> dict[str, dict]:
         missing = [k for k in ("name", "description", "tools") if not fm.get(k)]
         if missing:
             report.add("08-agent-frontmatter", "ERROR", f"Agent '{entry.stem}' missing required keys: {', '.join(missing)}", str(entry))
+        else:
+            report.add("08-agent-frontmatter", "OK", f"Agent '{entry.stem}' has valid frontmatter.", str(entry))
         agents[entry.stem] = {"name": fm.get("name", ""), "path": str(entry)}
     return agents
 
@@ -224,12 +235,17 @@ def check_cross_refs(root: Path, report: Report, skills: dict[str, dict], agents
         for m in re.finditer(r"\|\s*`([a-z0-9-]+)`\s*\|", block):
             referenced_agents.add(m.group(1))
 
+    agent_errors = False
     for agent_name in agents:
         if agent_name not in referenced_agents:
             report.add("09-agent-in-claude-md", "ERROR", f"Agent '{agent_name}' exists but not in CLAUDE.md 'Agents directory'", str(claude_md))
+            agent_errors = True
     for ref in referenced_agents:
         if ref not in agents:
             report.add("09-claude-md-agent-missing", "ERROR", f"CLAUDE.md references agent '{ref}' but .claude/agents/{ref}.md missing", str(claude_md))
+            agent_errors = True
+    if not agent_errors and agents:
+        report.add("09-agent-cross-refs", "OK", f"All {len(agents)} agents cross-referenced correctly.", str(claude_md))
 
     referenced_skills: set[str] = set()
     skills_index_match = re.search(r"##\s+Skills index.*?\Z", text, re.DOTALL | re.MULTILINE)
@@ -238,12 +254,17 @@ def check_cross_refs(root: Path, report: Report, skills: dict[str, dict], agents
         for m in re.finditer(r"\|\s*`([a-z0-9-]+)`\s*\|", block):
             referenced_skills.add(m.group(1))
 
+    skill_errors = False
     for skill_name in skills:
         if skill_name not in referenced_skills:
             report.add("10-skill-in-claude-md-index", "WARN", f"Skill '{skill_name}' exists but not in CLAUDE.md 'Skills index'", str(claude_md))
+            skill_errors = True
     for ref in referenced_skills:
         if ref not in skills:
             report.add("10-claude-md-skill-missing", "WARN", f"CLAUDE.md skills index references '{ref}' but .claude/skills/{ref}/ missing", str(claude_md))
+            skill_errors = True
+    if not skill_errors and skills:
+        report.add("10-skill-cross-refs", "OK", f"All {len(skills)} skills cross-referenced correctly.", str(claude_md))
 
 
 def check_english_only(root: Path, report: Report) -> None:
@@ -336,13 +357,15 @@ def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description="Audit Claude configuration.")
     parser.add_argument("--root", default=".", help="Repository root (default: cwd)")
     parser.add_argument("--json", action="store_true", help="Output JSON instead of text")
+    parser.add_argument("--max-desc", type=int, default=DESCRIPTION_WARN_CHARS,
+                        help=f"Max recommended description length (default: {DESCRIPTION_WARN_CHARS})")
     args = parser.parse_args(argv)
 
     root = Path(args.root).resolve()
     report = Report()
 
     check_claude_md(root, report)
-    skills = check_skills(root, report)
+    skills = check_skills(root, report, max_desc=args.max_desc)
     agents = check_agents(root, report)
     check_cross_refs(root, report, skills, agents)
     check_english_only(root, report)

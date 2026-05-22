@@ -1,0 +1,29 @@
+{
+  "skill_name": "vue-ssr-deployment",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-docker-build",
+      "prompt": "How do I build the Docker image?",
+      "assertions": [
+        { "text": "Explains the Docker multi-stage build process and docker-compose configuration for the project" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "trigger-github-actions",
+      "prompt": "What GitHub Actions workflows exist?",
+      "assertions": [
+        { "text": "Lists the CI/CD workflows: CodeQL, npm-publish on tags, npm-test on PR, docker-build to GHCR" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "negative-vue-component",
+      "prompt": "How do I create a new Vue component?",
+      "assertions": [
+        { "text": "Does NOT trigger the deployment skill; component creation routes to vue-ssr-architecture or vue3-composition" }
+      ]
+    }
+  ]
+}

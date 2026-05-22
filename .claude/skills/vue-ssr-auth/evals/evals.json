@@ -1,0 +1,29 @@
+{
+  "skill_name": "vue-ssr-auth",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-signup-flow",
+      "prompt": "How does the signup flow work?",
+      "assertions": [
+        { "text": "Describes the email-based security code flow: signup, 6-digit code generation, SHA-256 hashing, and verification" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "trigger-rate-limiting",
+      "prompt": "I need to add rate limiting to a new endpoint",
+      "assertions": [
+        { "text": "References the rate limiting per endpoint type pattern, IP blocking, and existing security middleware" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "negative-locale-addition",
+      "prompt": "How do I add a new locale?",
+      "assertions": [
+        { "text": "Does NOT trigger the auth skill; i18n questions route to the translate skill instead" }
+      ]
+    }
+  ]
+}

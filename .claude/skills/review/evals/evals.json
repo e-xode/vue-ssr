@@ -1,0 +1,29 @@
+{
+  "skill_name": "review",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-branch-review",
+      "prompt": "Review the changes on branch feature-login",
+      "assertions": [
+        { "text": "Performs a structured, severity-categorized code review of the branch diff against project conventions" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "trigger-uncommitted-review",
+      "prompt": "Can you code-review my uncommitted changes?",
+      "assertions": [
+        { "text": "Analyzes uncommitted diff and returns a markdown report with anomaly types without modifying any code" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "negative-fix-bug",
+      "prompt": "Fix the bug in the auth module",
+      "assertions": [
+        { "text": "Does NOT trigger the review skill; this is a code modification task, not a review request" }
+      ]
+    }
+  ]
+}

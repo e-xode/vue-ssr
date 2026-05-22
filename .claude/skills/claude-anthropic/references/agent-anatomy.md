@@ -36,12 +36,15 @@ model: haiku
 4. **Structured return.** What was done / files modified / blockers / follow-ups.
 5. **Self-contained prompts.** Each agent gets complete context.
 
-## Current agent fleet (2 agents)
+## Current agent fleet (5 agents)
 
 | Agent | Model | Scope |
 | --- | --- | --- |
 | `hooks` | haiku | Post-task validation (format → lint → test). Sole validation exception. |
 | `review` | sonnet | Read-only structured code review. Never modifies code. |
+| `translate` | sonnet | i18n operations, locale parity, fleet mode (one sub-agent per locale). |
+| `vue` | sonnet | Vue component creation, composables, stores, routing, unit tests. |
+| `design` | sonnet | UI/UX design, SCSS styling, Vuetify theming, accessibility, responsive layout. |
 
 ## Coherence with `CLAUDE.md`
 

@@ -1,6 +1,6 @@
 ---
 name: vue3-composition
-description: "Vue 3 Composition API reference for the Vue SSR Starter Kit (e-xode/vue-ssr): ref(), computed(), watch(), onMounted(), nextTick(), <script setup>, composable authoring (useXxx pattern), template refs, defineProps/defineEmits/defineModel, SSR-safe reactivity patterns, and common pitfalls (.value, destructuring loss). Trigger on any Vue 3 reactivity question, component authoring, composable creation, lifecycle hook usage, watcher setup, ref vs reactive decision, script setup syntax, defineProps, defineEmits, or template ref pattern. Don't use for: app architecture or file structure (→ vue-ssr-architecture), auth flow (→ vue-ssr-auth), deployment (→ vue-ssr-deployment), post-task validation (→ vue-ssr-hooks)."
+description: "Vue 3 Composition API reference for the Vue SSR Starter Kit (e-xode/vue-ssr): ref(), computed(), watch(), onMounted(), nextTick(), <script setup>, composable authoring (useXxx pattern), template refs, defineProps/defineEmits/defineModel, SSR-safe reactivity patterns, and common pitfalls (.value, destructuring loss). Trigger on any Vue 3 reactivity question, component authoring, composable creation, lifecycle hook usage, watcher setup, ref vs reactive decision, script setup syntax, defineProps, defineEmits, or template ref pattern. Don't use for: app architecture or file structure (→ vue-ssr-architecture), auth flow (→ vue-ssr-auth), deployment (→ vue-ssr-deployment), post-task validation (→ vue-ssr-hooks), UI/UX design or styling (→ design agent)."
 ---
 
 # Vue 3 Composition API

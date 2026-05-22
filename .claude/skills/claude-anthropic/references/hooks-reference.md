@@ -4,7 +4,15 @@
 
 Project hooks are configured in `.claude/settings._json` (disabled via `._json` extension). Validation is performed by the orchestrator delegating to the `hooks` **agent**.
 
-When enabling hooks, rename to `.claude/settings.json`.
+### Why disabled
+
+The shell hooks are intentionally disabled due to a **known bug in GitHub Copilot** that causes unreliable hook execution — hooks fail silently, run out of order, or hang the session. The `._json` extension is a deliberate kill switch, not accidental.
+
+The `hooks` agent exists as the active workaround: the orchestrator delegates validation manually at task end, achieving the same format → lint → test guarantee without relying on buggy automatic execution.
+
+**Do NOT re-enable** by renaming to `settings.json` until the Copilot bug is confirmed fixed upstream. Premature re-enabling breaks the validation pipeline.
+
+When enabling hooks (after bug fix), rename to `.claude/settings.json`.
 
 ## Where hooks live
 
