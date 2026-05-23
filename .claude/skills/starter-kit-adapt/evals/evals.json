@@ -1,0 +1,35 @@
+{
+  "skill_name": "starter-kit-adapt",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-post-fork",
+      "prompt": "I just forked this starter kit for a new project — how do I adapt the Claude configuration?",
+      "assertions": [
+        {
+          "text": "Provides the post-fork adaptation checklist: rename project/repo references and commit trailer, update hardcoded versions, remove non-applicable skills/rules, run audit.py"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "trigger-stack-change",
+      "prompt": "Our fork dropped MongoDB and Vuetify — which Claude config should I strip?",
+      "assertions": [
+        {
+          "text": "Identifies removable skills/rules (vuetify-components, ObjectId validation rule, design-scss if styling differs) and the version-sensitive locations to update"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "negative-feature-work",
+      "prompt": "Add a new dashboard component to the app",
+      "assertions": [
+        {
+          "text": "Does NOT trigger starter-kit-adapt; day-to-day feature work belongs to the vue/design agents"
+        }
+      ]
+    }
+  ]
+}

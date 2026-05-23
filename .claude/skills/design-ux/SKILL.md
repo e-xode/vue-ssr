@@ -1,6 +1,6 @@
 ---
 name: design-ux
-description: "Design and UX methodology for the Vue SSR Starter Kit: design-first thinking, visual hierarchy (size > color > weight > position), Material Design 3 alignment via Vuetify 4, 8px spacing rhythm ($spacing-unit multiples), color semantics (primary for CTAs, success/error for feedback, neutral for chrome), micro-interactions (meaningful, restrained, accessible), responsive UX (mobile-first, breakpoint semantics), and WCAG 2.1 AA accessibility. Trigger on: UI quality, design direction, visual hierarchy, spacing/layout critique, accessibility audit, responsive decisions, animation design, color review, UX patterns, user feedback design. This is methodology — the design agent is the executor. Don't use for: SCSS implementation (→ design-scss), Vuetify component API (→ vuetify-components), app architecture (→ vue-ssr-architecture), auth flow (→ vue-ssr-auth), deciding when to delegate design work (→ vue-ssr-design)."
+description: "Design and UX methodology for the Vue SSR Starter Kit: design-first thinking, visual hierarchy (size > color > weight > position), Material Design 3 alignment via Vuetify 4, 8px spacing rhythm ($spacing-unit multiples), color semantics (primary for CTAs, success/error for feedback, neutral for chrome), micro-interactions (meaningful, restrained, accessible), responsive UX (mobile-first, breakpoint semantics), and WCAG 2.1 AA accessibility. Trigger on: UI quality, design direction, visual hierarchy, accessibility audit, responsive decisions, animation design, color review, UX patterns, user feedback design. This is methodology — the design agent is the executor. Don't use for: SCSS implementation (→ design-scss), Vuetify component API (→ vuetify-components), app architecture (→ vue-ssr-architecture), auth flow (→ vue-ssr-auth), deciding when to delegate design work (→ vue-ssr-design)."
 ---
 
 # Design & UX
@@ -46,31 +46,32 @@ Use Vuetify's typography classes (`text-h1` through `text-body-2`) consistently.
 
 The project uses an **8px base unit** (`$spacing-unit`).
 
-| Token | Value | Use case |
-| --- | --- | --- |
-| `$spacing-xs` | 4px | Tight gaps (icon-to-label) |
-| `$spacing-sm` | 8px | Intra-component padding |
-| `$spacing-md` | 16px | Inter-element gaps |
-| `$spacing-lg` | 24px | Section padding |
-| `$spacing-xl` | 32px | Major section breaks |
-| `$spacing-2xl` | 48px | Page-level margins |
-| `$spacing-3xl` | 64px | Hero sections |
+| Token          | Value | Use case                   |
+| -------------- | ----- | -------------------------- |
+| `$spacing-xs`  | 4px   | Tight gaps (icon-to-label) |
+| `$spacing-sm`  | 8px   | Intra-component padding    |
+| `$spacing-md`  | 16px  | Inter-element gaps         |
+| `$spacing-lg`  | 24px  | Section padding            |
+| `$spacing-xl`  | 32px  | Major section breaks       |
+| `$spacing-2xl` | 48px  | Page-level margins         |
+| `$spacing-3xl` | 64px  | Hero sections              |
 
 All spacing must be multiples of 4px. Never use arbitrary pixel values.
 
 ## Color semantics
 
-| Role | Color | Usage |
-| --- | --- | --- |
-| Primary | `#2563eb` (blue) | CTAs, active states, links |
-| Secondary | `#7c3aed` (purple) | Supporting actions, accents |
-| Accent | `#06b6d4` (cyan) | Highlights, badges, data viz |
-| Success | green | Confirmations, positive feedback |
-| Error | red | Validation errors, destructive actions |
-| Warning | amber | Caution states, degraded features |
-| Neutral | gray scale | Chrome, borders, disabled states |
+| Role      | Color              | Usage                                  |
+| --------- | ------------------ | -------------------------------------- |
+| Primary   | `#2563eb` (blue)   | CTAs, active states, links             |
+| Secondary | `#7c3aed` (purple) | Supporting actions, accents            |
+| Accent    | `#06b6d4` (cyan)   | Highlights, badges, data viz           |
+| Success   | green              | Confirmations, positive feedback       |
+| Error     | red                | Validation errors, destructive actions |
+| Warning   | amber              | Caution states, degraded features      |
+| Neutral   | gray scale         | Chrome, borders, disabled states       |
 
 Rules:
+
 - Primary color reserved for the single most important action per view
 - Never use color as the sole indicator (pair with icon or text)
 - Dark mode: colors shift for contrast but maintain semantic meaning
@@ -78,6 +79,7 @@ Rules:
 ## Micro-interactions
 
 Every interactive element must provide visible feedback across these states:
+
 - **Hover** — subtle transform or color shift
 - **Focus** — visible ring (keyboard navigation)
 - **Active/pressed** — confirmation feedback
@@ -85,6 +87,7 @@ Every interactive element must provide visible feedback across these states:
 - **Disabled** — muted appearance, no pointer events
 
 Timing tokens:
+
 - `$transition-fast` (150ms) — buttons, toggles, small UI
 - `$transition-base` (300ms) — cards, modals, layout shifts
 - `$transition-slow` (500ms) — page transitions, emphasis
@@ -108,15 +111,16 @@ WCAG 2.1 AA is the minimum bar. Key requirements:
 
 Mobile-first design with progressive enhancement:
 
-| Breakpoint | Width | Target |
-| --- | --- | --- |
-| xs | < 640px | Phones |
-| sm | ≥ 640px | Large phones, small tablets |
-| md | ≥ 768px | Tablets |
-| lg | ≥ 1024px | Laptops |
-| xl | ≥ 1280px | Desktops |
+| Breakpoint | Width    | Target                      |
+| ---------- | -------- | --------------------------- |
+| xs         | < 640px  | Phones                      |
+| sm         | ≥ 640px  | Large phones, small tablets |
+| md         | ≥ 768px  | Tablets                     |
+| lg         | ≥ 1024px | Laptops                     |
+| xl         | ≥ 1280px | Desktops                    |
 
 Principles:
+
 - Design for xs first, add complexity as viewport grows
 - Touch interactions on mobile, hover enhancements on desktop
 - Content priority: show essential content always, progressive disclosure for secondary
@@ -126,11 +130,13 @@ Principles:
 ## Design system tokens
 
 The project's design tokens live in `src/styles/variables.scss`:
+
 - Border radius: sm (4px), md (8px), lg (12px), xl (16px)
 - Shadows: sm, md, lg, xl (soft, layered)
 - Vuetify defaults: rounded `lg`/`xl`, flat variant, outlined inputs, tonal alerts
 
 Utility classes available:
+
 - `.glass` / `.glass-dark` — frosted glass effects
 - `.text-gradient-primary` — gradient text
 - `.hover-lift` / `.hover-scale` — hover animations
@@ -140,9 +146,9 @@ Utility classes available:
 
 ## References
 
-| File | Covers |
-| --- | --- |
-| [visual-hierarchy.md](./references/visual-hierarchy.md) | Typography, spacing rhythm, focal points, card composition, alignment |
-| [micro-interactions.md](./references/micro-interactions.md) | Hover states, transitions, loading, feedback, page transitions |
-| [accessibility.md](./references/accessibility.md) | WCAG compliance, contrast, focus, aria, motion, forms |
-| [responsive-ux.md](./references/responsive-ux.md) | Breakpoints, mobile-first, touch vs pointer, content priority |
+| File                                                        | Covers                                                                |
+| ----------------------------------------------------------- | --------------------------------------------------------------------- |
+| [visual-hierarchy.md](./references/visual-hierarchy.md)     | Typography, spacing rhythm, focal points, card composition, alignment |
+| [micro-interactions.md](./references/micro-interactions.md) | Hover states, transitions, loading, feedback, page transitions        |
+| [accessibility.md](./references/accessibility.md)           | WCAG compliance, contrast, focus, aria, motion, forms                 |
+| [responsive-ux.md](./references/responsive-ux.md)           | Breakpoints, mobile-first, touch vs pointer, content priority         |

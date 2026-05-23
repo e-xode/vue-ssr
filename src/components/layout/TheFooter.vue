@@ -1,18 +1,16 @@
 <script setup>
-import { useI18n } from 'vue-i18n'
-import { useLocalePath } from '@/composables/useLocalePath'
-import { mdiHome } from '@mdi/js'
+import { useI18n } from 'vue-i18n';
+import { useLocalePath } from '@/composables/useLocalePath';
+import { mdiHome } from '@mdi/js';
 
-const { t } = useI18n()
-const { localePath } = useLocalePath()
-const currentYear = new Date().getFullYear()
-const appVersion = __APP_VERSION__
+const { t } = useI18n();
+const { localePath } = useLocalePath();
+const currentYear = new Date().getFullYear();
+const appVersion = __APP_VERSION__;
 </script>
 
 <template>
-  <v-footer
-    class="app-footer pa-0"
-  >
+  <v-footer class="app-footer pa-0">
     <v-container>
       <v-row>
         <v-col

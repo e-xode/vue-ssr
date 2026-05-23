@@ -31,6 +31,7 @@ Or on failure:
 ## Text-based failure indicators
 
 Check for these even on exit 0:
+
 - `error` in eslint output with non-zero error count
 - `FAIL` in vitest output
 - Non-zero exit code

@@ -27,6 +27,7 @@ Le système d'authentification utilise une approche **email + code de sécurité
 6. **Protected Routes:** Routes protégées vérifiées par session
 
 **Avantages:**
+
 - ✅ Sans 2FA supplémentaire
 - ✅ Protection contre brute force
 - ✅ Audit trail via emails
@@ -236,28 +237,30 @@ Response
 
 ```javascript
 // server.js
-app.use(session({
-  secret: process.env.COOKIE_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',  // HTTPS only
-    httpOnly: true,                                  // No JS access
-    sameSite: 'strict',                              // CSRF protection
-    maxAge: 7 * 24 * 60 * 60 * 1000                 // 7 days
-  }
-}))
+app.use(
+  session({
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production', // HTTPS only
+      httpOnly: true, // No JS access
+      sameSite: 'strict', // CSRF protection
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    },
+  })
+);
 
 // Usage:
 app.post('/api/auth/verify-code', async (req, res) => {
   // ... verification logic
-  req.session.userId = user._id  // Create session
-  res.json({ user })
-})
+  req.session.userId = user._id; // Create session
+  res.json({ user });
+});
 
 // Getting session:
-const userId = req.session?.userId
-const isAuthenticated = !!userId
+const userId = req.session?.userId;
+const isAuthenticated = !!userId;
 ```
 
 ---
@@ -267,18 +270,20 @@ const isAuthenticated = !!userId
 ### Password Security
 
 **Bcrypt Hashing:**
+
 ```javascript
-import bcryptjs from 'bcryptjs'
+import bcryptjs from 'bcryptjs';
 
 // Signup: hash password
-const salt = 10  // Cost factor
-const passwordHash = await bcryptjs.hash(password, salt)
+const salt = 10; // Cost factor
+const passwordHash = await bcryptjs.hash(password, salt);
 
 // Signin: compare
-const isValid = await bcryptjs.compare(inputPassword, passwordHash)
+const isValid = await bcryptjs.compare(inputPassword, passwordHash);
 ```
 
 **Why bcryptjs:**
+
 - ✅ Salted hashing (prevents rainbow tables)
 - ✅ Adaptive cost (slow = brute force protection)
 - ✅ No plaintext storage
@@ -287,26 +292,28 @@ const isValid = await bcryptjs.compare(inputPassword, passwordHash)
 ### Code Security
 
 **Generation:**
+
 ```javascript
 // Generate 6-digit random code
-const code = Math.floor(100000 + Math.random() * 900000).toString()
+const code = Math.floor(100000 + Math.random() * 900000).toString();
 // Example: "548293"
 
 // Hash for storage
-const hashedCode = Buffer.from(code).toString('base64')
+const hashedCode = Buffer.from(code).toString('base64');
 
 // Store in DB with expiry
-user.securityCode = hashedCode
-user.securityCodeExpires = new Date(Date.now() + 5 * 60 * 1000)
+user.securityCode = hashedCode;
+user.securityCodeExpires = new Date(Date.now() + 5 * 60 * 1000);
 
 // Email actual code (readable, not hash)
 await sendEmail({
   to: email,
-  text: `Your code: ${code}`
-})
+  text: `Your code: ${code}`,
+});
 ```
 
 **Why hash the code:**
+
 - ✅ DB compromise doesn't leak codes
 - ✅ Prevents code reuse if DB accessed
 - ✅ Codes still human-readable in emails
@@ -323,6 +330,7 @@ cookie: {
 ```
 
 **Session Lifetime:**
+
 - Development: 7 days
 - Production: Consider 24-48 hours
 - Requires re-auth for sensitive operations
@@ -331,23 +339,23 @@ cookie: {
 
 ```javascript
 // src/shared/rateLimit.js
-import rateLimit from 'express-rate-limit'
+import rateLimit from 'express-rate-limit';
 
 export const signupLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,    // 15 min
-  max: 5,                       // 5 requests
-  message: 'Too many signups, try again later'
-})
+  windowMs: 15 * 60 * 1000, // 15 min
+  max: 5, // 5 requests
+  message: 'Too many signups, try again later',
+});
 
 export const verifyCodeLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000,      // 1 min
-  max: 5,                       // 5 attempts
-  message: 'Too many attempts, try again later'
-})
+  windowMs: 1 * 60 * 1000, // 1 min
+  max: 5, // 5 attempts
+  message: 'Too many attempts, try again later',
+});
 
 // server.js
-app.post('/api/auth/signup', signupLimiter, setupSignupRoute)
-app.post('/api/auth/verify-code', verifyCodeLimiter, setupVerifyCodeRoute)
+app.post('/api/auth/signup', signupLimiter, setupSignupRoute);
+app.post('/api/auth/verify-code', verifyCodeLimiter, setupVerifyCodeRoute);
 ```
 
 ### Account Lockout (Optional)
@@ -399,6 +407,7 @@ if (codeValid) {
 ### POST /api/auth/signup
 
 **Request:**
+
 ```json
 {
   "email": "user@example.com",
@@ -408,6 +417,7 @@ if (codeValid) {
 ```
 
 **Response (201):**
+
 ```json
 {
   "message": "Signup successful. Check your email for verification code.",
@@ -416,6 +426,7 @@ if (codeValid) {
 ```
 
 **Errors:**
+
 - 400: Invalid input (missing field, invalid email format)
 - 400: Email already exists
 - 500: Server error (email sending failed, DB error)
@@ -423,6 +434,7 @@ if (codeValid) {
 ### POST /api/auth/signin
 
 **Request:**
+
 ```json
 {
   "email": "user@example.com",
@@ -431,6 +443,7 @@ if (codeValid) {
 ```
 
 **Response (200):**
+
 ```json
 {
   "message": "Signin code sent to your email.",
@@ -439,12 +452,14 @@ if (codeValid) {
 ```
 
 **Errors:**
+
 - 400: Invalid email or password
 - 400: User not found
 
 ### POST /api/auth/verify-code
 
 **Request:**
+
 ```json
 {
   "email": "user@example.com",
@@ -453,6 +468,7 @@ if (codeValid) {
 ```
 
 **Response (200):**
+
 ```json
 {
   "user": {
@@ -467,6 +483,7 @@ if (codeValid) {
 ```
 
 **Errors:**
+
 - 400: Invalid or expired code
 - 404: User not found
 - 500: Server error
@@ -474,6 +491,7 @@ if (codeValid) {
 ### POST /api/auth/resend-code
 
 **Request:**
+
 ```json
 {
   "email": "user@example.com"
@@ -481,6 +499,7 @@ if (codeValid) {
 ```
 
 **Response (200):**
+
 ```json
 {
   "message": "Verification code resent to your email.",
@@ -489,18 +508,21 @@ if (codeValid) {
 ```
 
 **Errors:**
+
 - 400: User not found
 - 429: Too many resend attempts (rate limited)
 
 ### GET /api/auth/me
 
 **Request:**
+
 ```
 GET /api/auth/me
 Cookie: connect.sid=...
 ```
 
 **Response (200) - if authenticated:**
+
 ```json
 {
   "user": {
@@ -514,6 +536,7 @@ Cookie: connect.sid=...
 ```
 
 **Response (200) - if not authenticated:**
+
 ```json
 {
   "user": null
@@ -523,12 +546,14 @@ Cookie: connect.sid=...
 ### POST /api/auth/signout
 
 **Request:**
+
 ```
 POST /api/auth/signout
 Cookie: connect.sid=...
 ```
 
 **Response (200):**
+
 ```json
 {
   "message": "Signed out successfully."
@@ -542,13 +567,14 @@ Cookie: connect.sid=...
 ### Auth Store Usage
 
 **In a Composable:**
+
 ```javascript
 // composables/useAuth.js
-import { useAuthStore } from '@/stores/auth'
-import { ref, computed } from 'vue'
+import { useAuthStore } from '@/stores/auth';
+import { ref, computed } from 'vue';
 
 export function useAuth() {
-  const authStore = useAuthStore()
+  const authStore = useAuthStore();
 
   return {
     user: computed(() => authStore.user),
@@ -560,20 +586,21 @@ export function useAuth() {
     signin: (email, password) => authStore.signin(email, password),
     verifyCode: (code) => authStore.verifyCode(code),
     resendCode: () => authStore.resendCode(),
-    signout: () => authStore.signout()
-  }
+    signout: () => authStore.signout(),
+  };
 }
 ```
 
 **In a Component:**
+
 ```vue
 <script setup>
-import { useAuth } from '@/composables/useAuth'
+import { useAuth } from '@/composables/useAuth';
 
-const { user, isAuthenticated, loading, signup } = useAuth()
+const { user, isAuthenticated, loading, signup } = useAuth();
 
 async function handleSignup(formData) {
-  await signup(formData.email, formData.password, formData.name)
+  await signup(formData.email, formData.password, formData.name);
 }
 </script>
 
@@ -623,15 +650,15 @@ router.beforeEach((to, from, next) => {
 
 ```javascript
 // main.js or entry-client.js
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '@/stores/auth';
 
-const app = createApp(App)
-const authStore = useAuthStore()
+const app = createApp(App);
+const authStore = useAuthStore();
 
 // Fetch current user on app init
-await authStore.fetchCurrentUser()
+await authStore.fetchCurrentUser();
 
-app.mount('#app')
+app.mount('#app');
 ```
 
 ---
@@ -654,24 +681,24 @@ const user = {
   bio: null,
   preferences: {
     language: 'en',
-    newsletter: true
+    newsletter: true,
   },
 
   securityCode,
   securityCodeExpires,
   createdAt: new Date(),
-  updatedAt: new Date()
-}
+  updatedAt: new Date(),
+};
 ```
 
 ### Modify Code Expiry
 
 ```javascript
 // src/shared/email.js
-const CODE_EXPIRES_IN = 5 * 60 * 1000  // 5 minutes
+const CODE_EXPIRES_IN = 5 * 60 * 1000; // 5 minutes
 
 // Change to 10 minutes:
-const CODE_EXPIRES_IN = 10 * 60 * 1000
+const CODE_EXPIRES_IN = 10 * 60 * 1000;
 ```
 
 ### Custom Email Template
@@ -689,16 +716,16 @@ export default {
       <p>If you didn't request this code, please ignore this email.</p>
       <hr>
       <small>This is an automated message, please don't reply.</small>
-    `
-  }
-}
+    `,
+  },
+};
 ```
 
 ### Add OAuth/Social Auth
 
 ```javascript
 // src/api/auth/oauth-google.js
-import { google } from 'googleapis'
+import { google } from 'googleapis';
 
 export function setupOAuthGoogleRoute(app, db) {
   app.get('/api/auth/oauth/google', async (req, res) => {
@@ -706,7 +733,7 @@ export function setupOAuthGoogleRoute(app, db) {
     // Get auth code → exchange for token → get user info
     // Create/update user in DB
     // Create session
-  })
+  });
 }
 ```
 
@@ -714,19 +741,19 @@ export function setupOAuthGoogleRoute(app, db) {
 
 ```javascript
 // src/api/auth/setup-2fa.js
-import QRCode from 'qrcode'
-import speakeasy from 'speakeasy'
+import QRCode from 'qrcode';
+import speakeasy from 'speakeasy';
 
 export function setupTwoFactorRoute(app, db) {
   app.post('/api/auth/setup-2fa', async (req, res) => {
-    const secret = speakeasy.generateSecret()
-    const qrCode = await QRCode.toDataURL(secret.otpauth_url)
+    const secret = speakeasy.generateSecret();
+    const qrCode = await QRCode.toDataURL(secret.otpauth_url);
 
     res.json({
       secret: secret.base32,
-      qrCode  // URL to show user
-    })
-  })
+      qrCode, // URL to show user
+    });
+  });
 }
 ```
 
@@ -737,11 +764,13 @@ export function setupTwoFactorRoute(app, db) {
 ### "Invalid code" error
 
 **Causes:**
+
 1. Code expired (> 5 minutes)
 2. Code doesn't match
 3. DB record deleted
 
 **Solution:**
+
 ```bash
 # Check DB:
 mongosh mongodb://root:password@localhost:27017/app

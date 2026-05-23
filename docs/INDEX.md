@@ -34,33 +34,39 @@ Guide complet pour naviguer toute la documentation de e-xode-vue-ssr.
 ## 🎯 Documentation by Purpose
 
 ### Installation & Setup
+
 - [QUICK_START.en.md](./QUICK_START.en.md) - Installation rapide anglais
 - [QUICK_START.fr.md](./QUICK_START.fr.md) - Installation rapide français
 - [README.en.md](../README.en.md#installation) - Section installation
 - [README.fr.md](../README.fr.md#installation) - Section installation
 
 ### Learning the Project
+
 - [ARCHITECTURE.md](./ARCHITECTURE.md) - Comment tout fonctionne
 - [README.en.md](../README.en.md#architecture) - Vue d'ensemble architecture
 - [README.fr.md](../README.fr.md#architecture) - Vue d'ensemble architecture
 
 ### Writing Code
+
 - [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) - Comment ajouter features
 - [ARCHITECTURE.md](./ARCHITECTURE.md) - Patterns et structure
 - [README.en.md](../README.en.md#project-structure) - Structure du projet
 
 ### Using the API
+
 - [API.md](./API.md) - Tous les endpoints avec exemples
 - [AUTHENTICATION.md](./AUTHENTICATION.md) - Flux d'authentification
 - [README.en.md](../README.en.md#api-reference) - Référence API brève
 - [README.fr.md](../README.fr.md#api-reference) - Référence API brève
 
 ### Deployment
+
 - [DEPLOYMENT.md](./DEPLOYMENT.md) - Déployer en production
 - [README.en.md](../README.en.md#deployment) - Guide déploiement brève
 - [README.fr.md](../README.fr.md#deployment) - Guide déploiement brève
 
 ### Troubleshooting
+
 - [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Dépannage complet
 - [README.en.md](../README.en.md#troubleshooting) - Dépannage brève
 - [README.fr.md](../README.fr.md#dépannage) - Dépannage brève
@@ -68,6 +74,7 @@ Guide complet pour naviguer toute la documentation de e-xode-vue-ssr.
 - [QUICK_START.fr.md](./QUICK_START.fr.md#problèmes-courants) - Problèmes courants
 
 ### Contributing
+
 - [CONTRIBUTING.md](../CONTRIBUTING.md) - Toutes les règles
 - [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md#contribution) - Checklist
 
@@ -119,25 +126,26 @@ e-xode-vue-ssr/
 
 ## 🔍 Quick Links by Topic
 
-| Topic | Doc | Link |
-|-------|-----|------|
-| **Getting Started** | README | [en](../README.en.md) / [fr](../README.fr.md) |
-| **Quick Setup** | QUICK_START | [en](./QUICK_START.en.md) / [fr](./QUICK_START.fr.md) |
-| **Architecture** | ARCHITECTURE | [Lire](./ARCHITECTURE.md) |
-| **Development** | DEV_GUIDE | [Lire](./DEVELOPER_GUIDE.md) |
-| **Authentication** | AUTH | [Lire](./AUTHENTICATION.md) |
-| **API Reference** | API | [Lire](./API.md) |
-| **Deployment** | DEPLOYMENT | [Lire](./DEPLOYMENT.md) |
-| **Troubleshooting** | TROUBLESHOOT | [Lire](./TROUBLESHOOTING.md) |
-| **Contributing** | CONTRIB | [Lire](../CONTRIBUTING.md) |
-| **License** | LICENSE | [Lire](../LICENSE) |
-| **Changelog** | CHANGELOG | [Lire](../CHANGELOG.md) |
+| Topic               | Doc          | Link                                                  |
+| ------------------- | ------------ | ----------------------------------------------------- |
+| **Getting Started** | README       | [en](../README.en.md) / [fr](../README.fr.md)         |
+| **Quick Setup**     | QUICK_START  | [en](./QUICK_START.en.md) / [fr](./QUICK_START.fr.md) |
+| **Architecture**    | ARCHITECTURE | [Lire](./ARCHITECTURE.md)                             |
+| **Development**     | DEV_GUIDE    | [Lire](./DEVELOPER_GUIDE.md)                          |
+| **Authentication**  | AUTH         | [Lire](./AUTHENTICATION.md)                           |
+| **API Reference**   | API          | [Lire](./API.md)                                      |
+| **Deployment**      | DEPLOYMENT   | [Lire](./DEPLOYMENT.md)                               |
+| **Troubleshooting** | TROUBLESHOOT | [Lire](./TROUBLESHOOTING.md)                          |
+| **Contributing**    | CONTRIB      | [Lire](../CONTRIBUTING.md)                            |
+| **License**         | LICENSE      | [Lire](../LICENSE)                                    |
+| **Changelog**       | CHANGELOG    | [Lire](../CHANGELOG.md)                               |
 
 ---
 
 ## 🌍 Language Support
 
 ### English Versions
+
 - README.en.md
 - QUICK_START.en.md
 - API.md (English examples)
@@ -145,6 +153,7 @@ e-xode-vue-ssr/
 - AUTHENTICATION.md (English sections)
 
 ### French Versions
+
 - README.fr.md
 - QUICK_START.fr.md
 - ARCHITECTURE.md (French)
@@ -153,6 +162,7 @@ e-xode-vue-ssr/
 - CHANGELOG.md (French)
 
 ### Bilingual
+
 - API.md - French with English examples
 - DEVELOPER_GUIDE.md - French with English code
 - AUTHENTICATION.md - French with English diagrams
@@ -162,6 +172,7 @@ e-xode-vue-ssr/
 ## 📋 Topic Quick Reference
 
 ### Frontend Development
+
 ```
 Want to: Learn Vue 3 patterns
 → DEVELOPER_GUIDE.md (Vue Components section)
@@ -174,6 +185,7 @@ Want to: Customize styling
 ```
 
 ### Backend Development
+
 ```
 Want to: Add new API endpoint
 → DEVELOPER_GUIDE.md (Ajouter un Nouvel Endpoint API)
@@ -186,6 +198,7 @@ Want to: See API reference
 ```
 
 ### Database
+
 ```
 Want to: Extend user schema
 → AUTHENTICATION.md (Extend User Schema)
@@ -198,6 +211,7 @@ Want to: See schema details
 ```
 
 ### Deployment
+
 ```
 Want to: Deploy to Heroku
 → DEPLOYMENT.md (Heroku section)
@@ -213,6 +227,7 @@ Want to: Monitoring setup
 ```
 
 ### Issues & Help
+
 ```
 Want to: Fix a problem
 → TROUBLESHOOTING.md
@@ -225,6 +240,7 @@ Want to: Debug SSR
 ```
 
 ### Contributing
+
 ```
 Want to: Contribute code
 → CONTRIBUTING.md
@@ -241,6 +257,7 @@ Want to: Suggest feature
 ## 📝 Documentation Format
 
 Toutes les documentations utilisent:
+
 - **Markdown** pour le formatage
 - **Code blocks** avec syntax highlighting
 - **Tables** pour les références

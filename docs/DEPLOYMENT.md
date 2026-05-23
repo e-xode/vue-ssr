@@ -158,16 +158,16 @@ npm run build
 
 ```javascript
 // vite.config.js
-import compress from 'vite-plugin-compression'
+import compress from 'vite-plugin-compression';
 
 export default {
   plugins: [
     compress({
       ext: '.gz',
-      deleteOriginFile: false
-    })
-  ]
-}
+      deleteOriginFile: false,
+    }),
+  ],
+};
 ```
 
 ### Bundle Splitting
@@ -207,6 +207,8 @@ docker push your-registry/app:latest
 
 ### Deploy with Docker Compose
 
+> Note: this production deployment uses its own `docker-compose.prod.yml` as documented below. The **development** compose is separate — it is split into `docker-compose.yml` (base, app only → remote DB) and `docker-compose.local.yml` (override, adds a local `mongo` container), switched via the `COMPOSE_FILE` variable in `.env`.
+
 ```yaml
 # docker-compose.prod.yml
 version: '3.8'
@@ -222,17 +224,17 @@ services:
       COOKIE_SECRET: ${COOKIE_SECRET}
       # ... other env vars
     ports:
-      - "5173:5173"
+      - '5173:5173'
     volumes:
       - ./logs:/app/logs
-      - ./public:/app/public  # For uploads if needed
+      - ./public:/app/public # For uploads if needed
     depends_on:
       mongo:
         condition: service_healthy
     networks:
       - app-network
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5173/"]
+      test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://localhost:5173/']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -246,7 +248,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
     ports:
-      - "27017:27017"
+      - '27017:27017'
     volumes:
       - mongo-data:/data/db
       - ./mongo-init.js:/docker-entrypoint-initdb.d/init.js
@@ -263,11 +265,11 @@ services:
     container_name: app-nginx
     restart: always
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./ssl:/etc/nginx/ssl  # SSL certificates
+      - ./ssl:/etc/nginx/ssl # SSL certificates
       - ./public:/app/public:ro
     depends_on:
       - node
@@ -305,6 +307,7 @@ docker-compose -f docker-compose.prod.yml down
 ### Heroku
 
 **1. Préparation**
+
 ```bash
 # Create Procfile
 echo "web: npm run prod" > Procfile
@@ -336,6 +339,7 @@ EOF
 ```
 
 **2. Deploy**
+
 ```bash
 # Install Heroku CLI
 npm install -g heroku
@@ -364,6 +368,7 @@ heroku open -a my-app
 ### AWS EC2
 
 **1. Setup Instance**
+
 ```bash
 # Launch Ubuntu 22.04 LTS instance
 # t2.micro (free tier) or t2.small
@@ -392,6 +397,7 @@ sudo apt install -y git
 ```
 
 **2. Deploy App**
+
 ```bash
 # Clone repo
 git clone https://github.com/your-repo/e-xode-vue-ssr.git
@@ -404,7 +410,7 @@ npm install --production
 npm run build
 
 # Copy env
-cp env_sample .env.production
+cp .env.example .env.production
 # Edit .env.production with production values
 
 # Start with PM2
@@ -419,6 +425,7 @@ sudo systemctl enable nginx
 ```
 
 **3. Nginx Configuration**
+
 ```nginx
 # /etc/nginx/sites-available/app
 upstream app {
@@ -469,6 +476,7 @@ server {
 ```
 
 Enable:
+
 ```bash
 sudo ln -s /etc/nginx/sites-available/app /etc/nginx/sites-enabled/app
 sudo nginx -t
@@ -476,6 +484,7 @@ sudo systemctl restart nginx
 ```
 
 **4. SSL Certificate (Let's Encrypt)**
+
 ```bash
 sudo apt install -y certbot python3-certbot-nginx
 
@@ -491,6 +500,7 @@ sudo openssl req -x509 -nodes -days 365 \
 ### DigitalOcean App Platform
 
 **1. Deploy via GitHub**
+
 - Push to GitHub
 - Login to DigitalOcean
 - App Platform → Create App
@@ -499,6 +509,7 @@ sudo openssl req -x509 -nodes -days 365 \
 - Configure
 
 **2. DigitalOcean CLI**
+
 ```bash
 # Install
 brew install doctl
@@ -520,43 +531,45 @@ doctl apps create --spec app.yaml
 // src/shared/log.js - Already implemented
 
 // Or enhance with Winston:
-import winston from 'winston'
+import winston from 'winston';
 
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
   format: winston.format.json(),
   transports: [
     new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'logs/combined.log' })
-  ]
+    new winston.transports.File({ filename: 'logs/combined.log' }),
+  ],
 });
 
 if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.simple()
-  }))
+  logger.add(
+    new winston.transports.Console({
+      format: winston.format.simple(),
+    })
+  );
 }
 
-export default logger
+export default logger;
 ```
 
 ### Error Tracking (Sentry)
 
 ```javascript
 // server.js
-import * as Sentry from "@sentry/node"
+import * as Sentry from '@sentry/node';
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.NODE_ENV,
   tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
-})
+});
 
-app.use(Sentry.Handlers.requestHandler())
+app.use(Sentry.Handlers.requestHandler());
 
 // Routes here
 
-app.use(Sentry.Handlers.errorHandler())
+app.use(Sentry.Handlers.errorHandler());
 ```
 
 ### Health Checks
@@ -604,6 +617,7 @@ location /dist/ {
 ```
 
 Use CloudFlare, AWS CloudFront, or similar for:
+
 - Static assets caching
 - Gzip compression
 - DDoS protection
@@ -631,39 +645,39 @@ mongosh mongodb://...
 const client = new MongoClient(uri, {
   maxPoolSize: 10,
   minPoolSize: 2,
-  maxIdleTimeMS: 300000
-})
+  maxIdleTimeMS: 300000,
+});
 ```
 
 ### Caching Strategy
 
 ```javascript
 // Add Redis caching (optional)
-import redis from 'redis'
+import redis from 'redis';
 
 const redisClient = redis.createClient({
   host: process.env.REDIS_HOST || 'localhost',
-  port: process.env.REDIS_PORT || 6379
-})
+  port: process.env.REDIS_PORT || 6379,
+});
 
 // Cache user lookup
 app.get('/api/auth/me', async (req, res) => {
-  const userId = req.session?.userId
+  const userId = req.session?.userId;
 
-  if (!userId) return res.json({ user: null })
+  if (!userId) return res.json({ user: null });
 
   // Try cache
-  const cached = await redisClient.get(`user:${userId}`)
-  if (cached) return res.json({ user: JSON.parse(cached) })
+  const cached = await redisClient.get(`user:${userId}`);
+  if (cached) return res.json({ user: JSON.parse(cached) });
 
   // Query DB
-  const user = await db.collection('users').findOne({ _id: userId })
+  const user = await db.collection('users').findOne({ _id: userId });
 
   // Cache for 5 minutes
-  await redisClient.setEx(`user:${userId}`, 300, JSON.stringify(user))
+  await redisClient.setEx(`user:${userId}`, 300, JSON.stringify(user));
 
-  res.json({ user })
-})
+  res.json({ user });
+});
 ```
 
 ---

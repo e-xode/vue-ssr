@@ -9,13 +9,13 @@ description: "Code-review specialist for the Vue SSR Starter Kit (e-xode/vue-ssr
 
 ## Severity rubric
 
-| Level | Meaning | Action |
-| --- | --- | --- |
-| 🔴 Critique | Bug, security issue, data loss risk | Must fix before merge |
-| 🟠 Important | Convention violation, potential regression | Should fix |
-| 🟡 Medium | Suboptimal pattern, missing edge case | Consider fixing |
-| 🟢 Minor | Style, naming, minor improvement | Optional |
-| ℹ️ Info | Observation, question, suggestion | No action required |
+| Level        | Meaning                                    | Action                |
+| ------------ | ------------------------------------------ | --------------------- |
+| 🔴 Critique  | Bug, security issue, data loss risk        | Must fix before merge |
+| 🟠 Important | Convention violation, potential regression | Should fix            |
+| 🟡 Medium    | Suboptimal pattern, missing edge case      | Consider fixing       |
+| 🟢 Minor     | Style, naming, minor improvement           | Optional              |
+| ℹ️ Info      | Observation, question, suggestion          | No action required    |
 
 ## Anomaly types
 
@@ -46,19 +46,22 @@ security, bug, regression, perf, a11y, i18n, convention, test-gap, docs-gap, typ
 ## Code Review — [scope description]
 
 ### 🔴 Critique (N)
+
 - **[file:line]** [anomaly-type] Description. Evidence: `code snippet`.
 
 ### 🟠 Important (N)
+
 ...
 
 ### Summary
+
 | Severity | Count |
-| --- | --- |
-| 🔴 | N |
-| 🟠 | N |
-| 🟡 | N |
-| 🟢 | N |
-| ℹ️ | N |
+| -------- | ----- |
+| 🔴       | N     |
+| 🟠       | N     |
+| 🟡       | N     |
+| 🟢       | N     |
+| ℹ️       | N     |
 
 **Recommendation:** merge as-is / fix critique+important / request changes
 ```

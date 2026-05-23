@@ -25,17 +25,17 @@ Container component for grouped content. Project defaults: `rounded="xl"`, `elev
 
 ### Key props
 
-| Prop | Type | Description |
-| --- | --- | --- |
-| `title` | string | Card title (or use #title slot) |
-| `subtitle` | string | Subtitle text |
-| `text` | string | Body text |
-| `color` | string | Background color |
-| `variant` | string | flat, elevated, tonal, outlined |
-| `loading` | boolean | Shows progress bar at top |
-| `hover` | boolean | Elevation on hover |
-| `link` | boolean | Makes card clickable |
-| `to` | string/object | Router link destination |
+| Prop       | Type          | Description                     |
+| ---------- | ------------- | ------------------------------- |
+| `title`    | string        | Card title (or use #title slot) |
+| `subtitle` | string        | Subtitle text                   |
+| `text`     | string        | Body text                       |
+| `color`    | string        | Background color                |
+| `variant`  | string        | flat, elevated, tonal, outlined |
+| `loading`  | boolean       | Shows progress bar at top       |
+| `hover`    | boolean       | Elevation on hover              |
+| `link`     | boolean       | Makes card clickable            |
+| `to`       | string/object | Router link destination         |
 
 ### Card with image
 
@@ -55,42 +55,42 @@ Data grid with sorting, pagination, and custom rendering.
 
 ```vue
 <script setup>
-import { ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { mdiPencil, mdiDelete } from '@mdi/js'
-import { apiFetch } from '@/shared/apiFetch'
+import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { mdiPencil, mdiDelete } from '@mdi/js';
+import { apiFetch } from '@/shared/apiFetch';
 
-const { t } = useI18n()
-const items = ref([])
-const totalItems = ref(0)
-const loading = ref(false)
-const options = ref({ page: 1, itemsPerPage: 10, sortBy: [] })
+const { t } = useI18n();
+const items = ref([]);
+const totalItems = ref(0);
+const loading = ref(false);
+const options = ref({ page: 1, itemsPerPage: 10, sortBy: [] });
 
 const headers = [
   { title: t('fields.name'), key: 'name', sortable: true },
   { title: t('fields.email'), key: 'email', sortable: true },
   { title: t('fields.status'), key: 'status', sortable: false },
-  { title: t('fields.actions'), key: 'actions', sortable: false, align: 'end' }
-]
+  { title: t('fields.actions'), key: 'actions', sortable: false, align: 'end' },
+];
 
 async function fetchData() {
-  loading.value = true
+  loading.value = true;
   try {
-    const { page, itemsPerPage, sortBy } = options.value
+    const { page, itemsPerPage, sortBy } = options.value;
     const params = new URLSearchParams({
       page: String(page),
       limit: String(itemsPerPage),
-      ...(sortBy.length && { sort: sortBy[0].key, order: sortBy[0].order })
-    })
-    const res = await apiFetch(`/api/admin/users?${params}`)
-    items.value = res.items
-    totalItems.value = res.total
+      ...(sortBy.length && { sort: sortBy[0].key, order: sortBy[0].order }),
+    });
+    const res = await apiFetch(`/api/admin/users?${params}`);
+    items.value = res.items;
+    totalItems.value = res.total;
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
-watch(options, fetchData, { deep: true, immediate: true })
+watch(options, fetchData, { deep: true, immediate: true });
 </script>
 <template>
   <v-data-table-server
@@ -115,17 +115,17 @@ watch(options, fetchData, { deep: true, immediate: true })
 
 ### Key props
 
-| Prop | Type | Description |
-| --- | --- | --- |
-| `headers` | array | Column definitions |
-| `items` | array | Row data |
-| `items-length` | number | Total items (server-side) |
-| `loading` | boolean | Show loading state |
-| `search` | string | Client-side filter |
-| `sort-by` | array | Sort configuration |
-| `items-per-page` | number | Rows per page |
-| `hover` | boolean | Highlight row on hover |
-| `show-select` | boolean | Row selection checkboxes |
+| Prop             | Type    | Description               |
+| ---------------- | ------- | ------------------------- |
+| `headers`        | array   | Column definitions        |
+| `items`          | array   | Row data                  |
+| `items-length`   | number  | Total items (server-side) |
+| `loading`        | boolean | Show loading state        |
+| `search`         | string  | Client-side filter        |
+| `sort-by`        | array   | Sort configuration        |
+| `items-per-page` | number  | Rows per page             |
+| `hover`          | boolean | Highlight row on hover    |
+| `show-select`    | boolean | Row selection checkboxes  |
 
 ### Header definition
 
@@ -147,18 +147,18 @@ Navigation and action lists.
 
 ```vue
 <script setup>
-import { mdiHome, mdiAccount, mdiCog } from '@mdi/js'
-import { useI18n } from 'vue-i18n'
-import { useLocalePath } from '@/composables/useLocalePath'
+import { mdiHome, mdiAccount, mdiCog } from '@mdi/js';
+import { useI18n } from 'vue-i18n';
+import { useLocalePath } from '@/composables/useLocalePath';
 
-const { t } = useI18n()
-const localePath = useLocalePath()
+const { t } = useI18n();
+const localePath = useLocalePath();
 
 const navItems = [
   { icon: mdiHome, title: t('nav.home'), to: localePath('/') },
   { icon: mdiAccount, title: t('nav.profile'), to: localePath('/profile') },
-  { icon: mdiCog, title: t('nav.settings'), to: localePath('/settings') }
-]
+  { icon: mdiCog, title: t('nav.settings'), to: localePath('/settings') },
+];
 </script>
 <template>
   <v-list nav>
@@ -218,8 +218,8 @@ const statusColors = {
   active: 'success',
   pending: 'warning',
   inactive: 'error',
-  draft: 'grey'
-}
+  draft: 'grey',
+};
 </script>
 <template>
   <v-chip :color="statusColors[item.status]" size="small">
@@ -245,19 +245,14 @@ Used in admin views alongside data tables:
 
 ```vue
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed } from 'vue';
 
-const page = ref(1)
-const itemsPerPage = ref(10)
-const totalItems = ref(0)
-const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value))
+const page = ref(1);
+const itemsPerPage = ref(10);
+const totalItems = ref(0);
+const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value));
 </script>
 <template>
-  <v-pagination
-    v-model="page"
-    :length="totalPages"
-    rounded="lg"
-    total-visible="7"
-  />
+  <v-pagination v-model="page" :length="totalPages" rounded="lg" total-visible="7" />
 </template>
 ```

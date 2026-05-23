@@ -21,8 +21,8 @@ Replace all occurrences of starter-kit identity:
 Each skill description references the project name. Update the project identifier:
 
 ```diff
--description: "Architecture reference for the Vue SSR Starter Kit (e-xode/vue-ssr): Vue 3.6 + Vite 7..."
-+description: "Architecture reference for MyProject (myorg/myrepo): Vue 3.6 + Vite 7..."
+-description: "Architecture reference for the Vue SSR Starter Kit (e-xode/vue-ssr): Vue 3.5 + Vite 7..."
++description: "Architecture reference for MyProject (myorg/myrepo): Vue 3.5 + Vite 7..."
 ```
 
 ### In agent files
@@ -39,14 +39,14 @@ node -e "const p=require('./package.json'); console.log(JSON.stringify(p.depende
 
 Common version references to update:
 
-| Dependency | Where referenced |
-| --- | --- |
-| `vue` | `vue-ssr-architecture`, `vue3-composition` |
-| `vite` | `vue-ssr-architecture` |
-| `express` | `vue-ssr-architecture` |
-| `vuetify` | `vue-ssr-architecture`, `vuetify-components` |
-| `vue-i18n` | `translate` |
-| `pinia` | `vue-ssr-architecture` |
+| Dependency | Where referenced                             |
+| ---------- | -------------------------------------------- |
+| `vue`      | `vue-ssr-architecture`, `vue3-composition`   |
+| `vite`     | `vue-ssr-architecture`                       |
+| `express`  | `vue-ssr-architecture`                       |
+| `vuetify`  | `vue-ssr-architecture`, `vuetify-components` |
+| `vue-i18n` | `translate`                                  |
+| `pinia`    | `vue-ssr-architecture`                       |
 
 ## Step 3: Remove inapplicable skills
 
@@ -60,16 +60,19 @@ Common version references to update:
 ### Common removal scenarios
 
 **No MongoDB:**
+
 - Remove `.claude/rules/` rule for ObjectId validation
 - Update `vue-ssr-architecture` references to remove MongoDB mentions
 - Remove `parseObjectId` from shared utilities list in `CLAUDE.md`
 
 **No authentication:**
+
 - Remove `.claude/skills/vue-ssr-auth/`
 - Remove auth-related hard rules from `CLAUDE.md`
 - Remove security utilities from shared list (`generateSecurityCode`, `findUserSafe`)
 
 **Different UI framework (not Vuetify):**
+
 - Remove `.claude/skills/vuetify-components/`
 - Remove `.claude/skills/design-scss/` (if not using SCSS)
 - Remove `.claude/skills/design-ux/` or adapt for your framework
@@ -120,11 +123,11 @@ description: "Domain knowledge for MyProject (myorg/myrepo): [brief tech/domain 
 ### Example: Adding a domain-specific agent
 
 ```markdown
-| Agent       | Trigger (delegate when…)                          |
-| ----------- | ------------------------------------------------- |
-| `hooks`     | Post-task validation (format → lint → test)       |
-| `review`    | User asks to review a branch / PR / diff          |
-| `migration` | Database migration tasks or schema changes        |
+| Agent       | Trigger (delegate when…)                    |
+| ----------- | ------------------------------------------- |
+| `hooks`     | Post-task validation (format → lint → test) |
+| `review`    | User asks to review a branch / PR / diff    |
+| `migration` | Database migration tasks or schema changes  |
 ```
 
 ### Removing an agent
@@ -148,7 +151,7 @@ Each rule has a `paths:` frontmatter declaring which files it applies to. Remove
 
 ```markdown
 ---
-paths: ["src/api/**", "server/**"]
+paths: ['src/api/**', 'server/**']
 ---
 
 # API Convention
@@ -210,6 +213,7 @@ python scripts/audit.py
 ```
 
 This checks:
+
 - All skills in `CLAUDE.md` index have corresponding folders
 - All skill folders are listed in `CLAUDE.md` index
 - Cross-references between skills point to existing skills

@@ -21,9 +21,9 @@ When you fork/clone the Vue SSR Starter Kit for a new project, the `.claude/` co
 
 ## Post-fork adaptation checklist
 
-1. **Rename project references in `CLAUDE.md`** — Update project name, description, repository identifier (`e-xode/vue-ssr` → your org/repo).
+1. **Rename project references in `CLAUDE.md`** — Update project name, description, repository identifier (`e-xode/vue-ssr` → your org/repo), and the commit co-author trailer identity in the Hard rules section (a tool-agnostic placeholder you can replace).
 
-2. **Review and update skill descriptions** — Dependency versions are hardcoded in descriptions (Vue 3.6, Vite 7, Express 5.1, Vuetify 4, etc.). Update to match your `package.json`.
+2. **Review and update skill descriptions** — Dependency versions are hardcoded in descriptions (Vue 3.5, Vite 7, Express 5, Vuetify 4, etc.). Update to match your `package.json`.
 
 3. **Remove skills that don't apply** — Delete skill folders and their `CLAUDE.md` index entries. See the table below for guidance.
 
@@ -39,13 +39,13 @@ When you fork/clone the Vue SSR Starter Kit for a new project, the `.claude/` co
 
 ## What to keep vs customize vs remove
 
-| Keep as-is | Customize | Remove if N/A |
-| --- | --- | --- |
-| `claude-anthropic` skill | `vue-ssr-architecture` (your stack) | `vue-ssr-auth` (if no auth) |
-| `skill-creator` skill | `CLAUDE.md` hard rules | Specific rules (`objectid` if no MongoDB) |
-| `vue-ssr-hooks` skill + `hooks` agent | Agent fleet for your domain | `vuetify-components` (if not using Vuetify) |
-| `review` skill + agent | `translate` skill (your locales) | `design-scss` (if different styling approach) |
-| Audit script (`scripts/audit.py`) | `vue-ssr-deployment` (your CI/CD) | `vue-ssr-design` (if different UI framework) |
+| Keep as-is                                     | Customize                                    | Remove if N/A                                    |
+| ---------------------------------------------- | -------------------------------------------- | ------------------------------------------------ |
+| `claude-anthropic` skill                       | `vue-ssr-architecture` (your stack)          | `vue-ssr-auth` (if no auth)                      |
+| `skill-creator` skill                          | `CLAUDE.md` hard rules                       | Specific rules (`objectid` if no MongoDB)        |
+| `vue-ssr-hooks` skill + `hooks` agent          | Agent fleet for your domain                  | `vuetify-components` (if not using Vuetify)      |
+| `review` skill + agent                         | `translate` skill (your locales)             | `design-scss` (if different styling approach)    |
+| Audit script (`scripts/audit.py`)              | `vue-ssr-deployment` (your CI/CD)            | `vue-ssr-design` (if different UI framework)     |
 | `vue-ssr-design` skill (coordination patterns) | `design` agent (adapt for your UI framework) | `design-ux` (if using a different design system) |
 
 ## Adapting the design agent post-fork
@@ -68,16 +68,16 @@ The coordination skill (`vue-ssr-design`) documents the delegation routing — a
 
 These locations contain hardcoded dependency versions — update after forking:
 
-| Location | What to check |
-| --- | --- |
-| `vue-ssr-architecture` skill description | Vue, Vite, Express, MongoDB, Vuetify, Pinia versions |
-| `vue-ssr-deployment` skill / references | Docker base image, Node.js version, GitHub Actions versions |
-| `vuetify-components` skill description | Vuetify major version, Material Design version |
-| `vue3-composition` skill description | Vue version |
-| `translate` skill description | `vue-i18n` version |
-| `design-scss` skill description | SCSS tooling versions |
-| `design` agent | Stack context line (Vue, Vite, Vuetify versions) |
-| `CLAUDE.md` commands section | npm script names (verify they still exist) |
+| Location                                 | What to check                                               |
+| ---------------------------------------- | ----------------------------------------------------------- |
+| `vue-ssr-architecture` skill description | Vue, Vite, Express, MongoDB, Vuetify, Pinia versions        |
+| `vue-ssr-deployment` skill / references  | Docker base image, Node.js version, GitHub Actions versions |
+| `vuetify-components` skill description   | Vuetify major version, Material Design version              |
+| `vue3-composition` skill description     | Vue version                                                 |
+| `translate` skill description            | `vue-i18n` version                                          |
+| `design-scss` skill description          | SCSS tooling versions                                       |
+| `design` agent                           | Stack context line (Vue, Vite, Vuetify versions)            |
+| `CLAUDE.md` commands section             | npm script names (verify they still exist)                  |
 
 ## Adding a new locale
 
@@ -90,11 +90,13 @@ These locations contain hardcoded dependency versions — update after forking:
 ## Extending the agent fleet
 
 **Create a new agent when:**
+
 - A task requires a distinct tool set or model configuration
 - Separation of concerns demands isolated context (e.g., security review vs code review)
 - A workflow is triggered frequently and benefits from specialization
 
 **Extend an existing agent when:**
+
 - The new capability is a natural extension of an existing agent's scope
 - Adding a prompt section is sufficient (no new tools needed)
 - The trigger conditions overlap heavily with an existing agent

@@ -1,53 +1,54 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
-import { useLocalePath } from '@/composables/useLocalePath'
-import { SUPPORTED_LOCALES } from '@/shared/const'
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import { useLocalePath } from '@/composables/useLocalePath';
+import { SUPPORTED_LOCALES } from '@/shared/const';
+import ThemeToggle from '@/components/layout/ThemeToggle.vue';
 import {
   mdiAccount,
+  mdiChevronDown,
   mdiClose,
   mdiHome,
   mdiMenu,
   mdiShieldAccount,
-  mdiLogout
-} from '@mdi/js'
+  mdiLogout,
+} from '@mdi/js';
 
-const { t } = useI18n()
-const router = useRouter()
-const authStore = useAuthStore()
-const { locale, localePath, switchLocale } = useLocalePath()
+const { t } = useI18n();
+const router = useRouter();
+const authStore = useAuthStore();
+const { locale, localePath, switchLocale } = useLocalePath();
 
-const drawer = ref(false)
-const scrolled = ref(false)
+const drawer = ref(false);
+const scrolled = ref(false);
 
-const isAuthenticated = computed(() => authStore.isAuthenticated)
-const isAdmin = computed(() => authStore.isAdmin)
+const isAuthenticated = computed(() => authStore.isAuthenticated);
+const isAdmin = computed(() => authStore.isAdmin);
 
 function handleScroll() {
-  scrolled.value = window.scrollY > 20
+  scrolled.value = window.scrollY > 20;
 }
 
 async function handleSignout() {
-  await authStore.signout()
-  await router.push(localePath('/signin'))
+  await authStore.signout();
+  await router.push(localePath('/signin'));
 }
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-})
+  window.addEventListener('scroll', handleScroll);
+});
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
+  window.removeEventListener('scroll', handleScroll);
+});
 </script>
 
 <template>
   <v-app-bar
-    :elevation="scrolled ? 2 : 0"
     class="app-header"
-    height="72"
+    :class="{ 'app-header--scrolled': scrolled }"
   >
     <v-container class="d-flex align-center">
       <router-link
@@ -66,12 +67,15 @@ onUnmounted(() => {
 
       <v-spacer />
 
-      <div class="d-none d-md-flex align-center">
+      <div class="d-none d-md-flex align-center ga-1">
+        <ThemeToggle />
+
         <v-menu location="bottom end">
           <template #activator="{ props }">
             <v-btn
               v-bind="props"
-              icon
+              variant="text"
+              :append-icon="mdiChevronDown"
               :aria-label="t('a11y.languageSelector')"
             >
               {{ locale.toUpperCase() }}
@@ -157,7 +161,6 @@ onUnmounted(() => {
     v-model="drawer"
     location="top"
     temporary
-    class="app-mobile-nav"
   >
     <v-list class="pa-4">
       <v-list-item
@@ -179,7 +182,7 @@ onUnmounted(() => {
         <v-list-item-title class="text-uppercase font-weight-bold mb-2">
           {{ t('nav.language') }}
         </v-list-item-title>
-        <div class="d-flex ga-2">
+        <div class="d-flex align-center ga-2">
           <v-btn
             v-for="loc in SUPPORTED_LOCALES"
             :key="loc.code"
@@ -190,6 +193,8 @@ onUnmounted(() => {
           >
             {{ loc.code.toUpperCase() }}
           </v-btn>
+          <v-spacer />
+          <ThemeToggle />
         </div>
       </v-list-item>
 

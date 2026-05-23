@@ -1,48 +1,53 @@
-import bcrypt from 'bcryptjs'
-import { sendSecurityCodeEmail, generateSecurityCode, hashCode } from '#src/shared/email.js'
-import { USER_TYPES, SECURITY_CODE_EXPIRY_MS, BCRYPT_ROUNDS, EMAIL_REGEX } from '#src/shared/const.js'
-import { getClientIp } from '#src/shared/security.js'
-import { logEvent } from '#src/shared/logger.js'
-import { verifyCaptcha } from '#src/shared/captcha.js'
+import bcrypt from 'bcryptjs';
+import { sendSecurityCodeEmail, generateSecurityCode, hashCode } from '#src/shared/email.js';
+import {
+  USER_TYPES,
+  SECURITY_CODE_EXPIRY_MS,
+  BCRYPT_ROUNDS,
+  EMAIL_REGEX,
+} from '#src/shared/const.js';
+import { getClientIp } from '#src/shared/security.js';
+import { logEvent } from '#src/shared/logger.js';
+import { verifyCaptcha } from '#src/shared/captcha.js';
 
 export function setupSignupRoute(app, db) {
   app.post('/api/auth/signup', async (req, res) => {
-    const email = req.body.email?.trim().toLowerCase()
-    const { password, name, captchaToken } = req.body
+    const email = req.body.email?.trim().toLowerCase();
+    const { password, name, captchaToken } = req.body;
 
     if (!email || !password || !name) {
-      return res.status(400).json({ error: 'error.auth.missingFields' })
+      return res.status(400).json({ error: 'error.auth.missingFields' });
     }
 
     if (!EMAIL_REGEX.test(email)) {
-      return res.status(400).json({ error: 'error.validation.invalidEmail' })
+      return res.status(400).json({ error: 'error.validation.invalidEmail' });
     }
 
     if (!password || password.length < 8) {
-      return res.status(400).json({ error: 'error.auth.passwordTooShort' })
+      return res.status(400).json({ error: 'error.auth.passwordTooShort' });
     }
 
     if (!name || name.trim().length < 2) {
-      return res.status(400).json({ error: 'error.validation.nameTooShort' })
+      return res.status(400).json({ error: 'error.validation.nameTooShort' });
     }
 
     if (captchaToken) {
-      const captchaValid = await verifyCaptcha(captchaToken)
-      if (!captchaValid) return res.status(400).json({ error: 'error.auth.captchaFailed' })
+      const captchaValid = await verifyCaptcha(captchaToken);
+      if (!captchaValid) return res.status(400).json({ error: 'error.auth.captchaFailed' });
     }
 
     try {
-      const ip = getClientIp(req)
+      const ip = getClientIp(req);
 
-      const existingUser = await db.collection('users').findOne({ email })
+      const existingUser = await db.collection('users').findOne({ email });
       if (existingUser) {
-        return res.status(400).json({ error: 'error.auth.emailAlreadyUsed' })
+        return res.status(400).json({ error: 'error.auth.emailAlreadyUsed' });
       }
 
-      const hashedPassword = await bcrypt.hash(password, BCRYPT_ROUNDS)
-      const code = generateSecurityCode()
-      const codeHash = hashCode(code)
-      const codeExpires = new Date(Date.now() + SECURITY_CODE_EXPIRY_MS)
+      const hashedPassword = await bcrypt.hash(password, BCRYPT_ROUNDS);
+      const code = generateSecurityCode();
+      const codeHash = hashCode(code);
+      const codeExpires = new Date(Date.now() + SECURITY_CODE_EXPIRY_MS);
 
       const user = {
         email,
@@ -53,19 +58,19 @@ export function setupSignupRoute(app, db) {
         securityCodeExpires: codeExpires,
         securityCodeAttempts: 0,
         createdAt: new Date(),
-        updatedAt: new Date()
-      }
+        updatedAt: new Date(),
+      };
 
-      await db.collection('users').insertOne(user)
+      await db.collection('users').insertOne(user);
 
-      await sendSecurityCodeEmail(email, code)
+      await sendSecurityCodeEmail(email, code);
 
-      logEvent(db, { event: 'user-signup', userId: user._id, ip, meta: { email } })
+      logEvent(db, { event: 'user-signup', userId: user._id, ip, meta: { email } });
 
-      res.json({ status: 'verification_pending', email })
+      res.json({ status: 'verification_pending', email });
     } catch (err) {
-      console.error('Signup error:', err)
-      res.status(500).json({ error: 'error.auth.signupFailed' })
+      console.error('Signup error:', err);
+      res.status(500).json({ error: 'error.auth.signupFailed' });
     }
-  })
+  });
 }

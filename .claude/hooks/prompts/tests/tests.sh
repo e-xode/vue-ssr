@@ -4,6 +4,7 @@ set -euo pipefail
 
 export _HOOK_NAME="prompt-tests"
 source "$(dirname "$0")/../../logs/logs.sh"
+require_jq
 hook_log_start ""
 
 input=$(cat)
@@ -30,4 +31,4 @@ touch "$marker_file"
 reason="Check if you need to update or create new unit tests to cover the changes in codebase, and if so, create or update the unit tests accordingly. If there are no updates needed for unit tests, just respond with 'No updates needed for unit tests'."
 
 hook_log_end "BLOCK (prompt injected)"
-jq -nc --arg r "$reason" '{decision:"block", reason:$r}'
+emit_block "$reason"

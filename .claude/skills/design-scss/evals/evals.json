@@ -7,7 +7,9 @@
       "prompt": "I'm creating a new ProfileView component at src/views/Profile/ProfileView.vue. It needs a card layout with padding, a header row, and some content. Set up the SCSS file for me.",
       "assertions": [
         { "text": "Creates src/views/Profile/ProfileView.scss (not inline styles)" },
-        { "text": "Uses <style lang=\"scss\" scoped src=\"./ProfileView.scss\"></style> reference" },
+        {
+          "text": "Uses <style lang=\"scss\" scoped src=\"./ProfileView.scss\"></style> reference"
+        },
         { "text": "Uses $spacing-* tokens for padding and gaps" },
         { "text": "Uses mixins like @include flex-col or @include flex-between" },
         { "text": "Does not include code comments in the SCSS file" },

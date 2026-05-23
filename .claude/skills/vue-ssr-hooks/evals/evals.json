@@ -6,7 +6,9 @@
       "name": "trigger-tests-not-running",
       "prompt": "Why didn't the tests run after my change?",
       "assertions": [
-        { "text": "Explains the short-circuit table for non-code files and the dirty-list evaluation that determines when validation runs" }
+        {
+          "text": "Explains the short-circuit table for non-code files and the dirty-list evaluation that determines when validation runs"
+        }
       ]
     },
     {
@@ -14,7 +16,9 @@
       "name": "trigger-validation-pipeline",
       "prompt": "How does the validation pipeline work?",
       "assertions": [
-        { "text": "Describes the format → lint → test battery, hook scripts, guard scripts, and git digest sentinel for change detection" }
+        {
+          "text": "Describes the format → lint → test battery, hook scripts, guard scripts, and git digest sentinel for change detection"
+        }
       ]
     },
     {
@@ -22,7 +26,9 @@
       "name": "negative-api-route",
       "prompt": "How do I add a new API route?",
       "assertions": [
-        { "text": "Does NOT trigger the hooks skill; API routing questions route to vue-ssr-architecture instead" }
+        {
+          "text": "Does NOT trigger the hooks skill; API routing questions route to vue-ssr-architecture instead"
+        }
       ]
     }
   ]

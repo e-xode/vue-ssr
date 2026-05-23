@@ -8,6 +8,7 @@
     "mainNavigation": "Main navigation",
     "openMenu": "Open menu",
     "skipToContent": "Skip to main content",
+    "toggleTheme": "Toggle light/dark theme",
     "userMenu": "User menu"
   },
   "app": {
@@ -122,7 +123,8 @@
       "description": "Get in touch with us"
     },
     "notFound": {
-      "title": "Page Not Found"
+      "title": "Page Not Found",
+      "subtitle": "The page you are looking for does not exist or has been moved."
     },
     "admin": {
       "users": {
@@ -229,6 +231,7 @@
       "total": "logs",
       "search": "Search by event or IP",
       "date": "Date",
+      "deleteSelected": "Delete selected ({count})",
       "event": "Event",
       "ip": "IP",
       "user": "User",
@@ -237,6 +240,7 @@
       "filter": {
         "event": "Filter by event",
         "from": "From",
+        "reset": "Reset",
         "to": "To"
       },
       "deleteConfirm": {
@@ -255,25 +259,27 @@
   },
   "verify": {
     "title": "Verify your email",
-    "subtitle": "We sent a 6-digit code to",
-    "submit": "Verify",
-    "timerExpiring": "Expires in {minutes}:{seconds}",
-    "codeExpired": "Code expired. Please request a new one.",
     "attemptsRemaining": "{remaining} attempt(s) remaining",
+    "backToLogin": "Back to sign in",
+    "codeExpired": "Code expired. Please request a new one.",
     "noCode": "Didn't receive a code?",
     "resend": "Resend code",
-    "resendIn": "Resend in {seconds}s"
+    "resendIn": "Resend in {seconds}s",
+    "submit": "Verify",
+    "subtitle": "We sent a 6-digit code to",
+    "timerExpiring": "Expires in {minutes}:{seconds}"
   },
   "forgotPassword": {
     "title": "Forgot your password?",
+    "backToSignin": "Back to sign in",
     "description": "Enter your email address and we'll send you a reset code.",
-    "subtitle": "Enter your email address and we'll send you a reset code.",
-    "submit": "Send reset code",
+    "enterCode": "Enter reset code",
+    "link": "Forgot password?",
+    "resend": "Resend code",
     "sent": "If an account exists for this email address, a password reset code has been sent.",
     "sentHint": "Check your inbox (and spam folder).",
-    "enterCode": "Enter reset code",
-    "resend": "Resend code",
-    "backToSignin": "Back to sign in"
+    "submit": "Send reset code",
+    "subtitle": "Enter your email address and we'll send you a reset code."
   },
   "resetPassword": {
     "title": "Reset your password",

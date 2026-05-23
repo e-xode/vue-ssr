@@ -1,22 +1,22 @@
 .code-boxes {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: $spacing-sm;
 }
 
 .code-digit {
-  width: 44px;
-  height: 54px;
+  width: $spacing-unit * 5.5;
+  height: $spacing-unit * 6.5;
   text-align: center;
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-semibold;
   border: 2px solid rgba(var(--v-border-color), 0.26);
-  border-radius: 8px;
+  border-radius: $border-radius-md;
   background: transparent;
   color: inherit;
   outline: none;
-  transition: border-color 0.15s ease;
   caret-color: transparent;
+  @include transition(border-color, $transition-fast);
 
   &:focus {
     border-color: rgb(var(--v-theme-primary));

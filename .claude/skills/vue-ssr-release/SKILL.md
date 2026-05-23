@@ -9,21 +9,22 @@ description: "Release workflow for the Vue SSR Starter Kit (e-xode/vue-ssr): ver
 
 ## What this skill does (and does not)
 
-| In scope | Out of scope |
-| --- | --- |
-| Detect current branch (main/master) | Deploying to production (→ `vue-ssr-deployment`) |
-| Create release branch `release/vX.Y.Z` | Writing application code (→ `vue` agent) |
-| Bump `version` in `package.json` | CI/CD pipeline changes (→ `vue-ssr-deployment`) |
-| Sync `package-lock.json` via `npm install` | Post-task code validation (→ `hooks` agent) |
-| Gather unreleased changes from git log | |
-| Format and write CHANGELOG entry | |
-| Propose commit, push, and tag | |
+| In scope                                   | Out of scope                                     |
+| ------------------------------------------ | ------------------------------------------------ |
+| Detect current branch (main/master)        | Deploying to production (→ `vue-ssr-deployment`) |
+| Create release branch `release/vX.Y.Z`     | Writing application code (→ `vue` agent)         |
+| Bump `version` in `package.json`           | CI/CD pipeline changes (→ `vue-ssr-deployment`)  |
+| Sync `package-lock.json` via `npm install` | Post-task code validation (→ `hooks` agent)      |
+| Gather unreleased changes from git log     |                                                  |
+| Format and write CHANGELOG entry           |                                                  |
+| Maintain `[Unreleased]` between releases   |                                                  |
+| Propose commit, push, and tag              |                                                  |
 
 ## Hard constraints
 
 1. **Never auto-commit/push/tag.** Always propose and wait for explicit user confirmation before executing any git write operation.
 2. **Commit format:** `[release/vX.Y.Z] release vX.Y.Z`
-3. **Co-authored-by trailer** on every commit: `Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>`
+3. **Co-authored-by trailer** on every commit: `Co-authored-by: AI Assistant <ai-assistant@users.noreply.github.com>` (tool-agnostic placeholder — forks may replace this identity)
 4. **Tag format:** `vX.Y.Z` (prefixed with `v`)
 5. **Branch must be main or master** to start a release. If on another branch, abort and inform the user.
 
@@ -50,6 +51,7 @@ If dirty, abort: "Working tree is not clean. Please commit or stash your changes
 Ask the user: **patch**, **minor**, or **major**.
 
 Compute new version from current `package.json` version:
+
 - `patch`: 3.0.2 → 3.0.3
 - `minor`: 3.0.2 → 3.1.0
 - `major`: 3.0.2 → 4.0.0
@@ -74,19 +76,21 @@ This updates `package-lock.json` to match the new version.
 
 ### Step 7 — Gather unreleased changes
 
+If a `## [Unreleased]` section already exists in `CHANGELOG.md` (maintained continuously — see "Continuous `[Unreleased]` update" below), use it as the primary source and only cross-check git log for anything missed. Otherwise gather from git log:
+
 ```bash
 git log --oneline $(git describe --tags --abbrev=0)..HEAD
 ```
 
 Parse commit messages. Group them into categories:
 
-| Category | Commit patterns |
-| --- | --- |
+| Category         | Commit patterns                            |
+| ---------------- | ------------------------------------------ |
 | Breaking Changes | `breaking:`, `BREAKING CHANGE`, major bump |
-| New Features | `feat:`, `feature:`, `add:` |
-| Improvements | `improve:`, `refactor:`, `perf:`, `chore:` |
-| Bug Fixes | `fix:`, `bugfix:` |
-| Security | `security:`, `sec:` |
+| New Features     | `feat:`, `feature:`, `add:`                |
+| Improvements     | `improve:`, `refactor:`, `perf:`, `chore:` |
+| Bug Fixes        | `fix:`, `bugfix:`                          |
+| Security         | `security:`, `sec:`                        |
 
 If commits don't follow conventional format, list them as bullet points and let the user categorize.
 
@@ -98,12 +102,15 @@ Show the user the formatted CHANGELOG section:
 ## X.Y.Z
 
 ### New Features
+
 - Description of feature
 
 ### Improvements
+
 - Description of improvement
 
 ### Bug Fixes
+
 - Description of fix
 ```
 
@@ -111,7 +118,7 @@ Ask the user to **approve**, **edit**, or **provide corrections**.
 
 ### Step 9 — Write CHANGELOG
 
-Insert the approved section at the top of `CHANGELOG.md`, below `# Changelog` and any blank line, above the first existing `## X.Y.Z` entry.
+If a `## [Unreleased]` section exists, rename its header to `## X.Y.Z` (merging any additions from Steps 7–8). Otherwise insert the approved `## X.Y.Z` section at the top of `CHANGELOG.md`, below `# Changelog` and any blank line, above the first existing `## X.Y.Z` entry. Either way, leave no empty `[Unreleased]` section behind.
 
 ### Step 10 — Propose commit
 
@@ -121,7 +128,7 @@ Present the exact command to the user:
 git add package.json package-lock.json CHANGELOG.md
 git commit -m "[release/vX.Y.Z] release vX.Y.Z
 
-Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
+Co-authored-by: AI Assistant <ai-assistant@users.noreply.github.com>"
 ```
 
 **Wait for user confirmation** before executing.
@@ -148,12 +155,15 @@ Match the existing project style:
 ## X.Y.Z
 
 ### New Features
+
 - **component/scope** — Description of the change
 
 ### Improvements
+
 - Description
 
 ### Bug Fixes
+
 - Description
 
 ---
@@ -165,6 +175,22 @@ Match the existing project style:
 - Use `###` for categories
 - Use `- ` bullet points with optional `**scope**` prefix
 - No date in header (project convention — dates are in older entries but dropped from v3.0.0+)
+- An `## [Unreleased]` section may sit at the very top between releases; it uses the same category structure and is converted to `## X.Y.Z` at release time (Step 9)
+
+## Continuous `[Unreleased]` update (between releases)
+
+Triggered by the **Task completion protocol** in `CLAUDE.md` (step 5), not by a release. The orchestrator does this inline and silently — no version bump, no commit, no tag, no user prompt.
+
+**When to add an entry (curated):** the task produced a user-facing feature, bug fix, dependency change, or behavior/UI/i18n change. **Skip** pure reformatting, lockfile-only, `.claude/` config, test-only, and internal-docs changes.
+
+**How:**
+
+1. Derive the entry from the diff of the just-completed task — what changed, and why it matters to a user of the kit. One bullet = one theme; ignore reformatting noise.
+2. Ensure a `## [Unreleased]` section exists at the top of `CHANGELOG.md`, directly under `# Changelog`. Create it if absent.
+3. Place each bullet under the matching category: `Package Updates`, `New Features`, `Improvements`, `Bug Fixes`, `Removed` (`Security` if relevant). Create a category subsection only when needed.
+4. **Deduplicate and merge** into existing `[Unreleased]` bullets under the same category — never add a second `[Unreleased]` section and never restate an existing bullet.
+
+**Constraints:** never bump the `package.json` version, never `git commit`/`tag`, no dates. The section stays `[Unreleased]` until a release converts it (Step 9).
 
 ## Edge cases
 

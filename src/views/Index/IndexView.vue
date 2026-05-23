@@ -1,6 +1,6 @@
 <script setup>
-import { useI18n } from 'vue-i18n'
-import { useLocalePath } from '@/composables/useLocalePath'
+import { useI18n } from 'vue-i18n';
+import { useLocalePath } from '@/composables/useLocalePath';
 import {
   mdiServerNetwork,
   mdiShieldLock,
@@ -15,33 +15,33 @@ import {
   mdiVuejs,
   mdiNodejs,
   mdiDatabase,
-  mdiLanguageJavascript
-} from '@mdi/js'
+  mdiLanguageJavascript,
+} from '@mdi/js';
 
-const { t } = useI18n()
-const { localePath } = useLocalePath()
+const { t } = useI18n();
+const { localePath } = useLocalePath();
 
-const GITHUB_URL = 'https://github.com/e-xode/vue-ssr'
+const GITHUB_URL = 'https://github.com/e-xode/vue-ssr';
 
 const features = [
-  { key: 'ssr', icon: mdiServerNetwork, color: 'primary' },
-  { key: 'auth', icon: mdiShieldLock, color: 'secondary' },
-  { key: 'i18n', icon: mdiTranslate, color: 'info' },
-  { key: 'admin', icon: mdiShieldAccount, color: 'warning' },
-  { key: 'ui', icon: mdiPalette, color: 'success' },
-  { key: 'security', icon: mdiSecurity, color: 'error' },
-  { key: 'account', icon: mdiAccountCog, color: 'primary' },
-  { key: 'logging', icon: mdiFormatListChecks, color: 'secondary' },
-  { key: 'ipSecurity', icon: mdiShieldCheck, color: 'info' }
-]
+  { key: 'ssr', icon: mdiServerNetwork },
+  { key: 'auth', icon: mdiShieldLock },
+  { key: 'i18n', icon: mdiTranslate },
+  { key: 'admin', icon: mdiShieldAccount },
+  { key: 'ui', icon: mdiPalette },
+  { key: 'security', icon: mdiSecurity },
+  { key: 'account', icon: mdiAccountCog },
+  { key: 'logging', icon: mdiFormatListChecks },
+  { key: 'ipSecurity', icon: mdiShieldCheck },
+];
 
 const stack = [
-  { label: 'Vue 3', icon: mdiVuejs, color: '#42b883' },
-  { label: 'Express', icon: mdiNodejs, color: '#339933' },
-  { label: 'Vite SSR', icon: mdiLanguageJavascript, color: '#646cff' },
-  { label: 'MongoDB', icon: mdiDatabase, color: '#47a248' },
-  { label: 'Vuetify', icon: mdiPalette, color: '#1867c0' }
-]
+  { label: 'Vue 3', icon: mdiVuejs },
+  { label: 'Express', icon: mdiNodejs },
+  { label: 'Vite SSR', icon: mdiLanguageJavascript },
+  { label: 'MongoDB', icon: mdiDatabase },
+  { label: 'Vuetify', icon: mdiPalette },
+];
 </script>
 
 <template>
@@ -79,7 +79,7 @@ const stack = [
               {{ t('index.hero.description') }}
             </p>
 
-            <div class="d-flex gap-4 justify-center flex-wrap">
+            <div class="d-flex ga-4 justify-center flex-wrap">
               <v-btn
                 :to="localePath('/signup')"
                 variant="flat"
@@ -94,7 +94,6 @@ const stack = [
                 target="_blank"
                 rel="noopener noreferrer"
                 variant="outlined"
-                color="primary"
                 size="large"
                 rounded="lg"
                 :prepend-icon="mdiGithub"
@@ -108,7 +107,7 @@ const stack = [
       </v-container>
     </section>
 
-    <section class="features py-16">
+    <section class="features">
       <v-container>
         <v-row
           justify="center"
@@ -116,9 +115,10 @@ const stack = [
         >
           <v-col
             cols="12"
+            md="8"
             class="text-center"
           >
-            <h2 class="text-h5 font-weight-bold">
+            <h2 class="section-title">
               {{ t('index.features.title') }}
             </h2>
           </v-col>
@@ -131,20 +131,17 @@ const stack = [
             sm="6"
             md="4"
           >
-            <v-card
-              class="pa-5 h-100"
-              border
-            >
-              <v-icon
-                :icon="feature.icon"
-                :color="feature.color"
-                size="32"
-                class="mb-3"
-              />
-              <div class="text-subtitle-1 font-weight-bold mb-2">
-                {{ t(`index.features.${feature.key}.title`) }}
+            <v-card class="feature-card h-100">
+              <div class="feature-card__icon">
+                <v-icon
+                  :icon="feature.icon"
+                  size="24"
+                />
               </div>
-              <p class="text-body-2 text-medium-emphasis mb-0">
+              <h3 class="feature-card__title">
+                {{ t(`index.features.${feature.key}.title`) }}
+              </h3>
+              <p class="feature-card__desc">
                 {{ t(`index.features.${feature.key}.description`) }}
               </p>
             </v-card>
@@ -153,7 +150,7 @@ const stack = [
       </v-container>
     </section>
 
-    <section class="stack py-12">
+    <section class="stack">
       <v-container>
         <v-row
           justify="center"
@@ -163,14 +160,14 @@ const stack = [
             cols="12"
             class="text-center"
           >
-            <h2 class="text-h6 font-weight-bold text-medium-emphasis text-uppercase">
+            <h2 class="section-eyebrow">
               {{ t('index.stack.title') }}
             </h2>
           </v-col>
         </v-row>
         <v-row
           justify="center"
-          class="gap-2"
+          class="ga-3"
         >
           <v-col
             v-for="item in stack"
@@ -180,12 +177,12 @@ const stack = [
             <v-chip
               variant="tonal"
               size="large"
+              class="stack__chip"
             >
               <template #prepend>
                 <v-icon
                   :icon="item.icon"
-                  :color="item.color"
-                  class="mr-1"
+                  class="mr-2"
                 />
               </template>
               {{ item.label }}
@@ -195,7 +192,7 @@ const stack = [
       </v-container>
     </section>
 
-    <section class="opensource py-16">
+    <section class="opensource">
       <v-container>
         <v-row justify="center">
           <v-col
@@ -206,12 +203,12 @@ const stack = [
             <v-icon
               :icon="mdiGithub"
               size="48"
-              class="mb-4"
+              class="opensource__icon mb-4"
             />
-            <h2 class="text-h5 font-weight-bold mb-3">
+            <h2 class="section-title mb-3">
               {{ t('index.opensource.title') }}
             </h2>
-            <p class="text-body-1 text-medium-emphasis mb-6">
+            <p class="opensource__description mb-6">
               {{ t('index.opensource.description') }}
             </p>
             <v-btn

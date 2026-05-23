@@ -1,7 +1,7 @@
 name: Question / Help
 description: Posez une question ou demandez de l'aide
-title: "[QUESTION] "
-labels: ["question", "documentation"]
+title: '[QUESTION] '
+labels: ['question', 'documentation']
 assignees: []
 
 body:
@@ -52,16 +52,16 @@ body:
       label: Catégorie
       description: Quelle catégorie correspond le mieux?
       options:
-        - "Setup / Installation"
-        - "Development"
-        - "API Usage"
-        - "Authentication"
-        - "Database"
-        - "Deployment"
-        - "Performance"
-        - "Error / Bug (should create bug report)"
-        - "Documentation"
-        - "Autre"
+        - 'Setup / Installation'
+        - 'Development'
+        - 'API Usage'
+        - 'Authentication'
+        - 'Database'
+        - 'Deployment'
+        - 'Performance'
+        - 'Error / Bug (should create bug report)'
+        - 'Documentation'
+        - 'Autre'
     validations:
       required: false
 

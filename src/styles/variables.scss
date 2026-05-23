@@ -6,15 +6,46 @@ $spacing-lg: $spacing-unit * 3;
 $spacing-xl: $spacing-unit * 4;
 $spacing-2xl: $spacing-unit * 6;
 
+$section-py-sm: $spacing-2xl;
+$section-py: $spacing-unit * 10;
+$section-py-lg: $spacing-unit * 16;
+
 $border-radius-sm: 4px;
 $border-radius-md: 8px;
 $border-radius-lg: 12px;
 $border-radius-xl: 16px;
 
-$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+$border-width-hairline: 1px;
+
+$header-height: 64px;
+
+$container-sm: 640px;
+$container-md: 768px;
+$container-lg: 1024px;
+$container-xl: 1280px;
+
+$white: #ffffff;
+$gray-50: #fafafa;
+$gray-100: #f5f5f5;
+$gray-200: #e5e5e5;
+$gray-300: #d4d4d4;
+$gray-400: #a3a3a3;
+$gray-500: #737373;
+$gray-600: #525252;
+$gray-700: #404040;
+$gray-800: #262626;
+$gray-900: #171717;
+
+$accent-indigo: #4f46e5;
+$accent-indigo-hover: #4338ca;
+$accent-indigo-active: #3730a3;
+
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+$shadow-md:
+  0 1px 3px rgba(0, 0, 0, 0.06),
+  0 1px 2px rgba(0, 0, 0, 0.04);
+$shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
+$shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.1);
 
 $transition-fast: 150ms;
 $transition-base: 300ms;
@@ -26,3 +57,11 @@ $breakpoint-md: 768px;
 $breakpoint-lg: 1024px;
 $breakpoint-xl: 1280px;
 $breakpoint-2xl: 1536px;
+
+$z-base: 1;
+$z-dropdown: 1000;
+$z-sticky: 1020;
+$z-header: 1030;
+$z-overlay: 1040;
+$z-modal: 1050;
+$z-skip-link: 9999;

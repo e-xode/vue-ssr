@@ -360,13 +360,11 @@ Usage:
 
 ```javascript
 // src/shared/email.js
-Transporter:
-  host: process.env.MAILER_HOST
-  port: process.env.MAILER_PORT
-  ssl: process.env.MAILER_SSL === 'true'
-  auth:
-    user: process.env.MAILER_LOGIN
-    pass: process.env.MAILER_PASSWORD
+Transporter: host: process.env.MAILER_HOST;
+port: process.env.MAILER_PORT;
+ssl: process.env.MAILER_SSL === 'true';
+auth: user: process.env.MAILER_LOGIN;
+pass: process.env.MAILER_PASSWORD;
 ```
 
 ### Templates d'Email
@@ -431,15 +429,15 @@ createI18n({
   fallbackLocale: 'en',
   legacy: false,
   locale: savedLocale,
-  messages: { en, fr }
-})
+  messages: { en, fr },
+});
 ```
 
 ### Usage dans les composants
 
 ```vue
 <script setup>
-const { t, locale } = useI18n()
+const { t, locale } = useI18n();
 
 // t('key.name') → cherche dans le fichier locale actuelle
 // locale = 'fr' → change la langue
@@ -555,6 +553,8 @@ FROM node:22-slim AS runner
 
 ### Docker Compose Dev
 
+The dev compose is split into `docker-compose.yml` (base — runs the `node` app only and reads `.env`, connecting to a remote DB) and `docker-compose.local.yml` (override — adds a local `mongo` container and redirects the app to it). The active combination is driven by the `COMPOSE_FILE` variable in `.env` (set in `.env.example`): keep it set for local node + mongo, comment it out to target a remote database.
+
 ```yaml
 services:
   node:
@@ -611,12 +611,14 @@ Application performante + pré-rendue
 ## Performance & Optimisations
 
 ### SSR Benefits
+
 ✅ HTML content available immédiatement
 ✅ Better SEO (crawlers voient le contenu)
 ✅ Faster First Contentful Paint
 ✅ Sessions server-side (pas vulnérable XSS)
 
 ### Optimisations appliquées
+
 ✅ CSS code splitting désactivé (Vite)
 ✅ Asset naming avec hashes
 ✅ Production image: Alpine → Slim (plus léger)
@@ -630,9 +632,9 @@ Application performante + pré-rendue
 
 ```javascript
 // src/shared/log.js
-logInfo('[APP] Database connection successful')
-logError('[APP] Error...')
-logWarn('[APP] Warning...')
+logInfo('[APP] Database connection successful');
+logError('[APP] Error...');
+logWarn('[APP] Warning...');
 ```
 
 ### Environment & Watch

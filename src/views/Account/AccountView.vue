@@ -1,165 +1,165 @@
 <script setup>
-import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { mdiCamera, mdiDelete } from '@mdi/js'
-import { useAuthStore } from '@/stores/auth'
+import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { mdiCamera, mdiDelete } from '@mdi/js';
+import { useAuthStore } from '@/stores/auth';
 
-const { t } = useI18n()
-const authStore = useAuthStore()
+const { t } = useI18n();
+const authStore = useAuthStore();
 
-const tab = ref('profile')
+const tab = ref('profile');
 
-const avatarInput = ref(null)
-const avatarLoading = ref(false)
-const avatarError = ref('')
+const avatarInput = ref(null);
+const avatarLoading = ref(false);
+const avatarError = ref('');
 
-const profileForm = ref({ name: authStore.user?.name || '' })
-const profileSaving = ref(false)
-const profileSuccess = ref('')
-const profileError = ref('')
+const profileForm = ref({ name: authStore.user?.name || '' });
+const profileSaving = ref(false);
+const profileSuccess = ref('');
+const profileError = ref('');
 
-const emailForm = ref({ newEmail: '', code: '' })
-const emailStep = ref(1)
-const emailSaving = ref(false)
-const emailSuccess = ref('')
-const emailError = ref('')
+const emailForm = ref({ newEmail: '', code: '' });
+const emailStep = ref(1);
+const emailSaving = ref(false);
+const emailSuccess = ref('');
+const emailError = ref('');
 
-const passwordForm = ref({ currentPassword: '', newPassword: '', confirmPassword: '' })
-const showPassword = ref(false)
-const passwordSaving = ref(false)
-const passwordSuccess = ref('')
-const passwordError = ref('')
+const passwordForm = ref({ currentPassword: '', newPassword: '', confirmPassword: '' });
+const showPassword = ref(false);
+const passwordSaving = ref(false);
+const passwordSuccess = ref('');
+const passwordError = ref('');
 
 async function uploadAvatar(event) {
-  const file = event.target.files?.[0]
-  if (!file) return
-  avatarError.value = ''
-  avatarLoading.value = true
+  const file = event.target.files?.[0];
+  if (!file) return;
+  avatarError.value = '';
+  avatarLoading.value = true;
   try {
-    const form = new FormData()
-    form.append('avatar', file)
+    const form = new FormData();
+    form.append('avatar', file);
     const response = await fetch('/api/auth/avatar', {
       method: 'POST',
       credentials: 'include',
-      body: form
-    })
-    const data = await response.json()
+      body: form,
+    });
+    const data = await response.json();
     if (response.ok) {
-      authStore.updateUser({ avatar: data.avatar })
+      authStore.updateUser({ avatar: data.avatar });
     } else {
-      avatarError.value = t(data.error) || t('error.server')
+      avatarError.value = t(data.error) || t('error.server');
     }
   } catch {
-    avatarError.value = t('error.server')
+    avatarError.value = t('error.server');
   } finally {
-    avatarLoading.value = false
-    if (avatarInput.value) avatarInput.value.value = ''
+    avatarLoading.value = false;
+    if (avatarInput.value) avatarInput.value.value = '';
   }
 }
 
 async function deleteAvatar() {
-  avatarError.value = ''
-  avatarLoading.value = true
+  avatarError.value = '';
+  avatarLoading.value = true;
   try {
     const response = await fetch('/api/auth/avatar', {
       method: 'DELETE',
-      credentials: 'include'
-    })
+      credentials: 'include',
+    });
     if (response.ok) {
-      authStore.updateUser({ avatar: null })
+      authStore.updateUser({ avatar: null });
     } else {
-      const data = await response.json()
-      avatarError.value = t(data.error) || t('error.server')
+      const data = await response.json();
+      avatarError.value = t(data.error) || t('error.server');
     }
   } catch {
-    avatarError.value = t('error.server')
+    avatarError.value = t('error.server');
   } finally {
-    avatarLoading.value = false
+    avatarLoading.value = false;
   }
 }
 
 async function saveProfile() {
-  profileError.value = ''
-  profileSuccess.value = ''
-  profileSaving.value = true
+  profileError.value = '';
+  profileSuccess.value = '';
+  profileSaving.value = true;
   try {
     const response = await fetch('/api/auth/profile', {
       method: 'PUT',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: profileForm.value.name })
-    })
-    const data = await response.json()
+      body: JSON.stringify({ name: profileForm.value.name }),
+    });
+    const data = await response.json();
     if (response.ok) {
-      authStore.updateUser({ name: profileForm.value.name })
-      profileSuccess.value = t('account.profile.saveSuccess')
+      authStore.updateUser({ name: profileForm.value.name });
+      profileSuccess.value = t('account.profile.saveSuccess');
     } else {
-      profileError.value = t(data.error) || t('error.server')
+      profileError.value = t(data.error) || t('error.server');
     }
   } catch {
-    profileError.value = t('error.server')
+    profileError.value = t('error.server');
   } finally {
-    profileSaving.value = false
+    profileSaving.value = false;
   }
 }
 
 async function requestEmailChange() {
-  emailError.value = ''
-  emailSaving.value = true
+  emailError.value = '';
+  emailSaving.value = true;
   try {
     const response = await fetch('/api/auth/change-email', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ newEmail: emailForm.value.newEmail })
-    })
-    const data = await response.json()
+      body: JSON.stringify({ newEmail: emailForm.value.newEmail }),
+    });
+    const data = await response.json();
     if (response.ok) {
-      emailStep.value = 2
+      emailStep.value = 2;
     } else {
-      emailError.value = t(data.error) || t('error.server')
+      emailError.value = t(data.error) || t('error.server');
     }
   } catch {
-    emailError.value = t('error.server')
+    emailError.value = t('error.server');
   } finally {
-    emailSaving.value = false
+    emailSaving.value = false;
   }
 }
 
 async function verifyEmailChange() {
-  emailError.value = ''
-  emailSaving.value = true
+  emailError.value = '';
+  emailSaving.value = true;
   try {
     const response = await fetch('/api/auth/verify-email-change', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code: emailForm.value.code })
-    })
-    const data = await response.json()
+      body: JSON.stringify({ code: emailForm.value.code }),
+    });
+    const data = await response.json();
     if (response.ok) {
-      authStore.updateUser({ email: data.email })
-      emailSuccess.value = t('account.email.changeSuccess')
-      emailStep.value = 1
-      emailForm.value = { newEmail: '', code: '' }
+      authStore.updateUser({ email: data.email });
+      emailSuccess.value = t('account.email.changeSuccess');
+      emailStep.value = 1;
+      emailForm.value = { newEmail: '', code: '' };
     } else {
-      emailError.value = t(data.error) || t('error.server')
+      emailError.value = t(data.error) || t('error.server');
     }
   } catch {
-    emailError.value = t('error.server')
+    emailError.value = t('error.server');
   } finally {
-    emailSaving.value = false
+    emailSaving.value = false;
   }
 }
 
 async function changePassword() {
   if (passwordForm.value.newPassword !== passwordForm.value.confirmPassword) {
-    passwordError.value = t('error.auth.passwordsDoNotMatch')
-    return
+    passwordError.value = t('error.auth.passwordsDoNotMatch');
+    return;
   }
-  passwordError.value = ''
-  passwordSuccess.value = ''
-  passwordSaving.value = true
+  passwordError.value = '';
+  passwordSuccess.value = '';
+  passwordSaving.value = true;
   try {
     const response = await fetch('/api/auth/change-password', {
       method: 'POST',
@@ -167,20 +167,20 @@ async function changePassword() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         currentPassword: passwordForm.value.currentPassword,
-        newPassword: passwordForm.value.newPassword
-      })
-    })
-    const data = await response.json()
+        newPassword: passwordForm.value.newPassword,
+      }),
+    });
+    const data = await response.json();
     if (response.ok) {
-      passwordSuccess.value = t('account.password.changeSuccess')
-      passwordForm.value = { currentPassword: '', newPassword: '', confirmPassword: '' }
+      passwordSuccess.value = t('account.password.changeSuccess');
+      passwordForm.value = { currentPassword: '', newPassword: '', confirmPassword: '' };
     } else {
-      passwordError.value = t(data.error) || t('error.server')
+      passwordError.value = t(data.error) || t('error.server');
     }
   } catch {
-    passwordError.value = t('error.server')
+    passwordError.value = t('error.server');
   } finally {
-    passwordSaving.value = false
+    passwordSaving.value = false;
   }
 }
 </script>
@@ -213,7 +213,7 @@ async function changePassword() {
             <v-card max-width="500">
               <v-card-title>{{ t('account.profile.title') }}</v-card-title>
               <v-card-text>
-                <div class="d-flex align-center gap-4 mb-6">
+                <div class="d-flex align-center ga-4 mb-6">
                   <v-avatar
                     size="72"
                     color="primary"
@@ -230,7 +230,7 @@ async function changePassword() {
                       {{ authStore.user?.name?.charAt(0)?.toUpperCase() }}
                     </span>
                   </v-avatar>
-                  <div class="d-flex gap-2">
+                  <div class="d-flex ga-2">
                     <v-btn
                       :prepend-icon="mdiCamera"
                       size="small"
@@ -369,7 +369,7 @@ async function changePassword() {
                     :disabled="emailSaving"
                     required
                   />
-                  <div class="d-flex gap-2">
+                  <div class="d-flex ga-2">
                     <v-btn
                       type="submit"
                       color="primary"

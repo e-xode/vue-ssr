@@ -1,10 +1,10 @@
-name: "npm-test"
+name: 'npm-test'
 
 on:
   push:
-    branches: [ "master", "development"]
+    branches: ['master', 'development']
   pull_request:
-    branches: [ "master", "development" ]
+    branches: ['master', 'development']
 
 jobs:
   test:

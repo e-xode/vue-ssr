@@ -1,92 +1,92 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
-import { useLocalePath } from '@/composables/useLocalePath'
-import { mdiMagnify, mdiPencil, mdiDelete, mdiChevronLeft, mdiChevronRight } from '@mdi/js'
+import { ref, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import { useLocalePath } from '@/composables/useLocalePath';
+import { mdiMagnify, mdiPencil, mdiDelete, mdiChevronLeft, mdiChevronRight } from '@mdi/js';
 
-const { t } = useI18n()
-const router = useRouter()
-const { localePath } = useLocalePath()
+const { t } = useI18n();
+const router = useRouter();
+const { localePath } = useLocalePath();
 
-const users = ref([])
-const total = ref(0)
-const page = ref(1)
-const limit = ref(25)
-const search = ref('')
-const loading = ref(false)
-const error = ref('')
-const deleteDialog = ref(false)
-const userToDelete = ref(null)
-const deleteLoading = ref(false)
+const users = ref([]);
+const total = ref(0);
+const page = ref(1);
+const limit = ref(25);
+const search = ref('');
+const loading = ref(false);
+const error = ref('');
+const deleteDialog = ref(false);
+const userToDelete = ref(null);
+const deleteLoading = ref(false);
 
-const totalPages = ref(1)
+const totalPages = ref(1);
 
 async function fetchUsers() {
-  loading.value = true
-  error.value = ''
+  loading.value = true;
+  error.value = '';
   try {
     const params = new URLSearchParams({
       page: page.value,
       limit: limit.value,
-      ...(search.value ? { search: search.value } : {})
-    })
-    const response = await fetch(`/api/admin/users?${params}`, { credentials: 'include' })
-    if (!response.ok) throw new Error('error.server')
-    const data = await response.json()
-    users.value = data.users
-    total.value = data.total
-    totalPages.value = Math.ceil(data.total / limit.value)
+      ...(search.value ? { search: search.value } : {}),
+    });
+    const response = await fetch(`/api/admin/users?${params}`, { credentials: 'include' });
+    if (!response.ok) throw new Error('error.server');
+    const data = await response.json();
+    users.value = data.users;
+    total.value = data.total;
+    totalPages.value = Math.ceil(data.total / limit.value);
   } catch (e) {
-    error.value = e.message
+    error.value = e.message;
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
 function handleSearch() {
-  page.value = 1
-  fetchUsers()
+  page.value = 1;
+  fetchUsers();
 }
 
 function goToPage(p) {
-  page.value = p
-  fetchUsers()
+  page.value = p;
+  fetchUsers();
 }
 
 function confirmDelete(user) {
-  userToDelete.value = user
-  deleteDialog.value = true
+  userToDelete.value = user;
+  deleteDialog.value = true;
 }
 
 async function executeDelete() {
-  if (!userToDelete.value) return
-  deleteLoading.value = true
+  if (!userToDelete.value) return;
+  deleteLoading.value = true;
   try {
     const response = await fetch(`/api/admin/users/${userToDelete.value._id}`, {
       method: 'DELETE',
-      credentials: 'include'
-    })
+      credentials: 'include',
+    });
     if (!response.ok) {
-      const data = await response.json()
-      throw new Error(data.error || 'error.server')
+      const data = await response.json();
+      throw new Error(data.error || 'error.server');
     }
-    deleteDialog.value = false
-    userToDelete.value = null
-    await fetchUsers()
+    deleteDialog.value = false;
+    userToDelete.value = null;
+    await fetchUsers();
   } catch (e) {
-    error.value = e.message
+    error.value = e.message;
   } finally {
-    deleteLoading.value = false
+    deleteLoading.value = false;
   }
 }
 
 function formatDate(date) {
-  if (!date) return '—'
-  return new Date(date).toLocaleDateString()
+  if (!date) return '—';
+  return new Date(date).toLocaleDateString();
 }
 
-onMounted(fetchUsers)
+onMounted(fetchUsers);
 </script>
 
 <template>
@@ -176,7 +176,6 @@ onMounted(fetchUsers)
                 <td>{{ user.email }}</td>
                 <td>
                   <v-chip
-                    :color="user.type === 'admin' ? 'primary' : 'default'"
                     size="small"
                     variant="tonal"
                   >
@@ -205,7 +204,7 @@ onMounted(fetchUsers)
 
           <v-card-text
             v-if="totalPages > 1"
-            class="d-flex align-center justify-center gap-2 pt-4"
+            class="d-flex align-center justify-center ga-2 pt-4"
           >
             <v-btn
               :icon="mdiChevronLeft"

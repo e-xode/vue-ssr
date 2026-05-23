@@ -37,6 +37,7 @@ src/components/layout/
 ```
 
 Rules:
+
 - Always `lang="scss"`
 - Always `scoped`
 - Always external `src` attribute
@@ -58,7 +59,7 @@ This is configured in `vite.config.js`:
 css: {
   preprocessorOptions: {
     scss: {
-      additionalData: `@use '@/styles/_inject.scss' as *;\n`
+      additionalData: `@use '@/styles/_inject.scss' as *;\n`;
     }
   }
 }
@@ -76,11 +77,11 @@ Since `_inject.scss` provides variables and mixins automatically:
 
 ## Global styles vs scoped styles
 
-| File | Scope | Loaded by |
-| --- | --- | --- |
-| `_animations.scss` | Global | App entry (main.js or App.vue) |
-| `_utilities.scss` | Global | App entry (main.js or App.vue) |
-| `Component.scss` | Scoped (data attribute) | Vue SFC `<style>` tag |
+| File               | Scope                   | Loaded by                      |
+| ------------------ | ----------------------- | ------------------------------ |
+| `_animations.scss` | Global                  | App entry (main.js or App.vue) |
+| `_utilities.scss`  | Global                  | App entry (main.js or App.vue) |
+| `Component.scss`   | Scoped (data attribute) | Vue SFC `<style>` tag          |
 
 Global utility classes (`.animate-fade-up`, `.glass`, `.badge-success`) work anywhere in templates because they are loaded globally. Component-scoped styles use Vue's scoped attribute isolation.
 
@@ -190,6 +191,7 @@ When creating a new component SCSS file:
 ## Creating a new component SCSS file
 
 Checklist:
+
 1. Create `ComponentName.scss` next to `ComponentName.vue`
 2. Add `<style lang="scss" scoped src="./ComponentName.scss"></style>` to the Vue file
 3. Use only tokens and mixins (no hardcoded values)

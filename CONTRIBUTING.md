@@ -48,7 +48,7 @@ git remote add upstream https://github.com/e-xode/e-xode-vue-ssr.git
 npm install
 
 # 5. Configurer l'environnement
-cp env_sample .env
+cp .env.example .env
 
 # 6. Démarrer MongoDB
 docker run -d -p 27017:27017 \
@@ -88,20 +88,25 @@ git rebase upstream/main
 
 ```markdown
 ## Description
+
 [Description du bug]
 
 ## Étapes de reproduction
+
 1. Aller à...
 2. Cliquer sur...
 3. Voir l'erreur...
 
 ## Comportement attendu
+
 [Ce qui devrait se passer]
 
 ## Comportement réel
+
 [Ce qui se passe vraiment]
 
 ## Environnement
+
 - Node: 18.0.0
 - OS: macOS 13.0
 - Navigateur: Chrome 120
@@ -151,6 +156,7 @@ git checkout -b docs/setup-guide
 ```
 
 **Conventions de nommage:**
+
 - `feat/` - nouvelle feature
 - `fix/` - correction de bug
 - `docs/` - documentation
@@ -190,26 +196,32 @@ git push origin feat/user-authentication
 ### 4. Ouvrir une Pull Request
 
 Sur GitHub:
+
 1. Aller à votre fork
 2. Cliquer "Compare & pull request"
 3. Remplir le template PR:
 
 ```markdown
 ## Description
+
 Que fait cette PR? Quel problème résout-elle?
 
 ## Type de Changement
+
 - [ ] Bug fix (changement backward-compatible qui corrige un issue)
 - [ ] New feature (changement backward-compatible qui ajoute une fonctionnalité)
 - [ ] Breaking change (fix ou feature qui change le comportement existant)
 - [ ] Documentation update
 
 ## Comment tester
+
 Étapes pour tester les changements:
+
 1. Faire X
 2. Vérifier Y
 
 ## Checklist
+
 - [ ] Code stylisé (npm run lint:check passant)
 - [ ] Tests passants (npm run test:run passant)
 - [ ] Routes i18n tests (si changement UI)
@@ -234,6 +246,7 @@ Que fait cette PR? Quel problème résout-elle?
 Une fois approuvée, un maintainer mergera votre PR. Bravo! 🎉
 
 **Après le merge:**
+
 ```bash
 # Nettoyer localement
 git checkout main
@@ -254,6 +267,7 @@ Format Conventional Commits:
 ```
 
 ### Types
+
 - `feat:` nouvelle feature
 - `fix:` correction de bug
 - `docs:` documentation
@@ -306,28 +320,28 @@ including Docker and local installation options.
 // ✅ Bon
 export function setupUserRoute(app, db) {
   app.post('/api/users', async (req, res) => {
-    const { email, name } = req.body
+    const { email, name } = req.body;
 
     try {
       const user = await db.collection('users').insertOne({
         email,
         name,
-        createdAt: new Date()
-      })
-      res.status(201).json(user)
+        createdAt: new Date(),
+      });
+      res.status(201).json(user);
     } catch (err) {
-      console.error('User creation error:', err)
-      res.status(500).json({ error: 'error.server' })
+      console.error('User creation error:', err);
+      res.status(500).json({ error: 'error.server' });
     }
-  })
+  });
 }
 
 // ❌ Mauvais
 export function setupUserRoute(app, db) {
   app.post('/api/users', (req, res) => {
-    let user = db.collection('users').insertOne(req.body)
-    res.json({ ok: true, user })
-  })
+    let user = db.collection('users').insertOne(req.body);
+    res.json({ ok: true, user });
+  });
 }
 ```
 
@@ -336,17 +350,17 @@ export function setupUserRoute(app, db) {
 ```vue
 <!-- ✅ Bon -->
 <script setup>
-import { ref, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n()
-const count = ref(0)
+const { t } = useI18n();
+const count = ref(0);
 
-const isPositive = computed(() => count.value > 0)
+const isPositive = computed(() => count.value > 0);
 
 const increment = () => {
-  count.value++
-}
+  count.value++;
+};
 </script>
 
 <template>
@@ -383,9 +397,9 @@ const increment = () => {
 <script>
 export default {
   data() {
-    return { c: 0 }
-  }
-}
+    return { c: 0 };
+  },
+};
 </script>
 ```
 
@@ -449,6 +463,7 @@ npm run lint
 ```
 
 Cela vérifie:
+
 - ✅ Vue 3 best practices
 - ✅ Code formatting consistency
 - ✅ No console.log in production code
@@ -470,12 +485,14 @@ npm run test:coverage
 ```
 
 **For new features:**
+
 - ✅ Add unit tests in `tests/unit/`
 - ✅ Follow existing test patterns
 - ✅ Aim for 70%+ coverage
 - See [TESTING.md](./TESTING.md) for guidelines
 
 **PR Checklist:**
+
 - [ ] `npm run lint:check` passes (no errors)
 - [ ] `npm run test:run` passes (all tests green)
 - [ ] New features have tests

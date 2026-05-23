@@ -5,12 +5,12 @@
 This project uses `ref()` exclusively for all reactive state. No `reactive()`.
 
 ```js
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const count = ref(0)
-const items = ref([])
-const user = ref({ name: '', email: '' })
-const isLoading = ref(false)
+const count = ref(0);
+const items = ref([]);
+const user = ref({ name: '', email: '' });
+const isLoading = ref(false);
 ```
 
 **Why ref() over reactive():**
@@ -24,10 +24,11 @@ const isLoading = ref(false)
 ## reactive() — NOT used
 
 ```js
-const state = reactive({ count: 0, name: '' })
+const state = reactive({ count: 0, name: '' });
 ```
 
 Avoided because:
+
 - Cannot reassign the whole object
 - Destructuring loses reactivity: `const { count } = state` is plain value
 - Mixing ref and reactive causes confusion
@@ -38,13 +39,13 @@ Avoided because:
 When you have a large object that you replace entirely (never mutate deeply), use `shallowRef()` for performance:
 
 ```js
-import { shallowRef, triggerRef } from 'vue'
+import { shallowRef, triggerRef } from 'vue';
 
-const largeList = shallowRef([])
+const largeList = shallowRef([]);
 
-largeList.value = fetchedData
+largeList.value = fetchedData;
 
-triggerRef(largeList)
+triggerRef(largeList);
 ```
 
 Only the `.value` assignment is tracked. Deep mutations won't trigger updates unless you call `triggerRef()`.
@@ -54,13 +55,13 @@ Only the `.value` assignment is tracked. Deep mutations won't trigger updates un
 When you need to pass a single prop as a ref to a composable:
 
 ```js
-import { toRef, toRefs } from 'vue'
+import { toRef, toRefs } from 'vue';
 
-const props = defineProps({ modelValue: String, disabled: Boolean })
+const props = defineProps({ modelValue: String, disabled: Boolean });
 
-const value = toRef(props, 'modelValue')
+const value = toRef(props, 'modelValue');
 
-const { modelValue, disabled } = toRefs(props)
+const { modelValue, disabled } = toRefs(props);
 ```
 
 This maintains reactivity — the resulting refs stay connected to the prop source.
@@ -70,13 +71,13 @@ This maintains reactivity — the resulting refs stay connected to the prop sour
 Read-only computed (most common):
 
 ```js
-import { computed } from 'vue'
+import { computed } from 'vue';
 
-const fullName = computed(() => `${first.value} ${last.value}`)
+const fullName = computed(() => `${first.value} ${last.value}`);
 
-const isValid = computed(() => email.value.includes('@') && password.value.length >= 8)
+const isValid = computed(() => email.value.includes('@') && password.value.length >= 8);
 
-const currentPage = computed(() => parseInt(route.query.page) || 1)
+const currentPage = computed(() => parseInt(route.query.page) || 1);
 ```
 
 Writable computed (rare, use when you need two-way binding on derived state):
@@ -85,11 +86,11 @@ Writable computed (rare, use when you need two-way binding on derived state):
 const fullName = computed({
   get: () => `${first.value} ${last.value}`,
   set: (val) => {
-    const [f, l] = val.split(' ')
-    first.value = f
-    last.value = l
-  }
-})
+    const [f, l] = val.split(' ');
+    first.value = f;
+    last.value = l;
+  },
+});
 ```
 
 ## Reactivity gotchas
@@ -97,9 +98,9 @@ const fullName = computed({
 ### Losing reactivity on destructure
 
 ```js
-const count = ref(0)
-let { value } = count
-value++
+const count = ref(0);
+let { value } = count;
+value++;
 ```
 
 This does NOT update `count`. The number is copied by value.
@@ -110,13 +111,15 @@ In `<template>`, refs are auto-unwrapped — no `.value` needed:
 
 ```vue
 <template>
-  <span>{{ count }}</span>       <!-- auto-unwrapped -->
-  <span>{{ user.name }}</span>   <!-- deep access works -->
+  <span>{{ count }}</span>
+  <!-- auto-unwrapped -->
+  <span>{{ user.name }}</span>
+  <!-- deep access works -->
 </template>
 
 <script setup>
-const count = ref(0)
-const user = ref({ name: 'Alice' })
+const count = ref(0);
+const user = ref({ name: 'Alice' });
 </script>
 ```
 
@@ -125,11 +128,11 @@ const user = ref({ name: 'Alice' })
 Both trigger reactivity with `ref()`:
 
 ```js
-const items = ref([1, 2, 3])
+const items = ref([1, 2, 3]);
 
-items.value.push(4)
+items.value.push(4);
 
-items.value = items.value.filter(x => x > 2)
+items.value = items.value.filter((x) => x > 2);
 ```
 
 ### Watching the ref, not the value
@@ -147,8 +150,8 @@ Never pass `count.value` to watch — that's a plain number, not a reactive sour
 A ref inside a reactive object is automatically unwrapped:
 
 ```js
-const state = reactive({ count: ref(0) })
-state.count++
+const state = reactive({ count: ref(0) });
+state.count++;
 ```
 
 This project avoids this pattern entirely by not using reactive().

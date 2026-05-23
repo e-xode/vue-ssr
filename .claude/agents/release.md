@@ -35,7 +35,7 @@ Follow the `vue-ssr-release` skill steps exactly:
 
 1. **NEVER auto-commit, push, or tag.** Always present the exact command and wait for explicit user approval.
 2. **Commit format:** `[release/vX.Y.Z] release vX.Y.Z`
-3. **Co-authored-by trailer** mandatory: `Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>`
+3. **Co-authored-by trailer** mandatory: `Co-authored-by: AI Assistant <ai-assistant@users.noreply.github.com>`
 4. **Tag format:** `vX.Y.Z`
 5. **No code comments** in any file.
 6. **No validation** — do NOT run `npm test/lint/format` (that's the hooks agent's job).
@@ -44,6 +44,7 @@ Follow the `vue-ssr-release` skill steps exactly:
 ## CHANGELOG format
 
 Match existing project style — see `vue-ssr-release` skill for format reference. Key points:
+
 - `## X.Y.Z` header (no date)
 - `### Category` subsections (New Features / Improvements / Bug Fixes / Security / Breaking Changes)
 - `- ` bullet points, optional `**scope** —` prefix

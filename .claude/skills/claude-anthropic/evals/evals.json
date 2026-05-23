@@ -6,7 +6,9 @@
       "name": "new-skill-placement",
       "prompt": "I want to create a new skill that documents how we handle email sending in the project. Where should it go and what should the folder be named?",
       "assertions": [
-        { "text": "Proposes the path .claude/skills/vue-ssr-email/ (or similar kebab-case with vue-ssr- prefix)" },
+        {
+          "text": "Proposes the path .claude/skills/vue-ssr-email/ (or similar kebab-case with vue-ssr- prefix)"
+        },
         { "text": "States that the skill folder name must match the frontmatter name exactly" },
         { "text": "Mentions the domain prefix convention (vue-ssr-* for project-scoped skills)" },
         { "text": "Requires a SKILL.md file inside the folder" },
@@ -19,7 +21,9 @@
       "name": "claude-md-bloat-detection",
       "prompt": "I added a 50-line section to CLAUDE.md explaining how the SSR lifecycle works step by step. Is that okay?",
       "assertions": [
-        { "text": "States the content does NOT belong in CLAUDE.md (it is knowledge, not a hard rule)" },
+        {
+          "text": "States the content does NOT belong in CLAUDE.md (it is knowledge, not a hard rule)"
+        },
         { "text": "References the 10 KB budget" },
         { "text": "Recommends moving the content to a skill (e.g. vue-ssr-architecture)" },
         { "text": "Explains CLAUDE.md should only contain hard rules needed every turn" },
@@ -56,7 +60,9 @@
       "prompt": "I just modified the vue-ssr-auth skill — changed its description and added a reference file. What should I do before considering this done?",
       "assertions": [
         { "text": "Instructs to run scripts/audit.py" },
-        { "text": "Mentions checking for broken links (new reference must be linked from SKILL.md)" },
+        {
+          "text": "Mentions checking for broken links (new reference must be linked from SKILL.md)"
+        },
         { "text": "Mentions verifying name/folder match and description length" },
         { "text": "Suggests walking the manual audit checklist" },
         { "text": "Reminds to propose corrections, never auto-fix" }

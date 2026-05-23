@@ -23,6 +23,7 @@ Guide de dépannage pour résoudre les problèmes courants avec e-xode-vue-ssr.
 **Erreur:** "ERR! code E404" ou "ENOTFOUND"
 
 **Solutions:**
+
 1. Vérifier la connexion internet
 2. Vider le cache npm:
    ```bash
@@ -39,6 +40,7 @@ Guide de dépannage pour résoudre les problèmes courants avec e-xode-vue-ssr.
 **Symptôme:** "Cannot find module 'vue'"
 
 **Solution:**
+
 ```bash
 npm install
 npm list  # Vérifier toutes les dépendances
@@ -49,6 +51,7 @@ npm list  # Vérifier toutes les dépendances
 **Symptôme:** "npm ERR! Engine! Incompatible version"
 
 **Solution:**
+
 ```bash
 node --version  # Vérifier version
 
@@ -87,11 +90,14 @@ ps aux | grep node
 ### "Cannot connect to MongoDB"
 
 **Symptômes:**
+
 - "connect ECONNREFUSED 127.0.0.1:27017"
 - Application plante au démarrage
 
 **Solutions:**
+
 1. Vérifier MongoDB:
+
    ```bash
    # Avec Docker:
    docker ps | grep mongo
@@ -101,6 +107,7 @@ ps aux | grep node
    ```
 
 2. Vérifier connection string:
+
    ```bash
    # .env doit avoir:
    MONGO_URI=mongodb://root:password@localhost:27017/app
@@ -120,7 +127,9 @@ ps aux | grep node
 **Symptômes:** Page blanche, pas d'erreur console
 
 **Solutions:**
+
 1. Vérifier les logs:
+
    ```bash
    npm run dev 2>&1 | tee dev.log
    ```
@@ -130,6 +139,7 @@ ps aux | grep node
    - Vérifier network tab
 
 3. Vérifier Vite config:
+
    ```bash
    # Vite doit être en dev mode:
    npm run dev
@@ -146,6 +156,7 @@ ps aux | grep node
 **Symptôme:** Erreur lors de création utilisateur
 
 **Solution:**
+
 ```bash
 # MongoDB crée les collections automatiquement
 # Sinon, créer manuellement:
@@ -165,6 +176,7 @@ db.users.createIndex({ email: 1 }, { unique: true })
 **Problème:** Collection avec mauvais schéma
 
 **Solution:**
+
 ```bash
 # Backup d'abord:
 mongodump --uri="mongodb://root:password@localhost:27017/app" \
@@ -182,18 +194,21 @@ mongosh mongodb://root:password@localhost:27017/app
 ### Performance lente
 
 **Symptoms:**
+
 - Requêtes DB prennent 10+ secondes
 - Connexion timeout
 
 **Solutions:**
 
 1. Vérifier les indexes:
+
    ```bash
    mongosh mongodb://root:password@localhost:27017/app
    > db.users.getIndexes()
    ```
 
 2. Ajouter index manquant:
+
    ```bash
    > db.users.createIndex({ email: 1 })
    > db.sessions.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 })
@@ -203,7 +218,9 @@ mongosh mongodb://root:password@localhost:27017/app
    ```javascript
    // Dans mongo.js:
    // Augmenter maxPoolSize si beaucoup de connexions:
-   { maxPoolSize: 10 }
+   {
+     maxPoolSize: 10;
+   }
    ```
 
 ---
@@ -215,7 +232,9 @@ mongosh mongodb://root:password@localhost:27017/app
 **Symptôme:** POST /api/auth/signup retourne 500
 
 **Solution:**
+
 1. Vérifier .env:
+
    ```bash
    MAILER_EMAIL=test@example.com
    MAILER_PASSWORD=your_app_password
@@ -223,6 +242,7 @@ mongosh mongodb://root:password@localhost:27017/app
    ```
 
 2. Vérifier body validations:
+
    ```bash
    # Envoyer request valide:
    {
@@ -243,19 +263,22 @@ mongosh mongodb://root:password@localhost:27017/app
 **Problème:** Code correct refusé
 
 **Symptômes:**
+
 - Code expirée? (5 min timeout)
 - Hash n'a matché pas
 
 **Solutions:**
 
 1. Vérifier le timeout:
+
    ```javascript
    // Dans verify-code.js:
    // Vérifier la durée d'expiration (5 minutes par défaut)
-   const CODE_EXPIRES_IN = 5 * 60 * 1000 // 5 min
+   const CODE_EXPIRES_IN = 5 * 60 * 1000; // 5 min
    ```
 
 2. Tester directement dans DB:
+
    ```bash
    mongosh mongodb://root:password@localhost:27017/app
    > db.users.findOne({email:'test@example.com'})
@@ -268,35 +291,40 @@ mongosh mongodb://root:password@localhost:27017/app
 ### "Session expire trop vite / pas du tout"
 
 **Symptôme:**
+
 - Disconnectés après 10 mins
 - Jamais disconnectés
 
 **Solution:**
 
 1. Vérifier session config (.env):
+
    ```bash
    COOKIE_SECRET=your-secret-key
    NODE_ENV=production  # Important pour secure cookies
    ```
 
 2. Vérifier backend session setup:
+
    ```javascript
    // server.js
-   app.use(session({
-     secret: process.env.COOKIE_SECRET,
-     resave: false,
-     saveUninitialized: false,
-     cookie: {
-       secure: process.env.NODE_ENV === 'production',
-       maxAge: 7 * 24 * 60 * 60 * 1000 // 7 jours
-     }
-   }))
+   app.use(
+     session({
+       secret: process.env.COOKIE_SECRET,
+       resave: false,
+       saveUninitialized: false,
+       cookie: {
+         secure: process.env.NODE_ENV === 'production',
+         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
+       },
+     })
+   );
    ```
 
 3. Augmenter session maxAge si besoin:
    ```javascript
    // maxAge en milliseconds
-   maxAge: 30 * 24 * 60 * 60 * 1000  // 30 jours
+   maxAge: 30 * 24 * 60 * 60 * 1000; // 30 jours
    ```
 
 ---
@@ -306,12 +334,14 @@ mongosh mongodb://root:password@localhost:27017/app
 ### "Emails ne arrive pas"
 
 **Symptômes:**
+
 - Signup/Signin: pas de code reçu
 - Pas d'erreur mais silence radio
 
 **Solutions:**
 
 1. Vérifier config SMTP:
+
    ```bash
    # .env doit avoir:
    MAILER_SERVICE=gmail  # ou autre
@@ -325,6 +355,7 @@ mongosh mongodb://root:password@localhost:27017/app
    - Utiliser le password généré dans MAILER_PASSWORD
 
 3. Tester manuellement:
+
    ```bash
    node -e "
    require('dotenv').config();
@@ -348,6 +379,7 @@ mongosh mongodb://root:password@localhost:27017/app
    ```
 
 4. Vérifier logs serveur:
+
    ```bash
    npm run dev 2>&1 | grep -i mail
    ```
@@ -356,8 +388,8 @@ mongosh mongodb://root:password@localhost:27017/app
    ```javascript
    // email.js - vérifier sendSecurityCodeEmail
    // Ajouter logs de debug:
-   console.log('Sending email to:', email)
-   console.log('Subject:', subject)
+   console.log('Sending email to:', email);
+   console.log('Subject:', subject);
    ```
 
 ### "SMTP Connection Timeout"
@@ -365,13 +397,16 @@ mongosh mongodb://root:password@localhost:27017/app
 **Erreur:** "connect ETIMEDOUT" ou "auth errors"
 
 **Solutions:**
+
 1. Vérifier le service:
+
    ```bash
    # MAILER_SERVICE doit exister dans nodemailer
    # Options: gmail, hotmail, yahoo, outlook, etc.
    ```
 
 2. Essayer avec config manuelle:
+
    ```bash
    # Au lieu de service, utiliser host/port:
    MAILER_HOST=smtp.gmail.com
@@ -396,6 +431,7 @@ mongosh mongodb://root:password@localhost:27017/app
 **Erreur:** "Cannot find module '@/views/MyComponent.vue'"
 
 **Solution:**
+
 ```bash
 # Vérifier le chemin:
 # ❌ Mauvais: import Component from '@views/Component.vue'
@@ -412,12 +448,15 @@ resolve: {
 ### Build lent (30+ secondes)
 
 **Solutions:**
+
 1. Vérifier node version:
+
    ```bash
    node --version  # Utiliser 18+
    ```
 
 2. Augmenter timeout:
+
    ```bash
    # Linux/Mac:
    npm run build --timeout=120000
@@ -441,31 +480,33 @@ resolve: {
 
 ### Bundle size énorme
 
-**Problème:** dist/client/assets/*.js > 1MB
+**Problème:** dist/client/assets/\*.js > 1MB
 
 **Solutions:**
+
 1. Analyser bundle:
+
    ```bash
    npm install --save-dev rollup-plugin-visualizer
    ```
 
    Ajouter à vite.config.js:
+
    ```javascript
-   import { visualizer } from 'rollup-plugin-visualizer'
+   import { visualizer } from 'rollup-plugin-visualizer';
 
    export default {
-     plugins: [
-       visualizer()
-     ]
-   }
+     plugins: [visualizer()],
+   };
    ```
 
    Build et ouvrir stats.html
 
 2. Lazy load routes:
+
    ```javascript
    // router.js
-   component: () => import('@/views/Dashboard/DashboardView.vue')
+   component: () => import('@/views/Dashboard/DashboardView.vue');
    ```
 
 3. Tree-shake unused code:
@@ -480,17 +521,21 @@ resolve: {
 **Problème:** npm run build marche, prod échoue
 
 **Solution:**
+
 1. D'abord build:
+
    ```bash
    npm run build
    ```
 
 2. Vérifier dist/ existe:
+
    ```bash
    ls -la dist/
    ```
 
 3. Vérifier NODE_ENV:
+
    ```bash
    NODE_ENV=production npm run prod
    ```
@@ -515,11 +560,13 @@ resolve: {
 **Solution:**
 
 Option 1: Utiliser docker-compose (recommandé):
+
 ```bash
 docker-compose up
 ```
 
 Option 2: Modifier connection string:
+
 ```bash
 # ❌ MONGO_URI=mongodb://localhost:27017/app
 # ✅ MONGO_URI=mongodb://host.docker.internal:27017/app (macOS/Windows)
@@ -531,6 +578,7 @@ Option 2: Modifier connection string:
 **Erreur:** "failed to solve with frontend dockerfile.v0"
 
 **Solutions:**
+
 ```bash
 # Vérifier Docker:
 docker --version
@@ -547,12 +595,15 @@ docker build -f docker/build/Dockerfile -t app:latest .
 **Logs:** `docker logs -f container_name`
 
 **Solutions:**
+
 1. Vérifier .env dans container:
+
    ```bash
    docker exec container_name env | grep MONGO
    ```
 
 2. Vérifier MongoDB accessible:
+
    ```bash
    docker exec container_name mongosh mongodb://root:pass@mongo:27017
    ```
@@ -566,13 +617,16 @@ docker build -f docker/build/Dockerfile -t app:latest .
 ### "Npm install dans Docker slow"
 
 **Solutions:**
+
 1. Utiliser npm ci (plus vite):
+
    ```dockerfile
    # Dockerfile
    RUN npm ci --only=production
    ```
 
 2. Utiliser cache layers:
+
    ```dockerfile
    COPY package.json package-lock.json .
    RUN npm ci --only=production
@@ -591,12 +645,15 @@ docker build -f docker/build/Dockerfile -t app:latest .
 ### Application lente au démarrage
 
 **Solutions:**
+
 1. Lazy load routes:
+
    ```javascript
-   component: () => import('@/views/...')
+   component: () => import('@/views/...');
    ```
 
 2. Code splitting:
+
    ```javascript
    // vite.config.js
    build: {
@@ -622,7 +679,9 @@ docker build -f docker/build/Dockerfile -t app:latest .
 ### Requêtes API lentes
 
 **Solutions:**
+
 1. Ajouter des indexes DB:
+
    ```bash
    mongosh
    > db.users.createIndex({ email: 1 })
@@ -634,17 +693,18 @@ docker build -f docker/build/Dockerfile -t app:latest .
    - Add caching si applicable
 
 3. Exemple cache:
+
    ```javascript
-   const cache = new Map()
+   const cache = new Map();
 
    app.get('/api/data', (req, res) => {
-     const cached = cache.get('key')
+     const cached = cache.get('key');
      if (cached && Date.now() - cached.time < 60000) {
-       return res.json(cached.data)
+       return res.json(cached.data);
      }
      // ... fetch fresh data
-     cache.set('key', { data, time: Date.now() })
-   })
+     cache.set('key', { data, time: Date.now() });
+   });
    ```
 
 ---
@@ -665,19 +725,20 @@ PORT=3000 NODE_ENV=production npm run prod
 
 ```javascript
 // server.js
-import { renderToString } from 'vue/server-renderer'
+import { renderToString } from 'vue/server-renderer';
 
-console.log('=== SSR DEBUG ===')
-console.log('URL:', req.url)
-console.log('User agent:', req.headers['user-agent'])
+console.log('=== SSR DEBUG ===');
+console.log('URL:', req.url);
+console.log('User agent:', req.headers['user-agent']);
 
 // Dans entry-server.js
-console.log('SSR rendering app')
+console.log('SSR rendering app');
 ```
 
 ### **Q: Comment ajouter TypeScript?**
 
 1. Installer:
+
    ```bash
    npm install --save-dev typescript
    ```
@@ -755,6 +816,7 @@ healthcheck:
 ## 🆘 Toujours pas résolu?
 
 1. **Vérifier logs:**
+
    ```bash
    npm run dev 2>&1 | tee debug.log
    docker logs -f container_name

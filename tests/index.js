@@ -77,7 +77,7 @@ export default {
     'components/layout/TheHeader.vue',
     'validation.js',
     'api.utils.js',
-    'api.endpoints.js'
+    'api.endpoints.js',
   ],
   helpers: {
     validateEmail: 'Validates email format',
@@ -85,6 +85,6 @@ export default {
     isValidSecurityCode: 'Validates 6-digit security code',
     parseApiError: 'Parses API error responses',
     formatRequestBody: 'Formats API request bodies',
-    isSuccessResponse: 'Checks if API response is successful'
-  }
-}
+    isSuccessResponse: 'Checks if API response is successful',
+  },
+};

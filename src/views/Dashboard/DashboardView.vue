@@ -1,16 +1,16 @@
 <script setup>
-import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useAuthStore } from '@/stores/auth'
-import { useLocalePath } from '@/composables/useLocalePath'
-import { mdiShieldAccount } from '@mdi/js'
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '@/stores/auth';
+import { useLocalePath } from '@/composables/useLocalePath';
+import { mdiShieldAccount } from '@mdi/js';
 
-const { t } = useI18n()
-const authStore = useAuthStore()
-const { localePath } = useLocalePath()
+const { t } = useI18n();
+const authStore = useAuthStore();
+const { localePath } = useLocalePath();
 
-const user = computed(() => authStore.user)
-const isAdmin = computed(() => authStore.isAdmin)
+const user = computed(() => authStore.user);
+const isAdmin = computed(() => authStore.isAdmin);
 </script>
 
 <template>
@@ -34,10 +34,9 @@ const isAdmin = computed(() => authStore.isAdmin)
           :to="localePath('/admin/users')"
           class="pa-4"
         >
-          <div class="d-flex align-center gap-3">
+          <div class="d-flex align-center ga-3">
             <v-icon
               :icon="mdiShieldAccount"
-              color="primary"
               size="32"
             />
             <div>

@@ -1,33 +1,55 @@
-:deep() {
-  .v-app {
-    background: var(--v-background-base);
-  }
+.v-app {
+  background: rgb(var(--v-theme-background));
+}
 
-  .v-main {
-    background: inherit;
-  }
+.v-main {
+  background: inherit;
 }
 
 .container-sm {
-  max-width: 640px;
+  max-width: $container-sm;
   margin-left: auto;
   margin-right: auto;
 }
 
 .container-md {
-  max-width: 768px;
+  max-width: $container-md;
   margin-left: auto;
   margin-right: auto;
 }
 
 .container-lg {
-  max-width: 1024px;
+  max-width: $container-lg;
   margin-left: auto;
   margin-right: auto;
 }
 
 .container-xl {
-  max-width: 1280px;
+  max-width: $container-xl;
   margin-left: auto;
   margin-right: auto;
+}
+
+.skip-link {
+  position: absolute;
+  top: -($spacing-xl + $spacing-sm);
+  left: 0;
+  background: rgb(var(--v-theme-primary));
+  color: rgb(var(--v-theme-on-primary));
+  padding: $spacing-sm $spacing-md;
+  z-index: $z-skip-link;
+
+  &:focus {
+    top: 0;
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  @include transition(opacity, $transition-base);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }

@@ -6,12 +6,12 @@ WCAG 2.1 AA compliance guidelines for the Vue SSR Starter Kit.
 
 ### Requirements
 
-| Content type | Minimum ratio | Example |
-| --- | --- | --- |
-| Normal text (< 18px) | 4.5:1 | Body text on backgrounds |
-| Large text (≥ 18px or ≥ 14px bold) | 3:1 | Headings |
-| UI components and graphics | 3:1 | Buttons, icons, borders |
-| Decorative elements | No requirement | Dividers, shadows |
+| Content type                       | Minimum ratio  | Example                  |
+| ---------------------------------- | -------------- | ------------------------ |
+| Normal text (< 18px)               | 4.5:1          | Body text on backgrounds |
+| Large text (≥ 18px or ≥ 14px bold) | 3:1            | Headings                 |
+| UI components and graphics         | 3:1            | Buttons, icons, borders  |
+| Decorative elements                | No requirement | Dividers, shadows        |
 
 ### Application
 
@@ -53,6 +53,7 @@ WCAG 2.1 AA compliance guidelines for the Vue SSR Starter Kit.
 ### Roving tabindex
 
 For composite widgets (toolbars, tab lists, menu bars):
+
 - Only one item in the group is tabbable at a time
 - Arrow keys navigate within the group
 - Vuetify implements this for v-tabs, v-btn-toggle, etc.
@@ -80,12 +81,12 @@ Every interactive element without visible text needs an accessible name:
 
 Dynamic content updates need aria-live to announce changes:
 
-| Scenario | Attribute | Priority |
-| --- | --- | --- |
-| Form validation errors | `aria-live="assertive"` | Immediate |
-| Success notifications | `aria-live="polite"` | Next opportunity |
-| Loading status | `aria-live="polite"` | Next opportunity |
-| Timer/countdown | `aria-live="off"` or `aria-atomic="true"` | Controlled |
+| Scenario               | Attribute                                 | Priority         |
+| ---------------------- | ----------------------------------------- | ---------------- |
+| Form validation errors | `aria-live="assertive"`                   | Immediate        |
+| Success notifications  | `aria-live="polite"`                      | Next opportunity |
+| Loading status         | `aria-live="polite"`                      | Next opportunity |
+| Timer/countdown        | `aria-live="off"` or `aria-atomic="true"` | Controlled       |
 
 ### Roles and states
 
@@ -104,12 +105,14 @@ Dynamic content updates need aria-live to announce changes:
 The project provides `.sr-only` (aliased as `.visually-hidden`) for content visible only to screen readers:
 
 Use for:
+
 - Additional context that's visually obvious but not programmatically clear
 - "Opens in new tab" warnings for external links
 - Table header descriptions
 - Form field instructions
 
 Do NOT use for:
+
 - Hiding content from sighted users that they should see
 - Replacing proper aria attributes
 - Duplicating visible text
@@ -133,6 +136,7 @@ Do NOT use for:
 ### prefers-reduced-motion
 
 The project's `_animations.scss` globally disables animations when this preference is set:
+
 - All keyframe animations are set to `none`
 - Transitions are reduced to minimal or instant
 - This is automatic — no per-component configuration needed
@@ -230,6 +234,7 @@ Structure in locale files:
 ```
 
 Rules:
+
 - `aria-label` values: `t('a11y.closeDialog')`
 - `alt` text: `t('images.profilePhoto')`
 - Screen reader announcements: `t('a11y.itemAdded')`

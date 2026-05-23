@@ -1,106 +1,106 @@
 // tests/unit/stores.auth.test.js
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { createPinia, setActivePinia } from 'pinia'
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { createPinia, setActivePinia } from 'pinia';
 
 // Mock apiFetch from shared/api
-const mockApiFetch = vi.fn()
+const mockApiFetch = vi.fn();
 vi.mock('#src/shared/api', () => ({
-  apiFetch: (...args) => mockApiFetch(...args)
-}))
+  apiFetch: (...args) => mockApiFetch(...args),
+}));
 
-import { useAuthStore } from '#src/stores/auth'
+import { useAuthStore } from '#src/stores/auth';
 
 describe('stores/auth.js', () => {
   beforeEach(() => {
-    setActivePinia(createPinia())
-    vi.clearAllMocks()
-    mockApiFetch.mockClear()
-  })
+    setActivePinia(createPinia());
+    vi.clearAllMocks();
+    mockApiFetch.mockClear();
+  });
 
   describe('useAuthStore', () => {
     it('should initialize with null user', () => {
-      const store = useAuthStore()
+      const store = useAuthStore();
 
-      expect(store.user).toBeNull()
-      expect(store.email).toBeNull() // Now computed property
-    })
+      expect(store.user).toBeNull();
+      expect(store.email).toBeNull(); // Now computed property
+    });
 
     it('should have isAuthenticated computed property', () => {
-      const store = useAuthStore()
+      const store = useAuthStore();
 
-      expect(store.isAuthenticated).toBe(false)
+      expect(store.isAuthenticated).toBe(false);
 
-      store.user = { _id: '1', email: 'test@example.com' }
-      expect(store.isAuthenticated).toBe(true)
-    })
+      store.user = { _id: '1', email: 'test@example.com' };
+      expect(store.isAuthenticated).toBe(true);
+    });
 
     it('should have loading state', () => {
-      const store = useAuthStore()
+      const store = useAuthStore();
 
-      expect(store.loading).toBe(false)
-    })
+      expect(store.loading).toBe(false);
+    });
 
     it('should have error state', () => {
-      const store = useAuthStore()
+      const store = useAuthStore();
 
-      expect(store.error).toBeNull()
-    })
+      expect(store.error).toBeNull();
+    });
 
     it('should update user when setUser is called', () => {
-      const store = useAuthStore()
-      const newUser = { _id: '1', email: 'test@example.com', name: 'Test' }
+      const store = useAuthStore();
+      const newUser = { _id: '1', email: 'test@example.com', name: 'Test' };
 
-      store.setUser(newUser)
+      store.setUser(newUser);
 
-      expect(store.user).toEqual(newUser)
-      expect(store.email).toBe('test@example.com')
-    })
+      expect(store.user).toEqual(newUser);
+      expect(store.email).toBe('test@example.com');
+    });
 
     it('should clear user when clearUser is called', () => {
-      const store = useAuthStore()
-      store.user = { _id: '1', email: 'test@example.com' }
+      const store = useAuthStore();
+      store.user = { _id: '1', email: 'test@example.com' };
 
-      store.clearUser()
+      store.clearUser();
 
-      expect(store.user).toBeNull()
-      expect(store.email).toBeNull()
-    })
+      expect(store.user).toBeNull();
+      expect(store.email).toBeNull();
+    });
 
     it('should update error state', () => {
-      const store = useAuthStore()
-      const testError = 'Test error message'
+      const store = useAuthStore();
+      const testError = 'Test error message';
 
-      store.setError(testError)
+      store.setError(testError);
 
-      expect(store.error).toBe(testError)
-    })
+      expect(store.error).toBe(testError);
+    });
 
     it('should clear error', () => {
-      const store = useAuthStore()
-      store.error = 'Some error'
+      const store = useAuthStore();
+      store.error = 'Some error';
 
-      store.clearError()
+      store.clearError();
 
-      expect(store.error).toBeNull()
-    })
+      expect(store.error).toBeNull();
+    });
 
     it('should initialize user from server on first check', async () => {
-      mockApiFetch.mockResolvedValueOnce({ user: { _id: '1', email: 'test@example.com' } })
+      mockApiFetch.mockResolvedValueOnce({ user: { _id: '1', email: 'test@example.com' } });
 
-      const store = useAuthStore()
-      await store.initializeUser()
+      const store = useAuthStore();
+      await store.initializeUser();
 
-      expect(store.user).toEqual({ _id: '1', email: 'test@example.com' })
-    })
+      expect(store.user).toEqual({ _id: '1', email: 'test@example.com' });
+    });
 
     it('should not fetch user twice', async () => {
-      mockApiFetch.mockResolvedValueOnce({ user: { _id: '1', email: 'test@example.com' } })
+      mockApiFetch.mockResolvedValueOnce({ user: { _id: '1', email: 'test@example.com' } });
 
-      const store = useAuthStore()
-      await store.initializeUser()
-      await store.initializeUser()
+      const store = useAuthStore();
+      await store.initializeUser();
+      await store.initializeUser();
 
-      expect(mockApiFetch).toHaveBeenCalledTimes(1)
-    })
-  })
-})
+      expect(mockApiFetch).toHaveBeenCalledTimes(1);
+    });
+  });
+});

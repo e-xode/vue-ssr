@@ -74,41 +74,41 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { apiFetch } from '@/shared/api'
-import { useCaptcha } from '@/composables/useCaptcha'
+import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { apiFetch } from '@/shared/api';
+import { useCaptcha } from '@/composables/useCaptcha';
 
-const { t, locale } = useI18n()
-const { executeRecaptcha } = useCaptcha()
+const { t, locale } = useI18n();
+const { executeRecaptcha } = useCaptcha();
 
-const form = ref({ name: '', email: '', message: '' })
-const loading = ref(false)
-const success = ref(false)
-const error = ref('')
+const form = ref({ name: '', email: '', message: '' });
+const loading = ref(false);
+const success = ref(false);
+const error = ref('');
 
-const isFormValid = computed(() =>
-  form.value.name.trim() && form.value.email.trim() && form.value.message.trim()
-)
+const isFormValid = computed(
+  () => form.value.name.trim() && form.value.email.trim() && form.value.message.trim()
+);
 
 async function handleSubmit() {
-  loading.value = true
-  error.value = ''
+  loading.value = true;
+  error.value = '';
 
   try {
-    const captchaToken = await executeRecaptcha('contact')
+    const captchaToken = await executeRecaptcha('contact');
 
     await apiFetch('/api/contact', {
       method: 'POST',
-      body: JSON.stringify({ ...form.value, locale: locale.value, captchaToken })
-    })
-    success.value = true
+      body: JSON.stringify({ ...form.value, locale: locale.value, captchaToken }),
+    });
+    success.value = true;
   } catch (err) {
-    error.value = err.isRateLimit ? t('error.tooManyRequests') : t('contact.error')
+    error.value = err.isRateLimit ? t('error.tooManyRequests') : t('contact.error');
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 </script>
 
-<style lang="scss" src="./ContactView.scss"></style>
+<style lang="scss" scoped src="./ContactView.scss"></style>

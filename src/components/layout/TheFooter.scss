@@ -1,13 +1,13 @@
 .app-footer {
-  background: var(--v-background-base);
-  border-top: 1px solid var(--v-border-color, #e5e7eb);
+  background: rgb(var(--v-theme-background));
+  border-top: $border-width-hairline solid rgba(var(--v-border-color), var(--v-border-opacity));
   margin-top: auto;
-  padding: 48px 0 24px !important;
+  padding: $section-py-sm 0 $spacing-lg !important;
 
   &__brand {
-    margin-bottom: 24px;
+    margin-bottom: $spacing-lg;
 
-    @media (min-width: 960px) {
+    @include respond-to('lg') {
       margin-bottom: 0;
     }
   }
@@ -15,33 +15,32 @@
   &__logo {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: $spacing-sm;
     text-decoration: none;
-    margin-bottom: 16px;
+    margin-bottom: $spacing-md;
 
     span {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--v-on-background-base);
+      font-size: $font-size-xl;
+      font-weight: $font-weight-semibold;
+      color: rgb(var(--v-theme-on-background));
     }
   }
 
   &__description {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--v-on-background-base);
-    opacity: 0.7;
+    font-size: $font-size-sm;
+    line-height: $line-height-relaxed;
+    color: rgba(var(--v-theme-on-background), 0.7);
     margin: 0;
     max-width: 280px;
   }
 
   &__title {
-    font-size: 12px;
-    font-weight: 600;
+    font-size: $font-size-caption;
+    font-weight: $font-weight-semibold;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--v-on-background-base);
-    margin-bottom: 16px;
+    letter-spacing: $letter-spacing-wide;
+    color: rgb(var(--v-theme-on-background));
+    margin-bottom: $spacing-md;
   }
 
   &__links {
@@ -50,27 +49,24 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: $spacing-md;
 
     a {
-      font-size: 14px;
-      color: var(--v-on-background-base);
-      opacity: 0.7;
+      font-size: $font-size-sm;
+      color: rgba(var(--v-theme-on-background), 0.7);
       text-decoration: none;
-      transition: all 0.2s ease;
+      @include transition(color, $transition-fast);
 
       &:hover {
-        opacity: 1;
-        color: var(--v-primary-base);
+        color: rgb(var(--v-theme-primary));
       }
     }
   }
 
   &__bottom {
     p {
-      font-size: 14px;
-      color: var(--v-on-background-base);
-      opacity: 0.6;
+      font-size: $font-size-sm;
+      color: rgba(var(--v-theme-on-background), 0.6);
       margin: 0;
     }
   }

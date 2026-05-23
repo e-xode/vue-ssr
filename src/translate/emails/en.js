@@ -4,13 +4,13 @@ const baseStyle = `
   .header { text-align: center; padding: 20px 0; border-bottom: 2px solid #f0f0f0; }
   .content { padding: 20px 0; }
   .code-box { background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 20px; text-align: center; }
-  .code { font-size: 32px; font-weight: bold; letter-spacing: 4px; color: #2563eb; font-family: 'Courier New', monospace; }
+  .code { font-size: 32px; font-weight: bold; letter-spacing: 4px; color: #4f46e5; font-family: 'Courier New', monospace; }
   .expiry { font-size: 12px; color: #6b7280; margin-top: 15px; }
   .footer { border-top: 2px solid #f0f0f0; padding: 20px 0; margin-top: 30px; font-size: 12px; color: #6b7280; text-align: center; }
-`
+`;
 
-const appName = process.env?.APP_NAME || 'App'
-const year = new Date().getFullYear()
+const appName = process.env?.APP_NAME || 'App';
+const year = new Date().getFullYear();
 
 export const emailTemplates = {
   securityCode: {
@@ -20,7 +20,7 @@ export const emailTemplates = {
 <head><meta charset="utf-8"><style>${baseStyle}</style></head>
 <body>
   <div class="container">
-    <div class="header"><h1 style="margin:0;color:#2563eb;">${appName}</h1></div>
+    <div class="header"><h1 style="margin:0;color:#4f46e5;">${appName}</h1></div>
     <div class="content">
       <p>Hello,</p>
       <p>Here is your security code:</p>
@@ -33,7 +33,7 @@ export const emailTemplates = {
     <div class="footer"><p>© ${year} ${appName}. All rights reserved.</p></div>
   </div>
 </body>
-</html>`
+</html>`,
   },
   emailChangeCode: {
     subject: `Confirm your new email — ${appName}`,
@@ -42,7 +42,7 @@ export const emailTemplates = {
 <head><meta charset="utf-8"><style>${baseStyle}</style></head>
 <body>
   <div class="container">
-    <div class="header"><h1 style="margin:0;color:#2563eb;">${appName}</h1></div>
+    <div class="header"><h1 style="margin:0;color:#4f46e5;">${appName}</h1></div>
     <div class="content">
       <p>Hello,</p>
       <p>You requested to change your email address. Enter the code below to confirm:</p>
@@ -55,7 +55,7 @@ export const emailTemplates = {
     <div class="footer"><p>© ${year} ${appName}. All rights reserved.</p></div>
   </div>
 </body>
-</html>`
+</html>`,
   },
   resetPassword: {
     subject: `Reset your ${appName} password`,
@@ -64,7 +64,7 @@ export const emailTemplates = {
 <head><meta charset="utf-8"><style>${baseStyle}</style></head>
 <body>
   <div class="container">
-    <div class="header"><h1 style="margin:0;color:#2563eb;">${appName}</h1></div>
+    <div class="header"><h1 style="margin:0;color:#4f46e5;">${appName}</h1></div>
     <div class="content">
       <p>Hello,</p>
       <p>You requested to reset your password. Use the code below to proceed:</p>
@@ -77,7 +77,7 @@ export const emailTemplates = {
     <div class="footer"><p>© ${year} ${appName}. All rights reserved.</p></div>
   </div>
 </body>
-</html>`
+</html>`,
   },
   welcome: {
     subject: (name) => `Welcome to ${appName}, ${name}!`,
@@ -86,7 +86,7 @@ export const emailTemplates = {
 <head><meta charset="utf-8"><style>${baseStyle}</style></head>
 <body>
   <div class="container">
-    <div class="header"><h1 style="margin:0;color:#2563eb;">${appName}</h1></div>
+    <div class="header"><h1 style="margin:0;color:#4f46e5;">${appName}</h1></div>
     <div class="content">
       <p>Hello ${name},</p>
       <p>Your account has been successfully created. Welcome aboard!</p>
@@ -95,7 +95,7 @@ export const emailTemplates = {
     <div class="footer"><p>© ${year} ${appName}. All rights reserved.</p></div>
   </div>
 </body>
-</html>`
+</html>`,
   },
   contact: {
     subject: (data) => `New contact message from ${data.name}`,
@@ -104,7 +104,7 @@ export const emailTemplates = {
 <head><meta charset="utf-8"><style>${baseStyle}</style></head>
 <body>
   <div class="container">
-    <div class="header"><h1 style="margin:0;color:#2563eb;">${appName} — Contact</h1></div>
+    <div class="header"><h1 style="margin:0;color:#4f46e5;">${appName} — Contact</h1></div>
     <div class="content">
       <p><strong>Name:</strong> ${data.name}</p>
       <p><strong>Email:</strong> ${data.email}</p>
@@ -114,6 +114,6 @@ export const emailTemplates = {
     <div class="footer"><p>© ${year} ${appName}. All rights reserved.</p></div>
   </div>
 </body>
-</html>`
-  }
-}
+</html>`,
+  },
+};

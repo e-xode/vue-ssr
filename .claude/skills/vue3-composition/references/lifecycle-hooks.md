@@ -25,76 +25,76 @@ setup()              ← runs on BOTH server and client
 ### Fetch data on mount
 
 ```js
-import { ref, onMounted } from 'vue'
-import { apiFetch } from '@/shared/apiFetch'
+import { ref, onMounted } from 'vue';
+import { apiFetch } from '@/shared/apiFetch';
 
-const data = ref(null)
-const loading = ref(true)
+const data = ref(null);
+const loading = ref(true);
 
 onMounted(async () => {
-  const res = await apiFetch('/api/items')
+  const res = await apiFetch('/api/items');
   if (res.ok) {
-    data.value = await res.json()
+    data.value = await res.json();
   }
-  loading.value = false
-})
+  loading.value = false;
+});
 ```
 
 ### Event listener with cleanup
 
 ```js
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue';
 
 function handleResize() {
   // ...
 }
 
 onMounted(() => {
-  window.addEventListener('resize', handleResize)
-})
+  window.addEventListener('resize', handleResize);
+});
 
 onUnmounted(() => {
-  window.removeEventListener('resize', handleResize)
-})
+  window.removeEventListener('resize', handleResize);
+});
 ```
 
 ### Timer with cleanup
 
 ```js
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue';
 
-const elapsed = ref(0)
-let interval = null
+const elapsed = ref(0);
+let interval = null;
 
 onMounted(() => {
   interval = setInterval(() => {
-    elapsed.value++
-  }, 1000)
-})
+    elapsed.value++;
+  }, 1000);
+});
 
 onUnmounted(() => {
-  clearInterval(interval)
-})
+  clearInterval(interval);
+});
 ```
 
 ### Keyboard shortcut
 
 ```js
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue';
 
 function handleKey(e) {
   if (e.key === 'Escape') {
-    emit('close')
+    emit('close');
   }
 }
 
 onMounted(() => {
-  document.addEventListener('keydown', handleKey)
-})
+  document.addEventListener('keydown', handleKey);
+});
 
 onUnmounted(() => {
-  document.removeEventListener('keydown', handleKey)
-})
+  document.removeEventListener('keydown', handleKey);
+});
 ```
 
 ## nextTick() — DOM updates
@@ -102,15 +102,15 @@ onUnmounted(() => {
 Vue batches DOM updates. After changing reactive state, the DOM hasn't updated yet in the same tick. Use `nextTick()` to wait:
 
 ```js
-import { ref, nextTick } from 'vue'
+import { ref, nextTick } from 'vue';
 
-const message = ref('')
-const inputEl = ref(null)
+const message = ref('');
+const inputEl = ref(null);
 
 async function addItem() {
-  message.value = 'New item'
-  await nextTick()
-  inputEl.value.focus()
+  message.value = 'New item';
+  await nextTick();
+  inputEl.value.focus();
 }
 ```
 
@@ -119,29 +119,29 @@ async function addItem() {
 Common in this project for forms with dynamic fields:
 
 ```js
-import { ref, nextTick } from 'vue'
+import { ref, nextTick } from 'vue';
 
-const inputs = ref([])
-const values = ref([''])
+const inputs = ref([]);
+const values = ref(['']);
 
 async function addField() {
-  values.value.push('')
-  await nextTick()
-  const lastIndex = inputs.value.length - 1
-  inputs.value[lastIndex]?.focus()
+  values.value.push('');
+  await nextTick();
+  const lastIndex = inputs.value.length - 1;
+  inputs.value[lastIndex]?.focus();
 }
 ```
 
 ## Hooks NOT used in this project
 
-| Hook | Reason |
-| --- | --- |
-| `onBeforeMount` | No use case — setup handles pre-mount logic |
-| `onBeforeUpdate` | No use case — computed handles derived state |
-| `onUpdated` | Risky (infinite loops) — prefer watch or nextTick |
-| `onActivated` / `onDeactivated` | No `<KeepAlive>` usage |
-| `onErrorCaptured` | Not implemented at component level |
-| `onRenderTracked` / `onRenderTriggered` | Dev-only debugging, not committed |
+| Hook                                    | Reason                                            |
+| --------------------------------------- | ------------------------------------------------- |
+| `onBeforeMount`                         | No use case — setup handles pre-mount logic       |
+| `onBeforeUpdate`                        | No use case — computed handles derived state      |
+| `onUpdated`                             | Risky (infinite loops) — prefer watch or nextTick |
+| `onActivated` / `onDeactivated`         | No `<KeepAlive>` usage                            |
+| `onErrorCaptured`                       | Not implemented at component level                |
+| `onRenderTracked` / `onRenderTriggered` | Dev-only debugging, not committed                 |
 
 ## SSR-safe checklist
 

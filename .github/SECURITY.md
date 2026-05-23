@@ -15,10 +15,10 @@ Politique de sécurité et directives pour signaler les vulnérabilités.
 
 ## Supported Versions
 
-| Version | Released | Supported | End of Life |
-|---------|----------|-----------|-------------|
-| 1.0.0 | 2024-01-15 | ✅ Yes | TBD |
-| < 1.0.0 | N/A | ❌ No | N/A |
+| Version | Released   | Supported | End of Life |
+| ------- | ---------- | --------- | ----------- |
+| 1.0.0   | 2024-01-15 | ✅ Yes    | TBD         |
+| < 1.0.0 | N/A        | ❌ No     | N/A         |
 
 **Security Updates**: Fournies pour les versions supported seulement.
 
@@ -31,12 +31,14 @@ Politique de sécurité et directives pour signaler les vulnérabilités.
 Si vous découvrez une vulnérabilité de sécurité:
 
 **❌ NE PAS:**
+
 - Ouvrir une issue GitHub publique
 - Poster sur les réseaux sociaux
 - Partager les détails techniques
 - Créer une PR qui "fix" la vulnérabilité
 
 **✅ FAIRE:**
+
 - Email directement aux mainteneurs
 - Inclure les détails techniques complets
 - Proposer un fix si vous en avez un
@@ -47,6 +49,7 @@ Si vous découvrez une vulnérabilité de sécurité:
 **Envoyer à:** contact@e-xode.net
 
 **Inclure:**
+
 - Description de la vulnérabilité
 - Composants affectés (frontend/backend/DB/etc)
 - Severity (critical/high/medium/low)
@@ -164,6 +167,7 @@ Timeline:
 ### Authentication & Authorization
 
 ✅ **Implemented:**
+
 - Password hashing avec bcryptjs (salt: 10)
 - Session-based authentication
 - HTTP-only cookies
@@ -173,6 +177,7 @@ Timeline:
 - Rate limiting sur auth endpoints
 
 🔄 **In Development:**
+
 - Two-factor authentication
 - Account lockout après failed attempts
 - Brute force detection
@@ -181,12 +186,14 @@ Timeline:
 ### Data Protection
 
 ✅ **Implemented:**
+
 - MongoDB connection over network isolation
 - No sensitive data in logs
 - Error messages don't reveal system info
 - Session secrets unique per environment
 
 🔄 **In Development:**
+
 - Database encryption at rest
 - Automatic backup encryption
 - Data retention policies
@@ -195,12 +202,14 @@ Timeline:
 ### Network Security
 
 ✅ **Implemented:**
+
 - CORS configuration
 - Rate limiting
 - Input validation
 - Request body size limits
 
 🔄 **In Development:**
+
 - DDoS protection
 - Web Application Firewall (WAF)
 - Bot detection
@@ -208,12 +217,14 @@ Timeline:
 ### Code Security
 
 ✅ **Implemented:**
+
 - Dependency scanning (npm audit)
 - No eval() or dangerous functions
 - Input sanitization
 - Output encoding
 
 🔄 **In Development:**
+
 - SAST scanning (SonarQube)
 - Dependency update automation
 - Code security training
@@ -223,24 +234,28 @@ Timeline:
 ## 📊 Security Response Timeline
 
 ### Critical Vulnerabilities (CVSS 9.0-10.0)
+
 - **Investigation**: < 24 hours
 - **Patch**: < 48 hours
 - **Release**: Immediate
 - **Notification**: Urgent (email + GitHub)
 
 ### High Vulnerabilities (CVSS 7.0-8.9)
+
 - **Investigation**: < 3 days
 - **Patch**: < 7 days
 - **Release**: Expedited
 - **Notification**: Email to users
 
 ### Medium Vulnerabilities (CVSS 4.0-6.9)
+
 - **Investigation**: < 1 week
 - **Patch**: < 2 weeks
 - **Release**: Next minor version
 - **Notification**: Release notes
 
 ### Low Vulnerabilities (CVSS 0.1-3.9)
+
 - **Investigation**: < 2 weeks
 - **Patch**: < 4 weeks
 - **Release**: Next minor/patch version
@@ -325,6 +340,7 @@ Always use parameterized queries, validate email format first.
 We appreciate security researchers who follow responsible disclosure:
 
 ✅ **Good:**
+
 - Report to contact@e-xode.net
 - Allow reasonable time to develop fix
 - Don't share details publicly
@@ -332,12 +348,14 @@ We appreciate security researchers who follow responsible disclosure:
 - Accept recognition (if desired)
 
 ❌ **Bad:**
+
 - Public disclosure before fix
 - Exploit the vulnerability
 - Demand payment for reporting
 - Share with other attackers
 
 **We will:**
+
 - Keep you updated on progress
 - Credit you in advisories (if desired)
 - Provide timely security patches
@@ -363,9 +381,9 @@ We appreciate security researchers who follow responsible disclosure:
 
 ## Version History
 
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.0 | 2024-01-15 | Initial policy |
+| Version | Date       | Changes        |
+| ------- | ---------- | -------------- |
+| 1.0     | 2024-01-15 | Initial policy |
 
 ---
 

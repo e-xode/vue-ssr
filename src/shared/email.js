@@ -1,7 +1,7 @@
-import nodemailer from 'nodemailer'
-import { randomInt, createHash, timingSafeEqual } from 'node:crypto'
-import { emailTemplates as frTemplates } from '#src/translate/emails/fr.js'
-import { emailTemplates as enTemplates } from '#src/translate/emails/en.js'
+import nodemailer from 'nodemailer';
+import { randomInt, createHash, timingSafeEqual } from 'node:crypto';
+import { emailTemplates as frTemplates } from '#src/translate/emails/fr.js';
+import { emailTemplates as enTemplates } from '#src/translate/emails/en.js';
 
 const transporter = nodemailer.createTransport({
   host: process.env.MAILER_HOST,
@@ -9,15 +9,15 @@ const transporter = nodemailer.createTransport({
   secure: process.env.MAILER_SSL === 'true',
   auth: {
     user: process.env.MAILER_LOGIN,
-    pass: process.env.MAILER_PASSWORD
-  }
-})
+    pass: process.env.MAILER_PASSWORD,
+  },
+});
 
-const templates = { fr: frTemplates, en: enTemplates }
+const templates = { fr: frTemplates, en: enTemplates };
 
 function getTemplate(templateName, locale = 'en') {
-  const lang = templates[locale] ? locale : 'en'
-  return templates[lang][templateName]
+  const lang = templates[locale] ? locale : 'en';
+  return templates[lang][templateName];
 }
 
 async function sendMail(to, subject, html) {
@@ -26,58 +26,60 @@ async function sendMail(to, subject, html) {
       from: process.env.MAILER_FROM,
       to,
       subject,
-      html
-    })
-    return { success: true }
+      html,
+    });
+    return { success: true };
   } catch (err) {
-    console.error('Email send error:', err)
-    return { success: false, error: err.message }
+    console.error('Email send error:', err);
+    return { success: false, error: err.message };
   }
 }
 
 export async function sendSecurityCodeEmail(email, code, locale = 'en') {
-  const template = getTemplate('securityCode', locale)
-  return sendMail(email, template.subject, template.html(code))
+  const template = getTemplate('securityCode', locale);
+  return sendMail(email, template.subject, template.html(code));
 }
 
 export async function sendWelcomeEmail(email, name, locale = 'en') {
-  const template = getTemplate('welcome', locale)
-  if (!template) return { success: true }
-  const subject = typeof template.subject === 'function' ? template.subject(name) : template.subject
-  return sendMail(email, subject, template.html(name))
+  const template = getTemplate('welcome', locale);
+  if (!template) return { success: true };
+  const subject =
+    typeof template.subject === 'function' ? template.subject(name) : template.subject;
+  return sendMail(email, subject, template.html(name));
 }
 
 export async function sendContactEmail(data, locale = 'en') {
-  const template = getTemplate('contact', locale)
-  if (!template) return { success: true }
-  const to = process.env.MAILER_TO || process.env.MAILER_FROM
-  const subject = typeof template.subject === 'function' ? template.subject(data) : template.subject
-  return sendMail(to, subject, template.html(data))
+  const template = getTemplate('contact', locale);
+  if (!template) return { success: true };
+  const to = process.env.MAILER_TO || process.env.MAILER_FROM;
+  const subject =
+    typeof template.subject === 'function' ? template.subject(data) : template.subject;
+  return sendMail(to, subject, template.html(data));
 }
 
 export async function sendEmailChangeCodeEmail(email, code, locale = 'en') {
-  const template = getTemplate('emailChangeCode', locale)
-  return sendMail(email, template.subject, template.html(code))
+  const template = getTemplate('emailChangeCode', locale);
+  return sendMail(email, template.subject, template.html(code));
 }
 
 export async function sendResetPasswordEmail(email, code, locale = 'en') {
-  const template = getTemplate('resetPassword', locale)
-  return sendMail(email, template.subject, template.html(code))
+  const template = getTemplate('resetPassword', locale);
+  return sendMail(email, template.subject, template.html(code));
 }
 
 export function generateSecurityCode() {
-  return randomInt(100000, 1000000).toString()
+  return randomInt(100000, 1000000).toString();
 }
 
 export function hashCode(code) {
-  return createHash('sha256').update(code).digest('hex')
+  return createHash('sha256').update(code).digest('hex');
 }
 
 export function verifyCode(storedHash, providedCode) {
-  const hash = createHash('sha256').update(providedCode).digest('hex')
+  const hash = createHash('sha256').update(providedCode).digest('hex');
   try {
-    return timingSafeEqual(Buffer.from(storedHash), Buffer.from(hash))
+    return timingSafeEqual(Buffer.from(storedHash), Buffer.from(hash));
   } catch {
-    return false
+    return false;
   }
 }

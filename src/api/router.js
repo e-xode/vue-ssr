@@ -1,22 +1,22 @@
-import { rateLimit } from 'express-rate-limit'
-import { setMiddlewareDb } from './middleware.js'
-import { setupMeRoute } from './auth/me.js'
-import { setupSignupRoute } from './auth/signup.js'
-import { setupSigninRoute } from './auth/signin.js'
-import { setupSignoutRoute } from './auth/signout.js'
-import { setupVerifyCodeRoute } from './auth/verifyCode.js'
-import { setupResendCodeRoute } from './auth/resendCode.js'
-import { setupChangePasswordRoute } from './auth/changePassword.js'
-import { setupChangeEmailRoute } from './auth/changeEmail.js'
-import { setupForgotPasswordRoute } from './auth/forgotPassword.js'
-import { setupResetPasswordRoute } from './auth/resetPassword.js'
-import { setupUpdateProfileRoute } from './auth/updateProfile.js'
-import { setupAvatarRoute } from './auth/avatar.js'
-import { setupAdminUsersRoutes } from './admin/users.js'
-import { setupAdminLogsRoute } from './admin/logs.js'
-import { setupContactRoute } from './contact/send.js'
+import { rateLimit } from 'express-rate-limit';
+import { setMiddlewareDb } from './middleware.js';
+import { setupMeRoute } from './auth/me.js';
+import { setupSignupRoute } from './auth/signup.js';
+import { setupSigninRoute } from './auth/signin.js';
+import { setupSignoutRoute } from './auth/signout.js';
+import { setupVerifyCodeRoute } from './auth/verifyCode.js';
+import { setupResendCodeRoute } from './auth/resendCode.js';
+import { setupChangePasswordRoute } from './auth/changePassword.js';
+import { setupChangeEmailRoute } from './auth/changeEmail.js';
+import { setupForgotPasswordRoute } from './auth/forgotPassword.js';
+import { setupResetPasswordRoute } from './auth/resetPassword.js';
+import { setupUpdateProfileRoute } from './auth/updateProfile.js';
+import { setupAvatarRoute } from './auth/avatar.js';
+import { setupAdminUsersRoutes } from './admin/users.js';
+import { setupAdminLogsRoute } from './admin/logs.js';
+import { setupContactRoute } from './contact/send.js';
 
-const isProduction = process.env.NODE_ENV === 'production'
+const isProduction = process.env.NODE_ENV === 'production';
 
 const createLimiter = (max) =>
   isProduction
@@ -25,43 +25,43 @@ const createLimiter = (max) =>
         max,
         standardHeaders: true,
         legacyHeaders: false,
-        message: { error: 'error.rateLimit' }
+        message: { error: 'error.rateLimit' },
       })
-    : (req, res, next) => next()
+    : (req, res, next) => next();
 
-const signupLimiter = createLimiter(5)
-const authLimiter = createLimiter(10)
-const accountLimiter = createLimiter(20)
-const contactLimiter = createLimiter(3)
+const signupLimiter = createLimiter(5);
+const authLimiter = createLimiter(10);
+const accountLimiter = createLimiter(20);
+const contactLimiter = createLimiter(3);
 
 export function registerApiRoutes(app, db) {
-  setMiddlewareDb(db)
+  setMiddlewareDb(db);
 
-  app.use('/api/auth/signup', signupLimiter)
-  app.use('/api/auth/signin', authLimiter)
-  app.use('/api/auth/verify-code', authLimiter)
-  app.use('/api/auth/resend-code', authLimiter)
-  app.use('/api/auth/forgot-password', authLimiter)
-  app.use('/api/auth/reset-password', authLimiter)
-  app.use('/api/auth/change-email', accountLimiter)
-  app.use('/api/auth/verify-email-change', accountLimiter)
-  app.use('/api/auth/change-password', accountLimiter)
-  app.use('/api/contact', contactLimiter)
+  app.use('/api/auth/signup', signupLimiter);
+  app.use('/api/auth/signin', authLimiter);
+  app.use('/api/auth/verify-code', authLimiter);
+  app.use('/api/auth/resend-code', authLimiter);
+  app.use('/api/auth/forgot-password', authLimiter);
+  app.use('/api/auth/reset-password', authLimiter);
+  app.use('/api/auth/change-email', accountLimiter);
+  app.use('/api/auth/verify-email-change', accountLimiter);
+  app.use('/api/auth/change-password', accountLimiter);
+  app.use('/api/contact', contactLimiter);
 
-  setupMeRoute(app, db)
-  setupSignupRoute(app, db)
-  setupSigninRoute(app, db)
-  setupSignoutRoute(app, db)
-  setupVerifyCodeRoute(app, db)
-  setupResendCodeRoute(app, db)
-  setupChangePasswordRoute(app, db)
-  setupChangeEmailRoute(app, db)
-  setupForgotPasswordRoute(app, db)
-  setupResetPasswordRoute(app, db)
-  setupUpdateProfileRoute(app, db)
-  setupAvatarRoute(app, db)
+  setupMeRoute(app, db);
+  setupSignupRoute(app, db);
+  setupSigninRoute(app, db);
+  setupSignoutRoute(app, db);
+  setupVerifyCodeRoute(app, db);
+  setupResendCodeRoute(app, db);
+  setupChangePasswordRoute(app, db);
+  setupChangeEmailRoute(app, db);
+  setupForgotPasswordRoute(app, db);
+  setupResetPasswordRoute(app, db);
+  setupUpdateProfileRoute(app, db);
+  setupAvatarRoute(app, db);
 
-  setupAdminUsersRoutes(app, db)
-  setupAdminLogsRoute(app, db)
-  setupContactRoute(app, db)
+  setupAdminUsersRoutes(app, db);
+  setupAdminLogsRoute(app, db);
+  setupContactRoute(app, db);
 }

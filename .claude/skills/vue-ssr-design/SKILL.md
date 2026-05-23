@@ -11,15 +11,15 @@ description: "Design delegation and coordination reference for the Vue SSR Start
 
 Delegate to the `design` agent when a task is **primarily** about visual output:
 
-| Delegate to `design` | Handle inline (orchestrator) |
-|---|---|
-| Creating/revamping a full view layout | Adding a single `v-btn` to an existing template |
-| Responsive redesign of a component | A one-line SCSS token change |
-| Accessibility audit of a page | Fixing a linter warning in `.scss` |
-| Vuetify theming changes (colors, defaults) | Changing a prop value on a Vuetify component |
-| New design-system tokens/mixins | Reading existing tokens for reference |
-| Complex animations or transitions | Adding a simple `class="animate-fade-up"` |
-| Visual polish pass (spacing, alignment, shadows) | — |
+| Delegate to `design`                             | Handle inline (orchestrator)                    |
+| ------------------------------------------------ | ----------------------------------------------- |
+| Creating/revamping a full view layout            | Adding a single `v-btn` to an existing template |
+| Responsive redesign of a component               | A one-line SCSS token change                    |
+| Accessibility audit of a page                    | Fixing a linter warning in `.scss`              |
+| Vuetify theming changes (colors, defaults)       | Changing a prop value on a Vuetify component    |
+| New design-system tokens/mixins                  | Reading existing tokens for reference           |
+| Complex animations or transitions                | Adding a simple `class="animate-fade-up"`       |
+| Visual polish pass (spacing, alignment, shadows) | —                                               |
 
 **Rule of thumb:** If you need to read `design-ux` or `design-scss` skills to do the work, delegate to the `design` agent instead.
 
@@ -47,12 +47,12 @@ Delegate to the `design` agent when a task is **primarily** about visual output:
 
 ### Skill vs Agent distinction
 
-| Layer | Role |
-|---|---|
-| `design-ux` skill | **Methodology** — principles, hierarchy, spacing rules, accessibility requirements |
-| `design-scss` skill | **Implementation reference** — tokens, mixins, animation classes, file patterns |
-| `vuetify-components` skill | **Component API** — which component for which need, props, patterns |
-| `design` agent | **Executor** — applies skills to produce actual code changes |
+| Layer                      | Role                                                                               |
+| -------------------------- | ---------------------------------------------------------------------------------- |
+| `design-ux` skill          | **Methodology** — principles, hierarchy, spacing rules, accessibility requirements |
+| `design-scss` skill        | **Implementation reference** — tokens, mixins, animation classes, file patterns    |
+| `vuetify-components` skill | **Component API** — which component for which need, props, patterns                |
+| `design` agent             | **Executor** — applies skills to produce actual code changes                       |
 
 Skills are **knowledge**. The agent is the **worker** that uses that knowledge.
 
@@ -97,12 +97,12 @@ Split:
 
 When the design agent reports follow-ups or debt, categorize:
 
-| Type | Action |
-|---|---|
-| Missing dark-mode support | Schedule as follow-up task |
-| Hardcoded spacing found in existing code | Note for refactoring pass |
+| Type                                           | Action                           |
+| ---------------------------------------------- | -------------------------------- |
+| Missing dark-mode support                      | Schedule as follow-up task       |
+| Hardcoded spacing found in existing code       | Note for refactoring pass        |
 | Accessibility gap (missing aria, low contrast) | Fix immediately (non-negotiable) |
-| Inconsistent token usage across views | Schedule design-system cleanup |
+| Inconsistent token usage across views          | Schedule design-system cleanup   |
 
 ## See also
 

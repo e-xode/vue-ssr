@@ -1,6 +1,6 @@
-import js from '@eslint/js'
-import vue from 'eslint-plugin-vue'
-import globals from 'globals'
+import js from '@eslint/js';
+import vue from 'eslint-plugin-vue';
+import globals from 'globals';
 
 export default [
   {
@@ -14,8 +14,8 @@ export default [
       'logs',
       '.env*',
       '*.log',
-      '*.lock'
-    ]
+      '*.lock',
+    ],
   },
   js.configs.recommended,
   ...vue.configs['flat/recommended'],
@@ -27,14 +27,14 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.node,
-        __APP_VERSION__: 'readonly'
-      }
+        __APP_VERSION__: 'readonly',
+      },
     },
     rules: {
       'vue/multi-word-component-names': 'off',
       'vue/require-v-for-key': 'warn',
       'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-      'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
-    }
-  }
-]
+      'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    },
+  },
+];

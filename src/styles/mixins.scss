@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 @mixin flex-center {
   display: flex;
   align-items: center;

@@ -1,43 +1,69 @@
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
+import { createVuetify } from 'vuetify';
+import * as components from 'vuetify/components';
+import * as directives from 'vuetify/directives';
+import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
 
 const colors = {
-  primary: '#2563eb',
-  'primary-darken-1': '#1e40af',
-  'primary-darken-2': '#1e3a8a',
-  'primary-lighten-1': '#60a5fa',
-  'primary-lighten-2': '#93c5fd',
+  primary: '#4f46e5',
+  'primary-darken-1': '#4338ca',
+  'primary-darken-2': '#3730a3',
+  'primary-lighten-1': '#818cf8',
+  'primary-lighten-2': '#c7d2fe',
 
-  secondary: '#7c3aed',
-  'secondary-darken-1': '#6d28d9',
-  'secondary-darken-2': '#5b21b6',
-  'secondary-lighten-1': '#a78bfa',
-  'secondary-lighten-2': '#c4b5fd',
+  secondary: '#525252',
+  'secondary-darken-1': '#404040',
+  'secondary-lighten-1': '#737373',
 
-  accent: '#06b6d4',
+  accent: '#4f46e5',
 
-  success: '#00c853',
-  warning: '#ff9800',
-  error: '#f44336',
-  info: '#2196f3',
+  success: '#16a34a',
+  warning: '#d97706',
+  error: '#dc2626',
+  info: '#4f46e5',
 
+  'on-primary': '#ffffff',
+
+  background: '#fafafa',
   surface: '#ffffff',
-  background: '#f8fafc',
-  'on-surface': '#0f172a',
-  'on-background': '#0f172a',
-}
+  'surface-variant': '#f5f5f5',
+  'on-surface-variant': '#525252',
+  'on-surface': '#171717',
+  'on-background': '#171717',
+  outline: '#e5e5e5',
+  'outline-variant': '#f0f0f0',
+};
 
 const colorsDark = {
-  ...colors,
-  surface: '#1e293b',
-  background: '#0f172a',
-  'on-surface': '#f8fafc',
-  'on-background': '#f8fafc',
-}
+  primary: '#818cf8',
+  'primary-darken-1': '#6366f1',
+  'primary-darken-2': '#4f46e5',
+  'primary-lighten-1': '#a5b4fc',
+  'primary-lighten-2': '#c7d2fe',
 
-export function createApplicationVuetify(ssr = false) {
+  secondary: '#a3a3a3',
+  'secondary-darken-1': '#737373',
+  'secondary-lighten-1': '#d4d4d4',
+
+  accent: '#818cf8',
+
+  success: '#22c55e',
+  warning: '#f59e0b',
+  error: '#f87171',
+  info: '#818cf8',
+
+  'on-primary': '#ffffff',
+
+  background: '#0a0a0a',
+  surface: '#171717',
+  'surface-variant': '#262626',
+  'on-surface-variant': '#a3a3a3',
+  'on-surface': '#fafafa',
+  'on-background': '#fafafa',
+  outline: '#404040',
+  'outline-variant': '#262626',
+};
+
+export function createApplicationVuetify(ssr = false, theme = 'light') {
   return createVuetify({
     components,
     directives,
@@ -48,7 +74,7 @@ export function createApplicationVuetify(ssr = false) {
       sets: { mdi },
     },
     theme: {
-      defaultTheme: 'light',
+      defaultTheme: theme,
       themes: {
         light: {
           dark: false,
@@ -61,12 +87,15 @@ export function createApplicationVuetify(ssr = false) {
       },
     },
     defaults: {
+      VAppBar: {
+        flat: true,
+      },
       VBtn: {
         variant: 'flat',
         rounded: 'lg',
       },
       VCard: {
-        rounded: 'xl',
+        rounded: 'lg',
         elevation: 0,
         border: true,
       },
@@ -94,6 +123,6 @@ export function createApplicationVuetify(ssr = false) {
       VTooltip: {
         location: 'bottom',
       },
-    }
-  })
+    },
+  });
 }

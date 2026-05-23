@@ -10,12 +10,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const count = ref(0)
+const count = ref(0);
 
 function increment() {
-  count.value++
+  count.value++;
 }
 </script>
 ```
@@ -31,31 +31,31 @@ const props = defineProps({
   title: { type: String, required: true },
   count: { type: Number, default: 0 },
   items: { type: Array, default: () => [] },
-  user: { type: Object, default: null }
-})
+  user: { type: Object, default: null },
+});
 ```
 
 ### Type-based declaration (TypeScript projects)
 
 ```ts
 const props = defineProps<{
-  title: string
-  count?: number
-}>()
+  title: string;
+  count?: number;
+}>();
 ```
 
 ### Accessing props
 
 ```js
-const props = defineProps({ modelValue: String })
+const props = defineProps({ modelValue: String });
 
-const display = computed(() => props.modelValue.toUpperCase())
+const display = computed(() => props.modelValue.toUpperCase());
 ```
 
 Props are reactive — use them directly in computed/watch. Do NOT destructure:
 
 ```js
-const { title } = defineProps({ title: String })
+const { title } = defineProps({ title: String });
 ```
 
 This loses reactivity in Vue 3.4 and below. From Vue 3.5+, destructured props with `defineProps` are reactive.
@@ -63,14 +63,14 @@ This loses reactivity in Vue 3.4 and below. From Vue 3.5+, destructured props wi
 ## defineEmits()
 
 ```js
-const emit = defineEmits(['update:modelValue', 'submit', 'close'])
+const emit = defineEmits(['update:modelValue', 'submit', 'close']);
 
 function handleSubmit() {
-  emit('submit', { data: formData.value })
+  emit('submit', { data: formData.value });
 }
 
 function updateValue(val) {
-  emit('update:modelValue', val)
+  emit('update:modelValue', val);
 }
 ```
 
@@ -79,8 +79,8 @@ function updateValue(val) {
 ```js
 const emit = defineEmits({
   submit: (payload) => payload.data !== null,
-  close: null
-})
+  close: null,
+});
 ```
 
 ## defineModel() — Vue 3.4+
@@ -89,23 +89,23 @@ Simplifies `v-model` binding. Replaces the `props + emit('update:modelValue')` p
 
 ```vue
 <script setup>
-const model = defineModel()
+const model = defineModel();
 
-const modelWithOptions = defineModel({ type: String, default: '' })
+const modelWithOptions = defineModel({ type: String, default: '' });
 
-const named = defineModel('title', { type: String })
+const named = defineModel('title', { type: String });
 </script>
 ```
 
 Equivalent to:
 
 ```js
-const props = defineProps({ modelValue: String })
-const emit = defineEmits(['update:modelValue'])
+const props = defineProps({ modelValue: String });
+const emit = defineEmits(['update:modelValue']);
 const model = computed({
   get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val)
-})
+  set: (val) => emit('update:modelValue', val),
+});
 ```
 
 ## defineExpose()
@@ -114,15 +114,15 @@ Exposes component internals to parent via template ref. **Not used in this proje
 
 ```vue
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const count = ref(0)
+const count = ref(0);
 
 function reset() {
-  count.value = 0
+  count.value = 0;
 }
 
-defineExpose({ count, reset })
+defineExpose({ count, reset });
 </script>
 ```
 
@@ -134,25 +134,25 @@ Parent access:
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
 
-const childRef = ref(null)
+const childRef = ref(null);
 
 onMounted(() => {
-  childRef.value.reset()
-})
+  childRef.value.reset();
+});
 </script>
 ```
 
 ## useSlots() and useAttrs()
 
 ```js
-import { useSlots, useAttrs } from 'vue'
+import { useSlots, useAttrs } from 'vue';
 
-const slots = useSlots()
-const attrs = useAttrs()
+const slots = useSlots();
+const attrs = useAttrs();
 
-const hasHeader = computed(() => !!slots.header)
+const hasHeader = computed(() => !!slots.header);
 ```
 
 `attrs` contains all non-prop, non-emit attributes passed to the component (class, style, event listeners from parent).
@@ -163,7 +163,7 @@ const hasHeader = computed(() => !!slots.header)
 
 ```vue
 <script setup>
-const data = await fetchData()
+const data = await fetchData();
 </script>
 ```
 
@@ -180,8 +180,8 @@ Imported components are automatically available in template:
 </template>
 
 <script setup>
-import AppHeader from '@/components/AppHeader.vue'
-import MainContent from '@/components/MainContent.vue'
+import AppHeader from '@/components/AppHeader.vue';
+import MainContent from '@/components/MainContent.vue';
 </script>
 ```
 
@@ -195,10 +195,10 @@ No `components: {}` registration needed.
 </template>
 
 <script setup>
-import TabA from './TabA.vue'
-import TabB from './TabB.vue'
+import TabA from './TabA.vue';
+import TabB from './TabB.vue';
 
-const tabs = { TabA, TabB }
-const currentTab = computed(() => tabs[activeTab.value])
+const tabs = { TabA, TabB };
+const currentTab = computed(() => tabs[activeTab.value]);
 </script>
 ```

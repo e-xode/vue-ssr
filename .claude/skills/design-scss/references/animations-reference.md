@@ -4,39 +4,39 @@
 
 ## Keyframes inventory
 
-| Keyframe | Effect | Duration context |
-| --- | --- | --- |
-| `fadeIn` | Opacity 0 → 1 | Subtle entrances |
-| `fadeUp` | Opacity + translateY(24px → 0) | Content reveals |
-| `fadeDown` | Opacity + translateY(-16px → 0) | Dropdown content |
-| `scaleIn` | Opacity + scale(0.96 → 1) | Modal/dialog entrances |
-| `reveal` | Opacity + translateY(32px) + blur(4px → 0) | Hero/feature reveals |
-| `slideLeft` | Opacity + translateX(24px → 0) | Right-to-left entrance |
-| `slideRight` | Opacity + translateX(-24px → 0) | Left-to-right entrance |
-| `float` | translateY(0 → -8px → 0) | Continuous hover effect |
-| `pulse` | Opacity 1 → 0.6 → 1 | Attention/loading |
-| `shimmer` | Background-position sweep | Skeleton loading |
-| `glow` | Box-shadow pulse via --glow-color | Highlight/focus |
-| `rotate` | 0deg → 360deg | Spinners |
+| Keyframe     | Effect                                     | Duration context        |
+| ------------ | ------------------------------------------ | ----------------------- |
+| `fadeIn`     | Opacity 0 → 1                              | Subtle entrances        |
+| `fadeUp`     | Opacity + translateY(24px → 0)             | Content reveals         |
+| `fadeDown`   | Opacity + translateY(-16px → 0)            | Dropdown content        |
+| `scaleIn`    | Opacity + scale(0.96 → 1)                  | Modal/dialog entrances  |
+| `reveal`     | Opacity + translateY(32px) + blur(4px → 0) | Hero/feature reveals    |
+| `slideLeft`  | Opacity + translateX(24px → 0)             | Right-to-left entrance  |
+| `slideRight` | Opacity + translateX(-24px → 0)            | Left-to-right entrance  |
+| `float`      | translateY(0 → -8px → 0)                   | Continuous hover effect |
+| `pulse`      | Opacity 1 → 0.6 → 1                        | Attention/loading       |
+| `shimmer`    | Background-position sweep                  | Skeleton loading        |
+| `glow`       | Box-shadow pulse via --glow-color          | Highlight/focus         |
+| `rotate`     | 0deg → 360deg                              | Spinners                |
 
 ## Utility classes
 
 Apply directly in templates. Each class runs its animation once (except infinite ones).
 
-| Class | Keyframe | Duration | Behavior |
-| --- | --- | --- | --- |
-| `.animate-fade-in` | fadeIn | $transition-base (300ms) | One-shot |
-| `.animate-fade-up` | fadeUp | $transition-slow (500ms) | One-shot |
-| `.animate-fade-down` | fadeDown | $transition-slow (500ms) | One-shot |
-| `.animate-scale-in` | scaleIn | $transition-base (300ms) | One-shot |
-| `.animate-reveal` | reveal | 700ms | One-shot |
-| `.animate-slide-left` | slideLeft | $transition-slow (500ms) | One-shot |
+| Class                  | Keyframe   | Duration                 | Behavior |
+| ---------------------- | ---------- | ------------------------ | -------- |
+| `.animate-fade-in`     | fadeIn     | $transition-base (300ms) | One-shot |
+| `.animate-fade-up`     | fadeUp     | $transition-slow (500ms) | One-shot |
+| `.animate-fade-down`   | fadeDown   | $transition-slow (500ms) | One-shot |
+| `.animate-scale-in`    | scaleIn    | $transition-base (300ms) | One-shot |
+| `.animate-reveal`      | reveal     | 700ms                    | One-shot |
+| `.animate-slide-left`  | slideLeft  | $transition-slow (500ms) | One-shot |
 | `.animate-slide-right` | slideRight | $transition-slow (500ms) | One-shot |
-| `.animate-float` | float | 3s | Infinite |
-| `.animate-pulse` | pulse | 2s | Infinite |
-| `.animate-shimmer` | shimmer | 1.5s | Infinite |
-| `.animate-glow` | glow | 2s | Infinite |
-| `.animate-rotate` | rotate | 1s | Infinite |
+| `.animate-float`       | float      | 3s                       | Infinite |
+| `.animate-pulse`       | pulse      | 2s                       | Infinite |
+| `.animate-shimmer`     | shimmer    | 1.5s                     | Infinite |
+| `.animate-glow`        | glow       | 2s                       | Infinite |
+| `.animate-rotate`      | rotate     | 1s                       | Infinite |
 
 ### Usage in templates
 
@@ -52,8 +52,8 @@ Apply directly in templates. Each class runs its animation once (except infinite
 
 Classes `.delay-1` through `.delay-8` add incremental `animation-delay` at 100ms intervals.
 
-| Class | Delay |
-| --- | --- |
+| Class      | Delay |
+| ---------- | ----- |
 | `.delay-1` | 100ms |
 | `.delay-2` | 200ms |
 | `.delay-3` | 300ms |
@@ -81,9 +81,7 @@ Use with lists or grids for cascading reveal:
 The `glow` keyframe uses a CSS custom property `--glow-color`:
 
 ```html
-<div class="animate-glow" style="--glow-color: rgba(34, 197, 94, 0.3)">
-  Custom green glow
-</div>
+<div class="animate-glow" style="--glow-color: rgba(34, 197, 94, 0.3)">Custom green glow</div>
 ```
 
 Default glow color: `rgba(99, 102, 241, 0.2)` (indigo).
@@ -100,14 +98,14 @@ This applies to all elements (`*`, `*::before`, `*::after`). No action needed fr
 
 ## Choosing the right animation
 
-| Scenario | Recommended class |
-| --- | --- |
-| Page section entering viewport | `.animate-reveal` |
-| Card or item appearing | `.animate-fade-up` |
-| Modal/dialog opening | `.animate-scale-in` |
-| Dropdown content | `.animate-fade-down` |
-| Slide-in navigation | `.animate-slide-right` |
-| Decorative floating element | `.animate-float` |
-| Loading indicator | `.animate-pulse` or `.animate-rotate` |
-| Skeleton placeholder | `.animate-shimmer` (via `.skeleton` class) |
-| Call-to-action highlight | `.animate-glow` |
+| Scenario                       | Recommended class                          |
+| ------------------------------ | ------------------------------------------ |
+| Page section entering viewport | `.animate-reveal`                          |
+| Card or item appearing         | `.animate-fade-up`                         |
+| Modal/dialog opening           | `.animate-scale-in`                        |
+| Dropdown content               | `.animate-fade-down`                       |
+| Slide-in navigation            | `.animate-slide-right`                     |
+| Decorative floating element    | `.animate-float`                           |
+| Loading indicator              | `.animate-pulse` or `.animate-rotate`      |
+| Skeleton placeholder           | `.animate-shimmer` (via `.skeleton` class) |
+| Call-to-action highlight       | `.animate-glow`                            |

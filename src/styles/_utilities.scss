@@ -36,7 +36,9 @@
 // ---- Hover effects --------------------------------------------------------
 
 .hover-lift {
-  transition: transform $transition-base ease, box-shadow $transition-base ease;
+  transition:
+    transform $transition-base ease,
+    box-shadow $transition-base ease;
 
   &:hover {
     transform: translateY(-4px);

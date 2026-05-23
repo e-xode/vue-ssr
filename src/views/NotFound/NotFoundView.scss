@@ -1,0 +1,23 @@
+.not-found {
+  &__code {
+    font-size: $font-size-display;
+    font-weight: $font-weight-bold;
+    line-height: $line-height-tight;
+    letter-spacing: $letter-spacing-tight;
+    color: rgba(var(--v-theme-on-surface), 0.12);
+  }
+
+  &__title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-semibold;
+    line-height: $line-height-snug;
+    letter-spacing: $letter-spacing-snug;
+    color: rgb(var(--v-theme-on-surface));
+  }
+
+  &__subtitle {
+    font-size: $font-size-base;
+    line-height: $line-height-normal;
+    color: rgba(var(--v-theme-on-surface), 0.65);
+  }
+}

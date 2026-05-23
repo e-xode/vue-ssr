@@ -6,7 +6,9 @@
       "name": "trigger-branch-review",
       "prompt": "Review the changes on branch feature-login",
       "assertions": [
-        { "text": "Performs a structured, severity-categorized code review of the branch diff against project conventions" }
+        {
+          "text": "Performs a structured, severity-categorized code review of the branch diff against project conventions"
+        }
       ]
     },
     {
@@ -14,7 +16,9 @@
       "name": "trigger-uncommitted-review",
       "prompt": "Can you code-review my uncommitted changes?",
       "assertions": [
-        { "text": "Analyzes uncommitted diff and returns a markdown report with anomaly types without modifying any code" }
+        {
+          "text": "Analyzes uncommitted diff and returns a markdown report with anomaly types without modifying any code"
+        }
       ]
     },
     {
@@ -22,7 +26,9 @@
       "name": "negative-fix-bug",
       "prompt": "Fix the bug in the auth module",
       "assertions": [
-        { "text": "Does NOT trigger the review skill; this is a code modification task, not a review request" }
+        {
+          "text": "Does NOT trigger the review skill; this is a code modification task, not a review request"
+        }
       ]
     }
   ]

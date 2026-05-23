@@ -1,0 +1,35 @@
+{
+  "skill_name": "skill-creator",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-create-skill",
+      "prompt": "Create a new skill that documents our Stripe payment integration patterns",
+      "assertions": [
+        {
+          "text": "Guides through the create/eval/iterate workflow, scaffolds a SKILL.md with valid frontmatter (third-person description, concrete triggers, anti-triggers) and respects the description budget"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "trigger-improve-description",
+      "prompt": "The vue-ssr-auth skill never seems to trigger — help me rewrite its description",
+      "assertions": [
+        {
+          "text": "Applies description best practices (discriminating keywords, third-person, Don't-use-for anti-triggers) and verifies length against the budget rather than editing skill body content"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "negative-add-translation",
+      "prompt": "Add a translation key for the new notifications page",
+      "assertions": [
+        {
+          "text": "Does NOT trigger skill-creator; this is an i18n task that belongs to the translate skill/agent"
+        }
+      ]
+    }
+  ]
+}
