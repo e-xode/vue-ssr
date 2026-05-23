@@ -1,6 +1,6 @@
 ---
 name: review
-description: "Code-review specialist for the Vue SSR Starter Kit. Performs a structured, severity-categorized review of a branch, PR, or uncommitted diff against project conventions. Read-only — never modifies code. Delegate when user asks to review, code-review, or audit changes. Returns a markdown report with severity levels and anomaly types."
+description: 'Code-review specialist for the Vue SSR Starter Kit. Performs a structured, severity-categorized review of a branch, PR, or uncommitted diff against project conventions. Read-only — never modifies code. Delegate when user asks to review, code-review, or audit changes. Returns a markdown report with severity levels and anomaly types.'
 tools: Read, Glob, Grep, Bash
 model: sonnet
 ---
@@ -30,6 +30,7 @@ git diff <scope>
 ### Step 3 — Review against project conventions
 
 Check against CLAUDE.md rules and relevant skills:
+
 - No code comments
 - SCSS externalized
 - i18n mandatory
@@ -41,6 +42,7 @@ Check against CLAUDE.md rules and relevant skills:
 ### Step 4 — Classify and report
 
 Use severity rubric from `.claude/skills/review/SKILL.md`:
+
 - 🔴 Critique (must fix)
 - 🟠 Important (should fix)
 - 🟡 Medium (consider)

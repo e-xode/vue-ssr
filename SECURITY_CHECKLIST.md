@@ -7,17 +7,20 @@ Use this checklist before deploying to production or publishing the project.
 ### ✅ Environment & Configuration
 
 - [ ] `.env` file not committed to git
+
   ```bash
   git check-ignore .env  # Should return match
   ```
 
 - [ ] All credentials are environment variables
+
   ```bash
   grep -r "password\|secret" src/ | grep -v "process.env"
   # Should return 0 results (only docs/comments)
   ```
 
 - [ ] `.gitignore` covers all sensitive items
+
   ```bash
   git check-ignore -v .env logs/ dist/ node_modules/
   # All should match
@@ -31,6 +34,7 @@ Use this checklist before deploying to production or publishing the project.
 ### ✅ Code Review
 
 - [ ] No hardcoded credentials (searches)
+
   ```bash
   grep -ri "password.*=\|secret.*=\|token.*=" src/ \
     --include="*.js" --include="*.vue" | \
@@ -40,12 +44,14 @@ Use this checklist before deploying to production or publishing the project.
   ```
 
 - [ ] No product-specific references left
+
   ```bash
   grep -ri "vitapulse\|payment\|stripe" src/
   # Should find nothing
   ```
 
 - [ ] No real email addresses
+
   ```bash
   grep -ri "@.*\.com\|@.*\.io" src/ | grep -v example.com
   # Should find nothing (only docs reference contact@e-xode.net)
@@ -60,6 +66,7 @@ Use this checklist before deploying to production or publishing the project.
 ### ✅ Documentation
 
 - [ ] Example credentials use placeholders
+
   ```bash
   grep -r "password\|secret\|token" docs/ README*.md | \
     grep -v "example\|placeholder\|your_\|your-"
@@ -67,6 +74,7 @@ Use this checklist before deploying to production or publishing the project.
   ```
 
 - [ ] SECURITY.md exists and has contact info
+
   ```bash
   test -f .github/SECURITY.md && \
   grep -q "security@" .github/SECURITY.md
@@ -80,12 +88,14 @@ Use this checklist before deploying to production or publishing the project.
 ### ✅ Docker & Deployment
 
 - [ ] Docker doesn't expose env variables
+
   ```bash
   grep -r "ENV.*PASSWORD\|ENV.*SECRET" docker/
   # Should only show ${VAR} references, not actual values
   ```
 
 - [ ] .dockerignore exists and is comprehensive
+
   ```bash
   test -f .dockerignore && wc -l .dockerignore
   # Should have ~30+ lines
@@ -100,6 +110,7 @@ Use this checklist before deploying to production or publishing the project.
 ### ✅ Git Operations
 
 - [ ] No credentials in git history
+
   ```bash
   git log --all -p -- '*' | \
   grep -i "password\|secret\|api.key" | head -5
@@ -107,6 +118,7 @@ Use this checklist before deploying to production or publishing the project.
   ```
 
 - [ ] Recent commits don't add secrets
+
   ```bash
   git log -10 --name-only | grep "\.env\|password\|secret"
   # Should find nothing
@@ -120,6 +132,7 @@ Use this checklist before deploying to production or publishing the project.
 ### ✅ Dependencies & Packages
 
 - [ ] Audit npm packages for vulnerabilities
+
   ```bash
   npm audit
   # Should show no critical/high issues
@@ -136,6 +149,7 @@ Use this checklist before deploying to production or publishing the project.
 **Before deploying to production:**
 
 1. Create strong values:
+
    ```bash
    # Generate COOKIE_SECRET
    node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
@@ -165,6 +179,7 @@ Use this checklist before deploying to production or publishing the project.
   - Alerts go to: contact@e-xode.net (or configured email)
 
 - [ ] Set up pre-commit hooks locally
+
   ```bash
   npm install detect-secrets --save-dev
   # Configure in .pre-commit-config.yaml
@@ -229,6 +244,7 @@ exit 0
 ```
 
 Save as `scripts/security-check.sh` and run with:
+
 ```bash
 chmod +x scripts/security-check.sh
 ./scripts/security-check.sh
@@ -243,12 +259,14 @@ See [SECURITY_AUDIT.md](SECURITY_AUDIT.md) for the complete audit report.
 **Summary:** ✅ **PASSED - No sensitive information found**
 
 ### Last Audit
+
 - **Date:** February 8, 2026
 - **Auditor:** Automated Security Review
 - **Result:** 100% PASS (0 critical issues)
 - **Recommendations:** 5 optional improvements
 
 ### Next Audit
+
 - Recommended: 3-6 months
 - Trigger: Before major releases
 - Trigger: After security incidents
@@ -259,12 +277,14 @@ See [SECURITY_AUDIT.md](SECURITY_AUDIT.md) for the complete audit report.
 ## 🚨 If You Find a Security Issue
 
 **DO NOT:**
+
 - Create a public GitHub issue
 - Post on social media
 - Reply-all in team emails
 - Commit fixes without reporting
 
 **DO:**
+
 1. Email `contact@e-xode.net` with:
    - Description of vulnerability
    - Affected component

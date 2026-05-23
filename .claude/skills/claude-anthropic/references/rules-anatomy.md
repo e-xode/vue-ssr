@@ -24,12 +24,12 @@ Instruction text. Short, imperative, guardrail-style.
 
 ## When to use rules vs skills vs CLAUDE.md
 
-| Criterion | `.claude/rules/` | `.claude/skills/` | `CLAUDE.md` |
-| --- | --- | --- | --- |
-| **Content** | Guardrails, hard DON'Ts | Knowledge, procedures | Global hard rules |
-| **Loading** | Deterministic by path (100%) | Semantic matching (may miss) | Every turn |
-| **Size** | Short (< 2 KB) | Rich (up to 50 KB) | Minimal (< 10 KB) |
-| **Use when** | Constraint on specific files | Teaching domain knowledge | Rule on every turn |
+| Criterion    | `.claude/rules/`             | `.claude/skills/`            | `CLAUDE.md`        |
+| ------------ | ---------------------------- | ---------------------------- | ------------------ |
+| **Content**  | Guardrails, hard DON'Ts      | Knowledge, procedures        | Global hard rules  |
+| **Loading**  | Deterministic by path (100%) | Semantic matching (may miss) | Every turn         |
+| **Size**     | Short (< 2 KB)               | Rich (up to 50 KB)           | Minimal (< 10 KB)  |
+| **Use when** | Constraint on specific files | Teaching domain knowledge    | Rule on every turn |
 
 ### Decision flowchart
 
@@ -49,9 +49,9 @@ Instruction text. Short, imperative, guardrail-style.
 
 ## Current inventory
 
-| Rule file | `paths:` | Purpose |
-| --- | --- | --- |
-| `testing-conventions.md` | `tests/**/*.test.js`, `src/**/*.test.js` | Vitest + happy-dom patterns |
-| `i18n-mandatory.md` | `src/views/**/*.vue`, `src/components/**/*.vue` | No hardcoded text |
-| `scss-externalized.md` | `src/views/**/*.vue`, `src/components/**/*.vue` | Separate .scss files |
-| `api-error-handling.md` | `src/api/**/*.js` | try/catch + parseObjectId + rate limiters |
+| Rule file                | `paths:`                                        | Purpose                                   |
+| ------------------------ | ----------------------------------------------- | ----------------------------------------- |
+| `testing-conventions.md` | `tests/**/*.test.js`, `src/**/*.test.js`        | Vitest + happy-dom patterns               |
+| `i18n-mandatory.md`      | `src/views/**/*.vue`, `src/components/**/*.vue` | No hardcoded text                         |
+| `scss-externalized.md`   | `src/views/**/*.vue`, `src/components/**/*.vue` | Separate .scss files                      |
+| `api-error-handling.md`  | `src/api/**/*.js`                               | try/catch + parseObjectId + rate limiters |

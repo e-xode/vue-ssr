@@ -1,7 +1,7 @@
 name: Feature Request
 description: Proposer une nouvelle feature ou amélioration
-title: "[FEATURE] "
-labels: ["enhancement", "needs-triage"]
+title: '[FEATURE] '
+labels: ['enhancement', 'needs-triage']
 assignees: []
 
 body:
@@ -73,9 +73,9 @@ body:
       label: Priorité
       description: Quelle importance pour votre use case?
       options:
-        - "Nice to have (pas urgent)"
-        - "Important (aimerait voir bientôt)"
-        - "Critical (bloque ma production)"
+        - 'Nice to have (pas urgent)'
+        - 'Important (aimerait voir bientôt)'
+        - 'Critical (bloque ma production)'
     validations:
       required: true
 
@@ -84,17 +84,17 @@ body:
       label: Domaine Affecté
       description: Quel partie du projet est affectée?
       options:
-        - "Frontend / UI / Components"
-        - "Backend / API / Routes"
-        - "Database / Schema"
-        - "Authentication / Security"
-        - "Deployment / DevOps"
-        - "Documentation"
-        - "Testing"
-        - "Performance"
-        - "Accessibilité"
-        - "i18n / Localization"
-        - "Autre"
+        - 'Frontend / UI / Components'
+        - 'Backend / API / Routes'
+        - 'Database / Schema'
+        - 'Authentication / Security'
+        - 'Deployment / DevOps'
+        - 'Documentation'
+        - 'Testing'
+        - 'Performance'
+        - 'Accessibilité'
+        - 'i18n / Localization'
+        - 'Autre'
     validations:
       required: false
 
@@ -112,10 +112,10 @@ body:
       label: Taille d'Effort Estimée
       description: Avez-vous une idée de la taille d'effort?
       options:
-        - "Petit (< 4 heures) - simple fix"
-        - "Moyen (4-16 heures) - peut être divisé en 2-3 PRs"
-        - "Grand (16-40 heures) - plusieurs jours de travail"
-        - "Très Grand (> 40 heures) - projet majeur"
+        - 'Petit (< 4 heures) - simple fix'
+        - 'Moyen (4-16 heures) - peut être divisé en 2-3 PRs'
+        - 'Grand (16-40 heures) - plusieurs jours de travail'
+        - 'Très Grand (> 40 heures) - projet majeur'
 
   - type: markdown
     attributes:

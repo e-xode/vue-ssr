@@ -1,0 +1,35 @@
+{
+  "skill_name": "vue-ssr-design",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-design-routing",
+      "prompt": "Should the design agent or the vue agent restyle the login card?",
+      "assertions": [
+        {
+          "text": "Explains the routing: visual/SCSS/layout/Vuetify theming work goes to the design agent, component logic/composables/stores go to the vue agent"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "trigger-mixed-task-split",
+      "prompt": "Build a new analytics widget with a chart and live data fetching",
+      "assertions": [
+        {
+          "text": "Splits the work: design agent for the visual/layout/responsive parts, vue agent for the data fetching composable and logic, with handoff between them"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "negative-pure-logic",
+      "prompt": "Write a Pinia store for cart state",
+      "assertions": [
+        {
+          "text": "Does NOT trigger design routing; pure state/logic work goes directly to the vue agent"
+        }
+      ]
+    }
+  ]
+}

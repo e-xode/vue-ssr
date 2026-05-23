@@ -1,128 +1,128 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useRoute, useRouter } from 'vue-router'
-import { useLocalePath } from '@/composables/useLocalePath'
-import { mdiArrowLeft, mdiLock, mdiLockOpen } from '@mdi/js'
+import { ref, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { useLocalePath } from '@/composables/useLocalePath';
+import { mdiArrowLeft, mdiLock, mdiLockOpen } from '@mdi/js';
 
-const { t } = useI18n()
-const route = useRoute()
-const router = useRouter()
-const { localePath } = useLocalePath()
+const { t } = useI18n();
+const route = useRoute();
+const router = useRouter();
+const { localePath } = useLocalePath();
 
-const user = ref(null)
-const recentLogs = ref([])
-const loading = ref(false)
-const saving = ref(false)
-const blocking = ref(false)
-const error = ref('')
-const successMessage = ref('')
+const user = ref(null);
+const recentLogs = ref([]);
+const loading = ref(false);
+const saving = ref(false);
+const blocking = ref(false);
+const error = ref('');
+const successMessage = ref('');
 
 const form = ref({
   name: '',
-  type: 'user'
-})
+  type: 'user',
+});
 
-const blockDialog = ref(false)
-const blockIps = ref(false)
+const blockDialog = ref(false);
+const blockIps = ref(false);
 
 const typeOptions = [
   { value: 'user', title: 'User' },
-  { value: 'admin', title: 'Admin' }
-]
+  { value: 'admin', title: 'Admin' },
+];
 
 async function fetchUser() {
-  loading.value = true
-  error.value = ''
+  loading.value = true;
+  error.value = '';
   try {
     const response = await fetch(`/api/admin/users/${route.params.userId}`, {
-      credentials: 'include'
-    })
-    if (!response.ok) throw new Error('error.server')
-    const data = await response.json()
-    user.value = data.user
-    recentLogs.value = data.recentLogs || []
-    form.value.name = data.user.name
-    form.value.type = data.user.type || 'user'
+      credentials: 'include',
+    });
+    if (!response.ok) throw new Error('error.server');
+    const data = await response.json();
+    user.value = data.user;
+    recentLogs.value = data.recentLogs || [];
+    form.value.name = data.user.name;
+    form.value.type = data.user.type || 'user';
   } catch (e) {
-    error.value = e.message
+    error.value = e.message;
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
 async function handleSave() {
-  saving.value = true
-  error.value = ''
-  successMessage.value = ''
+  saving.value = true;
+  error.value = '';
+  successMessage.value = '';
   try {
     const response = await fetch(`/api/admin/users/${route.params.userId}`, {
       method: 'PUT',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: form.value.name, type: form.value.type })
-    })
+      body: JSON.stringify({ name: form.value.name, type: form.value.type }),
+    });
     if (!response.ok) {
-      const data = await response.json()
-      throw new Error(data.error || 'error.server')
+      const data = await response.json();
+      throw new Error(data.error || 'error.server');
     }
-    const data = await response.json()
-    user.value = data.user
-    successMessage.value = t('admin.users.saveSuccess')
+    const data = await response.json();
+    user.value = data.user;
+    successMessage.value = t('admin.users.saveSuccess');
   } catch (e) {
-    error.value = e.message
+    error.value = e.message;
   } finally {
-    saving.value = false
+    saving.value = false;
   }
 }
 
 async function blockUser() {
-  blocking.value = true
+  blocking.value = true;
   try {
     const response = await fetch(`/api/admin/users/${route.params.userId}/block`, {
       method: 'PUT',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ blockIps: blockIps.value })
-    })
+      body: JSON.stringify({ blockIps: blockIps.value }),
+    });
     if (response.ok) {
-      user.value = { ...user.value, isBlocked: true }
-      blockDialog.value = false
-      successMessage.value = t('admin.users.blockSuccess')
+      user.value = { ...user.value, isBlocked: true };
+      blockDialog.value = false;
+      successMessage.value = t('admin.users.blockSuccess');
     }
   } catch {
     /* empty */
   } finally {
-    blocking.value = false
+    blocking.value = false;
   }
 }
 
 async function unblockUser() {
-  blocking.value = true
+  blocking.value = true;
   try {
     const response = await fetch(`/api/admin/users/${route.params.userId}/unblock`, {
       method: 'PUT',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ unblockIps: false })
-    })
+      body: JSON.stringify({ unblockIps: false }),
+    });
     if (response.ok) {
-      user.value = { ...user.value, isBlocked: false }
-      successMessage.value = t('admin.users.unblockSuccess')
+      user.value = { ...user.value, isBlocked: false };
+      successMessage.value = t('admin.users.unblockSuccess');
     }
   } catch {
     /* empty */
   } finally {
-    blocking.value = false
+    blocking.value = false;
   }
 }
 
 function formatDate(date) {
-  if (!date) return '—'
-  return new Date(date).toLocaleString()
+  if (!date) return '—';
+  return new Date(date).toLocaleString();
 }
 
-onMounted(fetchUser)
+onMounted(fetchUser);
 </script>
 
 <template>
@@ -205,7 +205,9 @@ onMounted(fetchUser)
                     </v-list-item>
                     <v-list-item v-if="user.loginHistory?.length">
                       <v-list-item-subtitle>{{ t('admin.users.lastLogin') }}</v-list-item-subtitle>
-                      <v-list-item-title>{{ formatDate(user.loginHistory[user.loginHistory.length - 1]?.date) }}</v-list-item-title>
+                      <v-list-item-title>
+                        {{ formatDate(user.loginHistory[user.loginHistory.length - 1]?.date) }}
+                      </v-list-item-title>
                     </v-list-item>
                   </v-list>
                 </v-card-text>

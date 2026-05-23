@@ -25,6 +25,7 @@ Before any visual modification, load and apply these skills:
 - **vuetify-components** — Vuetify 4 component selection, forms, data tables, theming, icons, dialogs
 
 Complementary skills when relevant:
+
 - **vue3-composition** — reactivity patterns, SSR-safe coding, lifecycle hooks
 - **vue-ssr-architecture** — file structure, layout system, routing
 
@@ -33,6 +34,8 @@ Complementary skills when relevant:
 Vue 3.5+ | Vite 7 | Vuetify 4 (MD3) | SCSS (sass-embedded) | @mdi/js icons | Composition API only | SSR (renderToString + hydration)
 
 ## Principles
+
+The `CLAUDE.md` hard rules and `.claude/rules/` apply in full (both tools load `CLAUDE.md` as authoritative baseline). The principles below add design-specific doctrine on top.
 
 1. **Design before code** — choose aesthetic direction, layout, and interaction model before writing templates.
 2. **Consistency > creativity** — reuse existing tokens, mixins, and Vuetify defaults. Do not create new patterns if an existing one serves.
@@ -63,15 +66,15 @@ Vue 3.5+ | Vite 7 | Vuetify 4 (MD3) | SCSS (sass-embedded) | @mdi/js icons | Com
 
 ## Scope and delegation
 
-| Belongs to `design` agent | Does NOT belong |
-|---|---|
-| SCSS files (create/edit) | `<script setup>` logic beyond template bindings (→ vue agent) |
-| Vuetify component usage in templates | Composables, Pinia stores (→ vue agent) |
-| Responsive layout | i18n key creation (→ translate agent) |
-| Animations and transitions | API route handlers (→ orchestrator) |
-| Accessibility improvements | Post-task validation (→ hooks agent) |
-| Vuetify theming/customization | Auth flow decisions (→ orchestrator with vue-ssr-auth) |
-| Design system extensions (new tokens/mixins) | Code review (→ review agent) |
+| Belongs to `design` agent                    | Does NOT belong                                               |
+| -------------------------------------------- | ------------------------------------------------------------- |
+| SCSS files (create/edit)                     | `<script setup>` logic beyond template bindings (→ vue agent) |
+| Vuetify component usage in templates         | Composables, Pinia stores (→ vue agent)                       |
+| Responsive layout                            | i18n key creation (→ translate agent)                         |
+| Animations and transitions                   | API route handlers (→ orchestrator)                           |
+| Accessibility improvements                   | Post-task validation (→ hooks agent)                          |
+| Vuetify theming/customization                | Auth flow decisions (→ orchestrator with vue-ssr-auth)        |
+| Design system extensions (new tokens/mixins) | Code review (→ review agent)                                  |
 
 If a task mixes design + Vue logic, implement the design parts and note out-of-scope logic as follow-ups.
 

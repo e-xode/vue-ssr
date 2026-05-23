@@ -62,7 +62,9 @@
       "assertions": [
         { "text": "Uses useTheme() composable from vuetify" },
         { "text": "Toggles theme.global.name.value between 'light' and 'dark'" },
-        { "text": "Lists project color tokens: primary (#2563eb), secondary (#7c3aed), accent (#06b6d4)" },
+        {
+          "text": "Lists project color tokens: primary (#2563eb), secondary (#7c3aed), accent (#06b6d4)"
+        },
         { "text": "Mentions dark theme overrides surface/background/on-* colors" },
         { "text": "Explains colors are used via color='primary' prop, never hardcoded hex" }
       ]

@@ -47,25 +47,25 @@ theme: {
 
 ## Project color palette
 
-| Category | Token | Hex | Usage |
-| --- | --- | --- | --- |
-| Primary (blue) | `primary` | #2563eb | Buttons, links, active states |
-| | `primary-darken-1` | #1e40af | Hover |
-| | `primary-darken-2` | #1e3a8a | Active/pressed |
-| | `primary-lighten-1` | #60a5fa | Subtle backgrounds |
-| | `primary-lighten-2` | #93c5fd | Very subtle backgrounds |
-| Secondary (purple) | `secondary` | #7c3aed | Secondary actions |
-| | `secondary-darken-1` | #6d28d9 | Hover |
-| | `secondary-darken-2` | #5b21b6 | Active/pressed |
-| | `secondary-lighten-1` | #a78bfa | Subtle |
-| | `secondary-lighten-2` | #c4b5fd | Very subtle |
-| Accent (cyan) | `accent` | #06b6d4 | Highlights |
-| Semantic | `success` | #00c853 | Success feedback |
-| | `warning` | #ff9800 | Warning feedback |
-| | `error` | #f44336 | Errors, destructive |
-| | `info` | #2196f3 | Informational |
-| Surface | `surface` | #ffffff / #1e293b | Cards, sheets |
-| | `background` | #f8fafc / #0f172a | Page background |
+| Category           | Token                 | Hex               | Usage                         |
+| ------------------ | --------------------- | ----------------- | ----------------------------- |
+| Primary (blue)     | `primary`             | #2563eb           | Buttons, links, active states |
+|                    | `primary-darken-1`    | #1e40af           | Hover                         |
+|                    | `primary-darken-2`    | #1e3a8a           | Active/pressed                |
+|                    | `primary-lighten-1`   | #60a5fa           | Subtle backgrounds            |
+|                    | `primary-lighten-2`   | #93c5fd           | Very subtle backgrounds       |
+| Secondary (purple) | `secondary`           | #7c3aed           | Secondary actions             |
+|                    | `secondary-darken-1`  | #6d28d9           | Hover                         |
+|                    | `secondary-darken-2`  | #5b21b6           | Active/pressed                |
+|                    | `secondary-lighten-1` | #a78bfa           | Subtle                        |
+|                    | `secondary-lighten-2` | #c4b5fd           | Very subtle                   |
+| Accent (cyan)      | `accent`              | #06b6d4           | Highlights                    |
+| Semantic           | `success`             | #00c853           | Success feedback              |
+|                    | `warning`             | #ff9800           | Warning feedback              |
+|                    | `error`               | #f44336           | Errors, destructive           |
+|                    | `info`                | #2196f3           | Informational                 |
+| Surface            | `surface`             | #ffffff / #1e293b | Cards, sheets                 |
+|                    | `background`          | #f8fafc / #0f172a | Page background               |
 
 ## Dark mode
 
@@ -73,12 +73,12 @@ The dark theme inherits all color tokens from light and overrides only surface c
 
 ```vue
 <script setup>
-import { useTheme } from 'vuetify'
+import { useTheme } from 'vuetify';
 
-const theme = useTheme()
+const theme = useTheme();
 
 function toggleTheme() {
-  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark';
 }
 </script>
 ```
@@ -87,10 +87,10 @@ function toggleTheme() {
 
 ```vue
 <script setup>
-import { useTheme } from 'vuetify'
+import { useTheme } from 'vuetify';
 
-const theme = useTheme()
-const primaryColor = theme.current.value.colors.primary
+const theme = useTheme();
+const primaryColor = theme.current.value.colors.primary;
 </script>
 ```
 
@@ -100,16 +100,16 @@ Global defaults are defined in `createVuetify({ defaults: {...} })`. They apply 
 
 ### Project defaults summary
 
-| Component | Defaults |
-| --- | --- |
-| `VBtn` | variant: flat, rounded: lg |
-| `VCard` | rounded: xl, elevation: 0, border: true |
+| Component    | Defaults                                             |
+| ------------ | ---------------------------------------------------- |
+| `VBtn`       | variant: flat, rounded: lg                           |
+| `VCard`      | rounded: xl, elevation: 0, border: true              |
 | `VTextField` | variant: outlined, density: comfortable, rounded: lg |
-| `VSelect` | variant: outlined, density: comfortable, rounded: lg |
-| `VSwitch` | color: primary, inset: true |
-| `VChip` | rounded: lg |
-| `VAlert` | rounded: lg, variant: tonal |
-| `VTooltip` | location: bottom |
+| `VSelect`    | variant: outlined, density: comfortable, rounded: lg |
+| `VSwitch`    | color: primary, inset: true                          |
+| `VChip`      | rounded: lg                                          |
+| `VAlert`     | rounded: lg, variant: tonal                          |
+| `VTooltip`   | location: bottom                                     |
 
 ### Overriding per-instance
 
@@ -179,22 +179,25 @@ d-flex d-md-none       -> flex below md, hidden from md up
 The factory function accepts an `ssr` boolean:
 
 ```javascript
-import { createApplicationVuetify } from '@/plugins/vuetify'
+import { createApplicationVuetify } from '@/plugins/vuetify';
 ```
 
 Server-side (`entry-server.js`):
+
 ```javascript
-const vuetify = createApplicationVuetify(true)
-app.use(vuetify)
+const vuetify = createApplicationVuetify(true);
+app.use(vuetify);
 ```
 
 Client-side (`entry-client.js`):
+
 ```javascript
-const vuetify = createApplicationVuetify(false)
-app.use(vuetify)
+const vuetify = createApplicationVuetify(false);
+app.use(vuetify);
 ```
 
 The SSR flag:
+
 - Disables transitions during server render
 - Prevents client-only API access (window, document)
 - Ensures proper hydration matching between server and client output

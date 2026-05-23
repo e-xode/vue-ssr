@@ -1,0 +1,45 @@
+{
+  "skill_name": "vue3-performance",
+  "evals": [
+    {
+      "id": 1,
+      "name": "shallowref-large-list",
+      "prompt": "I fetch a 5000-row dataset into a ref and only ever replace it wholesale, but updates feel sluggish. How do I make this reactive state cheaper?",
+      "assertions": [
+        {
+          "text": "Recommends shallowRef() for the large wholesale-replaced dataset, explains only .value reassignment is tracked (deep mutations are not), notes treating the data as immutable and reassigning .value, and mentions triggerRef() if an in-place mutation must force an update"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "vmemo-big-vfor",
+      "prompt": "A v-for list of hundreds of post rows re-renders every row whenever an unrelated piece of state changes. How do I stop the unnecessary re-renders?",
+      "assertions": [
+        {
+          "text": "Recommends v-memo on the v-for element with a dep array listing the values the row actually depends on, keeps a stable :key, warns the dep list must include every reactive value the sub-tree reads to avoid stale renders, and may mention props stability / passing per-item booleans instead of a shared id"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "ssr-hydration-mismatch",
+      "prompt": "I get a hydration mismatch warning because my component renders new Date().toLocaleString() in the template under SSR. How do I fix it?",
+      "assertions": [
+        {
+          "text": "Explains SSR render must be deterministic so server and client output match, advises not calling Date.now()/new Date() (or Math.random/window) in render, and recommends computing the value on the server and passing it down or deferring to onMounted (e.g. a mounted flag with v-if for client-only content)"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "negative-deployment-bundle-config",
+      "prompt": "How do I configure the Docker multi-stage build and Vite production bundle/chunk splitting to shrink the deployed image?",
+      "assertions": [
+        {
+          "text": "Defers to the vue-ssr-deployment skill: this is build/bundle/production deployment configuration (Docker, Vite production build), not runtime Vue render/reactivity optimization, so vue3-performance should not handle it"
+        }
+      ]
+    }
+  ]
+}

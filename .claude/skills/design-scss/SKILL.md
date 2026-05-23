@@ -1,6 +1,6 @@
 ---
 name: design-scss
-description: "SCSS design-system reference for the Vue SSR Starter Kit: design tokens (spacing, radius, shadows, transitions, breakpoints in variables.scss), 11 mixins (flex-center, flex-between, flex-col, truncate, multiline-truncate, absolute-center, transition, hover-lift, button-reset, visually-hidden, respond-to), animations (_animations.scss), utilities (_utilities.scss: glass, badges, gradients, skeleton), auto-injection barrel (_inject.scss via Vite), and component-scoped SCSS conventions. Trigger on ANY styling work: writing SCSS, choosing tokens, responsive breakpoints, animations, component .scss files, Vuetify style overrides, layout utilities, or design-system questions. This is the token/mixin reference — the design agent loads this skill to produce SCSS. Don't use for: app architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), Docker/CI (→ vue-ssr-deployment), validation (→ vue-ssr-hooks), Vuetify component API (→ vuetify-components), design delegation routing (→ vue-ssr-design)."
+description: "SCSS design-system reference for the Vue SSR Starter Kit: design tokens (spacing, radius, shadows, transitions, breakpoints in variables.scss), 11 mixins (flex-center, flex-between, flex-col, truncate, multiline-truncate, absolute-center, transition, hover-lift, button-reset, visually-hidden, respond-to), animations (_animations.scss), utilities (_utilities.scss: glass, badges, gradients, skeleton), auto-injection barrel (_inject.scss via Vite), and component-scoped SCSS conventions. Trigger on ANY styling work: writing SCSS, choosing tokens, animations, component .scss files, Vuetify style overrides, layout utilities, or design-system questions. This is the token/mixin reference — the design agent loads this skill to produce SCSS. Don't use for: app architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), Docker/CI (→ vue-ssr-deployment), validation (→ vue-ssr-hooks), Vuetify component API (→ vuetify-components), design delegation routing (→ vue-ssr-design)."
 ---
 
 # Design SCSS
@@ -28,31 +28,31 @@ src/styles/
 
 ## Token system (variables.scss)
 
-| Category | Tokens | Base |
-| --- | --- | --- |
-| Spacing | xs (4px), sm (8px), md (16px), lg (24px), xl (32px), 2xl (48px) | $spacing-unit: 8px |
-| Border-radius | sm (4px), md (8px), lg (12px), xl (16px) | — |
-| Shadows | sm, md, lg, xl | rgba-based box-shadow |
-| Transitions | fast (150ms), base (300ms), slow (500ms) | — |
-| Breakpoints | xs (0), sm (640px), md (768px), lg (1024px), xl (1280px), 2xl (1536px) | Mobile-first |
+| Category      | Tokens                                                                 | Base                  |
+| ------------- | ---------------------------------------------------------------------- | --------------------- |
+| Spacing       | xs (4px), sm (8px), md (16px), lg (24px), xl (32px), 2xl (48px)        | $spacing-unit: 8px    |
+| Border-radius | sm (4px), md (8px), lg (12px), xl (16px)                               | —                     |
+| Shadows       | sm, md, lg, xl                                                         | rgba-based box-shadow |
+| Transitions   | fast (150ms), base (300ms), slow (500ms)                               | —                     |
+| Breakpoints   | xs (0), sm (640px), md (768px), lg (1024px), xl (1280px), 2xl (1536px) | Mobile-first          |
 
 **Rule:** Never hardcode colors, spacings, or font sizes. Always use tokens.
 
 ## Mixins quick-reference
 
-| Mixin | Purpose |
-| --- | --- |
-| `flex-center` | Flex + center both axes |
-| `flex-between` | Flex + space-between + center |
-| `flex-col` | Flex column |
-| `truncate` | Single-line text ellipsis |
-| `multiline-truncate($lines)` | Multi-line clamp |
-| `absolute-center` | Absolute + translate centering |
-| `transition($prop, $dur, $timing)` | Custom transition shorthand |
-| `hover-lift` | Hover: translateY(-4px) + shadow |
-| `button-reset` | Strip browser button defaults |
-| `visually-hidden` | Accessible hide (screen readers) |
-| `respond-to($bp)` | Mobile-first media query (sm/md/lg/xl/2xl) |
+| Mixin                              | Purpose                                    |
+| ---------------------------------- | ------------------------------------------ |
+| `flex-center`                      | Flex + center both axes                    |
+| `flex-between`                     | Flex + space-between + center              |
+| `flex-col`                         | Flex column                                |
+| `truncate`                         | Single-line text ellipsis                  |
+| `multiline-truncate($lines)`       | Multi-line clamp                           |
+| `absolute-center`                  | Absolute + translate centering             |
+| `transition($prop, $dur, $timing)` | Custom transition shorthand                |
+| `hover-lift`                       | Hover: translateY(-4px) + shadow           |
+| `button-reset`                     | Strip browser button defaults              |
+| `visually-hidden`                  | Accessible hide (screen readers)           |
+| `respond-to($bp)`                  | Mobile-first media query (sm/md/lg/xl/2xl) |
 
 Usage (no `@use` needed, auto-injected):
 
@@ -127,10 +127,10 @@ From `_utilities.scss`:
 
 ## References
 
-| File | Content |
-| --- | --- |
-| [variables-reference.md](references/variables-reference.md) | Complete token inventory |
-| [mixins-reference.md](references/mixins-reference.md) | All 11 mixins with examples |
-| [animations-reference.md](references/animations-reference.md) | Keyframes, classes, stagger, a11y |
-| [utilities-reference.md](references/utilities-reference.md) | Glass, badges, gradients, skeleton |
-| [scss-patterns.md](references/scss-patterns.md) | File naming, @use/@forward, nesting |
+| File                                                          | Content                             |
+| ------------------------------------------------------------- | ----------------------------------- |
+| [variables-reference.md](references/variables-reference.md)   | Complete token inventory            |
+| [mixins-reference.md](references/mixins-reference.md)         | All 11 mixins with examples         |
+| [animations-reference.md](references/animations-reference.md) | Keyframes, classes, stagger, a11y   |
+| [utilities-reference.md](references/utilities-reference.md)   | Glass, badges, gradients, skeleton  |
+| [scss-patterns.md](references/scss-patterns.md)               | File naming, @use/@forward, nesting |

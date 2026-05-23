@@ -1,34 +1,36 @@
 .app-header {
+  border-bottom: $border-width-hairline solid rgba(var(--v-border-color), var(--v-border-opacity));
+  @include transition(box-shadow, $transition-fast);
+
+  &--scrolled {
+    box-shadow: $shadow-sm;
+  }
+
   &__logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    background: var(--v-primary-base);
-    color: white;
+    @include flex-center;
+    width: $spacing-unit * 5;
+    height: $spacing-unit * 5;
+    border-radius: $border-radius-md;
+    background: rgb(var(--v-theme-primary));
+    color: rgb(var(--v-theme-on-primary));
     text-decoration: none;
-    transition: all 0.2s ease;
+    @include transition(opacity, $transition-fast);
 
     &:hover {
-      opacity: 0.8;
+      opacity: 0.85;
     }
   }
 
   &__title {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    letter-spacing: $letter-spacing-snug;
     text-decoration: none;
-    color: var(--v-on-background-base);
-    transition: color 0.2s ease;
+    color: rgb(var(--v-theme-on-background));
+    @include transition(color, $transition-fast);
 
     &:hover {
-      color: var(--v-primary-base);
+      color: rgb(var(--v-theme-primary));
     }
   }
-}
-
-.app-mobile-nav {
-  margin-top: 72px !important;
 }

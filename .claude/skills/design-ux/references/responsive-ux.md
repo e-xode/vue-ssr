@@ -4,13 +4,13 @@ Mobile-first responsive design methodology for the Vue SSR Starter Kit.
 
 ## Breakpoint semantics
 
-| Token | Width | Devices | Layout approach |
-| --- | --- | --- | --- |
-| xs | < 640px | Phones (portrait) | Single column, stacked |
-| sm | ≥ 640px | Large phones, small tablets | Single column, wider |
-| md | ≥ 768px | Tablets | Two columns possible |
-| lg | ≥ 1024px | Laptops, tablets landscape | Multi-column, sidebar |
-| xl | ≥ 1280px | Desktops | Full layout, max-width content |
+| Token | Width    | Devices                     | Layout approach                |
+| ----- | -------- | --------------------------- | ------------------------------ |
+| xs    | < 640px  | Phones (portrait)           | Single column, stacked         |
+| sm    | ≥ 640px  | Large phones, small tablets | Single column, wider           |
+| md    | ≥ 768px  | Tablets                     | Two columns possible           |
+| lg    | ≥ 1024px | Laptops, tablets landscape  | Multi-column, sidebar          |
+| xl    | ≥ 1280px | Desktops                    | Full layout, max-width content |
 
 ### Vuetify grid usage
 
@@ -35,12 +35,12 @@ Mobile-first responsive design methodology for the Vue SSR Starter Kit.
 
 ### Progressive enhancement by breakpoint
 
-| Breakpoint | Enhancement |
-| --- | --- |
-| xs → sm | Slightly wider spacing, two-column for short items |
-| sm → md | Side-by-side layouts, tab navigation visible |
-| md → lg | Sidebar navigation, three-column grids |
-| lg → xl | Maximum content width, extra whitespace, data tables |
+| Breakpoint | Enhancement                                          |
+| ---------- | ---------------------------------------------------- |
+| xs → sm    | Slightly wider spacing, two-column for short items   |
+| sm → md    | Side-by-side layouts, tab navigation visible         |
+| md → lg    | Sidebar navigation, three-column grids               |
+| lg → xl    | Maximum content width, extra whitespace, data tables |
 
 ### Content width
 
@@ -121,13 +121,13 @@ Gate hover effects behind media query:
 
 ### Progressive disclosure
 
-| Content | Mobile | Tablet | Desktop |
-| --- | --- | --- | --- |
-| Primary action | Visible | Visible | Visible |
-| Essential context | Visible | Visible | Visible |
-| Supporting details | Collapsed/tab | Visible | Visible |
-| Related content | Hidden/link | Collapsed | Sidebar |
-| Metadata | Minimal | Partial | Full |
+| Content            | Mobile        | Tablet    | Desktop |
+| ------------------ | ------------- | --------- | ------- |
+| Primary action     | Visible       | Visible   | Visible |
+| Essential context  | Visible       | Visible   | Visible |
+| Supporting details | Collapsed/tab | Visible   | Visible |
+| Related content    | Hidden/link   | Collapsed | Sidebar |
+| Metadata           | Minimal       | Partial   | Full    |
 
 ### Techniques
 

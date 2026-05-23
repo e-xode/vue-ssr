@@ -1,21 +1,21 @@
-import fs from 'node:fs'
-import path from 'node:path'
+import fs from 'node:fs';
+import path from 'node:path';
 
-const LOGIN_HISTORY_MAX = 50
+const LOGIN_HISTORY_MAX = 50;
 
 export function getClientIp(req) {
-  const forwarded = req.headers['x-forwarded-for']
-  if (forwarded) return forwarded.split(',')[0].trim()
-  return req.ip || req.socket?.remoteAddress || 'unknown'
+  const forwarded = req.headers['x-forwarded-for'];
+  if (forwarded) return forwarded.split(',')[0].trim();
+  return req.ip || req.socket?.remoteAddress || 'unknown';
 }
 
 export async function isIpBlocked(db, ip) {
-  const blocked = await db.collection('blockedIps').findOne({ ip })
-  return !!blocked
+  const blocked = await db.collection('blockedIps').findOne({ ip });
+  return !!blocked;
 }
 
 export async function recordLoginIp(db, userId, ip) {
-  const entry = { ip, date: new Date() }
+  const entry = { ip, date: new Date() };
 
   await db.collection('users').updateOne(
     { _id: userId },
@@ -23,35 +23,35 @@ export async function recordLoginIp(db, userId, ip) {
       $push: {
         loginHistory: {
           $each: [entry],
-          $slice: -LOGIN_HISTORY_MAX
-        }
-      }
+          $slice: -LOGIN_HISTORY_MAX,
+        },
+      },
     }
-  )
+  );
 }
 
 export async function destroyUserSessions(userId, excludeSessionId = null) {
-  const sessionsDir = 'logs/sessions'
-  const userIdStr = userId.toString()
+  const sessionsDir = 'logs/sessions';
+  const userIdStr = userId.toString();
 
-  let files
+  let files;
   try {
-    files = await fs.promises.readdir(sessionsDir)
+    files = await fs.promises.readdir(sessionsDir);
   } catch {
-    return
+    return;
   }
 
   for (const file of files) {
-    if (!file.endsWith('.json')) continue
-    if (excludeSessionId && file === `${excludeSessionId}.json`) continue
+    if (!file.endsWith('.json')) continue;
+    if (excludeSessionId && file === `${excludeSessionId}.json`) continue;
     try {
-      const content = await fs.promises.readFile(path.join(sessionsDir, file), 'utf-8')
-      const session = JSON.parse(content)
+      const content = await fs.promises.readFile(path.join(sessionsDir, file), 'utf-8');
+      const session = JSON.parse(content);
       if (session.userId === userIdStr) {
-        await fs.promises.unlink(path.join(sessionsDir, file))
+        await fs.promises.unlink(path.join(sessionsDir, file));
       }
     } catch {
-      continue
+      continue;
     }
   }
 }

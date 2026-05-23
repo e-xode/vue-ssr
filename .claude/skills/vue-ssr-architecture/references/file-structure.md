@@ -6,7 +6,8 @@ vite.config.js                  # __APP_VERSION__, @root alias, SCSS auto-inject
 package.json                    # v3.0.2
 eslint.config.js                # Flat config ESLint 10
 vitest.config.js                # Vitest config
-docker-compose.yml              # Dev: MongoDB + app
+docker-compose.yml              # Dev base: app only (remote DB via .env)
+docker-compose.local.yml        # Dev override: local mongo + redirect (COMPOSE_FILE)
 Dockerfile                      # Multi-stage production build
 
 src/

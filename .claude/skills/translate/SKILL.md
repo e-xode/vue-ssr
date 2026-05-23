@@ -9,13 +9,13 @@ description: "i18n and translation reference for the Vue SSR Starter Kit (e-xode
 
 ## System overview
 
-| Aspect | Detail |
-| --- | --- |
-| Library | vue-i18n 11, Composition API mode (`legacy: false`) |
-| Locales | English (`en`), French (`fr`) |
-| Locale files | `src/translate/en.json`, `src/translate/fr.json` |
-| Fallback | `en` (always the reference locale) |
-| Routing | Locale-prefixed: `/:locale(en|fr)/path` via `useLocalePath` |
+| Aspect       | Detail                                              |
+| ------------ | --------------------------------------------------- | --------------------------- |
+| Library      | vue-i18n 11, Composition API mode (`legacy: false`) |
+| Locales      | English (`en`), French (`fr`)                       |
+| Locale files | `src/translate/en.json`, `src/translate/fr.json`    |
+| Fallback     | `en` (always the reference locale)                  |
+| Routing      | Locale-prefixed: `/:locale(en                       | fr)/path`via`useLocalePath` |
 
 Both locale files MUST have identical key structures at all times. English is the source of truth.
 
@@ -26,6 +26,7 @@ Pattern: `<section>.<subsection>.<camelCaseKey>`
 Nesting depth: 2-4 levels maximum. Top-level sections map to views or domain areas.
 
 Examples:
+
 - `auth.signin.title`
 - `admin.users.deleteConfirm.message`
 - `index.hero.cta.start`
@@ -44,9 +45,9 @@ See [references/key-naming.md](./references/key-naming.md) for full rules and se
 
 ```vue
 <script setup>
-import { useI18n } from 'vue-i18n'
+import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n()
+const { t } = useI18n();
 </script>
 
 <template>
@@ -71,6 +72,7 @@ Syntax: `{paramName}` — curly braces with a camelCase parameter name.
 ```
 
 Rules:
+
 - Interpolation placeholders MUST be identical in both locales (same name, same count).
 - Parameter names use camelCase.
 - No HTML inside interpolation values.
@@ -83,9 +85,9 @@ The `useLocalePath` composable from `src/composables/useLocalePath.js` builds lo
 
 ```vue
 <script setup>
-import { useLocalePath } from '@/composables/useLocalePath'
+import { useLocalePath } from '@/composables/useLocalePath';
 
-const localePath = useLocalePath()
+const localePath = useLocalePath();
 </script>
 
 <template>
@@ -102,6 +104,7 @@ Route pattern: `/:locale(en|fr)/path` — the locale segment is always first.
 Keys within each JSON object MUST be sorted alphabetically. When inserting a new key, place it in correct alphabetical position relative to siblings.
 
 Example (correct):
+
 ```json
 {
   "cancel": "Cancel",
@@ -113,24 +116,24 @@ Example (correct):
 
 ## Section inventory
 
-| Section | Purpose |
-| --- | --- |
-| `a11y` | Accessibility labels (screen readers) |
-| `account` | Account management views (profile, email, password) |
-| `admin` | Admin panel (users, logs) |
-| `app` | Application-level metadata |
-| `contact` | Contact form page |
-| `dashboard` | Dashboard view |
-| `error` | Error messages (validation, auth, server) |
-| `footer` | Footer content |
-| `forgotPassword` | Password recovery flow |
-| `form` | Shared form labels and buttons |
-| `index` | Homepage (hero, features, stack, opensource) |
-| `message` | Generic flash/toast messages |
-| `meta` | Page meta titles and descriptions (SEO) |
-| `nav` | Navigation items |
-| `resetPassword` | Password reset flow |
-| `verify` | Email verification flow |
+| Section          | Purpose                                             |
+| ---------------- | --------------------------------------------------- |
+| `a11y`           | Accessibility labels (screen readers)               |
+| `account`        | Account management views (profile, email, password) |
+| `admin`          | Admin panel (users, logs)                           |
+| `app`            | Application-level metadata                          |
+| `contact`        | Contact form page                                   |
+| `dashboard`      | Dashboard view                                      |
+| `error`          | Error messages (validation, auth, server)           |
+| `footer`         | Footer content                                      |
+| `forgotPassword` | Password recovery flow                              |
+| `form`           | Shared form labels and buttons                      |
+| `index`          | Homepage (hero, features, stack, opensource)        |
+| `message`        | Generic flash/toast messages                        |
+| `meta`           | Page meta titles and descriptions (SEO)             |
+| `nav`            | Navigation items                                    |
+| `resetPassword`  | Password reset flow                                 |
+| `verify`         | Email verification flow                             |
 
 ## Parity check script
 

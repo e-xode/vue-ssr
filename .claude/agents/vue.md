@@ -20,6 +20,11 @@ Vue 3.5+ | Vite 7 | Express 5 | MongoDB | Vuetify 4 (Material Design 3) | Pinia 
 Before any Vue modification, consider whether these project skills apply:
 
 - **vue3-composition** — reactivity, composables, lifecycle, `<script setup>`, watchers, defineProps/defineEmits
+- **vue3-components** — props, events, slots, provide/inject, dynamic/async components
+- **vue3-templates** — directives, list/conditional rendering, class/style bindings, native `v-model`
+- **vue3-builtin-components** — Teleport, Suspense, KeepAlive, Transition/TransitionGroup
+- **vue3-reusability** — custom directives and plugins
+- **vue3-performance** — shallowRef/markRaw, v-memo/v-once, async components, SSR perf
 - **vuetify-components** — Vuetify 4 component selection, forms, data tables, icons, theming, dialogs
 - **vue-ssr-architecture** — file structure, SSR lifecycle, routing, shared utilities, layout system
 
@@ -33,17 +38,15 @@ Code runs on the server first (renderToString), then hydrates on the client:
 - State must be serializable for SSR transfer (no functions, DOM refs, or class instances in initial state)
 - `useRoute()` and `useRouter()` are SSR-safe — use them freely
 
-## Project conventions (mandatory)
+## Project conventions
+
+The `CLAUDE.md` hard rules and the path-scoped `.claude/rules/` apply in full — both tools load `CLAUDE.md` as authoritative baseline context (Claude project memory; `.github/copilot-instructions.md` for Copilot). Vue-specific emphases:
 
 - **Composition API only** — always `<script setup>`, never Options API
-- **No code comments** in `.vue` / `.js` / `.scss` / `.css` files
-- **SCSS externalized** — every component: `ComponentName.vue` + `ComponentName.scss` in same directory
-- **i18n mandatory** — all user-visible text via `t('key')`, never hardcoded strings
-- **SCSS variables** — no hardcoded colors, spacings, or font sizes; use `styles/variables.scss`
-- **Shared factorization** — check `src/shared/`, `src/composables/` before writing new utility code
+- **SCSS externalized** — `ComponentName.vue` + `ComponentName.scss` (same directory), referenced via `<style lang="scss" scoped src="./ComponentName.scss">`
+- **SSR-safe** — see the SSR constraints section above
 - **ObjectId validation** — always `parseObjectId()` from `dbHelpers.js` before MongoDB queries
-- **catch blocks** — always `console.error(err)`, never empty catch
-- **No over-engineering** — YAGNI; keep it simple
+- **Shared factorization** — reuse `src/shared/` and `src/composables/` before writing utilities
 
 ## File naming and structure
 
@@ -60,18 +63,18 @@ src/stores/featureName.js
 
 ```vue
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
+import { ref, computed, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 
-const { t } = useI18n()
-const route = useRoute()
+const { t } = useI18n();
+const route = useRoute();
 
-const data = ref(null)
+const data = ref(null);
 
 onMounted(() => {
   // browser-only code here
-})
+});
 </script>
 
 <template>
@@ -88,8 +91,8 @@ onMounted(() => {
 Locale-prefixed routing: `/:locale(en|fr)/path`. Use `useLocalePath` composable for navigation:
 
 ```javascript
-const localePath = useLocalePath()
-router.push(localePath('/dashboard'))
+const localePath = useLocalePath();
+router.push(localePath('/dashboard'));
 ```
 
 Layout system uses meta field: `meta: { layout: 'public' | 'minimal' | 'app' }`.
@@ -115,9 +118,9 @@ Layout system uses meta field: `meta: { layout: 'public' | 'minimal' | 'app' }`.
 - Test file naming: `ComponentName.spec.js` alongside the component
 
 ```javascript
-import { shallowMount } from '@vue/test-utils'
-import { describe, it, expect, vi } from 'vitest'
-import ComponentName from './ComponentName.vue'
+import { shallowMount } from '@vue/test-utils';
+import { describe, it, expect, vi } from 'vitest';
+import ComponentName from './ComponentName.vue';
 
 describe('ComponentName', () => {
   it('renders correctly', () => {
@@ -125,26 +128,26 @@ describe('ComponentName', () => {
       global: {
         stubs: ['v-container', 'v-btn'],
         mocks: {
-          $t: (key) => key
-        }
-      }
-    })
-    expect(wrapper.exists()).toBe(true)
-  })
-})
+          $t: (key) => key,
+        },
+      },
+    });
+    expect(wrapper.exists()).toBe(true);
+  });
+});
 ```
 
 ## Scope and delegation
 
-| Belongs to `vue` agent | Does NOT belong |
-|---|---|
-| `<script setup>` logic | SCSS/CSS styling (→ orchestrator or design-scss skill) |
-| Composables (`src/composables/`) | i18n key creation (→ translate agent) |
-| Pinia stores (`src/stores/`) | Auth flow decisions (→ orchestrator with vue-ssr-auth skill) |
-| Vue Router configuration | API route handlers / server-side (→ orchestrator) |
-| Vitest unit tests | Docker/CI (→ orchestrator with vue-ssr-deployment skill) |
-| Vuetify component usage in templates | Post-task validation (→ hooks agent) |
-| Template markup and bindings | Code review (→ review agent) |
+| Belongs to `vue` agent               | Does NOT belong                                              |
+| ------------------------------------ | ------------------------------------------------------------ |
+| `<script setup>` logic               | SCSS/CSS styling (→ orchestrator or design-scss skill)       |
+| Composables (`src/composables/`)     | i18n key creation (→ translate agent)                        |
+| Pinia stores (`src/stores/`)         | Auth flow decisions (→ orchestrator with vue-ssr-auth skill) |
+| Vue Router configuration             | API route handlers / server-side (→ orchestrator)            |
+| Vitest unit tests                    | Docker/CI (→ orchestrator with vue-ssr-deployment skill)     |
+| Vuetify component usage in templates | Post-task validation (→ hooks agent)                         |
+| Template markup and bindings         | Code review (→ review agent)                                 |
 
 If a task mixes scopes, implement the Vue logic and note the out-of-scope parts as follow-ups.
 

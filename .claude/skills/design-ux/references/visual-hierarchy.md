@@ -6,22 +6,23 @@ Detailed guidance on establishing clear visual hierarchy in Vue SSR Starter Kit 
 
 Use Vuetify's built-in typography classes consistently:
 
-| Class | Size | Weight | Use case |
-| --- | --- | --- | --- |
-| `text-h1` | 96px / 6rem | Light | Hero headlines (rare) |
-| `text-h2` | 60px / 3.75rem | Light | Page titles |
-| `text-h3` | 48px / 3rem | Regular | Section headers |
-| `text-h4` | 34px / 2.125rem | Regular | Sub-section headers |
-| `text-h5` | 24px / 1.5rem | Regular | Card titles |
-| `text-h6` | 20px / 1.25rem | Medium | Dialog titles, list headers |
-| `text-subtitle-1` | 16px / 1rem | Regular | Card subtitles |
-| `text-subtitle-2` | 14px / 0.875rem | Medium | Meta information |
-| `text-body-1` | 16px / 1rem | Regular | Primary body text |
-| `text-body-2` | 14px / 0.875rem | Regular | Secondary body text |
-| `text-caption` | 12px / 0.75rem | Regular | Timestamps, labels |
-| `text-overline` | 10px / 0.625rem | Regular | Category labels |
+| Class             | Size            | Weight  | Use case                    |
+| ----------------- | --------------- | ------- | --------------------------- |
+| `text-h1`         | 96px / 6rem     | Light   | Hero headlines (rare)       |
+| `text-h2`         | 60px / 3.75rem  | Light   | Page titles                 |
+| `text-h3`         | 48px / 3rem     | Regular | Section headers             |
+| `text-h4`         | 34px / 2.125rem | Regular | Sub-section headers         |
+| `text-h5`         | 24px / 1.5rem   | Regular | Card titles                 |
+| `text-h6`         | 20px / 1.25rem  | Medium  | Dialog titles, list headers |
+| `text-subtitle-1` | 16px / 1rem     | Regular | Card subtitles              |
+| `text-subtitle-2` | 14px / 0.875rem | Medium  | Meta information            |
+| `text-body-1`     | 16px / 1rem     | Regular | Primary body text           |
+| `text-body-2`     | 14px / 0.875rem | Regular | Secondary body text         |
+| `text-caption`    | 12px / 0.75rem  | Regular | Timestamps, labels          |
+| `text-overline`   | 10px / 0.625rem | Regular | Category labels             |
 
 Rules:
+
 - Never skip heading levels (h1 → h3 without h2)
 - Use `font-weight-bold` or `font-weight-medium` for emphasis within same size
 - Body text minimum 16px for readability on all devices
@@ -34,6 +35,7 @@ The 8px grid ensures consistent visual rhythm across all components.
 ### Intra-component spacing
 
 Elements within a component use tight spacing:
+
 - Icon to label: 4px (`$spacing-xs`)
 - Input label to input: 8px (`$spacing-sm`)
 - List item vertical padding: 8px (`$spacing-sm`)
@@ -42,6 +44,7 @@ Elements within a component use tight spacing:
 ### Inter-component spacing
 
 Components relate to each other with moderate spacing:
+
 - Cards in a grid: 16px gap (`$spacing-md`)
 - Form fields vertical spacing: 16px (`$spacing-md`)
 - Related content groups: 24px (`$spacing-lg`)
@@ -49,6 +52,7 @@ Components relate to each other with moderate spacing:
 ### Section spacing
 
 Major content divisions use generous spacing:
+
 - Section to section: 32px-48px (`$spacing-xl` to `$spacing-2xl`)
 - Page top padding: 32px (`$spacing-xl`)
 - Hero to content: 48px-64px (`$spacing-2xl` to `$spacing-3xl`)
@@ -56,6 +60,7 @@ Major content divisions use generous spacing:
 ### Decision framework
 
 When uncertain about spacing:
+
 1. Is this within a component? → Use `$spacing-sm` or `$spacing-md`
 2. Is this between related components? → Use `$spacing-md` or `$spacing-lg`
 3. Is this a section break? → Use `$spacing-xl` or larger
@@ -93,6 +98,7 @@ The primary action or information on each view must be immediately identifiable.
 ### CTA dominance
 
 The call-to-action should be the most visually prominent interactive element:
+
 - Largest button on screen
 - Primary color fill (flat variant)
 - Positioned in the natural reading flow endpoint
@@ -101,6 +107,7 @@ The call-to-action should be the most visually prominent interactive element:
 ### Visual anchors
 
 Each section needs exactly one focal point:
+
 - A heading that establishes context
 - A primary action that enables progress
 - Supporting content that provides details
@@ -131,6 +138,7 @@ Cards follow a consistent internal structure:
 ```
 
 Rules:
+
 - Title always present and first text element
 - Body text uses `text-body-2` for density
 - Actions section separated by divider or spacing

@@ -1,4 +1,3 @@
-// Barrel file for Vite scss.additionalData auto-injection.
-// Only forwards variables & mixins – NO output styles (keyframes, classes, etc.)
 @forward 'variables';
+@forward 'typography';
 @forward 'mixins';

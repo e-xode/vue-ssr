@@ -6,11 +6,11 @@
 
 Apply gradient coloring to text. Uses CSS custom properties for theme overridability.
 
-| Class | Default gradient | Use case |
-| --- | --- | --- |
-| `.text-gradient-primary` | Indigo → Purple (135deg) | Headings, brand text |
-| `.text-gradient-secondary` | Cyan → Blue (135deg) | Secondary headings |
-| `.text-gradient-accent` | Amber → Red (135deg) | Emphasis, alerts |
+| Class                      | Default gradient         | Use case             |
+| -------------------------- | ------------------------ | -------------------- |
+| `.text-gradient-primary`   | Indigo → Purple (135deg) | Headings, brand text |
+| `.text-gradient-secondary` | Cyan → Blue (135deg)     | Secondary headings   |
+| `.text-gradient-accent`    | Amber → Red (135deg)     | Emphasis, alerts     |
 
 ### Usage
 
@@ -28,10 +28,10 @@ Apply gradient coloring to text. Uses CSS custom properties for theme overridabi
 
 ## Hover effects
 
-| Class | Effect | Transition |
-| --- | --- | --- |
-| `.hover-lift` | translateY(-4px) + $shadow-lg on hover | $transition-base |
-| `.hover-scale` | scale(1.02) on hover | $transition-base |
+| Class          | Effect                                 | Transition       |
+| -------------- | -------------------------------------- | ---------------- |
+| `.hover-lift`  | translateY(-4px) + $shadow-lg on hover | $transition-base |
+| `.hover-scale` | scale(1.02) on hover                   | $transition-base |
 
 ### Usage
 
@@ -46,10 +46,10 @@ These classes handle their own transition declarations — no additional transit
 
 Glassmorphism effects with backdrop blur.
 
-| Class | Background | Blur | Border |
-| --- | --- | --- | --- |
-| `.glass` | rgba(255,255,255,0.7) | 12px | 1px solid rgba(255,255,255,0.2) |
-| `.glass-dark` | rgba(0,0,0,0.4) | 12px | 1px solid rgba(255,255,255,0.08) |
+| Class         | Background            | Blur | Border                           |
+| ------------- | --------------------- | ---- | -------------------------------- |
+| `.glass`      | rgba(255,255,255,0.7) | 12px | 1px solid rgba(255,255,255,0.2)  |
+| `.glass-dark` | rgba(0,0,0,0.4)       | 12px | 1px solid rgba(255,255,255,0.08) |
 
 ### Usage
 
@@ -66,13 +66,13 @@ Pill-shaped inline labels. Base `.badge` class provides layout; variant classes 
 
 **Base styles:** inline-flex, centered, pill border-radius (9999px), 0.75rem font, font-weight 600.
 
-| Class | Background | Text color | Use case |
-| --- | --- | --- | --- |
-| `.badge-primary` | Indigo 10% | #6366f1 | Default status |
-| `.badge-success` | Green 10% | #16a34a | Success, active |
-| `.badge-warning` | Amber 10% | #d97706 | Pending, caution |
-| `.badge-error` | Red 10% | #dc2626 | Error, critical |
-| `.badge-neutral` | Gray 10% | #4b5563 | Inactive, disabled |
+| Class            | Background | Text color | Use case           |
+| ---------------- | ---------- | ---------- | ------------------ |
+| `.badge-primary` | Indigo 10% | #6366f1    | Default status     |
+| `.badge-success` | Green 10%  | #16a34a    | Success, active    |
+| `.badge-warning` | Amber 10%  | #d97706    | Pending, caution   |
+| `.badge-error`   | Red 10%    | #dc2626    | Error, critical    |
+| `.badge-neutral` | Gray 10%   | #4b5563    | Inactive, disabled |
 
 ### Usage
 
@@ -95,8 +95,8 @@ Each badge variant supports theming:
 
 ## Screen-reader only
 
-| Class | Purpose |
-| --- | --- |
+| Class      | Purpose                                                          |
+| ---------- | ---------------------------------------------------------------- |
 | `.sr-only` | Hides element visually but keeps it accessible to screen readers |
 
 ### Usage
@@ -113,8 +113,8 @@ Identical implementation to the `visually-hidden` mixin. Use the class in templa
 
 ## Skeleton loading
 
-| Class | Effect |
-| --- | --- |
+| Class       | Effect                                |
+| ----------- | ------------------------------------- |
 | `.skeleton` | Animated shimmer gradient placeholder |
 
 Uses the `shimmer` keyframe with a sweeping linear gradient. Includes `$border-radius-md`.

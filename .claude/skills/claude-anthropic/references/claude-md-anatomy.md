@@ -11,15 +11,15 @@
 
 Only **hard rules** — operational, project-wide, non-negotiable.
 
-| ✅ Belongs | ❌ Does NOT belong |
-| --- | --- |
-| Task completion protocol (validation gate) | How a feature works |
-| No auto-commit / no-comments rules | Architecture explanations |
-| Code-style hard limits | Tutorial content |
-| Agent fleet directory (1-line trigger per agent) | Detailed agent prompts |
-| Skills index (one line per skill) | Skill bodies |
-| Sub-agent orchestration rules | Examples / case studies |
-| Commands quick reference | File-by-file descriptions |
+| ✅ Belongs                                       | ❌ Does NOT belong        |
+| ------------------------------------------------ | ------------------------- |
+| Task completion protocol (validation gate)       | How a feature works       |
+| No auto-commit / no-comments rules               | Architecture explanations |
+| Code-style hard limits                           | Tutorial content          |
+| Agent fleet directory (1-line trigger per agent) | Detailed agent prompts    |
+| Skills index (one line per skill)                | Skill bodies              |
+| Sub-agent orchestration rules                    | Examples / case studies   |
+| Commands quick reference                         | File-by-file descriptions |
 
 Anything needing more than 3 lines → move to a skill and reference it from the index.
 

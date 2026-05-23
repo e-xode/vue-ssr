@@ -16,12 +16,12 @@ description: "Authentication and security reference for the Vue SSR Starter Kit:
 
 ## Security constants
 
-| Constant | Value | Purpose |
-| --- | --- | --- |
-| SECURITY_CODE_EXPIRY_MS | 600000 | 10 minutes code validity |
-| SECURITY_CODE_MAX_ATTEMPTS | 3 | Max verification attempts |
-| RESEND_COOLDOWN_MS | 30000 | 30s between resends |
-| BCRYPT_ROUNDS | 10 | Password hash cost |
+| Constant                   | Value  | Purpose                   |
+| -------------------------- | ------ | ------------------------- |
+| SECURITY_CODE_EXPIRY_MS    | 600000 | 10 minutes code validity  |
+| SECURITY_CODE_MAX_ATTEMPTS | 3      | Max verification attempts |
+| RESEND_COOLDOWN_MS         | 30000  | 30s between resends       |
+| BCRYPT_ROUNDS              | 10     | Password hash cost        |
 
 ## Security features
 
@@ -53,6 +53,6 @@ description: "Authentication and security reference for the Vue SSR Starter Kit:
 
 ## Where to look
 
-| If you need… | Read |
-| --- | --- |
+| If you need…               | Read                                                         |
+| -------------------------- | ------------------------------------------------------------ |
 | Full security flow details | [references/security-flow.md](./references/security-flow.md) |

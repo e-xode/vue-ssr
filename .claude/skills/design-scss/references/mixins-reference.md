@@ -16,6 +16,7 @@ Centers content on both axes using flexbox.
 ```
 
 **Output:**
+
 ```css
 display: flex;
 align-items: center;
@@ -36,6 +37,7 @@ Horizontal layout with space-between and vertical centering.
 ```
 
 **Output:**
+
 ```css
 display: flex;
 align-items: center;
@@ -56,6 +58,7 @@ Column flex layout.
 ```
 
 **Output:**
+
 ```css
 display: flex;
 flex-direction: column;
@@ -75,6 +78,7 @@ Single-line text with ellipsis overflow.
 ```
 
 **Output:**
+
 ```css
 overflow: hidden;
 text-overflow: ellipsis;
@@ -87,9 +91,9 @@ Clamp text to a specific number of lines.
 
 **Signature:** `@mixin multiline-truncate($lines: 2)`
 
-| Parameter | Default | Description |
-| --- | --- | --- |
-| `$lines` | 2 | Number of visible lines before truncation |
+| Parameter | Default | Description                               |
+| --------- | ------- | ----------------------------------------- |
+| `$lines`  | 2       | Number of visible lines before truncation |
 
 ```scss
 .description {
@@ -98,6 +102,7 @@ Clamp text to a specific number of lines.
 ```
 
 **Output:**
+
 ```css
 display: -webkit-box;
 -webkit-line-clamp: 3;
@@ -118,6 +123,7 @@ Centers an absolutely-positioned element within its relative parent.
 ```
 
 **Output:**
+
 ```css
 position: absolute;
 top: 50%;
@@ -131,11 +137,11 @@ Configurable transition shorthand.
 
 **Signature:** `@mixin transition($property: all, $duration: 300ms, $timing: ease)`
 
-| Parameter | Default | Description |
-| --- | --- | --- |
-| `$property` | all | CSS property to animate |
-| `$duration` | 300ms | Duration |
-| `$timing` | ease | Timing function |
+| Parameter   | Default | Description             |
+| ----------- | ------- | ----------------------- |
+| `$property` | all     | CSS property to animate |
+| `$duration` | 300ms   | Duration                |
+| `$timing`   | ease    | Timing function         |
 
 ```scss
 .link {
@@ -148,6 +154,7 @@ Configurable transition shorthand.
 ```
 
 **Output:**
+
 ```css
 transition: color 150ms ease;
 ```
@@ -166,8 +173,11 @@ Adds an upward lift and shadow on hover. Includes its own transition setup.
 ```
 
 **Output:**
+
 ```css
-transition: transform, box-shadow 300ms ease;
+transition:
+  transform,
+  box-shadow 300ms ease;
 
 &:hover {
   transform: translateY(-4px);
@@ -191,6 +201,7 @@ Strips all browser default button styling.
 ```
 
 **Output:**
+
 ```css
 padding: 0;
 border: none;
@@ -221,6 +232,7 @@ Hides element visually while keeping it accessible to screen readers.
 ```
 
 **Output:**
+
 ```css
 position: absolute;
 width: 1px;
@@ -239,8 +251,8 @@ Mobile-first media query wrapper. Accepts breakpoint name strings.
 
 **Signature:** `@mixin respond-to($breakpoint)`
 
-| Parameter | Accepted values |
-| --- | --- |
+| Parameter     | Accepted values                         |
+| ------------- | --------------------------------------- |
 | `$breakpoint` | `'sm'`, `'md'`, `'lg'`, `'xl'`, `'2xl'` |
 
 ```scss
@@ -263,6 +275,7 @@ Mobile-first media query wrapper. Accepts breakpoint name strings.
 ```
 
 **Output (for 'md'):**
+
 ```css
 @media (min-width: 768px) {
   padding: 16px;

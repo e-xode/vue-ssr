@@ -2,6 +2,7 @@
 set -euo pipefail
 
 source "$(dirname "$0")/../../logs/logs.sh"
+require_jq
 
 payload=$(cat)
 tool_name=$(printf '%s' "$payload" | jq -r '.tool_name // .tool // ""' | tr '[:upper:]' '[:lower:]')
@@ -10,7 +11,7 @@ hook_log_start "tool=$tool_name"
 
 block() {
   hook_log_end "BLOCK: $1"
-  jq -nc --arg r "$1" '{decision:"block", reason:$r}'
+  emit_block "$1"
   exit 0
 }
 

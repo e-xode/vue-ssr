@@ -21,12 +21,12 @@ model: haiku
 
 ### Required fields
 
-| Field | Required | Notes |
-| --- | --- | --- |
-| `name` | yes | Must match reference in `CLAUDE.md` |
-| `description` | yes | Same rules as skill descriptions |
-| `tools` | recommended | Restrict to minimum needed |
-| `model` | no | `sonnet`, `opus`, `haiku`, or `inherit` |
+| Field         | Required    | Notes                                   |
+| ------------- | ----------- | --------------------------------------- |
+| `name`        | yes         | Must match reference in `CLAUDE.md`     |
+| `description` | yes         | Same rules as skill descriptions        |
+| `tools`       | recommended | Restrict to minimum needed              |
+| `model`       | no          | `sonnet`, `opus`, `haiku`, or `inherit` |
 
 ## Sub-agent contract (non-negotiable)
 
@@ -38,27 +38,30 @@ model: haiku
 
 ## Current agent fleet (5 agents)
 
-| Agent | Model | Scope |
-| --- | --- | --- |
-| `hooks` | haiku | Post-task validation (format → lint → test). Sole validation exception. |
-| `review` | sonnet | Read-only structured code review. Never modifies code. |
-| `translate` | sonnet | i18n operations, locale parity, fleet mode (one sub-agent per locale). |
-| `vue` | sonnet | Vue component creation, composables, stores, routing, unit tests. |
-| `design` | sonnet | UI/UX design, SCSS styling, Vuetify theming, accessibility, responsive layout. |
+| Agent       | Model  | Scope                                                                          |
+| ----------- | ------ | ------------------------------------------------------------------------------ |
+| `hooks`     | haiku  | Post-task validation (format → lint → test). Sole validation exception.        |
+| `review`    | sonnet | Read-only structured code review. Never modifies code.                         |
+| `translate` | sonnet | i18n operations, locale parity, fleet mode (one sub-agent per locale).         |
+| `vue`       | sonnet | Vue component creation, composables, stores, routing, unit tests.              |
+| `design`    | sonnet | UI/UX design, SCSS styling, Vuetify theming, accessibility, responsive layout. |
 
 ## Coherence with `CLAUDE.md`
 
 `scripts/audit.py` enforces:
+
 - Every file in `.claude/agents/` has a row in `CLAUDE.md` § Agents directory.
 - Every agent referenced in that section exists as `.claude/agents/<name>.md`.
 
 ## When to create a new agent
 
 Create when:
+
 - A class of tasks has a clear domain boundary
 - Tasks need a different tool set or model
 - The orchestrator would repeat the same preamble
 
 Extend existing when:
+
 - New task fits inside existing scope
 - Splitting means two agents called in sequence on same files

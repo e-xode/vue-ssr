@@ -1,38 +1,38 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { mdiRefresh, mdiDelete } from '@mdi/js'
+import { ref, onMounted, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { mdiRefresh, mdiDelete } from '@mdi/js';
 
-const { t } = useI18n()
+const { t } = useI18n();
 
-const logs = ref([])
-const total = ref(0)
-const loading = ref(false)
-const error = ref('')
+const logs = ref([]);
+const total = ref(0);
+const loading = ref(false);
+const error = ref('');
 
 const filters = ref({
   search: '',
   event: '',
   from: '',
-  to: ''
-})
+  to: '',
+});
 
-const pagination = ref({ page: 1, perPage: 50 })
-const eventTypes = ref([])
-const selected = ref([])
+const pagination = ref({ page: 1, perPage: 50 });
+const eventTypes = ref([]);
+const selected = ref([]);
 
-const pageCount = computed(() => Math.ceil(total.value / pagination.value.perPage))
+const pageCount = computed(() => Math.ceil(total.value / pagination.value.perPage));
 
 function formatDate(date) {
-  if (!date) return '—'
-  return new Date(date).toLocaleString()
+  if (!date) return '—';
+  return new Date(date).toLocaleString();
 }
 
 async function fetchEvents() {
   try {
-    const response = await fetch('/api/admin/logs/events', { credentials: 'include' })
+    const response = await fetch('/api/admin/logs/events', { credentials: 'include' });
     if (response.ok) {
-      eventTypes.value = await response.json()
+      eventTypes.value = await response.json();
     }
   } catch {
     /* empty */
@@ -40,69 +40,69 @@ async function fetchEvents() {
 }
 
 async function fetchLogs() {
-  loading.value = true
-  error.value = ''
-  selected.value = []
+  loading.value = true;
+  error.value = '';
+  selected.value = [];
   try {
     const params = new URLSearchParams({
       page: pagination.value.page,
-      perPage: pagination.value.perPage
-    })
-    if (filters.value.search) params.set('search', filters.value.search)
-    if (filters.value.event) params.set('event', filters.value.event)
-    if (filters.value.from) params.set('from', filters.value.from)
-    if (filters.value.to) params.set('to', filters.value.to)
+      perPage: pagination.value.perPage,
+    });
+    if (filters.value.search) params.set('search', filters.value.search);
+    if (filters.value.event) params.set('event', filters.value.event);
+    if (filters.value.from) params.set('from', filters.value.from);
+    if (filters.value.to) params.set('to', filters.value.to);
 
-    const response = await fetch(`/api/admin/logs?${params}`, { credentials: 'include' })
-    if (!response.ok) throw new Error('error.server')
-    const data = await response.json()
-    logs.value = data.logs
-    total.value = data.total
+    const response = await fetch(`/api/admin/logs?${params}`, { credentials: 'include' });
+    if (!response.ok) throw new Error('error.server');
+    const data = await response.json();
+    logs.value = data.logs;
+    total.value = data.total;
   } catch (e) {
-    error.value = e.message
+    error.value = e.message;
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
 function applyFilters() {
-  pagination.value.page = 1
-  fetchLogs()
+  pagination.value.page = 1;
+  fetchLogs();
 }
 
 function resetFilters() {
-  filters.value = { search: '', event: '', from: '', to: '' }
-  applyFilters()
+  filters.value = { search: '', event: '', from: '', to: '' };
+  applyFilters();
 }
 
 async function deleteLog(id) {
   try {
-    await fetch(`/api/admin/logs/${id}`, { method: 'DELETE', credentials: 'include' })
-    fetchLogs()
+    await fetch(`/api/admin/logs/${id}`, { method: 'DELETE', credentials: 'include' });
+    fetchLogs();
   } catch {
     /* empty */
   }
 }
 
 async function deleteSelected() {
-  if (!selected.value.length) return
+  if (!selected.value.length) return;
   try {
     await fetch('/api/admin/logs', {
       method: 'DELETE',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ids: selected.value })
-    })
-    fetchLogs()
+      body: JSON.stringify({ ids: selected.value }),
+    });
+    fetchLogs();
   } catch {
     /* empty */
   }
 }
 
 onMounted(() => {
-  fetchEvents()
-  fetchLogs()
-})
+  fetchEvents();
+  fetchLogs();
+});
 </script>
 
 <template>
@@ -113,7 +113,7 @@ onMounted(() => {
           <h1 class="text-h5 font-weight-bold">
             {{ t('admin.logs.title') }}
           </h1>
-          <div class="d-flex gap-2">
+          <div class="d-flex ga-2">
             <v-btn
               v-if="selected.length"
               color="error"
@@ -165,7 +165,7 @@ onMounted(() => {
               >
                 <v-text-field
                   v-model="filters.from"
-                  :label="t('admin.logs.from')"
+                  :label="t('admin.logs.filter.from')"
                   type="date"
                 />
               </v-col>
@@ -175,14 +175,14 @@ onMounted(() => {
               >
                 <v-text-field
                   v-model="filters.to"
-                  :label="t('admin.logs.to')"
+                  :label="t('admin.logs.filter.to')"
                   type="date"
                 />
               </v-col>
               <v-col
                 cols="12"
                 sm="1"
-                class="d-flex align-center gap-2"
+                class="d-flex align-center ga-2"
               >
                 <v-btn
                   color="primary"
@@ -197,7 +197,7 @@ onMounted(() => {
               size="small"
               @click="resetFilters"
             >
-              {{ t('admin.logs.reset') }}
+              {{ t('admin.logs.filter.reset') }}
             </v-btn>
           </v-card-text>
         </v-card>
@@ -221,7 +221,7 @@ onMounted(() => {
                 <v-checkbox
                   :model-value="selected.length === logs.length && logs.length > 0"
                   :indeterminate="selected.length > 0 && selected.length < logs.length"
-                  @change="selected = selected.length === logs.length ? [] : logs.map(l => l._id)"
+                  @change="selected = selected.length === logs.length ? [] : logs.map((l) => l._id)"
                 />
               </th>
               <th>{{ t('admin.logs.date') }}</th>
@@ -233,9 +233,7 @@ onMounted(() => {
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-if="loading"
-            >
+            <tr v-if="loading">
               <td
                 colspan="7"
                 class="text-center py-8"
@@ -246,9 +244,7 @@ onMounted(() => {
                 />
               </td>
             </tr>
-            <tr
-              v-else-if="!logs.length"
-            >
+            <tr v-else-if="!logs.length">
               <td
                 colspan="7"
                 class="text-center py-8 text-medium-emphasis"

@@ -17,16 +17,16 @@ This skill (`skill-creator`) handles the generic create / evaluate / iterate loo
 
 ### Division of responsibilities — `skill-creator` ↔ `claude-anthropic`
 
-| Concern | Owner |
-| --- | --- |
-| Generic create/evaluate/iterate workflow | `skill-creator` |
-| Eval harness, test prompts, assertions | `skill-creator` |
-| Description-optimisation guidelines | `skill-creator` |
+| Concern                                                                | Owner              |
+| ---------------------------------------------------------------------- | ------------------ |
+| Generic create/evaluate/iterate workflow                               | `skill-creator`    |
+| Eval harness, test prompts, assertions                                 | `skill-creator`    |
+| Description-optimisation guidelines                                    | `skill-creator`    |
 | Project description conventions (discriminating, pushy, anti-triggers) | `claude-anthropic` |
-| Skill naming, placement under `.claude/skills/`, folder layout | `claude-anthropic` |
-| `SKILL.md` anatomy and token budget for this project | `claude-anthropic` |
-| Project anti-patterns | `claude-anthropic` |
-| Post-creation audit (`scripts/audit.py`) + `CLAUDE.md` index update | `claude-anthropic` |
+| Skill naming, placement under `.claude/skills/`, folder layout         | `claude-anthropic` |
+| `SKILL.md` anatomy and token budget for this project                   | `claude-anthropic` |
+| Project anti-patterns                                                  | `claude-anthropic` |
+| Post-creation audit (`scripts/audit.py`) + `CLAUDE.md` index update    | `claude-anthropic` |
 
 Handoff convention: `➜ See skill: claude-anthropic — <reason>`.
 
@@ -69,9 +69,7 @@ Create `evals/evals.json` with test prompts and assertions:
       "id": 1,
       "name": "test-name",
       "prompt": "User prompt to test",
-      "assertions": [
-        { "text": "Expected behavior or content in response" }
-      ]
+      "assertions": [{ "text": "Expected behavior or content in response" }]
     }
   ]
 }

@@ -13,11 +13,11 @@ You receive a dirty-list (output of `git diff --name-only HEAD && git diff --nam
 
 1. **Apply the short-circuit table** based on file extensions present:
 
-| Files modified | format | lint | test |
-| --- | --- | --- | --- |
-| `.vue`, `.js` | ✅ | ✅ | ✅ |
-| `.scss`, `.css` only (no .vue/.js) | ✅ | ✅ | ❌ skip |
-| No code files (only .md, .json, config) | ❌ skip all | ❌ | ❌ |
+| Files modified                          | format      | lint | test    |
+| --------------------------------------- | ----------- | ---- | ------- |
+| `.vue`, `.js`                           | ✅          | ✅   | ✅      |
+| `.scss`, `.css` only (no .vue/.js)      | ✅          | ✅   | ❌ skip |
+| No code files (only .md, .json, config) | ❌ skip all | ❌   | ❌      |
 
 2. **Run commands in order** (stop at first failure):
 

@@ -8,11 +8,11 @@ Modal dialog overlay.
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n()
-const dialog = ref(false)
+const { t } = useI18n();
+const dialog = ref(false);
 </script>
 <template>
   <v-btn color="primary" @click="dialog = true">
@@ -41,51 +41,51 @@ const dialog = ref(false)
 
 ### Key props
 
-| Prop | Type | Description |
-| --- | --- | --- |
-| `v-model` | boolean | Show/hide |
-| `max-width` | number/string | Maximum dialog width |
-| `persistent` | boolean | Cannot dismiss by clicking outside |
-| `fullscreen` | boolean | Full-screen dialog |
-| `scrollable` | boolean | Scrollable content area |
-| `transition` | string | Open/close animation |
+| Prop         | Type          | Description                        |
+| ------------ | ------------- | ---------------------------------- |
+| `v-model`    | boolean       | Show/hide                          |
+| `max-width`  | number/string | Maximum dialog width               |
+| `persistent` | boolean       | Cannot dismiss by clicking outside |
+| `fullscreen` | boolean       | Full-screen dialog                 |
+| `scrollable` | boolean       | Scrollable content area            |
+| `transition` | string        | Open/close animation               |
 
 ### Confirm dialog pattern (reusable composable)
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { mdiAlert } from '@mdi/js'
+import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { mdiAlert } from '@mdi/js';
 
-const { t } = useI18n()
-const show = ref(false)
-const resolvePromise = ref(null)
-const title = ref('')
-const message = ref('')
-const confirmColor = ref('primary')
+const { t } = useI18n();
+const show = ref(false);
+const resolvePromise = ref(null);
+const title = ref('');
+const message = ref('');
+const confirmColor = ref('primary');
 
 function open(options) {
-  title.value = options.title
-  message.value = options.message
-  confirmColor.value = options.color || 'primary'
-  show.value = true
-  return new Promise(resolve => {
-    resolvePromise.value = resolve
-  })
+  title.value = options.title;
+  message.value = options.message;
+  confirmColor.value = options.color || 'primary';
+  show.value = true;
+  return new Promise((resolve) => {
+    resolvePromise.value = resolve;
+  });
 }
 
 function confirm() {
-  show.value = false
-  resolvePromise.value(true)
+  show.value = false;
+  resolvePromise.value(true);
 }
 
 function cancel() {
-  show.value = false
-  resolvePromise.value(false)
+  show.value = false;
+  resolvePromise.value(false);
 }
 
-defineExpose({ open })
+defineExpose({ open });
 </script>
 <template>
   <v-dialog v-model="show" max-width="400" persistent>
@@ -109,15 +109,15 @@ Usage:
 
 ```vue
 <script setup>
-const confirmDialog = ref(null)
+const confirmDialog = ref(null);
 
 async function handleDelete() {
   const confirmed = await confirmDialog.value.open({
     title: t('confirm.deleteTitle'),
     message: t('confirm.deleteMessage'),
-    color: 'error'
-  })
-  if (confirmed) await deleteItem()
+    color: 'error',
+  });
+  if (confirmed) await deleteItem();
 }
 </script>
 <template>
@@ -133,16 +133,16 @@ Toast notification.
 
 ```vue
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const snackbar = ref(false)
-const snackbarText = ref('')
-const snackbarColor = ref('success')
+const snackbar = ref(false);
+const snackbarText = ref('');
+const snackbarColor = ref('success');
 
 function showNotification(text, color = 'success') {
-  snackbarText.value = text
-  snackbarColor.value = color
-  snackbar.value = true
+  snackbarText.value = text;
+  snackbarColor.value = color;
+  snackbar.value = true;
 }
 </script>
 <template>
@@ -159,14 +159,14 @@ function showNotification(text, color = 'success') {
 
 ### Key props
 
-| Prop | Type | Description |
-| --- | --- | --- |
-| `v-model` | boolean | Show/hide |
-| `color` | string | Background color |
-| `timeout` | number | Auto-dismiss (ms), -1 for permanent |
-| `location` | string | Position (top, bottom + start/end) |
-| `multi-line` | boolean | Taller for longer text |
-| `vertical` | boolean | Stack text and action |
+| Prop         | Type    | Description                         |
+| ------------ | ------- | ----------------------------------- |
+| `v-model`    | boolean | Show/hide                           |
+| `color`      | string  | Background color                    |
+| `timeout`    | number  | Auto-dismiss (ms), -1 for permanent |
+| `location`   | string  | Position (top, bottom + start/end)  |
+| `multi-line` | boolean | Taller for longer text              |
+| `vertical`   | boolean | Stack text and action               |
 
 ## v-alert
 
@@ -184,27 +184,22 @@ Inline messages. Project defaults: `rounded="lg"`, `variant="tonal"`.
 ### With title and closable
 
 ```vue
-<v-alert
-  type="warning"
-  :title="t('alerts.warningTitle')"
-  closable
-  @click:close="dismissed = true"
->
+<v-alert type="warning" :title="t('alerts.warningTitle')" closable @click:close="dismissed = true">
   {{ t('alerts.warningMessage') }}
 </v-alert>
 ```
 
 ### Key props
 
-| Prop | Type | Description |
-| --- | --- | --- |
-| `type` | string | success, info, warning, error |
-| `variant` | string | tonal, flat, outlined, elevated, text |
-| `title` | string | Alert title |
-| `closable` | boolean | Show dismiss button |
-| `icon` | string/false | Custom icon or disable icon |
-| `prominent` | boolean | Larger icon |
-| `border` | string | top, end, bottom, start |
+| Prop        | Type         | Description                           |
+| ----------- | ------------ | ------------------------------------- |
+| `type`      | string       | success, info, warning, error         |
+| `variant`   | string       | tonal, flat, outlined, elevated, text |
+| `title`     | string       | Alert title                           |
+| `closable`  | boolean      | Show dismiss button                   |
+| `icon`      | string/false | Custom icon or disable icon           |
+| `prominent` | boolean      | Larger icon                           |
+| `border`    | string       | top, end, bottom, start               |
 
 ## v-tooltip
 
@@ -226,12 +221,12 @@ Short form (Vuetify 4):
 
 ### Key props
 
-| Prop | Type | Description |
-| --- | --- | --- |
-| `text` | string | Tooltip content |
-| `location` | string | Position (default: bottom from project config) |
-| `open-delay` | number | Delay before showing (ms) |
-| `close-delay` | number | Delay before hiding (ms) |
+| Prop          | Type   | Description                                    |
+| ------------- | ------ | ---------------------------------------------- |
+| `text`        | string | Tooltip content                                |
+| `location`    | string | Position (default: bottom from project config) |
+| `open-delay`  | number | Delay before showing (ms)                      |
+| `close-delay` | number | Delay before hiding (ms)                       |
 
 ## v-progress-linear
 

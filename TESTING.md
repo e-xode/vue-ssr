@@ -23,6 +23,7 @@ npm install
 ```
 
 Dépendances de test incluses:
+
 - `vitest` - Framework de test
 - `@vitest/ui` - Interface utilisateur pour Vitest
 - `@vue/test-utils` - Utilitaires pour tester les composants Vue
@@ -34,27 +35,35 @@ Dépendances de test incluses:
 ## Exécution des tests
 
 ### Mode watch (développement)
+
 ```bash
 npm test
 ```
+
 Les tests se relancent automatiquement quand vous modifiez un fichier.
 
 ### Mode run (une seule exécution)
+
 ```bash
 npm run test:run
 ```
+
 Idéal pour CI/CD ou avant de commiter.
 
 ### Interface utilisateur
+
 ```bash
 npm run test:ui
 ```
+
 Ouvre une interface web pour visualiser les tests en temps réel.
 
 ### Couverture de code
+
 ```bash
 npm run test:coverage
 ```
+
 Génère un rapport de couverture de code.
 
 ---
@@ -87,49 +96,49 @@ tests/
 
 ```javascript
 // tests/unit/myFeature.test.js
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { myFunction } from '#src/my/module'
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { myFunction } from '#src/my/module';
 
 describe('my/module.js', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
   describe('myFunction', () => {
     it('should do something specific', () => {
-      const result = myFunction('input')
-      expect(result).toBe('expected output')
-    })
+      const result = myFunction('input');
+      expect(result).toBe('expected output');
+    });
 
     it('should handle edge cases', () => {
-      expect(() => myFunction(null)).not.toThrow()
-    })
-  })
-})
+      expect(() => myFunction(null)).not.toThrow();
+    });
+  });
+});
 ```
 
 ### Exemple: Tester une fonction async
 
 ```javascript
-import { describe, it, expect } from 'vitest'
-import { fetchData } from '#src/api/data'
+import { describe, it, expect } from 'vitest';
+import { fetchData } from '#src/api/data';
 
 describe('API Functions', () => {
   it('should fetch data successfully', async () => {
-    const data = await fetchData()
+    const data = await fetchData();
 
-    expect(data).toBeDefined()
-    expect(data.id).toBeDefined()
-  })
-})
+    expect(data).toBeDefined();
+    expect(data.id).toBeDefined();
+  });
+});
 ```
 
 ### Exemple: Tester un composant Vue
 
 ```javascript
-import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
-import MyComponent from '#src/components/MyComponent.vue'
+import { describe, it, expect } from 'vitest';
+import { mount } from '@vue/test-utils';
+import MyComponent from '#src/components/MyComponent.vue';
 
 describe('MyComponent.vue', () => {
   it('should render properly', () => {
@@ -138,22 +147,22 @@ describe('MyComponent.vue', () => {
       global: {
         stubs: {
           VButton: true,
-          VContainer: true
-        }
-      }
-    })
+          VContainer: true,
+        },
+      },
+    });
 
-    expect(wrapper.text()).toContain('Test')
-  })
+    expect(wrapper.text()).toContain('Test');
+  });
 
   it('should emit event on button click', async () => {
-    const wrapper = mount(MyComponent)
+    const wrapper = mount(MyComponent);
 
-    await wrapper.find('button').trigger('click')
+    await wrapper.find('button').trigger('click');
 
-    expect(wrapper.emitted('click')).toBeTruthy()
-  })
-})
+    expect(wrapper.emitted('click')).toBeTruthy();
+  });
+});
 ```
 
 ---
@@ -171,6 +180,7 @@ Cela génère un rapport HTML dans `coverage/index.html`.
 ### Augmenter la couverture
 
 1. **Identifier les zones non couvertes**
+
    ```bash
    npm run test:coverage
    # Ouvrir coverage/index.html dans un navigateur
@@ -187,12 +197,12 @@ Cela génère un rapport HTML dans `coverage/index.html`.
 
 ### Objectifs de couverture recommandés
 
-| Type | Couverture |
-|------|-----------|
-| Déclarations | > 70% |
-| Branches | > 65% |
-| Fonctions | > 70% |
-| Lignes | > 70% |
+| Type         | Couverture |
+| ------------ | ---------- |
+| Déclarations | > 70%      |
+| Branches     | > 65%      |
+| Fonctions    | > 70%      |
+| Lignes       | > 70%      |
 
 ---
 
@@ -201,47 +211,49 @@ Cela génère un rapport HTML dans `coverage/index.html`.
 ### Mocking de modules
 
 ```javascript
-import { vi } from 'vitest'
+import { vi } from 'vitest';
 
 // Mock complet d'un module
 vi.mock('mongodb', () => ({
   MongoClient: class {
-    connect() { return Promise.resolve() }
-  }
-}))
+    connect() {
+      return Promise.resolve();
+    }
+  },
+}));
 ```
 
 ### Mocking de fonctions
 
 ```javascript
-import { vi } from 'vitest'
+import { vi } from 'vitest';
 
-const mockFunction = vi.fn()
+const mockFunction = vi.fn();
 
 // Vérifier que la fonction a été appelée
-expect(mockFunction).toHaveBeenCalled()
+expect(mockFunction).toHaveBeenCalled();
 
 // Vérifier les arguments
-expect(mockFunction).toHaveBeenCalledWith('arg1', 'arg2')
+expect(mockFunction).toHaveBeenCalledWith('arg1', 'arg2');
 
 // Retourner une valeur spécifique
-mockFunction.mockReturnValue('result')
+mockFunction.mockReturnValue('result');
 
 // Retourner une promise
-mockFunction.mockResolvedValue({ data: 'result' })
+mockFunction.mockResolvedValue({ data: 'result' });
 ```
 
 ### Mocking de fetch
 
 ```javascript
-import { vi } from 'vitest'
+import { vi } from 'vitest';
 
-global.fetch = vi.fn()
+global.fetch = vi.fn();
 
 fetch.mockResolvedValueOnce({
   ok: true,
-  json: async () => ({ user: { id: 1 } })
-})
+  json: async () => ({ user: { id: 1 } }),
+});
 ```
 
 ---
@@ -250,38 +262,38 @@ fetch.mockResolvedValueOnce({
 
 ```javascript
 // Égalité
-expect(value).toBe(expectedValue)
-expect(value).toEqual(expectedValue)
+expect(value).toBe(expectedValue);
+expect(value).toEqual(expectedValue);
 
 // Vérité
-expect(value).toBeTruthy()
-expect(value).toBeFalsy()
+expect(value).toBeTruthy();
+expect(value).toBeFalsy();
 
 // Types
-expect(value).toBeNull()
-expect(value).toBeUndefined()
-expect(typeof value).toBe('string')
+expect(value).toBeNull();
+expect(value).toBeUndefined();
+expect(typeof value).toBe('string');
 
 // Comparaisons
-expect(number).toBeGreaterThan(5)
-expect(number).toBeLessThan(10)
+expect(number).toBeGreaterThan(5);
+expect(number).toBeLessThan(10);
 
 // Contenu
-expect(text).toContain('substring')
-expect(array).toContain('element')
+expect(text).toContain('substring');
+expect(array).toContain('element');
 
 // Tableaux
-expect(array).toHaveLength(3)
-expect(array).toEqual([1, 2, 3])
+expect(array).toHaveLength(3);
+expect(array).toEqual([1, 2, 3]);
 
 // Erreurs
-expect(() => throw new Error()).toThrow()
-expect(() => action()).not.toThrow()
+expect(() => throw new Error()).toThrow();
+expect(() => action()).not.toThrow();
 
 // Mocking
-expect(mockFn).toHaveBeenCalled()
-expect(mockFn).toHaveBeenCalledTimes(2)
-expect(mockFn).toHaveBeenCalledWith('arg')
+expect(mockFn).toHaveBeenCalled();
+expect(mockFn).toHaveBeenCalledTimes(2);
+expect(mockFn).toHaveBeenCalledWith('arg');
 ```
 
 ---
@@ -291,51 +303,56 @@ expect(mockFn).toHaveBeenCalledWith('arg')
 ### ✅ À faire
 
 - **Nommer les tests clairement**
+
   ```javascript
-  it('should return hashed password when signupHandler is called')
+  it('should return hashed password when signupHandler is called');
   ```
 
 - **Tester un comportement unique par test**
+
   ```javascript
   it('should validate email format', () => {
-    expect(isValidEmail('test@example.com')).toBe(true)
-  })
+    expect(isValidEmail('test@example.com')).toBe(true);
+  });
   ```
 
 - **Utiliser beforeEach pour la configuration**
+
   ```javascript
   beforeEach(() => {
-    vi.clearAllMocks()
-    store = createTestStore()
-  })
+    vi.clearAllMocks();
+    store = createTestStore();
+  });
   ```
 
 - **Grouper les tests avec describe**
   ```javascript
   describe('AuthStore', () => {
     describe('signup', () => {
-      it('should...', () => {})
-    })
-  })
+      it('should...', () => {});
+    });
+  });
   ```
 
 ### ❌ À éviter
 
 - **Tester plusieurs comportements dans un test**
+
   ```javascript
   // Mauvais
   it('should validate and save user', () => {
-    expect(isValid(user)).toBe(true)
-    expect(save(user)).toBe(true)
-  })
+    expect(isValid(user)).toBe(true);
+    expect(save(user)).toBe(true);
+  });
   ```
 
 - **Tester les détails d'implémentation**
+
   ```javascript
   // Mauvais - dépend du détail interne
   it('should call formatData', () => {
-    expect(formatDataMock).toHaveBeenCalled()
-  })
+    expect(formatDataMock).toHaveBeenCalled();
+  });
   ```
 
 - **Avoir des tests qui dépendent l'un de l'autre**
@@ -381,8 +398,8 @@ npx husky add .husky/pre-commit "npm run test:run"
 ```javascript
 // Utiliser .only pour exécuter un seul test
 it.only('should test this feature', () => {
-  expect(true).toBe(true)
-})
+  expect(true).toBe(true);
+});
 ```
 
 ### Ignorer un test temporairement
@@ -391,23 +408,24 @@ it.only('should test this feature', () => {
 // Utiliser .skip pour ignorer temporairement
 it.skip('should test this feature', () => {
   // ...
-})
+});
 ```
 
 ### Afficher les logs
 
 ```javascript
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'vitest';
 
 describe('Debug test', () => {
   it('should log information', () => {
-    console.log('Debug info:', data)
-    expect(data).toBeDefined()
-  })
-})
+    console.log('Debug info:', data);
+    expect(data).toBeDefined();
+  });
+});
 ```
 
 Exécutez avec:
+
 ```bash
 npm test -- --reporter=verbose
 ```
@@ -424,6 +442,7 @@ npm test -- --reporter=verbose
 ---
 
 **Besoin d'aide?**
+
 - Consultez les tests existants dans `tests/unit/`
 - Vérifiez la configuration dans `vitest.config.js`
 - Lisez la documentation de Vitest officielle

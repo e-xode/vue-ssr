@@ -39,7 +39,7 @@ Min length: 80 characters. Max budget: 1,536 characters.
 ### Description example (good)
 
 ```
-"Architecture reference for the Vue SSR Starter Kit: Vue 3.6 + Vite 7 + Express 5.1 + MongoDB. Covers file structure, SSR lifecycle, locale routing, shared utilities. Trigger on architecture, routing, SSR, or utility questions. Don't use for: auth (→ vue-ssr-auth), deployment (→ vue-ssr-deployment)."
+"Architecture reference for the Vue SSR Starter Kit: Vue 3.5 + Vite 7 + Express 5 + MongoDB. Covers file structure, SSR lifecycle, locale routing, shared utilities. Trigger on architecture, routing, SSR, or utility questions. Don't use for: auth (→ vue-ssr-auth), deployment (→ vue-ssr-deployment)."
 ```
 
 ### Description example (bad)
@@ -75,6 +75,7 @@ Min length: 80 characters. Max budget: 1,536 characters.
 ## Scripts placement
 
 Scripts belong to one skill under `scripts/`:
+
 - No `.claude/scripts/` global pool (anti-pattern).
 - Stdlib first (Python/Bash, no external deps).
 - Executable + shebang. Usage docstring at top.
@@ -84,9 +85,11 @@ Scripts belong to one skill under `scripts/`:
 ## When to split a skill
 
 Split when:
+
 - Two distinct domains with different triggering profiles
 - Body exceeds 500 lines with independently triggerable topics
 
 Do NOT split when:
+
 - Two parts always load together
 - The "split" is just chapters of one procedure (use references/)

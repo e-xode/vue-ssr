@@ -2,44 +2,59 @@
 
 ## What this directory contains
 
-Validation shell scripts (format, lint, test) designed to run as GitHub Copilot Code hooks on the **Stop** event. They enforce the format → lint → test battery automatically after every code-modifying task.
+Validation shell scripts (format, lint, test) plus guards (comment blocker, sub-agent validation blocker), designed to run as **GitHub Copilot** hooks on the `PreToolUse` and `Stop` events. They enforce the format → lint → test battery and the project rules automatically after every code-modifying task.
 
-## Current status: DISABLED
+## Dual setup (by design)
 
-These hooks are **intentionally disabled**. The configuration file is named `.claude/settings._json` (note the underscore) — this non-standard extension prevents Copilot from loading it.
+This starter kit is meant to be forked and used with **either GitHub Copilot or Claude Code** (or both). Validation is therefore guaranteed through two complementary mechanisms:
 
-### Why disabled
+1. **Copilot path — shell hooks (currently dormant).** The scripts in this directory are wired through `.claude/settings._json`. The underscore in the filename is a deliberate kill switch: it prevents the hooks from loading. See "Why dormant" below.
+2. **Claude path — the `hooks` agent (active).** Under Claude Code, the orchestrator delegates validation to the `hooks` agent (`.claude/agents/hooks.md`) per the Task completion protocol in `CLAUDE.md`. This is the active, trusted validation path today.
 
-A known bug in GitHub Copilot causes unreliable hook execution when shell-based hooks are configured via `settings.json`. The bug manifests as hooks failing silently, running out of order, or causing the session to hang. Until this is fixed upstream, automatic hooks cannot be trusted for validation.
+Both paths run the same battery (format → lint → test) and produce the same guarantee.
 
-### Active workaround
+## Why the shell hooks are dormant
 
-The project uses the **`hooks` agent** (`.claude/agents/hooks.md`) as a manual workaround:
+A known bug in GitHub Copilot causes unreliable hook execution when shell-based hooks are configured via `settings.json`: hooks fail silently, run out of order, or hang the session. Until that is fixed upstream, the shell hooks stay disabled (`._json`) and the `hooks` agent carries validation.
 
-1. The orchestrator completes a code-modifying task.
-2. Per the Task completion protocol in `CLAUDE.md`, it delegates to the `hooks` agent.
-3. The `hooks` agent runs format → lint → test and reports results.
-4. The orchestrator fixes failures and re-delegates until clean.
+The scripts are kept **maintained and cross-platform** so they are ready to re-enable the day the Copilot bug is fixed — they are dormant, not abandoned.
 
-This achieves the same validation guarantee without relying on the buggy automatic hook system.
+## Cross-platform support
 
-## Re-enabling hooks (future)
+Scripts run on **macOS, Linux, and Windows (via Git Bash or WSL)**. Native Windows `cmd`/PowerShell is not supported (the hooks are bash). All OS-divergent mechanics are centralized in `lib/portable.sh`:
+
+- `portable_stat` — GNU (`stat -c`) vs BSD/macOS (`stat -f`) auto-detection
+- `portable_timestamp` — ISO-8601 on both GNU and BSD `date`
+- `portable_hash` — `shasum`, falling back to `sha1sum`
+- `compute_digest` — the change-digest pipeline (shared by `changes.sh` and `format.sh`)
+- `require_jq` / `emit_block` — graceful handling when `jq` is missing
+
+## Prerequisites
+
+- `bash` (Git Bash or WSL on Windows)
+- `git`
+- `jq` — required by the guards and prompt hooks. **If absent, those hooks fail open** (log a warning and exit 0) so a missing dependency never breaks a session.
+- `shasum` or `sha1sum`
+
+## Re-enabling hooks (future, Copilot only)
 
 When the Copilot bug is confirmed fixed:
 
-1. Rename `.claude/settings._json` → `.claude/settings.json`
-2. Remove the manual delegation step from the orchestrator workflow
-3. The Stop event hooks fire automatically — no agent needed
+1. Ensure `jq` is installed.
+2. Rename `.claude/settings._json` → `.claude/settings.json`.
+3. Remove the manual delegation step from the orchestrator workflow in `CLAUDE.md`.
+4. The `PreToolUse`/`Stop` hooks fire automatically — no agent needed.
 
-**Do NOT re-enable hooks until the Copilot bug is confirmed fixed.** Premature re-enabling breaks the validation guarantee and causes unpredictable session behavior.
+**Do NOT re-enable until the Copilot bug is confirmed fixed.** Premature re-enabling breaks the validation guarantee and causes unpredictable session behavior.
 
 ## Directory structure
 
 ```
 .claude/hooks/
+├── lib/            # Shared cross-platform helpers (portable.sh)
 ├── guards/         # PreToolUse blockers
 │   ├── changes/    # Git digest sentinel (skip if unchanged)
-│   └── subagents/  # Block validation commands in sub-agent prompts
+│   └── subagents/  # Block validation commands + code comments in sub-agent writes
 ├── scripts/        # Stop event validation (format, lint, test)
 │   ├── format/
 │   ├── lint/

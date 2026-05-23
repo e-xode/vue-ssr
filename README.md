@@ -77,10 +77,10 @@ npm install
 
 ### 2. Configure environment
 
-Copy `env_sample` to `.env` and update with your values:
+Copy `.env.example` to `.env` and update with your values:
 
 ```bash
-cp env_sample .env
+cp .env.example .env
 ```
 
 ### 3. MongoDB Setup
@@ -89,7 +89,7 @@ Make sure MongoDB is running and accessible at the configured host.
 
 ### 4. Email Configuration
 
-Configure your mail service credentials in `.env` (MAILER_* variables).
+Configure your mail service credentials in `.env` (MAILER\_\* variables).
 
 ## Development
 
@@ -140,6 +140,7 @@ npm run build
 ```
 
 This creates:
+
 - `dist/client/` - Client bundle
 - `dist/server/` - Server bundle
 

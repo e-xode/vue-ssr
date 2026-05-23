@@ -8,13 +8,13 @@ Every interactive element must respond to hover (on devices that support it).
 
 ### Available patterns
 
-| Pattern | Class | Effect | Best for |
-| --- | --- | --- | --- |
-| Lift | `.hover-lift` | translateY(-4px) + shadow increase | Cards, panels |
-| Scale | `.hover-scale` | scale(1.02-1.05) | Images, avatars |
-| Color shift | Custom | Background or text color transition | Buttons, links |
-| Glow | `.glow` | Subtle box-shadow glow | Primary CTAs |
-| Underline | Custom | Border-bottom or text-decoration | Text links |
+| Pattern     | Class          | Effect                              | Best for        |
+| ----------- | -------------- | ----------------------------------- | --------------- |
+| Lift        | `.hover-lift`  | translateY(-4px) + shadow increase  | Cards, panels   |
+| Scale       | `.hover-scale` | scale(1.02-1.05)                    | Images, avatars |
+| Color shift | Custom         | Background or text color transition | Buttons, links  |
+| Glow        | `.glow`        | Subtle box-shadow glow              | Primary CTAs    |
+| Underline   | Custom         | Border-bottom or text-decoration    | Text links      |
 
 ### Rules
 
@@ -28,11 +28,11 @@ Every interactive element must respond to hover (on devices that support it).
 
 ### Timing tokens
 
-| Token | Duration | Easing | Use case |
-| --- | --- | --- | --- |
-| `$transition-fast` | 150ms | ease-out | Buttons, toggles, icon changes |
-| `$transition-base` | 300ms | ease-in-out | Cards, panels, drawers |
-| `$transition-slow` | 500ms | ease-in-out | Page transitions, reveals, hero |
+| Token              | Duration | Easing      | Use case                        |
+| ------------------ | -------- | ----------- | ------------------------------- |
+| `$transition-fast` | 150ms    | ease-out    | Buttons, toggles, icon changes  |
+| `$transition-base` | 300ms    | ease-in-out | Cards, panels, drawers          |
+| `$transition-slow` | 500ms    | ease-in-out | Page transitions, reveals, hero |
 
 ### Easing guidelines
 
@@ -56,6 +56,7 @@ Avoid transitioning: `width`, `height`, `top`, `left` (use transforms instead fo
 ### Skeleton loaders
 
 Use the `.skeleton` class for content placeholders while data loads:
+
 - Match the approximate shape and size of final content
 - Animate with the shimmer keyframe (built into project)
 - Show skeleton immediately — no delay before showing loading state
@@ -63,12 +64,12 @@ Use the `.skeleton` class for content placeholders while data loads:
 
 ### Progress indicators
 
-| Type | When to use |
-| --- | --- |
-| Skeleton | Initial page/section load (< 3 seconds expected) |
-| Circular progress | Button actions, form submissions |
-| Linear progress | File uploads, multi-step processes |
-| Optimistic UI | Quick actions where success is likely (toggle, like) |
+| Type              | When to use                                          |
+| ----------------- | ---------------------------------------------------- |
+| Skeleton          | Initial page/section load (< 3 seconds expected)     |
+| Circular progress | Button actions, form submissions                     |
+| Linear progress   | File uploads, multi-step processes                   |
+| Optimistic UI     | Quick actions where success is likely (toggle, like) |
 
 ### Loading UX rules
 
@@ -84,14 +85,15 @@ Use the `.skeleton` class for content placeholders while data loads:
 
 Transient notifications for completed actions:
 
-| Scenario | Color | Duration | Position |
-| --- | --- | --- | --- |
-| Success | success (green) | 3000ms | bottom-center |
-| Error | error (red) | 5000ms | bottom-center |
-| Info | info (blue) | 4000ms | bottom-center |
-| Warning | warning (amber) | 4000ms | bottom-center |
+| Scenario | Color           | Duration | Position      |
+| -------- | --------------- | -------- | ------------- |
+| Success  | success (green) | 3000ms   | bottom-center |
+| Error    | error (red)     | 5000ms   | bottom-center |
+| Info     | info (blue)     | 4000ms   | bottom-center |
+| Warning  | warning (amber) | 4000ms   | bottom-center |
 
 Rules:
+
 - Always include a close button for error snackbars
 - Action text (e.g., "Undo") for reversible operations
 - Stack multiple snackbars, don't replace
@@ -99,6 +101,7 @@ Rules:
 ### Inline alerts (v-alert)
 
 Persistent feedback that requires acknowledgment or relates to a specific section:
+
 - Variant: `tonal` (project default)
 - Place directly above or within the relevant section
 - Include clear description of what happened and what to do
@@ -119,14 +122,14 @@ Persistent feedback that requires acknowledgment or relates to a specific sectio
 Default → Hover → Active/Pressed → Loading → Success/Error → Default
 ```
 
-| State | Visual |
-| --- | --- |
-| Default | Normal appearance |
-| Hover | Slight color shift or elevation |
-| Active | Darker shade, slight scale-down |
+| State   | Visual                                |
+| ------- | ------------------------------------- |
+| Default | Normal appearance                     |
+| Hover   | Slight color shift or elevation       |
+| Active  | Darker shade, slight scale-down       |
 | Loading | Spinner replaces text, disabled state |
-| Success | Brief green flash or check icon |
-| Error | Brief red flash, return to default |
+| Success | Brief green flash or check icon       |
+| Error   | Brief red flash, return to default    |
 
 ### Disabled buttons
 
@@ -141,17 +144,18 @@ Default → Hover → Active/Pressed → Loading → Success/Error → Default
 
 Use entrance animations sparingly for page mounts and section reveals:
 
-| Animation | Class | Duration | Use case |
-| --- | --- | --- | --- |
-| Fade up | `.animate-fade-up` | 500ms | Page content on mount |
-| Fade in | `.animate-fade-in` | 300ms | Modals, overlays |
-| Scale in | `.animate-scale-in` | 300ms | Cards, popovers |
-| Slide left/right | `.animate-slide-*` | 400ms | Step wizards, carousels |
-| Reveal | `.reveal` | Custom | Scroll-triggered content |
+| Animation        | Class               | Duration | Use case                 |
+| ---------------- | ------------------- | -------- | ------------------------ |
+| Fade up          | `.animate-fade-up`  | 500ms    | Page content on mount    |
+| Fade in          | `.animate-fade-in`  | 300ms    | Modals, overlays         |
+| Scale in         | `.animate-scale-in` | 300ms    | Cards, popovers          |
+| Slide left/right | `.animate-slide-*`  | 400ms    | Step wizards, carousels  |
+| Reveal           | `.reveal`           | Custom   | Scroll-triggered content |
 
 ### Stagger pattern
 
 For lists or card grids entering view, stagger the animation:
+
 - Use `.delay-1` through `.delay-5` classes (100ms increments)
 - Maximum stagger: 500ms total (5 items)
 - Beyond 5 items: batch in groups or reduce individual delays
@@ -165,6 +169,7 @@ For lists or card grids entering view, stagger the animation:
 ## Motion accessibility
 
 All animations in this project respect `prefers-reduced-motion`:
+
 - The `_animations.scss` file disables keyframes and transitions
 - This is automatic — no per-component work needed
 - Still provide state feedback through non-motion means (color, icon changes)
@@ -175,6 +180,7 @@ All animations in this project respect `prefers-reduced-motion`:
 ### Click outside to close
 
 Modals, dropdowns, and popovers close on outside click:
+
 - Vuetify handles this for its components
 - Custom overlays: use `v-click-outside` directive
 

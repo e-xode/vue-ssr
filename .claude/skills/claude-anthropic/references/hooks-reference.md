@@ -32,11 +32,11 @@ When enabling hooks (after bug fix), rename to `.claude/settings.json`.
 
 ## Hook events (key ones for this project)
 
-| Event | Fires when | Can block? |
-| --- | --- | --- |
-| `PreToolUse` | Before a tool call executes | Yes (exit 2) |
-| `Stop` | Claude finishes responding | Yes (exit 2 continues conversation) |
-| `SessionStart` | Session begins | No |
+| Event          | Fires when                  | Can block?                          |
+| -------------- | --------------------------- | ----------------------------------- |
+| `PreToolUse`   | Before a tool call executes | Yes (exit 2)                        |
+| `Stop`         | Claude finishes responding  | Yes (exit 2 continues conversation) |
+| `SessionStart` | Session begins              | No                                  |
 
 ## Configuration format
 
@@ -50,9 +50,18 @@ When enabling hooks (after bug fix), rename to `.claude/settings.json`.
       }
     ],
     "Stop": [
-      { "matcher": "", "hooks": [{ "type": "command", "command": ".claude/hooks/scripts/format/format.sh" }] },
-      { "matcher": "", "hooks": [{ "type": "command", "command": ".claude/hooks/scripts/lint/lint.sh" }] },
-      { "matcher": "", "hooks": [{ "type": "command", "command": ".claude/hooks/scripts/test/test.sh" }] }
+      {
+        "matcher": "",
+        "hooks": [{ "type": "command", "command": ".claude/hooks/scripts/format/format.sh" }]
+      },
+      {
+        "matcher": "",
+        "hooks": [{ "type": "command", "command": ".claude/hooks/scripts/lint/lint.sh" }]
+      },
+      {
+        "matcher": "",
+        "hooks": [{ "type": "command", "command": ".claude/hooks/scripts/test/test.sh" }]
+      }
     ]
   }
 }
@@ -60,23 +69,23 @@ When enabling hooks (after bug fix), rename to `.claude/settings.json`.
 
 ## Exit code semantics
 
-| Exit code | Meaning |
-| --- | --- |
-| `0` | Success — proceed. Stdout parsed for JSON |
-| `2` | Blocking error — block the action |
-| Other | Non-blocking error — continues, stderr logged |
+| Exit code | Meaning                                       |
+| --------- | --------------------------------------------- |
+| `0`       | Success — proceed. Stdout parsed for JSON     |
+| `2`       | Blocking error — block the action             |
+| Other     | Non-blocking error — continues, stderr logged |
 
 ## Current hook scripts
 
-| Script | Event | Purpose |
-| --- | --- | --- |
+| Script                          | Event      | Purpose                                                               |
+| ------------------------------- | ---------- | --------------------------------------------------------------------- |
 | `guards/subagents/subagents.sh` | PreToolUse | Blocks validation commands in sub-agent prompts, blocks code comments |
-| `guards/changes/changes.sh` | (sourced) | Git digest sentinel — skip if unchanged |
-| `scripts/format/format.sh` | Stop | Run prettier |
-| `scripts/lint/lint.sh` | Stop | Run eslint |
-| `scripts/test/test.sh` | Stop | Run vitest |
-| `prompts/tests/tests.sh` | Stop | Inject "update tests" prompt (once per session) |
-| `logs/logs.sh` | (sourced) | Timestamped logging to ~/.copilot/logs/hooks.log |
+| `guards/changes/changes.sh`     | (sourced)  | Git digest sentinel — skip if unchanged                               |
+| `scripts/format/format.sh`      | Stop       | Run prettier                                                          |
+| `scripts/lint/lint.sh`          | Stop       | Run eslint                                                            |
+| `scripts/test/test.sh`          | Stop       | Run vitest                                                            |
+| `prompts/tests/tests.sh`        | Stop       | Inject "update tests" prompt (once per session)                       |
+| `logs/logs.sh`                  | (sourced)  | Timestamped logging to ~/.copilot/logs/hooks.log                      |
 
 ## When NOT to write a hook
 

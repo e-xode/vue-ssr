@@ -1,0 +1,35 @@
+{
+  "skill_name": "vue-ssr-release",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-release",
+      "prompt": "release",
+      "assertions": [
+        {
+          "text": "Verifies branch is main/master and tree is clean, asks for bump type (patch/minor/major), and never auto-commits/pushes/tags"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "trigger-minor-bump",
+      "prompt": "Let's cut a minor version",
+      "assertions": [
+        {
+          "text": "Creates release/vX.Y.Z branch, bumps package.json, syncs the lockfile, generates a CHANGELOG draft from git log, and proposes the commit waiting for confirmation"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "negative-deployment",
+      "prompt": "Deploy the app to production",
+      "assertions": [
+        {
+          "text": "Does NOT trigger the release workflow; deployment/CI belongs to the vue-ssr-deployment skill"
+        }
+      ]
+    }
+  ]
+}

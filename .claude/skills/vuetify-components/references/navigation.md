@@ -8,11 +8,11 @@ Top application bar.
 
 ```vue
 <script setup>
-import { mdiMenu, mdiAccount } from '@mdi/js'
-import { useI18n } from 'vue-i18n'
+import { mdiMenu, mdiAccount } from '@mdi/js';
+import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n()
-const emit = defineEmits(['toggle-drawer'])
+const { t } = useI18n();
+const emit = defineEmits(['toggle-drawer']);
 </script>
 <template>
   <v-app-bar flat density="comfortable">
@@ -31,15 +31,15 @@ const emit = defineEmits(['toggle-drawer'])
 
 ### Key props
 
-| Prop | Type | Description |
-| --- | --- | --- |
-| `flat` | boolean | No shadow |
-| `density` | string | default, comfortable, compact |
-| `color` | string | Background color |
-| `scroll-behavior` | string | hide, elevate, collapse, fade-image |
-| `scroll-threshold` | number | Pixels before behavior triggers |
-| `fixed` | boolean | Fixed position |
-| `prominent` | boolean | Taller bar |
+| Prop               | Type    | Description                         |
+| ------------------ | ------- | ----------------------------------- |
+| `flat`             | boolean | No shadow                           |
+| `density`          | string  | default, comfortable, compact       |
+| `color`            | string  | Background color                    |
+| `scroll-behavior`  | string  | hide, elevate, collapse, fade-image |
+| `scroll-threshold` | number  | Pixels before behavior triggers     |
+| `fixed`            | boolean | Fixed position                      |
+| `prominent`        | boolean | Taller bar                          |
 
 ## v-navigation-drawer
 
@@ -49,11 +49,11 @@ Side navigation panel. Responsive patterns differ by device.
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import { useDisplay } from 'vuetify'
+import { ref } from 'vue';
+import { useDisplay } from 'vuetify';
 
-const { mobile } = useDisplay()
-const drawer = ref(true)
+const { mobile } = useDisplay();
+const drawer = ref(true);
 </script>
 <template>
   <v-navigation-drawer
@@ -77,16 +77,16 @@ const drawer = ref(true)
 
 ### Key props
 
-| Prop | Type | Description |
-| --- | --- | --- |
-| `v-model` | boolean | Show/hide |
-| `temporary` | boolean | Overlays content (mobile) |
-| `rail` | boolean | Collapsed to icons only |
-| `expand-on-hover` | boolean | Expands rail on hover |
-| `permanent` | boolean | Always visible |
-| `location` | string | start (left) or end (right) |
-| `width` | number | Drawer width in px |
-| `rail-width` | number | Rail mode width |
+| Prop              | Type    | Description                 |
+| ----------------- | ------- | --------------------------- |
+| `v-model`         | boolean | Show/hide                   |
+| `temporary`       | boolean | Overlays content (mobile)   |
+| `rail`            | boolean | Collapsed to icons only     |
+| `expand-on-hover` | boolean | Expands rail on hover       |
+| `permanent`       | boolean | Always visible              |
+| `location`        | string  | start (left) or end (right) |
+| `width`           | number  | Drawer width in px          |
+| `rail-width`      | number  | Rail mode width             |
 
 ## v-menu
 
@@ -96,10 +96,10 @@ Context menus and dropdowns.
 
 ```vue
 <script setup>
-import { mdiDotsVertical, mdiPencil, mdiDelete, mdiContentCopy } from '@mdi/js'
-import { useI18n } from 'vue-i18n'
+import { mdiDotsVertical, mdiPencil, mdiDelete, mdiContentCopy } from '@mdi/js';
+import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n()
+const { t } = useI18n();
 </script>
 <template>
   <v-menu location="bottom end" :offset="4">
@@ -108,9 +108,18 @@ const { t } = useI18n()
     </template>
     <v-list density="compact">
       <v-list-item :prepend-icon="mdiPencil" :title="t('actions.edit')" @click="edit()" />
-      <v-list-item :prepend-icon="mdiContentCopy" :title="t('actions.duplicate')" @click="duplicate()" />
+      <v-list-item
+        :prepend-icon="mdiContentCopy"
+        :title="t('actions.duplicate')"
+        @click="duplicate()"
+      />
       <v-divider />
-      <v-list-item :prepend-icon="mdiDelete" :title="t('actions.delete')" base-color="error" @click="remove()" />
+      <v-list-item
+        :prepend-icon="mdiDelete"
+        :title="t('actions.delete')"
+        base-color="error"
+        @click="remove()"
+      />
     </v-list>
   </v-menu>
 </template>
@@ -118,13 +127,13 @@ const { t } = useI18n()
 
 ### Key props
 
-| Prop | Type | Description |
-| --- | --- | --- |
-| `location` | string | top, bottom, start, end (combinable) |
-| `offset` | number/array | Offset from activator |
-| `close-on-content-click` | boolean | Close when item clicked (default true) |
-| `open-on-hover` | boolean | Open on hover |
-| `transition` | string | Transition animation |
+| Prop                     | Type         | Description                            |
+| ------------------------ | ------------ | -------------------------------------- |
+| `location`               | string       | top, bottom, start, end (combinable)   |
+| `offset`                 | number/array | Offset from activator                  |
+| `close-on-content-click` | boolean      | Close when item clicked (default true) |
+| `open-on-hover`          | boolean      | Open on hover                          |
+| `transition`             | string       | Transition animation                   |
 
 ## v-tabs + v-tabs-window
 
@@ -134,12 +143,12 @@ Tabbed navigation for content sections.
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { mdiAccount, mdiLock, mdiBell } from '@mdi/js'
+import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { mdiAccount, mdiLock, mdiBell } from '@mdi/js';
 
-const { t } = useI18n()
-const activeTab = ref('profile')
+const { t } = useI18n();
+const activeTab = ref('profile');
 </script>
 <template>
   <v-tabs v-model="activeTab" color="primary">
@@ -170,15 +179,15 @@ const activeTab = ref('profile')
 
 ### Key props (v-tabs)
 
-| Prop | Type | Description |
-| --- | --- | --- |
-| `v-model` | string/number | Active tab |
-| `color` | string | Active tab indicator color |
-| `grow` | boolean | Tabs fill available space |
-| `center-active` | boolean | Center the active tab |
-| `show-arrows` | boolean | Show scroll arrows |
-| `align-tabs` | string | start, center, end, title |
-| `density` | string | default, comfortable, compact |
+| Prop            | Type          | Description                   |
+| --------------- | ------------- | ----------------------------- |
+| `v-model`       | string/number | Active tab                    |
+| `color`         | string        | Active tab indicator color    |
+| `grow`          | boolean       | Tabs fill available space     |
+| `center-active` | boolean       | Center the active tab         |
+| `show-arrows`   | boolean       | Show scroll arrows            |
+| `align-tabs`    | string        | start, center, end, title     |
+| `density`       | string        | default, comfortable, compact |
 
 ## v-breadcrumbs
 
@@ -186,18 +195,18 @@ Hierarchical navigation path.
 
 ```vue
 <script setup>
-import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useLocalePath } from '@/composables/useLocalePath'
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useLocalePath } from '@/composables/useLocalePath';
 
-const { t } = useI18n()
-const localePath = useLocalePath()
+const { t } = useI18n();
+const localePath = useLocalePath();
 
 const breadcrumbs = computed(() => [
   { title: t('nav.home'), to: localePath('/'), disabled: false },
   { title: t('nav.admin'), to: localePath('/admin'), disabled: false },
-  { title: t('nav.users'), disabled: true }
-])
+  { title: t('nav.users'), disabled: true },
+]);
 </script>
 <template>
   <v-breadcrumbs :items="breadcrumbs" />
@@ -210,9 +219,9 @@ const breadcrumbs = computed(() => [
 
 ```vue
 <script setup>
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 
-const { mobile } = useDisplay()
+const { mobile } = useDisplay();
 </script>
 <template>
   <v-navigation-drawer v-if="mobile" v-model="drawer" temporary>

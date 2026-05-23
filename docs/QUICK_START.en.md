@@ -21,7 +21,7 @@ npm install
 ### 2. Configure environment
 
 ```bash
-cp env_sample .env
+cp .env.example .env
 ```
 
 Edit `.env` with your settings (or leave defaults for dev):
@@ -63,6 +63,23 @@ npm run dev
 
 ## Option 2: With Docker Compose (Recommended)
 
+### Local vs remote MongoDB
+
+The compose setup is split in two files so you can switch the database target without editing config:
+
+- `docker-compose.yml` (base) — runs the `node` app only and reads `.env`, connecting to a **remote** MongoDB (e.g. Atlas) via `MONGO_HOST` / `MONGO_TYPE`.
+- `docker-compose.local.yml` (override) — adds a local `mongo` container and redirects the app to it.
+
+Toggle via `COMPOSE_FILE` in `.env` (already set in `.env.example`):
+
+```env
+# Local (node + mongo): keep uncommented
+COMPOSE_FILE=docker-compose.yml:docker-compose.local.yml
+# Remote (e.g. Atlas): comment the line out
+```
+
+Then `docker compose up` follows the toggle. Explicit equivalents: `docker compose -f docker-compose.yml -f docker-compose.local.yml up` (local) vs `docker compose -f docker-compose.yml up` (remote).
+
 ### 1. Docker Prerequisites
 
 ```bash
@@ -79,7 +96,7 @@ docker-compose --version
 ```bash
 git clone https://github.com/yourusername/e-xode-vue-ssr.git
 cd e-xode-vue-ssr
-cp env_sample .env
+cp .env.example .env
 ```
 
 ### 3. Start services

@@ -1,0 +1,54 @@
+{
+  "skill_name": "vue3-components",
+  "evals": [
+    {
+      "id": 1,
+      "name": "props-emits-design",
+      "prompt": "I'm building a reusable StatusBadge component. It takes a status and should tell the parent when it's clicked. How should I define its props and events?",
+      "assertions": [
+        {
+          "text": "Recommends object-syntax defineProps for status with type and a validator constraining allowed values, and a factory default for any object/array prop"
+        },
+        {
+          "text": "Declares the click event via defineEmits and emits it, noting props are read-only one-way data flow and undeclared events fall through as attributes"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "component-v-model",
+      "prompt": "I have a custom SearchField component wrapping a v-text-field. How do I make it work with v-model from the parent?",
+      "assertions": [
+        {
+          "text": "Uses defineModel() returning a ref bound to the inner v-text-field with v-model, instead of hand-writing modelValue prop + update:modelValue event"
+        },
+        {
+          "text": "Notes the parent uses <SearchField v-model=\"query\" /> and advises against a child-side default that can desync the parent"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "scoped-slot-list",
+      "prompt": "I want a DataList component where the parent controls how each row is rendered but the child owns the data fetching. What slot pattern do I use?",
+      "assertions": [
+        {
+          "text": "Recommends a scoped slot exposing each item via slot props (e.g. <slot :item=\"item\" />) so parent template content can read child-owned data"
+        },
+        {
+          "text": "Shows the parent consuming it with #default=\"{ item }\" (or v-slot) and mentions a stable :key on the slotted v-for"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "negative-reactivity-routing",
+      "prompt": "Should I use ref() or reactive() for a form state object, and when does a computed re-evaluate?",
+      "assertions": [
+        {
+          "text": "Defers to the vue3-composition skill: ref vs reactive and computed re-evaluation are reactivity primitives, not component communication design owned by vue3-components"
+        }
+      ]
+    }
+  ]
+}

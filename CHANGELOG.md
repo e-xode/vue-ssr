@@ -1,8 +1,62 @@
 # Changelog
 
+## [Unreleased]
+
+### Package Updates
+
+- Vite 7.3 → 8.0 (Rolldown/Oxc bundler; `build.rollupOptions` → `rolldownOptions`)
+- Helmet 8.1 → 8.2, ESLint 10.1 → 10.4, Vitest / @vitest/ui 4.1.6 → 4.1.7
+- @vue/test-utils 2.4.6 → 2.4.10, sass-embedded 1.99 → 1.100
+- Added self-hosted webfonts: @fontsource/inter, @fontsource/ibm-plex-mono
+- Removed @vue/eslint-config-prettier (unused dev dependency)
+
+### New Features
+
+- **Theme** — Light/dark theme toggle: new `ThemeToggle` component (header + mobile menu), cookie-persisted and applied server-side for flash-free (no-FOUC) SSR rendering (new `src/shared/theme.js`)
+- **AuthShell** — Shared component factoring the card layout of the 5 auth views
+- Self-hosted webfonts (Inter + IBM Plex Mono via @fontsource) replacing the Google Fonts CDN
+- **Docker** — Compose split: new `docker-compose.local.yml` override for a local MongoDB container, switchable via `COMPOSE_FILE`; base compose is now app-only (remote DB)
+- New `.env.example` (replaces `env_sample`) with `COMPOSE_FILE`, GA, reCAPTCHA, Facebook and social-link templates
+- **claude** — 10 new skills (vue3-templates, vue3-components, vue3-reusability, vue3-performance, vue3-builtin-components, skill-creator, starter-kit-adapt, vue-ssr-design, vue-ssr-release, frontend-design)
+
+### Improvements
+
+- Design system overhaul: new indigo/neutral Vuetify palette (light + dark), added `on-primary`/`surface-variant`/`outline` tokens, softer multi-layer shadows, default rounded `lg` + flat app bar
+- SCSS tokens expanded: gray scale, accent indigo, section paddings, container widths, header height, full z-index scale; new `_typography.scss` (auto-injected)
+- Migrated all components/views to Vuetify 4 theme tokens (`rgb(var(--v-theme-*))`), restoring correct light/dark colors
+- Redesigned home page (IndexView) and 404 page with semantic headings and design-system classes
+- Header scroll effect via CSS class; footer migrated to mixins/tokens
+- Accessibility: global `:focus-visible` outlines, `::selection` style, `prefers-reduced-motion` support, themed skip-link
+- Hardened CSP (`buildCsp`): removed external Google Fonts sources, dev-only `unsafe-eval`/`ws`, dynamic `theme-color` meta following the theme
+- More robust reCAPTCHA: execution wrapped in try/catch, recovers after a network failure
+- Admin route guard redirects unauthenticated users to Signin with a `redirect` param
+- Email templates: brand color harmonized to indigo
+- Docker compose modernized (removed obsolete `version` key, parameterized mongo healthcheck with `${MONGO_DB}`)
+- Documentation: local-vs-remote MongoDB / `COMPOSE_FILE` documented in DEPLOYMENT + QUICK_START (en/fr); `env_sample` → `.env.example` rename propagated across docs
+- Repo-wide Prettier/markdownlint normalization across source, tests, docs and config
+- i18n: added `a11y.toggleTheme` and `meta.notFound.subtitle` keys (EN/FR parity maintained)
+
+### Bug Fixes
+
+- Replaced non-existent Vuetify `gap-*` utility with `ga-*` in 9 places (restores missing flex spacing)
+- ContactView style now `scoped` (was leaking styles)
+- AccountView email-change back button now disabled during save
+- App.scss: removed inoperative `:deep()` wrapper around `.v-app`
+- codeql.yml: fixed malformed `with: category:` block (wrong YAML nesting)
+- i18n: fixed 6 `t()` keys that rendered as raw text (forgot-password link, verify back-to-login, admin-logs From/To/Reset and delete-selected) — added 4 EN/FR keys and repointed the rest to existing namespaces
+
+### Removed
+
+- `env_sample` (→ `.env.example`), obsolete docker-compose `version` key, inline mongo service (moved to override)
+- 4 per-view auth SCSS files (factored into AuthShell), App.vue inline styles (externalized)
+- Google Fonts CDN usage (preconnect/links + CSP sources)
+
+---
+
 ## 4.0.0
 
 ### New Features
+
 - **claude** — Added agents, skills, rules and hooks configuration for AI-assisted development workflow
 
 ---
@@ -10,11 +64,13 @@
 ## 3.0.2
 
 ### Bug Fixes
+
 - Added `repository.url` in package.json for npm provenance verification
 
 ## 3.0.1
 
 ### Bug Fixes
+
 - Fixed Dockerfile COPY path (`src/locales` → `src/translate`)
 - Changed npm-publish workflow trigger from release to tag push (`v*`)
 - Fixed env_sample formatting
@@ -22,6 +78,7 @@
 ## 3.0.0
 
 ### Package Updates
+
 - Vue 3.5 → 3.6, Vuetify 3.8 → 3.9, Vite 6.3 → 7.0, Vitest 3 → 4
 - vue-router 4.5 → 4.6, vue-i18n 11.1 → 12.0, pinia 3.0 → 3.1
 - Express 5.1, Helmet 9.0, mongoose 8.15
@@ -29,6 +86,7 @@
 - Added: dompurify 3.x
 
 ### New Features
+
 - Google Analytics integration (GA_MEASUREMENT_ID)
 - reCAPTCHA v3 integration (server + client)
 - Dynamic sitemap with 1h TTL cache
@@ -42,6 +100,7 @@
 - apiFetch with AbortController timeout (15s)
 
 ### Improvements
+
 - Production-conditional CSP (disabled in dev)
 - Graduated rate limiting per endpoint type
 - Keywords meta tag support in routes
@@ -54,9 +113,10 @@
 - Auth store migrated to apiFetch
 - Error stack traces hidden in production
 - Docker: selective COPY, npm prune --production
-- ESLint: __APP_VERSION__ global
+- ESLint: **APP_VERSION** global
 
 ### Bug Fixes
+
 - Fixed locale hardcoding (now uses DEFAULT_LOCALE)
 - Fixed trailing slash on siteUrl in SEO tags
 - Fixed session cleanup error handling

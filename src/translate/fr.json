@@ -8,6 +8,7 @@
     "mainNavigation": "Navigation principale",
     "openMenu": "Ouvrir le menu",
     "skipToContent": "Passer au contenu principal",
+    "toggleTheme": "Basculer le thème clair/sombre",
     "userMenu": "Menu utilisateur"
   },
   "app": {
@@ -122,7 +123,8 @@
       "description": "Contactez-nous"
     },
     "notFound": {
-      "title": "Page non trouvée"
+      "title": "Page non trouvée",
+      "subtitle": "La page que vous recherchez n'existe pas ou a été déplacée."
     },
     "admin": {
       "users": {
@@ -229,6 +231,7 @@
       "total": "journaux",
       "search": "Rechercher par événement ou IP",
       "date": "Date",
+      "deleteSelected": "Supprimer la sélection ({count})",
       "event": "Événement",
       "ip": "IP",
       "user": "Utilisateur",
@@ -237,6 +240,7 @@
       "filter": {
         "event": "Filtrer par événement",
         "from": "Du",
+        "reset": "Réinitialiser",
         "to": "Au"
       },
       "deleteConfirm": {
@@ -255,25 +259,27 @@
   },
   "verify": {
     "title": "Vérifiez votre email",
-    "subtitle": "Nous avons envoyé un code à 6 chiffres à",
-    "submit": "Vérifier",
-    "timerExpiring": "Expire dans {minutes}:{seconds}",
-    "codeExpired": "Code expiré. Veuillez en demander un nouveau.",
     "attemptsRemaining": "{remaining} tentative(s) restante(s)",
+    "backToLogin": "Retour à la connexion",
+    "codeExpired": "Code expiré. Veuillez en demander un nouveau.",
     "noCode": "Vous n'avez pas reçu de code ?",
     "resend": "Renvoyer le code",
-    "resendIn": "Renvoyer dans {seconds}s"
+    "resendIn": "Renvoyer dans {seconds}s",
+    "submit": "Vérifier",
+    "subtitle": "Nous avons envoyé un code à 6 chiffres à",
+    "timerExpiring": "Expire dans {minutes}:{seconds}"
   },
   "forgotPassword": {
     "title": "Mot de passe oublié ?",
+    "backToSignin": "Retour à la connexion",
     "description": "Entrez votre adresse email et nous vous enverrons un code de réinitialisation.",
-    "subtitle": "Entrez votre adresse email et nous vous enverrons un code de réinitialisation.",
-    "submit": "Envoyer le code",
+    "enterCode": "Entrer le code de réinitialisation",
+    "link": "Mot de passe oublié ?",
+    "resend": "Renvoyer le code",
     "sent": "Si un compte existe pour cette adresse email, un code de réinitialisation a été envoyé.",
     "sentHint": "Vérifiez votre boîte de réception (et les spams).",
-    "enterCode": "Entrer le code de réinitialisation",
-    "resend": "Renvoyer le code",
-    "backToSignin": "Retour à la connexion"
+    "submit": "Envoyer le code",
+    "subtitle": "Entrez votre adresse email et nous vous enverrons un code de réinitialisation."
   },
   "resetPassword": {
     "title": "Réinitialiser le mot de passe",

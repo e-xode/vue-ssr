@@ -1,0 +1,45 @@
+{
+  "skill_name": "vue3-reusability",
+  "evals": [
+    {
+      "id": 1,
+      "name": "custom-directive-focus",
+      "prompt": "I want a v-focus directive that focuses an input when it mounts",
+      "assertions": [
+        {
+          "text": "Defines a local directive in <script setup> as const vFocus = { mounted: (el) => el.focus() }, used as v-focus in the template, and notes that the mounted DOM hook runs client-side only under SSR"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "directive-arg-modifiers",
+      "prompt": "Write a custom directive that sets an element's color from its value, supports an arg to target background instead, and a .bold modifier",
+      "assertions": [
+        {
+          "text": "Reads binding.value, binding.arg and binding.modifiers, applies logic in both mounted and updated hooks (or function shorthand), JavaScript only with no code comments"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "plugin-install-provide",
+      "prompt": "How do I author a small Vue plugin that registers a global directive and provides app-level config, then wire it into the app?",
+      "assertions": [
+        {
+          "text": "Defines an install(app, options) plugin that calls app.directive(...) and app.provide(...), exports a factory placed in src/plugins/, wires it via app.use(plugin, options) in main.js, prefers provide/inject over app.config.globalProperties, and guards browser APIs for SSR"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "negative-stateful-logic-to-composable",
+      "prompt": "I need to share the same stateful logic (a counter with increment/reset) across several components. Should I write a custom directive or a plugin for this?",
+      "assertions": [
+        {
+          "text": "Routes to vue3-composition: explains that stateful logic reuse is the job of a composable (useXxx), not a directive or plugin, since composables are the primary reuse mechanism in this project"
+        }
+      ]
+    }
+  ]
+}

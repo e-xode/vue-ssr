@@ -32,6 +32,7 @@ Every sibling key group must be alphabetically sorted. This applies at ALL level
 ```
 
 Within a section:
+
 ```json
 {
   "admin": {
@@ -53,6 +54,7 @@ Format: `{parameterName}`
 ### Examples
 
 English:
+
 ```json
 {
   "copyright": "© {year}. All rights reserved.",
@@ -64,6 +66,7 @@ English:
 ```
 
 French:
+
 ```json
 {
   "copyright": "© {year}. Tous droits réservés.",
@@ -81,28 +84,34 @@ The project does NOT currently use vue-i18n's built-in pluralization (`|` pipe s
 ## Edge cases
 
 ### Punctuation
+
 - French uses non-breaking spaces before `:`, `?`, `!`, `;` — use the actual character, not `&nbsp;`.
 - Periods and commas follow locale conventions.
 
 ### Special characters
+
 - Apostrophes: Use the plain ASCII apostrophe `'` (not smart quotes). JSON handles this natively.
 - Quotes inside strings: Escape with backslash `\"`.
 - Ampersands, angle brackets: Use the literal character — vue-i18n handles escaping.
 
 ### Empty strings
+
 - Never use empty string `""` as a translation value. If a key exists, it must have content.
 
 ### HTML in translations
+
 - Do NOT embed HTML tags in translation strings. Use component interpolation (`<i18n-t>`) if markup is needed around translated content.
 
 ## Parity enforcement
 
 Both `en.json` and `fr.json` must have:
+
 - Identical key hierarchies (same sections, same nesting)
 - Identical interpolation parameters per key
 - No key present in one file but absent from the other
 
 Run the parity check:
+
 ```bash
 python3 .claude/skills/translate/scripts/check_locales.py --root .
 ```

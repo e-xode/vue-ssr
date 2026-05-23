@@ -1,32 +1,33 @@
 <script setup>
-import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
-import { useLocalePath } from '@/composables/useLocalePath'
+import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import { useLocalePath } from '@/composables/useLocalePath';
+import AuthShell from '@/components/AuthShell.vue';
 
-const { t } = useI18n()
-const router = useRouter()
-const { localePath } = useLocalePath()
+const { t } = useI18n();
+const router = useRouter();
+const { localePath } = useLocalePath();
 
 const form = ref({
   email: '',
   code: '',
   password: '',
-  passwordConfirm: ''
-})
+  passwordConfirm: '',
+});
 
-const showPassword = ref(false)
-const isSubmitting = ref(false)
-const errorMessage = ref('')
+const showPassword = ref(false);
+const isSubmitting = ref(false);
+const errorMessage = ref('');
 
 async function handleSubmit() {
   if (form.value.password !== form.value.passwordConfirm) {
-    errorMessage.value = t('resetPassword.passwordMismatch')
-    return
+    errorMessage.value = t('resetPassword.passwordMismatch');
+    return;
   }
 
-  errorMessage.value = ''
-  isSubmitting.value = true
+  errorMessage.value = '';
+  isSubmitting.value = true;
 
   try {
     const response = await fetch('/api/auth/reset-password', {
@@ -36,121 +37,105 @@ async function handleSubmit() {
       body: JSON.stringify({
         email: form.value.email,
         code: form.value.code,
-        password: form.value.password
-      })
-    })
+        password: form.value.password,
+      }),
+    });
 
-    const data = await response.json()
+    const data = await response.json();
 
     if (response.ok) {
-      await router.push(localePath('/signin'))
+      await router.push(localePath('/signin'));
     } else {
-      errorMessage.value = data.error || t('error.server')
+      errorMessage.value = data.error || t('error.server');
     }
   } catch {
-    errorMessage.value = t('error.server')
+    errorMessage.value = t('error.server');
   } finally {
-    isSubmitting.value = false
+    isSubmitting.value = false;
   }
 }
 </script>
 
 <template>
-  <v-container class="fill-height">
-    <v-row
-      justify="center"
-      align="center"
+  <AuthShell>
+    <v-card-title class="text-center mb-6">
+      {{ t('resetPassword.title') }}
+    </v-card-title>
+
+    <p class="text-body-2 text-medium-emphasis mb-4">
+      {{ t('resetPassword.description') }}
+    </p>
+
+    <v-alert
+      v-if="errorMessage"
+      type="error"
+      class="mb-4"
+      closable
     >
-      <v-col
-        cols="12"
-        sm="8"
-        md="6"
-        lg="4"
+      {{ errorMessage }}
+    </v-alert>
+
+    <v-form @submit.prevent="handleSubmit">
+      <v-text-field
+        v-model="form.email"
+        :label="t('form.email')"
+        type="email"
+        autocomplete="email"
+        class="mb-4"
+        :disabled="isSubmitting"
+        required
+      />
+
+      <v-text-field
+        v-model="form.code"
+        :label="t('form.code')"
+        autocomplete="one-time-code"
+        class="mb-4"
+        :disabled="isSubmitting"
+        required
+      />
+
+      <v-text-field
+        v-model="form.password"
+        :label="t('form.newPassword')"
+        :type="showPassword ? 'text' : 'password'"
+        autocomplete="new-password"
+        class="mb-4"
+        :disabled="isSubmitting"
+        required
+        @click:append="showPassword = !showPassword"
+      />
+
+      <v-text-field
+        v-model="form.passwordConfirm"
+        :label="t('form.confirmPassword')"
+        :type="showPassword ? 'text' : 'password'"
+        autocomplete="new-password"
+        class="mb-6"
+        :disabled="isSubmitting"
+        required
+      />
+
+      <v-btn
+        type="submit"
+        color="primary"
+        block
+        size="large"
+        :loading="isSubmitting"
       >
-        <v-card class="pa-6">
-          <v-card-title class="text-center mb-6">
-            {{ t('resetPassword.title') }}
-          </v-card-title>
+        {{ t('resetPassword.submit') }}
+      </v-btn>
+    </v-form>
 
-          <p class="text-body-2 text-medium-emphasis mb-4">
-            {{ t('resetPassword.description') }}
-          </p>
+    <v-divider class="my-4" />
 
-          <v-alert
-            v-if="errorMessage"
-            type="error"
-            class="mb-4"
-            closable
-          >
-            {{ errorMessage }}
-          </v-alert>
-
-          <v-form @submit.prevent="handleSubmit">
-            <v-text-field
-              v-model="form.email"
-              :label="t('form.email')"
-              type="email"
-              autocomplete="email"
-              class="mb-4"
-              :disabled="isSubmitting"
-              required
-            />
-
-            <v-text-field
-              v-model="form.code"
-              :label="t('form.code')"
-              autocomplete="one-time-code"
-              class="mb-4"
-              :disabled="isSubmitting"
-              required
-            />
-
-            <v-text-field
-              v-model="form.password"
-              :label="t('form.newPassword')"
-              :type="showPassword ? 'text' : 'password'"
-              autocomplete="new-password"
-              class="mb-4"
-              :disabled="isSubmitting"
-              required
-              @click:append="showPassword = !showPassword"
-            />
-
-            <v-text-field
-              v-model="form.passwordConfirm"
-              :label="t('form.confirmPassword')"
-              :type="showPassword ? 'text' : 'password'"
-              autocomplete="new-password"
-              class="mb-6"
-              :disabled="isSubmitting"
-              required
-            />
-
-            <v-btn
-              type="submit"
-              color="primary"
-              block
-              size="large"
-              :loading="isSubmitting"
-            >
-              {{ t('resetPassword.submit') }}
-            </v-btn>
-          </v-form>
-
-          <v-divider class="my-4" />
-
-          <p class="text-center mb-0">
-            <router-link
-              :to="localePath('/forgot-password')"
-              class="link"
-            >
-              {{ t('forgotPassword.resend') }}
-            </router-link>
-          </p>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+    <p class="text-center mb-0">
+      <router-link
+        :to="localePath('/forgot-password')"
+        class="link"
+      >
+        {{ t('forgotPassword.resend') }}
+      </router-link>
+    </p>
+  </AuthShell>
 </template>
-
-<style lang="scss" scoped src="./ResetPasswordView.scss"></style>

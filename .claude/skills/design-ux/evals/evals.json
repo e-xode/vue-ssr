@@ -72,7 +72,9 @@
       "prompt": "I'm adding a status badge component that uses green for active, red for inactive, and yellow for pending. How should this work in dark mode?",
       "assertions": [
         { "text": "Notes colors must maintain semantic meaning across modes" },
-        { "text": "Recommends adjusting saturation/brightness for dark backgrounds (lighter tints)" },
+        {
+          "text": "Recommends adjusting saturation/brightness for dark backgrounds (lighter tints)"
+        },
         { "text": "Mentions contrast requirements still apply (3:1 minimum for UI components)" },
         { "text": "Suggests pairing color with text label or icon (color not sole indicator)" },
         { "text": "References project's SCSS variables rather than hardcoded hex values" },

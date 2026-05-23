@@ -9,21 +9,21 @@ description: "Architecture reference for the Vue SSR Starter Kit (e-xode/vue-ssr
 
 ## Stack
 
-| Layer | Technology |
-| --- | --- |
-| Frontend | Vue 3.5+ (Composition API) + Pinia 3 + Vue Router 5 |
-| SSR | Vite 7 + renderToString + Express middleware |
-| UI | Vuetify 4 (Material Design 3) + MDI icons (@mdi/js) |
-| i18n | Vue i18n v11 (EN/FR, Composition API legacy: false) |
-| Backend | Express 5 + express-session + session-file-store |
-| Database | MongoDB 7 (native driver, connection pooling) |
-| Email | Nodemailer 8 |
-| Sanitization | DOMPurify 3 |
-| Security | Helmet 8 + CSP (production only) + express-rate-limit + CORS |
-| Build | Vite 7 (client + server bundles) |
-| Tests | Vitest 4 + @vue/test-utils + happy-dom |
-| Lint | ESLint 10 + eslint-plugin-vue + Prettier |
-| SCSS | sass-embedded (modern-compiler API) |
+| Layer        | Technology                                                   |
+| ------------ | ------------------------------------------------------------ |
+| Frontend     | Vue 3.5+ (Composition API) + Pinia 3 + Vue Router 5          |
+| SSR          | Vite 7 + renderToString + Express middleware                 |
+| UI           | Vuetify 4 (Material Design 3) + MDI icons (@mdi/js)          |
+| i18n         | Vue i18n v11 (EN/FR, Composition API legacy: false)          |
+| Backend      | Express 5 + express-session + session-file-store             |
+| Database     | MongoDB 7 (native driver, connection pooling)                |
+| Email        | Nodemailer 8                                                 |
+| Sanitization | DOMPurify 3                                                  |
+| Security     | Helmet 8 + CSP (production only) + express-rate-limit + CORS |
+| Build        | Vite 7 (client + server bundles)                             |
+| Tests        | Vitest 4 + @vue/test-utils + happy-dom                       |
+| Lint         | ESLint 10 + eslint-plugin-vue + Prettier                     |
+| SCSS         | sass-embedded (modern-compiler API)                          |
 
 ## File structure
 
@@ -35,11 +35,11 @@ All routes prefixed with `/:locale(en|fr)/`. See [references/routing-locale.md](
 
 ## Layout system
 
-| Layout | Usage | Header | Footer |
-|--------|-------|--------|--------|
-| public | Landing, contact | Yes | Yes |
-| minimal | Auth pages | No | No |
-| app | Dashboard, account, admin | Yes | Yes |
+| Layout  | Usage                     | Header | Footer |
+| ------- | ------------------------- | ------ | ------ |
+| public  | Landing, contact          | Yes    | Yes    |
+| minimal | Auth pages                | No     | No     |
+| app     | Dashboard, account, admin | Yes    | Yes    |
 
 ## SSR lifecycle
 
@@ -47,19 +47,19 @@ See [references/ssr-lifecycle.md](./references/ssr-lifecycle.md).
 
 ## Shared utilities inventory
 
-| Module | Exports |
-| --- | --- |
-| `const.js` | BCRYPT_ROUNDS, SECURITY_CODE_EXPIRY_MS, LOCALES, USER_SAFE_PROJECTION, EMAIL_REGEX, isAdmin() |
-| `dbHelpers.js` | parseObjectId(), parsePagination(), findUserSafe(), getUserWithCounts() |
-| `email.js` | generateSecurityCode(), hashCode(), verifyCode(), sendSecurityCodeEmail(), sendContactEmail() |
-| `security.js` | getClientIp(), isIpBlocked(), recordLoginIp(), destroyUserSessions() |
-| `api.js` | apiFetch() — client fetch wrapper (AbortController 15s, rate-limit detection) |
-| `mongo.js` | connectDB(), getDB(), closeDB() — connection pooling + ensureIndexes |
-| `analytics.js` | Google Analytics gtag injection (SSR head, GA_MEASUREMENT_ID) |
-| `captcha.js` | Server-side reCAPTCHA v3 verification |
-| `utils.js` | escapeHtml() |
-| `log.js` | logInfo(), logWarn(), logError(), logDebug() |
-| `logger.js` | logEvent(db, event, meta) — MongoDB events collection |
+| Module         | Exports                                                                                       |
+| -------------- | --------------------------------------------------------------------------------------------- |
+| `const.js`     | BCRYPT_ROUNDS, SECURITY_CODE_EXPIRY_MS, LOCALES, USER_SAFE_PROJECTION, EMAIL_REGEX, isAdmin() |
+| `dbHelpers.js` | parseObjectId(), parsePagination(), findUserSafe(), getUserWithCounts()                       |
+| `email.js`     | generateSecurityCode(), hashCode(), verifyCode(), sendSecurityCodeEmail(), sendContactEmail() |
+| `security.js`  | getClientIp(), isIpBlocked(), recordLoginIp(), destroyUserSessions()                          |
+| `api.js`       | apiFetch() — client fetch wrapper (AbortController 15s, rate-limit detection)                 |
+| `mongo.js`     | connectDB(), getDB(), closeDB() — connection pooling + ensureIndexes                          |
+| `analytics.js` | Google Analytics gtag injection (SSR head, GA_MEASUREMENT_ID)                                 |
+| `captcha.js`   | Server-side reCAPTCHA v3 verification                                                         |
+| `utils.js`     | escapeHtml()                                                                                  |
+| `log.js`       | logInfo(), logWarn(), logError(), logDebug()                                                  |
+| `logger.js`    | logEvent(db, event, meta) — MongoDB events collection                                         |
 
 ## Key patterns
 
@@ -69,12 +69,12 @@ See [references/ssr-lifecycle.md](./references/ssr-lifecycle.md).
 export function setupMyFeatureRoute(app, db) {
   app.post('/api/my-feature', async (req, res) => {
     try {
-      res.json({ status: 'success', data })
+      res.json({ status: 'success', data });
     } catch (err) {
-      console.error(err)
-      res.status(500).json({ error: 'Server error' })
+      console.error(err);
+      res.status(500).json({ error: 'Server error' });
     }
-  })
+  });
 }
 ```
 
@@ -109,10 +109,10 @@ See [references/env-vars.md](./references/env-vars.md).
 
 ## Where to look
 
-| If you need… | Read |
-| --- | --- |
-| Full file tree | [references/file-structure.md](./references/file-structure.md) |
+| If you need…                  | Read                                                           |
+| ----------------------------- | -------------------------------------------------------------- |
+| Full file tree                | [references/file-structure.md](./references/file-structure.md) |
 | Route table and locale system | [references/routing-locale.md](./references/routing-locale.md) |
-| SSR build and render cycle | [references/ssr-lifecycle.md](./references/ssr-lifecycle.md) |
-| API endpoint patterns | [references/api-patterns.md](./references/api-patterns.md) |
-| Environment variables list | [references/env-vars.md](./references/env-vars.md) |
+| SSR build and render cycle    | [references/ssr-lifecycle.md](./references/ssr-lifecycle.md)   |
+| API endpoint patterns         | [references/api-patterns.md](./references/api-patterns.md)     |
+| Environment variables list    | [references/env-vars.md](./references/env-vars.md)             |

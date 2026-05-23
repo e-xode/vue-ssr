@@ -26,6 +26,7 @@ A complete and modern starter kit for building web applications with **Vue 3**, 
 ## 🎯 Features
 
 ### Frontend
+
 - ✅ **Vue 3** - Progressive JavaScript framework with Composition API
 - ✅ **Server-Side Rendering (SSR)** - Server-side rendering for better SEO
 - ✅ **Vite** - Ultra-fast bundler and dev server
@@ -36,6 +37,7 @@ A complete and modern starter kit for building web applications with **Vue 3**, 
 - ✅ **Vue i18n** - Multi-language support (EN, FR)
 
 ### Backend
+
 - ✅ **Express.js** - Minimalist web framework
 - ✅ **MongoDB** - Flexible NoSQL database
 - ✅ **Secure Authentication** - Email/password with code verification
@@ -48,6 +50,7 @@ A complete and modern starter kit for building web applications with **Vue 3**, 
 - ✅ **Secure Code Verification** - SHA-256 hashing with timingSafeEqual
 
 ### Infrastructure
+
 - ✅ **Docker & Docker Compose** - Complete containerization
 - ✅ **GitHub Actions** - Automated CI/CD
 - ✅ **Supervisor** - Process management in production
@@ -153,7 +156,8 @@ e-xode.vue-ssr/
 ├── server.js                    # Main Express server
 ├── index.html                   # Main HTML template
 ├── docker-compose.yml           # Docker orchestration
-├── env_sample                   # Example environment variables
+├── docker-compose.local.yml     # Local MongoDB override
+├── .env.example                 # Example environment variables
 ├── .env                         # Environment variables (local)
 ├── .gitignore                   # Git ignored files
 ├── README.en.md                 # This file
@@ -169,11 +173,13 @@ e-xode.vue-ssr/
 ## 📋 Prerequisites
 
 ### Minimum Requirements
+
 - **Node.js** >= 18.0.0
 - **npm** >= 8.0.0
 - **MongoDB** >= 5.0.0 (or access to an instance)
 
 ### Recommended for Docker
+
 - **Docker** >= 20.0
 - **Docker Compose** >= 1.29.0
 
@@ -182,22 +188,26 @@ e-xode.vue-ssr/
 ### Option 1: Local Development without Docker
 
 1. **Clone the project**
+
 ```bash
 git clone https://github.com/yourusername/e-xode-vue-ssr.git
 cd e-xode-vue-ssr
 ```
 
 2. **Install dependencies**
+
 ```bash
 npm install
 ```
 
 3. **Configure environment variables**
+
 ```bash
-cp env_sample .env
+cp .env.example .env
 ```
 
 Edit `.env` with your settings:
+
 ```env
 NODE_PORT=5173
 NODE_HOST=http://localhost:5173
@@ -222,6 +232,7 @@ COOKIE_SECRET=your-secret-key
 ```
 
 4. **Start MongoDB**
+
 ```bash
 # On macOS with Homebrew
 brew services start mongodb-community
@@ -236,23 +247,27 @@ docker run -d -p 27017:27017 \
 ### Option 2: Development with Docker Compose
 
 1. **Create Docker network (if doesn't exist)**
+
 ```bash
 docker network create e-xode
 ```
 
 2. **Clone and configure**
+
 ```bash
 git clone https://github.com/yourusername/e-xode-vue-ssr.git
 cd e-xode-vue-ssr
-cp env_sample .env
+cp .env.example .env
 ```
 
 3. **Start containers**
+
 ```bash
 docker-compose up -d
 ```
 
 Services will be available at:
+
 - Application: http://localhost:5173
 - MongoDB: localhost:27017
 
@@ -290,6 +305,7 @@ COOKIE_SECRET=change-me           # Secret for session cookies
 ### Vuetify Configuration
 
 Edit [src/plugins/vuetify.js](src/plugins/vuetify.js) to customize:
+
 - **Theme** (light/dark)
 - **Colors** (primary, secondary, etc.)
 - **Components** (defaults)
@@ -297,6 +313,7 @@ Edit [src/plugins/vuetify.js](src/plugins/vuetify.js) to customize:
 ### Vite Configuration
 
 Edit [vite.config.js](vite.config.js) for:
+
 - Path aliases
 - Build settings
 - API proxy
@@ -342,20 +359,26 @@ docker-compose -f docker-compose.yml up
 ### Entry Points
 
 #### `src/entry-client.js`
+
 Client entry point. Hydrates the Vue application rendered on the server.
 
 #### `src/entry-server.js`
+
 SSR entry point. Renders the application to HTML and generates meta tags.
 
 #### `src/main.js`
+
 Initializes the Vue application with:
+
 - Vue Router
 - Pinia (state management)
 - Vue i18n (multi-language)
 - Vuetify (components)
 
 #### `server.js`
+
 Main Express server that:
+
 - Manages sessions
 - Creates API routes
 - Performs SSR rendering
@@ -404,9 +427,11 @@ Browser receives + hydrates
 ### Authentication
 
 #### `POST /api/auth/signup`
+
 User registration
 
 **Body:**
+
 ```json
 {
   "email": "user@example.com",
@@ -416,6 +441,7 @@ User registration
 ```
 
 **Response (201):**
+
 ```json
 {
   "status": "verification_pending",
@@ -426,9 +452,11 @@ User registration
 ---
 
 #### `POST /api/auth/signin`
+
 User login
 
 **Body:**
+
 ```json
 {
   "email": "user@example.com",
@@ -437,6 +465,7 @@ User login
 ```
 
 **Response (200):**
+
 ```json
 {
   "status": "verification_pending",
@@ -447,9 +476,11 @@ User login
 ---
 
 #### `POST /api/auth/verify-code`
+
 Verify security code
 
 **Body:**
+
 ```json
 {
   "email": "user@example.com",
@@ -458,6 +489,7 @@ Verify security code
 ```
 
 **Response (200):**
+
 ```json
 {
   "user": {
@@ -473,9 +505,11 @@ Verify security code
 ---
 
 #### `POST /api/auth/resend-code`
+
 Resend security code
 
 **Body:**
+
 ```json
 {
   "email": "user@example.com"
@@ -483,6 +517,7 @@ Resend security code
 ```
 
 **Response (200):**
+
 ```json
 {
   "status": "code_sent",
@@ -493,9 +528,11 @@ Resend security code
 ---
 
 #### `GET /api/auth/me`
+
 Get current authenticated user
 
 **Response (200):**
+
 ```json
 {
   "user": {
@@ -509,9 +546,11 @@ Get current authenticated user
 ---
 
 #### `POST /api/auth/signout`
+
 User logout
 
 **Response (200):**
+
 ```json
 {
   "status": "success"
@@ -571,25 +610,27 @@ Error codes are localized. See `src/translate/en.json` for all available codes.
 ### Sessions
 
 User sessions are stored in:
+
 - **Development**: `logs/sessions/*.json`
 - **Production**: To be configured (Redis recommended)
 
 Configuration in `server.js`:
+
 ```javascript
 const sessionMiddleware = session({
   store: new fileStore({ path: 'logs/sessions' }),
   cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 7,  // 7 days
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
     sameSite: 'lax',
-    secure: isProduction,               // HTTPS only in production
+    secure: isProduction, // HTTPS only in production
     httpOnly: true,
-    path: '/'
+    path: '/',
   },
   name: 'ssr.sid',
   resave: false,
   saveUninitialized: true,
-  secret: process.env.COOKIE_SECRET
-})
+  secret: process.env.COOKIE_SECRET,
+});
 ```
 
 ## 🌍 Internationalization (i18n)
@@ -612,9 +653,9 @@ In Vue components:
 
 ```vue
 <script setup>
-import { useI18n } from 'vue-i18n'
+import { useI18n } from 'vue-i18n';
 
-const { t, locale } = useI18n()
+const { t, locale } = useI18n();
 </script>
 
 <template>
@@ -632,10 +673,10 @@ const { t, locale } = useI18n()
 In JavaScript:
 
 ```javascript
-import { useI18n } from 'vue-i18n'
+import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n()
-console.log(t('nav.home'))
+const { t } = useI18n();
+console.log(t('nav.home'));
 ```
 
 ### Translation Structure
@@ -665,12 +706,13 @@ console.log(t('nav.home'))
 2. Copy structure from `en.json`
 3. Translate all values
 4. Import in `src/main.js`:
+
 ```javascript
-import xx from '@/translate/xx.json'
+import xx from '@/translate/xx.json';
 
 const i18n = createI18n({
-  messages: { en, fr, xx }
-})
+  messages: { en, fr, xx },
+});
 ```
 
 ## 🎨 Styling
@@ -710,16 +752,17 @@ $breakpoint-xl: 1280px;
 ### Available Mixins
 
 ```scss
-@include flex-center;              // Center with flexbox
-@include flex-between;             // Space-between
-@include flex-col;                 // Flex column
-@include truncate;                 // Single line ellipsis
-@include multiline-truncate(3);    // Multi-line ellipsis
-@include absolute-center;          // Absolute Position centered
-@include transition;               // Smooth transition
-@include hover-lift;               // Lift effect on hover
-@include respond-to('md') { };     // Media query
-@include visually-hidden;          // Accessible hidden text
+@include flex-center; // Center with flexbox
+@include flex-between; // Space-between
+@include flex-col; // Flex column
+@include truncate; // Single line ellipsis
+@include multiline-truncate(3); // Multi-line ellipsis
+@include absolute-center; // Absolute Position centered
+@include transition; // Smooth transition
+@include hover-lift; // Lift effect on hover
+@include respond-to('md') {
+} // Media query
+@include visually-hidden; // Accessible hidden text
 ```
 
 ### Usage Example
@@ -759,7 +802,7 @@ const colors = {
   error: '#f44336',
   info: '#2196f3',
   // ... more colors
-}
+};
 ```
 
 ## 🗄️ Database
@@ -779,6 +822,7 @@ MONGO_PWD=password
 #### Collections
 
 **users**
+
 ```javascript
 {
   _id: ObjectId,
@@ -798,26 +842,28 @@ MONGO_PWD=password
 File [src/shared/mongo.js](src/shared/mongo.js) handles database connection:
 
 ```javascript
-import { mongoConnect } from '#src/shared/mongo.js'
+import { mongoConnect } from '#src/shared/mongo.js';
 
-const { db, error } = await mongoConnect()
+const { db, error } = await mongoConnect();
 if (error) {
-  console.error('DB Connection error:', error)
+  console.error('DB Connection error:', error);
 }
 
 // Use the connection
-const users = await db.collection('users').find({}).toArray()
+const users = await db.collection('users').find({}).toArray();
 ```
 
 #### Database Initialization
 
 To load initial data, create a script in:
+
 - `docker/dev/mongo/init-scripts/init-db.js`
 
 Example:
+
 ```javascript
-db.createCollection('users')
-db.users.createIndex( { "email": 1 }, { unique: true } )
+db.createCollection('users');
+db.users.createIndex({ email: 1 }, { unique: true });
 ```
 
 ## 🐳 Docker
@@ -837,19 +883,48 @@ services:
     # Volumes: Data persistence
 ```
 
+#### Local vs remote MongoDB
+
+The compose setup is split in two files so you can switch the database target without editing service or connection config:
+
+- `docker-compose.yml` (base) — runs the `node` app only and reads `.env` as-is, so it connects to a **remote** MongoDB (e.g. Atlas) via `MONGO_HOST` / `MONGO_TYPE`.
+- `docker-compose.local.yml` (override) — adds a local `mongo` container and redirects the app to it (`MONGO_HOST=mongo`, `MONGO_TYPE=mongodb`), overriding the `.env` values.
+
+Switch via the `COMPOSE_FILE` variable in `.env` (already set in `.env.example`):
+
+- **Local (node + mongo)** — keep the line uncommented, then `docker compose up` starts both containers:
+
+```env
+COMPOSE_FILE=docker-compose.yml:docker-compose.local.yml
+```
+
+- **Remote (e.g. Atlas)** — comment the line out; `docker compose up` then starts the app only and connects to the remote DB.
+
+Equivalent explicit commands (no `.env` edit):
+
+```bash
+# Local
+docker compose -f docker-compose.yml -f docker-compose.local.yml up
+# Remote
+docker compose -f docker-compose.yml up
+```
+
 ### Docker Images
 
 #### Node.js Dev (`docker/dev/node/Dockerfile`)
+
 - Base: `node:22-slim`
 - Includes: Playwright dependencies
 - Entry point: `npm run dev`
 
 #### MongoDB Dev (`docker/dev/mongo/Dockerfile`)
+
 - Base: Official MongoDB image
 - Initializes database and users
 - Custom scripts available
 
 #### Production Image (`docker/build/Dockerfile`)
+
 - Multi-stage build
 - Base: `node:22-alpine` + `node:22-slim`
 - Optimized for production
@@ -990,6 +1065,7 @@ server {
 ### Monitoring
 
 Integrate services like:
+
 - **Datadog** - APM and monitoring
 - **Sentry** - Error tracking
 - **ELK Stack** - Centralized logging
@@ -1053,6 +1129,7 @@ npm run prod              # Launch production server
 ### Email sending not working
 
 **Check:**
+
 ```bash
 # Environment variables
 cat .env | grep MAILER
@@ -1114,6 +1191,7 @@ This project is licensed under **MIT**. See [LICENSE](./LICENSE) for details.
 ## 📞 Support
 
 For questions or issues:
+
 - 📧 Email: support@example.com
 - 🐛 Report bugs: [GitHub Issues](https://github.com/yourusername/e-xode-vue-ssr/issues)
 - 💬 Discussions: [GitHub Discussions](https://github.com/yourusername/e-xode-vue-ssr/discussions)

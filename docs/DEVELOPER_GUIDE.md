@@ -12,16 +12,16 @@ Guide complet pour développer sur le projet e-xode-vue-ssr.
 
 ## 📋 Stack Technique
 
-| Domaine | Technologie |
-|---------|-------------|
+| Domaine  | Technologie                   |
+| -------- | ----------------------------- |
 | Frontend | Vue 3, Vite, Vuetify 3, Pinia |
-| Backend | Express.js, Node.js |
-| Database | MongoDB 5.0+ |
-| Styling | SCSS, Material Design |
-| Email | Nodemailer |
-| Auth | bcryptjs, sessions |
-| i18n | vue-i18n |
-| Server | Supervisor, Docker |
+| Backend  | Express.js, Node.js           |
+| Database | MongoDB 5.0+                  |
+| Styling  | SCSS, Material Design         |
+| Email    | Nodemailer                    |
+| Auth     | bcryptjs, sessions            |
+| i18n     | vue-i18n                      |
+| Server   | Supervisor, Docker            |
 
 ## 🏠 Structure du Projet
 
@@ -49,7 +49,7 @@ src/
 npm install
 
 # 2. Configurer l'environnement
-cp env_sample .env
+cp .env.example .env
 
 # 3. Démarrer MongoDB (Docker recommandé)
 docker run -d -p 27017:27017 \
@@ -73,9 +73,9 @@ src/views/MyFeature/MyFeatureView.vue
 
 ```vue
 <script setup>
-import { useI18n } from 'vue-i18n'
+import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n()
+const { t } = useI18n();
 </script>
 
 <template>
@@ -136,28 +136,28 @@ src/api/myfeature/create.js
 ```javascript
 export function setupCreateMyFeatureRoute(app, db) {
   app.post('/api/myfeature/create', async (req, res) => {
-    const { name } = req.body
+    const { name } = req.body;
 
     if (!name) {
-      return res.status(400).json({ error: 'error.validation.nameRequired' })
+      return res.status(400).json({ error: 'error.validation.nameRequired' });
     }
 
     try {
       const result = await db.collection('myfeatures').insertOne({
         name,
-        createdAt: new Date()
-      })
+        createdAt: new Date(),
+      });
 
       res.status(201).json({
         _id: result.insertedId,
         name,
-        createdAt: new Date()
-      })
+        createdAt: new Date(),
+      });
     } catch (err) {
-      console.error('Create error:', err)
-      res.status(500).json({ error: 'error.server' })
+      console.error('Create error:', err);
+      res.status(500).json({ error: 'error.server' });
     }
-  })
+  });
 }
 ```
 
@@ -166,11 +166,11 @@ export function setupCreateMyFeatureRoute(app, db) {
 Éditer `src/api/router.js`:
 
 ```javascript
-import { setupCreateMyFeatureRoute } from './myfeature/create.js'
+import { setupCreateMyFeatureRoute } from './myfeature/create.js';
 
 export function registerApiRoutes(app, db) {
   // ... autres routes
-  setupCreateMyFeatureRoute(app, db)
+  setupCreateMyFeatureRoute(app, db);
 }
 ```
 
@@ -180,12 +180,12 @@ export function registerApiRoutes(app, db) {
 // Dans un composant o store
 const response = await fetch('/api/myfeature/create', {
   method: 'POST',
-  credentials: 'include',  // Important pour les sessions
+  credentials: 'include', // Important pour les sessions
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ name: 'Test' })
-})
+  body: JSON.stringify({ name: 'Test' }),
+});
 
-const data = await response.json()
+const data = await response.json();
 ```
 
 ## 📦 Ajouter un Nouveau Store Pinia
@@ -197,32 +197,32 @@ src/stores/myfeature.js
 ```
 
 ```javascript
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
 
 export const useMyFeatureStore = defineStore('myfeature', () => {
-  const items = ref([])
-  const loading = ref(false)
-  const error = ref(null)
+  const items = ref([]);
+  const loading = ref(false);
+  const error = ref(null);
 
-  const isEmpty = computed(() => items.value.length === 0)
+  const isEmpty = computed(() => items.value.length === 0);
 
   async function fetchItems() {
-    loading.value = true
-    error.value = null
+    loading.value = true;
+    error.value = null;
 
     try {
-      const response = await fetch('/api/myfeature/list')
+      const response = await fetch('/api/myfeature/list');
       if (response.ok) {
-        const data = await response.json()
-        items.value = data.items
+        const data = await response.json();
+        items.value = data.items;
       } else {
-        error.value = 'Failed to fetch'
+        error.value = 'Failed to fetch';
       }
     } catch (e) {
-      error.value = e.message
+      error.value = e.message;
     } finally {
-      loading.value = false
+      loading.value = false;
     }
   }
 
@@ -231,16 +231,16 @@ export const useMyFeatureStore = defineStore('myfeature', () => {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name })
-    })
+      body: JSON.stringify({ name }),
+    });
 
     if (response.ok) {
-      const data = await response.json()
-      items.value.push(data)
-      return { status: 'success', data }
+      const data = await response.json();
+      items.value.push(data);
+      return { status: 'success', data };
     } else {
-      const data = await response.json()
-      return { status: 'error', error: data.error }
+      const data = await response.json();
+      return { status: 'error', error: data.error };
     }
   }
 
@@ -250,9 +250,9 @@ export const useMyFeatureStore = defineStore('myfeature', () => {
     error,
     isEmpty,
     fetchItems,
-    createItem
-  }
-})
+    createItem,
+  };
+});
 ```
 
 ### 2. Exporter du index
@@ -260,21 +260,21 @@ export const useMyFeatureStore = defineStore('myfeature', () => {
 Éditer `src/stores/index.js`:
 
 ```javascript
-export { useMyFeatureStore } from './myfeature'
+export { useMyFeatureStore } from './myfeature';
 ```
 
 ### 3. Utiliser dans les composants
 
 ```vue
 <script setup>
-import { useMyFeatureStore } from '@/stores'
-import { onMounted } from 'vue'
+import { useMyFeatureStore } from '@/stores';
+import { onMounted } from 'vue';
 
-const store = useMyFeatureStore()
+const store = useMyFeatureStore();
 
 onMounted(() => {
-  store.fetchItems()
-})
+  store.fetchItems();
+});
 </script>
 
 <template>
@@ -334,6 +334,7 @@ onMounted(() => {
 ### 1. Ajouter la clé
 
 `src/translate/en.json`:
+
 ```json
 {
   "myFeature": {
@@ -344,6 +345,7 @@ onMounted(() => {
 ```
 
 `src/translate/fr.json`:
+
 ```json
 {
   "myFeature": {
@@ -357,9 +359,9 @@ onMounted(() => {
 
 ```vue
 <script setup>
-import { useI18n } from 'vue-i18n'
+import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n()
+const { t } = useI18n();
 </script>
 
 <template>
@@ -373,13 +375,13 @@ const { t } = useI18n()
 ### 3. Utiliser dans le JavaScript
 
 ```javascript
-import { useI18n } from 'vue-i18n'
+import { useI18n } from 'vue-i18n';
 
 export function setupMyRoute(app, db) {
   app.post('/api/my', async (req, res) => {
     // ...
-    console.log('Error:', t('error.validation.invalid'))
-  })
+    console.log('Error:', t('error.validation.invalid'));
+  });
 }
 ```
 
@@ -405,8 +407,8 @@ Content-Type: application/json
 ```vue
 <script>
 // Vérifier le rendu SSR
-import { renderToString } from 'vue/server-renderer'
-import { createApp } from './main'
+import { renderToString } from 'vue/server-renderer';
+import { createApp } from './main';
 
 // Vous pouvez tester via le navigateur dev tools
 // Vérifier que le HTML est bien rendu côté serveur
@@ -432,7 +434,7 @@ docker-compose logs node | grep -i error
 
 ```javascript
 // Dans la console Firefox/Chrome
-localStorage.setItem('locale', 'fr')  // Changer langue
+localStorage.setItem('locale', 'fr'); // Changer langue
 ```
 
 ### MongoDB
@@ -480,6 +482,7 @@ npm run prod
    - Générer nouveau `COOKIE_SECRET`
 
 2. **Tests**
+
    ```bash
    npm run build
    npm run prod
@@ -531,12 +534,12 @@ Avant de soumettre une PR:
 
 ```javascript
 // ❌ Mauvais
-const fn = () => {}
-const a = 'test'
+const fn = () => {};
+const a = 'test';
 
 // ✅ Bon
-const handleClick = () => {}
-const userName = 'test'
+const handleClick = () => {};
+const userName = 'test';
 ```
 
 ### Vue Components
@@ -544,11 +547,11 @@ const userName = 'test'
 ```vue
 <!-- ✅ Bon -->
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const count = ref(0)
+const count = ref(0);
 
-const increment = () => count.value++
+const increment = () => count.value++;
 </script>
 
 <template>
@@ -564,12 +567,12 @@ export function setupMyRoute(app, db) {
   app.post('/api/path', async (req, res) => {
     try {
       // Logique
-      res.json({ data })
+      res.json({ data });
     } catch (err) {
-      console.error('Error:', err)
-      res.status(500).json({ error: 'error.server' })
+      console.error('Error:', err);
+      res.status(500).json({ error: 'error.server' });
     }
-  })
+  });
 }
 ```
 

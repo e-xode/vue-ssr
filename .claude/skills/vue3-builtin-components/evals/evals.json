@@ -1,0 +1,45 @@
+{
+  "skill_name": "vue3-builtin-components",
+  "evals": [
+    {
+      "id": 1,
+      "name": "teleport-custom-overlay",
+      "prompt": "I need a custom full-screen overlay that escapes a parent with overflow:hidden, rendered at body level. How do I do this in Vue without Vuetify?",
+      "assertions": [
+        {
+          "text": "Recommends wrapping the overlay in <Teleport to=\"body\">, notes the target must exist client-side, uses a ref(false) toggle driven SSR-safely, optionally wraps in <Transition>, and points animation CSS to design-scss; mentions Vuetify v-dialog/v-overlay as the default alternative"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "suspense-async-loading",
+      "prompt": "How do I show a loading spinner while an async child component with top-level await in setup resolves?",
+      "assertions": [
+        {
+          "text": "Uses <Suspense> with #default (the async component) and #fallback (e.g. v-progress-circular), flags that Suspense is experimental, and notes it has no built-in error handling so an onErrorCaptured boundary in the parent is needed, plus SSR caveat that the server awaits and emits resolved content"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "transitiongroup-list-reorder",
+      "prompt": "My v-for list animates items in and out, but when items reorder they jump instead of sliding. How do I fix this?",
+      "assertions": [
+        {
+          "text": "Identifies <TransitionGroup> with a *-move class for FLIP move transitions, requires a stable unique :key per child (not the index), sets position:absolute on leaving items so siblings shift, warns FLIP fails on display:inline, and defers the CSS class bodies to design-scss"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "vuetify-dialog-not-builtin",
+      "prompt": "How do I open a confirmation dialog with a fade transition when the user clicks delete?",
+      "assertions": [
+        {
+          "text": "Routes to vuetify-components: recommends Vuetify's v-dialog (which already teleports and animates) rather than a raw Teleport/Transition, and does not hand-roll a built-in overlay for a standard dialog"
+        }
+      ]
+    }
+  ]
+}

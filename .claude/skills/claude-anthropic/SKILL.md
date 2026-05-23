@@ -9,29 +9,29 @@ description: "Govern Claude/Anthropic configuration of the Vue SSR Starter Kit (
 
 ## What this skill does (and does not)
 
-| In scope | Out of scope |
-| --- | --- |
-| Rules for writing/editing `CLAUDE.md` | Validating modified application code (→ `vue-ssr-hooks` + `hooks` agent) |
-| Anatomy of a project skill (frontmatter, references, budget) | The workflow of drafting and evaluating a new skill (→ `skill-creator`) |
-| Anatomy of a project sub-agent | App architecture knowledge (→ `vue-ssr-architecture`) |
-| Anatomy of path-scoped rules (`.claude/rules/`) | Auth flow and security (→ `vue-ssr-auth`) |
-| Hook events, format, project status | Deployment and CI/CD (→ `vue-ssr-deployment`) |
-| Audit checklist + automated `scripts/audit.py` | |
-| Anthropic doctrine: progressive disclosure, agent design | |
+| In scope                                                     | Out of scope                                                             |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| Rules for writing/editing `CLAUDE.md`                        | Validating modified application code (→ `vue-ssr-hooks` + `hooks` agent) |
+| Anatomy of a project skill (frontmatter, references, budget) | The workflow of drafting and evaluating a new skill (→ `skill-creator`)  |
+| Anatomy of a project sub-agent                               | App architecture knowledge (→ `vue-ssr-architecture`)                    |
+| Anatomy of path-scoped rules (`.claude/rules/`)              | Auth flow and security (→ `vue-ssr-auth`)                                |
+| Hook events, format, project status                          | Deployment and CI/CD (→ `vue-ssr-deployment`)                            |
+| Audit checklist + automated `scripts/audit.py`               |                                                                          |
+| Anthropic doctrine: progressive disclosure, agent design     |                                                                          |
 
 ## Division of responsibilities — `claude-anthropic` ↔ `skill-creator`
 
-| Concern | Owner |
-| --- | --- |
-| Generic create/evaluate/iterate workflow | `skill-creator` |
-| Eval harness, test prompts, assertions | `skill-creator` |
-| Description-optimisation guidelines | `skill-creator` |
+| Concern                                                                | Owner              |
+| ---------------------------------------------------------------------- | ------------------ |
+| Generic create/evaluate/iterate workflow                               | `skill-creator`    |
+| Eval harness, test prompts, assertions                                 | `skill-creator`    |
+| Description-optimisation guidelines                                    | `skill-creator`    |
 | Project description conventions (discriminating, pushy, anti-triggers) | `claude-anthropic` |
-| Skill naming, placement under `.claude/skills/`, folder layout | `claude-anthropic` |
-| `SKILL.md` anatomy and token budget for this project | `claude-anthropic` |
-| Project anti-patterns | `claude-anthropic` |
-| Post-creation audit (`scripts/audit.py`) + `CLAUDE.md` index update | `claude-anthropic` |
-| Anthropic doctrine (model spec, progressive disclosure, agent design) | `claude-anthropic` |
+| Skill naming, placement under `.claude/skills/`, folder layout         | `claude-anthropic` |
+| `SKILL.md` anatomy and token budget for this project                   | `claude-anthropic` |
+| Project anti-patterns                                                  | `claude-anthropic` |
+| Post-creation audit (`scripts/audit.py`) + `CLAUDE.md` index update    | `claude-anthropic` |
+| Anthropic doctrine (model spec, progressive disclosure, agent design)  | `claude-anthropic` |
 
 When this skill hands off, use the convention: `➜ See skill: skill-creator — <reason>`.
 
@@ -108,13 +108,13 @@ If issues are found, propose corrections to the user. **Never silently rewrite**
 
 ## Where to look (routing table)
 
-| If you need… | Read |
-| --- | --- |
+| If you need…                                     | Read                                                                 |
+| ------------------------------------------------ | -------------------------------------------------------------------- |
 | Why `CLAUDE.md` is so terse / what belongs there | [references/claude-md-anatomy.md](./references/claude-md-anatomy.md) |
-| How to write a discriminating description | [references/skill-anatomy.md](./references/skill-anatomy.md) |
-| How to choose `tools` / `model` for an agent | [references/agent-anatomy.md](./references/agent-anatomy.md) |
-| When to use rules vs skills / rule anatomy | [references/rules-anatomy.md](./references/rules-anatomy.md) |
-| Hook events and current project status | [references/hooks-reference.md](./references/hooks-reference.md) |
-| Full audit checklist (auto + manual) | [references/audit-checklist.md](./references/audit-checklist.md) |
-| Known anti-patterns and corrections | [references/antipatterns.md](./references/antipatterns.md) |
-| Anthropic official documentation | [references/official-links.md](./references/official-links.md) |
+| How to write a discriminating description        | [references/skill-anatomy.md](./references/skill-anatomy.md)         |
+| How to choose `tools` / `model` for an agent     | [references/agent-anatomy.md](./references/agent-anatomy.md)         |
+| When to use rules vs skills / rule anatomy       | [references/rules-anatomy.md](./references/rules-anatomy.md)         |
+| Hook events and current project status           | [references/hooks-reference.md](./references/hooks-reference.md)     |
+| Full audit checklist (auto + manual)             | [references/audit-checklist.md](./references/audit-checklist.md)     |
+| Known anti-patterns and corrections              | [references/antipatterns.md](./references/antipatterns.md)           |
+| Anthropic official documentation                 | [references/official-links.md](./references/official-links.md)       |

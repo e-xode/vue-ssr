@@ -29,17 +29,20 @@ Closes #(issue number)
 <!-- Comment avez-vous testé cette PR? -->
 
 ### Manual Testing
+
 - [ ] Feature tested locally with `npm run dev`
 - [ ] All signup/signin/verify/signout flows work
 - [ ] No console errors or warnings
 - [ ] Responsive on mobile (DevTools)
 
 ### Automated Testing
+
 - [ ] Build passes: `npm run build`
 - [ ] Production build works: `npm run prod`
 - [ ] No lint errors
 
 ### Platforms Tested
+
 - [ ] Chrome/Firefox (latest)
 - [ ] Mobile (iOS/Android simulator or real device)
 - [ ] Development environment
@@ -82,9 +85,11 @@ Closes #(issue number)
 <!-- Si applicable, ajoutez des screenshots ou vidéos montrant le changement -->
 
 ### Before
+
 <!-- Screenshot/description of old behavior -->
 
 ### After
+
 <!-- Screenshot/description of new behavior -->
 
 ## Migration Guide (if applicable)
@@ -107,6 +112,7 @@ Pour mettre à jour depuis la version précédente:
 - [ ] Requires optimization: [describe]
 
 ### Metrics (if applicable)
+
 - Bundle size change: -5KB
 - Build time: no change
 - Runtime: faster by X%
@@ -139,6 +145,7 @@ Pour mettre à jour depuis la version précédente:
 **Thank you for contributing! 🎉**
 
 Please ensure you've read:
+
 - [CONTRIBUTING.md](../CONTRIBUTING.md)
 - [DEVELOPER_GUIDE.md](../docs/DEVELOPER_GUIDE.md)
 - [CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md) (if exists)

@@ -1,4 +1,4 @@
-import TheHeader from './TheHeader.vue'
-import TheFooter from './TheFooter.vue'
+import TheHeader from './TheHeader.vue';
+import TheFooter from './TheFooter.vue';
 
-export { TheHeader, TheFooter }
+export { TheHeader, TheFooter };
