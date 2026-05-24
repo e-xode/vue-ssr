@@ -561,7 +561,7 @@ services:
     build: docker/dev/node/
     depends_on: [mongo (healthy)]
     volumes: ['.:/app'] → hot reload
-    ports: ['5173:5173']
+    ports: ['3002:3002']
     env_file: [.env]
 
   mongo:

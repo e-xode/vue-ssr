@@ -65,19 +65,19 @@ nvm install 18
 
 ## 🚀 Démarrage
 
-### Port 5173 déjà utilisé
+### Port 3002 déjà utilisé
 
-**Symptôme:** "listen EADDRINUSE: address already in use :::5173"
+**Symptôme:** "listen EADDRINUSE: address already in use :::3002"
 
 **Solutions:**
 
 ```bash
 # Option 1: Tuer le processus existant
 # Linux/Mac:
-lsof -ti:5173 | xargs kill -9
+lsof -ti:3002 | xargs kill -9
 
 # Windows:
-netstat -ano | findstr :5173
+netstat -ano | findstr :3002
 taskkill /PID <PID> /F
 
 # Option 2: Utiliser un port différent
@@ -806,7 +806,7 @@ pm2 monit
 
 # Option 2: Docker health checks
 healthcheck:
-  test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5173/"]
+  test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3002/"]
   interval: 30s
   timeout: 10s
 ```

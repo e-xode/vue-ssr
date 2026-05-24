@@ -59,7 +59,7 @@ Use this checklist before deploying to production or publishing the project.
 
 - [ ] No real domain names
   ```bash
-  grep -r "localhost:5173\|example.com\|test@" src/
+  grep -r "localhost:3002\|example.com\|test@" src/
   # Only expected values, no production domains
   ```
 

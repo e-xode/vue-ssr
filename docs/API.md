@@ -19,7 +19,7 @@ Documentation complète des tous les endpoints API de e-xode-vue-ssr.
 **Base URL:**
 
 ```
-Development: http://localhost:5173
+Development: http://localhost:3002
 Production: https://your-domain.com
 ```
 
@@ -724,8 +724,8 @@ const limiters = {
 **Development:**
 
 ```
-http://localhost:5173
-http://127.0.0.1:5173
+http://localhost:3002
+http://127.0.0.1:3002
 ```
 
 **Production:**
@@ -763,7 +763,7 @@ Access-Control-Allow-Credentials: true
 // server.js
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN?.split(',') || 'http://localhost:5173',
+    origin: process.env.CORS_ORIGIN?.split(',') || 'http://localhost:3002',
     credentials: true,
     optionsSuccessStatus: 200,
   })
@@ -779,7 +779,7 @@ app.use(
 **Signup:**
 
 ```bash
-curl -X POST http://localhost:5173/api/auth/signup \
+curl -X POST http://localhost:3002/api/auth/signup \
   -H "Content-Type: application/json" \
   -d '{
     "email": "user@example.com",
@@ -791,7 +791,7 @@ curl -X POST http://localhost:5173/api/auth/signup \
 **Signin:**
 
 ```bash
-curl -X POST http://localhost:5173/api/auth/signin \
+curl -X POST http://localhost:3002/api/auth/signin \
   -H "Content-Type: application/json" \
   -d '{
     "email": "user@example.com",
@@ -802,7 +802,7 @@ curl -X POST http://localhost:5173/api/auth/signin \
 **Verify Code:**
 
 ```bash
-curl -X POST http://localhost:5173/api/auth/verify-code \
+curl -X POST http://localhost:3002/api/auth/verify-code \
   -H "Content-Type: application/json" \
   -H "Cookie: connect.sid=your_session_id" \
   -d '{
@@ -814,14 +814,14 @@ curl -X POST http://localhost:5173/api/auth/verify-code \
 **Get Current User:**
 
 ```bash
-curl -X GET http://localhost:5173/api/auth/me \
+curl -X GET http://localhost:3002/api/auth/me \
   -H "Cookie: connect.sid=your_session_id"
 ```
 
 **Signout:**
 
 ```bash
-curl -X POST http://localhost:5173/api/auth/signout \
+curl -X POST http://localhost:3002/api/auth/signout \
   -H "Cookie: connect.sid=your_session_id"
 ```
 
@@ -863,7 +863,7 @@ if (verifyResponse.ok) {
 ### Using Postman
 
 1. **Create Environment Variables:**
-   - `base_url`: http://localhost:5173
+   - `base_url`: http://localhost:3002
    - `session_id`: (will be filled from response)
 
 2. **Signup Request:**

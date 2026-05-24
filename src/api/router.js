@@ -1,3 +1,4 @@
+import express from 'express';
 import { rateLimit } from 'express-rate-limit';
 import { setMiddlewareDb } from './middleware.js';
 import { setupMeRoute } from './auth/me.js';
@@ -34,34 +35,38 @@ const authLimiter = createLimiter(10);
 const accountLimiter = createLimiter(20);
 const contactLimiter = createLimiter(3);
 
-export function registerApiRoutes(app, db) {
+export function createApiRouter(db) {
   setMiddlewareDb(db);
 
-  app.use('/api/auth/signup', signupLimiter);
-  app.use('/api/auth/signin', authLimiter);
-  app.use('/api/auth/verify-code', authLimiter);
-  app.use('/api/auth/resend-code', authLimiter);
-  app.use('/api/auth/forgot-password', authLimiter);
-  app.use('/api/auth/reset-password', authLimiter);
-  app.use('/api/auth/change-email', accountLimiter);
-  app.use('/api/auth/verify-email-change', accountLimiter);
-  app.use('/api/auth/change-password', accountLimiter);
-  app.use('/api/contact', contactLimiter);
+  const router = express.Router();
 
-  setupMeRoute(app, db);
-  setupSignupRoute(app, db);
-  setupSigninRoute(app, db);
-  setupSignoutRoute(app, db);
-  setupVerifyCodeRoute(app, db);
-  setupResendCodeRoute(app, db);
-  setupChangePasswordRoute(app, db);
-  setupChangeEmailRoute(app, db);
-  setupForgotPasswordRoute(app, db);
-  setupResetPasswordRoute(app, db);
-  setupUpdateProfileRoute(app, db);
-  setupAvatarRoute(app, db);
+  router.use('/api/auth/signup', signupLimiter);
+  router.use('/api/auth/signin', authLimiter);
+  router.use('/api/auth/verify-code', authLimiter);
+  router.use('/api/auth/resend-code', authLimiter);
+  router.use('/api/auth/forgot-password', authLimiter);
+  router.use('/api/auth/reset-password', authLimiter);
+  router.use('/api/auth/change-email', accountLimiter);
+  router.use('/api/auth/verify-email-change', accountLimiter);
+  router.use('/api/auth/change-password', accountLimiter);
+  router.use('/api/contact', contactLimiter);
 
-  setupAdminUsersRoutes(app, db);
-  setupAdminLogsRoute(app, db);
-  setupContactRoute(app, db);
+  setupMeRoute(router, db);
+  setupSignupRoute(router, db);
+  setupSigninRoute(router, db);
+  setupSignoutRoute(router, db);
+  setupVerifyCodeRoute(router, db);
+  setupResendCodeRoute(router, db);
+  setupChangePasswordRoute(router, db);
+  setupChangeEmailRoute(router, db);
+  setupForgotPasswordRoute(router, db);
+  setupResetPasswordRoute(router, db);
+  setupUpdateProfileRoute(router, db);
+  setupAvatarRoute(router, db);
+
+  setupAdminUsersRoutes(router, db);
+  setupAdminLogsRoute(router, db);
+  setupContactRoute(router, db);
+
+  return router;
 }
