@@ -209,8 +209,8 @@ cp .env.example .env
 Edit `.env` with your settings:
 
 ```env
-NODE_PORT=5173
-NODE_HOST=http://localhost:5173
+NODE_PORT=3002
+NODE_HOST=http://localhost:3002
 
 # MongoDB Database
 MONGO_DB=app
@@ -268,7 +268,7 @@ docker-compose up -d
 
 Services will be available at:
 
-- Application: http://localhost:5173
+- Application: http://localhost:3002
 - MongoDB: localhost:27017
 
 ## ⚙️ Configuration
@@ -280,8 +280,8 @@ Services will be available at:
 NODE_ENV=development|production
 
 # Node.js Server
-NODE_PORT=5173                    # Server port
-NODE_HOST=http://localhost:5173   # Base server URL
+NODE_PORT=3002                    # Server port
+NODE_HOST=http://localhost:3002   # Base server URL
 
 # MongoDB
 MONGO_TYPE=mongodb                # Connection type
@@ -330,7 +330,7 @@ npm run dev
 # With Docker Compose
 docker-compose up
 
-# Application accessible at http://localhost:5173
+# Application accessible at http://localhost:3002
 ```
 
 ### Build for Production
@@ -874,7 +874,7 @@ db.users.createIndex({ email: 1 }, { unique: true });
 services:
   node:
     # Node.js server with Vite dev server
-    # Port: 5173
+    # Port: 3002
     # Volumes: Entire project (hot reload)
 
   mongo:
@@ -957,9 +957,9 @@ docker-compose exec mongo mongosh
 docker build -f docker/build/Dockerfile -t e-xode-vue-ssr:latest .
 
 # Test locally
-docker run -p 5173:5173 \
+docker run -p 3002:3002 \
   -e NODE_ENV=production \
-  -e NODE_PORT=5173 \
+  -e NODE_PORT=3002 \
   e-xode-vue-ssr:latest
 ```
 
@@ -1029,7 +1029,7 @@ COOKIE_SECRET=generate_strong_random_value_here
 
 ```nginx
 upstream app {
-    server localhost:5173;
+    server localhost:3002;
 }
 
 server {
@@ -1167,7 +1167,7 @@ sudo sysctl -p
 
 ```bash
 # Find process using port
-lsof -i :5173
+lsof -i :3002
 kill -9 <PID>
 
 # Or change port in .env

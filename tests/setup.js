@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 
 // Mock process.env for tests
 process.env.NODE_ENV = 'test';
-process.env.NODE_HOST = 'http://localhost:5173';
+process.env.NODE_HOST = 'http://localhost:3002';
 process.env.MAILER_HOST = 'smtp.test.com';
 process.env.MAILER_FROM = 'test@example.com';
 process.env.MAILER_LOGIN = 'test@example.com';

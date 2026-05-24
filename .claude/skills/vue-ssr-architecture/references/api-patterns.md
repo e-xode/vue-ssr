@@ -15,7 +15,14 @@ export function setupMyFeatureRoute(app, db) {
 }
 ```
 
-Register in `src/api/router.js`.
+Register it inside `createApiRouter(db)` in `src/api/router.js` — that factory builds and
+returns an `express.Router()` (rate limiters + every `setupXRoute(router, db)`). The
+handler shape above is unchanged: it receives the router in place of `app`.
+
+In dev the whole API layer hot-reloads through Vite's module graph: `server.js` mounts it
+via `vite.ssrLoadModule('/src/api/router.js')` per `/api` request, so editing any route
+takes effect on the next request with no process restart and the HMR socket intact. In
+prod the router is built once at startup.
 
 ## Endpoints inventory
 

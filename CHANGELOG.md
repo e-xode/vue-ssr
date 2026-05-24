@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+
+### Improvements
+
+- **Dev server** — API routes now hot-reload in dev: `src/api/router.js` exports a `createApiRouter(db)` factory mounted through Vite's module graph (`vite.ssrLoadModule`), so editing any `src/api/**` route takes effect on the next request with no process restart and the HMR socket left intact. The Vite HMR websocket now shares the app port (dedicated port `24678` removed from `docker-compose.yml` and the dev Dockerfile), and `npm run dev` uses Node's built-in `--watch` scoped to `server.js` only (no nodemon) to restart on infrastructure changes. New `#src` Vite alias so the API/server modules resolve under SSR.
+- **Default port** — aligned the default dev port to `3002` (matching `.env.example`): the `NODE_PORT` fallback in `server.js`/`entry-server.js` and all documentation now use `3002` instead of the stale Vite `5173`.
+
 ## 5.0.0
 
 ### Package Updates

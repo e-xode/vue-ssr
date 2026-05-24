@@ -101,7 +101,7 @@ body:
       placeholder: |
         npm run dev
         > node server.js
-        [APP] Server running on port 5173
+        [APP] Server running on port 3002
         [APP] MongoDB connected
         [ERROR] Unexpected token in JSON
 

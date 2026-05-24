@@ -83,7 +83,7 @@ Créer `.env.production`:
 ```bash
 # Node
 NODE_ENV=production
-PORT=5173
+PORT=3002
 
 # MongoDB
 MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/database
@@ -224,7 +224,7 @@ services:
       COOKIE_SECRET: ${COOKIE_SECRET}
       # ... other env vars
     ports:
-      - '5173:5173'
+      - '3002:3002'
     volumes:
       - ./logs:/app/logs
       - ./public:/app/public # For uploads if needed
@@ -234,7 +234,7 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://localhost:5173/']
+      test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://localhost:3002/']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -429,7 +429,7 @@ sudo systemctl enable nginx
 ```nginx
 # /etc/nginx/sites-available/app
 upstream app {
-  server 127.0.0.1:5173;
+  server 127.0.0.1:3002;
 }
 
 server {
@@ -587,7 +587,7 @@ app.get('/health', (req, res) => {
 // Docker healthcheck
 // docker-compose.yml
 healthcheck:
-  test: ["CMD", "curl", "-f", "http://localhost:5173/health"]
+  test: ["CMD", "curl", "-f", "http://localhost:3002/health"]
   interval: 30s
   timeout: 10s
   retries: 3

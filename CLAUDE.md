@@ -95,26 +95,26 @@ This file loads every turn. Budget: ≤ 10 KB / ~2500 tokens. Knowledge → skil
 
 Skills load on demand by description matching. This index aids discovery.
 
-| Skill                     | Triggers on                                                                                              |
-| ------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `vue-ssr-architecture`    | App architecture, file structure, routing, SSR lifecycle, shared utils, Vuetify, env vars                |
-| `vue-ssr-auth`            | Auth flow, security codes, sessions, rate limiting, captcha                                              |
-| `vue-ssr-deployment`      | Docker, GitHub Actions CI/CD, production config, graceful shutdown                                       |
-| `vue-ssr-hooks`           | Post-task validation, hook scripts, format/lint/test battery                                             |
-| `claude-anthropic`        | Claude config rules + audit; Anthropic doctrine. Co-load with skill-creator                              |
-| `skill-creator`           | Authoring/editing skills (workflow, eval, iterate)                                                       |
-| `starter-kit-adapt`       | Post-fork/clone adaptation, customizing Claude config for new project                                    |
-| `translate`               | i18n, translations, locale keys, vue-i18n usage, locale parity                                           |
-| `vue3-composition`        | Vue 3 Composition API, reactivity, composables, lifecycle, script setup, watchers                        |
-| `vue3-components`         | Vue 3 component design: props, events, slots, provide/inject, dynamic/async components                   |
-| `vue3-templates`          | Vue 3 template syntax: directives, list/conditional rendering, bindings, native v-model                  |
-| `vue3-builtin-components` | Vue 3 built-ins: Teleport, Suspense, KeepAlive, Transition, TransitionGroup                              |
-| `vue3-reusability`        | Vue 3 custom directives and plugins (composables → vue3-composition)                                     |
-| `vue3-performance`        | Vue 3 perf: shallowRef/markRaw, v-memo/v-once, async components, SSR perf                                |
-| `design-ux`               | UI quality, design decisions, visual hierarchy, accessibility, responsive UX, micro-interactions         |
-| `design-scss`             | SCSS design system: tokens, mixins, animations, utilities, component-scoped patterns                     |
-| `vue-ssr-design`          | Design delegation routing, when to use design agent, mixed-task splitting, starter-kit design philosophy |
-| `vuetify-components`      | Vuetify 4 components, forms, data tables, icons, theming, dialogs, navigation                            |
+| Skill                     | Triggers on                                                                                               |
+| ------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `vue-ssr-architecture`    | App architecture, file structure, routing, SSR lifecycle, shared utils, Vuetify, env vars                 |
+| `vue-ssr-auth`            | Auth flow, security codes, sessions, rate limiting, captcha                                               |
+| `vue-ssr-deployment`      | Docker, GitHub Actions CI/CD, production config, graceful shutdown                                        |
+| `vue-ssr-hooks`           | Post-task validation, hook scripts, format/lint/test battery                                              |
+| `claude-anthropic`        | Claude config rules + audit; Anthropic doctrine. Co-load with skill-creator                               |
+| `skill-creator`           | Authoring/editing skills (workflow, eval, iterate)                                                        |
+| `starter-kit-adapt`       | Post-fork/clone adaptation, customizing Claude config for new project                                     |
+| `translate`               | i18n, translations, locale keys, vue-i18n usage, locale parity                                            |
+| `vue3-composition`        | Vue 3 Composition API, reactivity, composables, lifecycle, script setup, watchers                         |
+| `vue3-components`         | Vue 3 component design: props, events, slots, provide/inject, dynamic/async components                    |
+| `vue3-templates`          | Vue 3 template syntax: directives, list/conditional rendering, bindings, native v-model                   |
+| `vue3-builtin-components` | Vue 3 built-ins: Teleport, Suspense, KeepAlive, Transition, TransitionGroup                               |
+| `vue3-reusability`        | Vue 3 custom directives and plugins (composables → vue3-composition)                                      |
+| `vue3-performance`        | Vue 3 perf: shallowRef/markRaw, v-memo/v-once, async components, SSR perf                                 |
+| `design-ux`               | UI quality, design decisions, visual hierarchy, accessibility, responsive UX, micro-interactions          |
+| `design-scss`             | SCSS design system: tokens, mixins, animations, utilities, component-scoped patterns                      |
+| `vue-ssr-design`          | Design delegation routing, when to use design agent, mixed-task splitting, starter-kit design philosophy  |
+| `vuetify-components`      | Vuetify 4 components, forms, data tables, icons, theming, dialogs, navigation                             |
 | `frontend-design`         | Greenfield/standalone distinctive UI (non-kit); in-kit UI → design agent + design-scss/vuetify-components |
-| `review`                  | Code review of branch / PR / diff                                                                        |
-| `vue-ssr-release`         | Release workflow, version bump, CHANGELOG generation, release branch                                     |
+| `review`                  | Code review of branch / PR / diff                                                                         |
+| `vue-ssr-release`         | Release workflow, version bump, CHANGELOG generation, release branch                                      |

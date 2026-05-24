@@ -27,8 +27,8 @@ cp .env.example .env
 Edit `.env` with your settings (or leave defaults for dev):
 
 ```env
-NODE_PORT=5173
-NODE_HOST=http://localhost:5173
+NODE_PORT=3002
+NODE_HOST=http://localhost:3002
 MONGO_HOST=localhost:27017
 MONGO_DB=app
 MONGO_USER=root
@@ -57,7 +57,7 @@ docker-compose up mongo
 npm run dev
 ```
 
-✅ Application accessible at: **http://localhost:5173**
+✅ Application accessible at: **http://localhost:3002**
 
 ---
 
@@ -115,7 +115,7 @@ docker-compose logs -f node
 docker-compose logs mongo
 ```
 
-✅ Application accessible at: **http://localhost:5173**
+✅ Application accessible at: **http://localhost:3002**
 
 ---
 
@@ -123,7 +123,7 @@ docker-compose logs mongo
 
 ### 1. Go to signup page
 
-Visit: http://localhost:5173/signup
+Visit: http://localhost:3002/signup
 
 ### 2. Sign up
 
@@ -237,11 +237,11 @@ src/
 
 ## Common Issues
 
-### ❌ "Port 5173 already in use"
+### ❌ "Port 3002 already in use"
 
 ```bash
 # Kill the process
-lsof -i :5173
+lsof -i :3002
 kill -9 <PID>
 
 # Or change the port

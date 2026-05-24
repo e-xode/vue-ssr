@@ -52,6 +52,5 @@ RUN mkdir /home/node/.npm-global
 RUN npm install -g npm@latest
 
 EXPOSE $NODE_PORT
-EXPOSE 24678
 
 CMD ["/bin/sh", "/scripts/run.sh"]

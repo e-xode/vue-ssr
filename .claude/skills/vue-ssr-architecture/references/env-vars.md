@@ -3,12 +3,12 @@
 ```
 MONGO_URI=mongodb://localhost:27017
 DB_NAME=vue-ssr
-NODE_HOST=http://localhost:5173
+NODE_HOST=http://localhost:3002
 APP_NAME=vue-ssr
 COOKIE_SECRET=your-secret              # MUST be set in production
 MAIL_HOST, MAIL_PORT, MAIL_USER, MAIL_PASS, MAIL_FROM
 CONTACT_EMAIL=contact@example.com
-CORS_ORIGIN=http://localhost:5173
+CORS_ORIGIN=http://localhost:3002
 GA_MEASUREMENT_ID=G-XXXXXXXXXX         # Google Analytics 4 measurement ID
 RECAPTCHA_SITE_KEY=6Le...              # reCAPTCHA v3 site key (client)
 RECAPTCHA_SECRET_KEY=6Le...            # reCAPTCHA v3 secret key (server)

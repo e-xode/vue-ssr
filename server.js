@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import http from 'node:http';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -7,7 +8,6 @@ import session from 'express-session';
 import sessionFileStore from 'session-file-store';
 import { logInfo, logWarn } from '#src/shared/log.js';
 import { mongoConnect, mongoClose } from '#src/shared/mongo.js';
-import { registerApiRoutes } from '#src/api/router.js';
 import { LOCALE_CODES } from '#src/shared/const.js';
 import { parseThemeCookie } from '#src/shared/theme.js';
 
@@ -23,7 +23,7 @@ if (db && !error) {
   await ensureIndexes(db);
 
   const isProduction = process.env.NODE_ENV === 'production';
-  const port = process.env.NODE_PORT || 5173;
+  const port = process.env.NODE_PORT || 3002;
   const base = process.env.BASE || '/';
   const templateHtml = isProduction ? await fs.readFile('./dist/client/index.html', 'utf-8') : '';
 
@@ -61,6 +61,7 @@ if (db && !error) {
 
   const app = express();
   app.set('trust proxy', 1);
+  const httpServer = http.createServer(app);
 
   const recaptchaSrc = ['https://www.google.com/recaptcha/', 'https://www.gstatic.com/recaptcha/'];
   const analyticsSrc = ['https://www.googletagmanager.com'];
@@ -232,18 +233,31 @@ Disallow: /*/admin/
 Sitemap: ${siteUrl}/sitemap.xml`);
   });
 
-  registerApiRoutes(app, db);
-
   let vite;
   if (!isProduction) {
     const { createServer } = await import('vite');
     vite = await createServer({
-      server: { middlewareMode: true },
+      server: { middlewareMode: true, hmr: { server: httpServer } },
       appType: 'custom',
       base,
     });
+
+    app.use(async (req, res, next) => {
+      if (!req.path.startsWith('/api')) return next();
+      try {
+        const { createApiRouter } = await vite.ssrLoadModule('/src/api/router.js');
+        return createApiRouter(db)(req, res, next);
+      } catch (err) {
+        vite.ssrFixStacktrace(err);
+        return next(err);
+      }
+    });
+
     app.use(vite.middlewares);
   } else {
+    const { createApiRouter } = await import('#src/api/router.js');
+    app.use(createApiRouter(db));
+
     const compression = (await import('compression')).default;
     const sirv = (await import('sirv')).default;
     app.use(compression());
@@ -293,10 +307,10 @@ Sitemap: ${siteUrl}/sitemap.xml`);
     }
   });
 
-  const server = app.listen(port, () => {
+  httpServer.listen(port, () => {
     logInfo(`Server started at http://localhost:${port}`);
   });
-  server.on('error', (err) => {
+  httpServer.on('error', (err) => {
     if (err.code === 'EADDRINUSE') {
       logWarn(`Port ${port} already in use`);
     } else {

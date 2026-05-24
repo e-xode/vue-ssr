@@ -60,7 +60,7 @@ docker run -d -p 27017:27017 \
 # 4. Lancer le serveur dev
 npm run dev
 
-# 5. Ouvrir http://localhost:5173
+# 5. Ouvrir http://localhost:3002
 ```
 
 ## 📝 Ajouter une Nouvelle Page
@@ -391,12 +391,12 @@ export function setupMyRoute(app, db) {
 
 ```bash
 # Terminal
-curl -X POST http://localhost:5173/api/myfeature/create \
+curl -X POST http://localhost:3002/api/myfeature/create \
   -H "Content-Type: application/json" \
   -d '{"name":"Test"}'
 
 # Ou avec Postman/Insomnia
-POST http://localhost:5173/api/myfeature/create
+POST http://localhost:3002/api/myfeature/create
 Content-Type: application/json
 
 {"name":"Test"}
@@ -471,7 +471,7 @@ npm run build
 # Lancer production build
 npm run prod
 
-# Accéder à http://localhost:5173
+# Accéder à http://localhost:3002
 ```
 
 ### Préparation déploiement

@@ -23,7 +23,7 @@ export async function render(url, db, theme) {
 }
 
 function generateHead(route, locale, t, theme) {
-  const siteUrl = (process.env.NODE_HOST || 'http://localhost:5173').replace(/\/$/, '');
+  const siteUrl = (process.env.NODE_HOST || 'http://localhost:3002').replace(/\/$/, '');
   const appName = process.env.APP_NAME || 'App';
   const is404 = route.meta?.statusCode === 404;
   const canonical = `${siteUrl}${route.path}`;

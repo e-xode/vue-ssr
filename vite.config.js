@@ -21,6 +21,10 @@ export default defineConfig({
         find: '@root',
         replacement: resolve(__dirname),
       },
+      {
+        find: /^#src\//,
+        replacement: `${srcPath}/`,
+      },
     ],
   },
   build: {

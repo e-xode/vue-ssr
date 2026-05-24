@@ -2,7 +2,7 @@
 
 ```
 server.js                       # Express entry (SSR, Helmet, CSP, sessions, static, graceful shutdown, sitemap)
-vite.config.js                  # __APP_VERSION__, @root alias, SCSS auto-inject
+vite.config.js                  # __APP_VERSION__, @ / @root / #src aliases, SCSS auto-inject
 package.json                    # v3.0.2
 eslint.config.js                # Flat config ESLint 10
 vitest.config.js                # Vitest config
@@ -19,7 +19,7 @@ src/
   style.css                     # Global CSS reset
 
   api/
-    router.js                   # API route registration + rate limiters
+    router.js                   # exports createApiRouter(db) -> express.Router (rate limiters + routes)
     middleware.js               # requireAuth, requireAdmin middleware
     auth/                       # 12 auth endpoints (signup, signin, verify, etc.)
     contact/send.js             # POST /api/contact (rate limited 3/15min)
