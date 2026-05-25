@@ -1,6 +1,6 @@
 {
   "name": "@e-xode/vue-ssr",
-  "version": "5.0.0",
+  "version": "5.2.0",
   "description": "Vue 3 SSR Starter Kit with Authentication",
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## 5.2.0
 
 ### Improvements
 
@@ -10,6 +10,8 @@
 ### Security
 
 - Patched 4 dependency vulnerabilities (2 high, 2 moderate) via `npm audit fix` — `js-cookie` (per-instance prototype hijack / cookie-attribute injection), `path-to-regexp` (ReDoS via wildcards and optional groups), `qs` (DoS in `stringify`), `yaml` (stack overflow on deeply nested collections). Transitive updates, `package-lock.json` only.
+
+---
 
 ## 5.0.0
 
