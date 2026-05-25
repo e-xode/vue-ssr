@@ -1,3 +1,8 @@
+---
+name: vuetify-theming
+description: "Vuetify 4 theming for the Vue SSR Starter Kit: theme configuration (light/dark themes), theme tokens and CSS custom properties, dark-mode switching, per-component defaults via the defaults object, and Vuetify CSS utility classes. Trigger on: configuring or switching themes, dark mode, defining theme colors, the defaults provider, or Vuetify utility classes. Don't use for: choosing a color token by name or general component selection (→ vuetify-overview), SCSS design tokens/variables.scss (→ design-scss), component APIs (→ vuetify-components/forms/data/layout), icons (→ vuetify-icons)."
+---
+
 # Theming
 
 ## createVuetify theme configuration

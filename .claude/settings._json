@@ -44,6 +44,15 @@
         "hooks": [
           {
             "type": "command",
+            "command": ".claude/hooks/scripts/build/build.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
             "command": ".claude/hooks/scripts/test/test.sh"
           }
         ]

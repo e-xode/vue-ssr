@@ -1,95 +1,162 @@
 ---
 name: vuetify-components
-description: "Vuetify 4 (Material Design 3) component reference for the Vue SSR Starter Kit: component selection decision tree, project defaults (rounded, variants, density), color palette (primary/secondary/accent), @mdi/js icon patterns, form building with validation rules, v-data-table server-side pagination, navigation drawers/tabs, feedback dialogs/snackbars/alerts, theming (light/dark), SSR-safe Vuetify instantiation. Trigger on any Vuetify component question, form building, data table, dialog, snackbar, icon, theming, color, component props, layout, or Material Design 3 usage. The design agent loads this for component decisions. Don't use for: file structure/routing (→ vue-ssr-architecture), auth/sessions (→ vue-ssr-auth), SCSS tokens (→ design-scss), Docker/CI (→ vue-ssr-deployment), validation (→ vue-ssr-hooks), design routing (→ vue-ssr-design)."
+description: "Vuetify 4 general display and feedback components for the Vue SSR Starter Kit: containers and content (v-card, v-list/v-list-item, v-chip, v-avatar), overlays and feedback (v-dialog with reusable confirm-dialog pattern, v-snackbar toasts, v-alert, v-tooltip), and loading indicators (v-progress-linear, v-progress-circular, v-skeleton-loader). Trigger on: building cards, lists, chips, avatars, dialogs/modals, snackbars, alerts, tooltips, progress, or skeleton loaders. Don't use for: form inputs (→ vuetify-forms), data tables/pagination (→ vuetify-data), app shell/navigation/tabs (→ vuetify-layout), component selection overview and defaults (→ vuetify-overview), theming (→ vuetify-theming), icons (→ vuetify-icons), Vue-level Teleport/Suspense/Transition (→ vue3-builtin-components)."
 ---
 
-# Vuetify Components
+# Display and Feedback Components
 
-> Owns all Vuetify 4 component usage knowledge: selection, configuration, patterns, theming, and SSR integration.
+## v-card
 
-## Component selection decision tree
+Container component for grouped content. Project defaults: `rounded="xl"`, `elevation="0"`, `border: true`.
 
-| UI need            | Component                                   | Notes                                     |
-| ------------------ | ------------------------------------------- | ----------------------------------------- |
-| Text input         | `v-text-field`                              | outlined, comfortable density, rounded lg |
-| Dropdown           | `v-select`                                  | same defaults as text-field               |
-| Toggle             | `v-switch`                                  | primary color, inset                      |
-| Action button      | `v-btn`                                     | flat variant, rounded lg                  |
-| Card container     | `v-card`                                    | rounded xl, no elevation, border          |
-| Data grid          | `v-data-table`                              | server-side pagination preferred          |
-| Navigation list    | `v-list` + `v-list-item`                    | with prepend icons                        |
-| Tag/badge          | `v-chip`                                    | rounded lg                                |
-| Modal              | `v-dialog`                                  | max-width, persistent for forms           |
-| Toast notification | `v-snackbar`                                | location bottom, timeout 4000             |
-| Inline message     | `v-alert`                                   | tonal variant, rounded lg                 |
-| Hover info         | `v-tooltip`                                 | location bottom                           |
-| Top bar            | `v-app-bar`                                 | flat, density comfortable                 |
-| Side menu          | `v-navigation-drawer`                       | temporary on mobile, rail on desktop      |
-| Context menu       | `v-menu`                                    | activator slot pattern                    |
-| Tab navigation     | `v-tabs` + `v-tabs-window`                  | with v-tab items                          |
-| Loading state      | `v-progress-linear` / `v-progress-circular` | indeterminate                             |
-| Skeleton           | `v-skeleton-loader`                         | type: card, list-item, article            |
-| Grid layout        | `v-container` + `v-row` + `v-col`           | 12-column grid                            |
+### Structure
 
-## Project defaults
-
-The project configures global defaults in `src/plugins/vuetify.js`:
-
-```javascript
-defaults: {
-  VBtn: { variant: 'flat', rounded: 'lg' },
-  VCard: { rounded: 'xl', elevation: 0, border: true },
-  VTextField: { variant: 'outlined', density: 'comfortable', rounded: 'lg' },
-  VSelect: { variant: 'outlined', density: 'comfortable', rounded: 'lg' },
-  VSwitch: { color: 'primary', inset: true },
-  VChip: { rounded: 'lg' },
-  VAlert: { rounded: 'lg', variant: 'tonal' },
-  VTooltip: { location: 'bottom' }
-}
+```vue
+<v-card>
+  <template #prepend>
+    <v-icon :icon="mdiAccount" color="primary" />
+  </template>
+  <template #title>{{ t('card.title') }}</template>
+  <template #subtitle>{{ t('card.subtitle') }}</template>
+  <template #text>
+    <p>{{ t('card.content') }}</p>
+  </template>
+  <template #actions>
+    <v-spacer />
+    <v-btn color="primary">{{ t('actions.save') }}</v-btn>
+  </template>
+</v-card>
 ```
 
-These apply globally. Override per-instance when needed (e.g. `<v-btn variant="outlined">`).
+### Key props
 
-## Color system
+| Prop       | Type          | Description                     |
+| ---------- | ------------- | ------------------------------- |
+| `title`    | string        | Card title (or use #title slot) |
+| `subtitle` | string        | Subtitle text                   |
+| `text`     | string        | Body text                       |
+| `color`    | string        | Background color                |
+| `variant`  | string        | flat, elevated, tonal, outlined |
+| `loading`  | boolean       | Shows progress bar at top       |
+| `hover`    | boolean       | Elevation on hover              |
+| `link`     | boolean       | Makes card clickable            |
+| `to`       | string/object | Router link destination         |
 
-| Token               | Value   | Use                                |
-| ------------------- | ------- | ---------------------------------- |
-| `primary`           | #2563eb | Main actions, links, active states |
-| `primary-darken-1`  | #1e40af | Hover states                       |
-| `primary-darken-2`  | #1e3a8a | Active/pressed states              |
-| `primary-lighten-1` | #60a5fa | Subtle backgrounds                 |
-| `primary-lighten-2` | #93c5fd | Very subtle backgrounds            |
-| `secondary`         | #7c3aed | Secondary actions                  |
-| `accent`            | #06b6d4 | Highlights, accents                |
-| `success`           | #00c853 | Success states                     |
-| `warning`           | #ff9800 | Warning states                     |
-| `error`             | #f44336 | Error states, destructive          |
-| `info`              | #2196f3 | Informational                      |
-| `surface`           | #ffffff | Card/sheet backgrounds             |
-| `background`        | #f8fafc | Page background                    |
+### Card with image
 
-Use semantic color names in components: `color="primary"`, `color="error"`, etc. Never hardcode hex values.
+```vue
+<v-card>
+  <v-img src="/path/to/image.jpg" height="200" cover />
+  <template #title>{{ title }}</template>
+  <template #text>{{ description }}</template>
+</v-card>
+```
 
-## Icon usage
+## v-list + v-list-item
 
-The project uses `@mdi/js` for tree-shakeable SVG icons:
+Navigation and action lists.
+
+### Navigation list
 
 ```vue
 <script setup>
-import { mdiAccount, mdiEmail, mdiLock } from '@mdi/js';
+import { mdiHome, mdiAccount, mdiCog } from '@mdi/js';
+import { useI18n } from 'vue-i18n';
+import { useLocalePath } from '@/composables/useLocalePath';
+
+const { t } = useI18n();
+const localePath = useLocalePath();
+
+const navItems = [
+  { icon: mdiHome, title: t('nav.home'), to: localePath('/') },
+  { icon: mdiAccount, title: t('nav.profile'), to: localePath('/profile') },
+  { icon: mdiCog, title: t('nav.settings'), to: localePath('/settings') },
+];
 </script>
 <template>
-  <v-icon :icon="mdiAccount" />
-  <v-btn :prepend-icon="mdiEmail">Send</v-btn>
-  <v-text-field :append-inner-icon="mdiLock" />
+  <v-list nav>
+    <v-list-item
+      v-for="item in navItems"
+      :key="item.to"
+      :prepend-icon="item.icon"
+      :title="item.title"
+      :to="item.to"
+      rounded="lg"
+    />
+  </v-list>
 </template>
 ```
 
-Never use icon font classes (`mdi-account`). Always import from `@mdi/js`.
+### Action list with subtitles
 
-See [references/icons.md](./references/icons.md) for the full icon catalog.
+```vue
+<v-list lines="two">
+  <v-list-item
+    v-for="user in users"
+    :key="user._id"
+    :title="user.name"
+    :subtitle="user.email"
+  >
+    <template #prepend>
+      <v-avatar color="primary">
+        <span>{{ user.name.charAt(0) }}</span>
+      </v-avatar>
+    </template>
+    <template #append>
+      <v-btn :icon="mdiChevronRight" variant="text" size="small" />
+    </template>
+  </v-list-item>
+</v-list>
+```
 
-## Form pattern
+## v-chip
+
+Tag/badge component. Project default: `rounded="lg"`.
+
+### Variants
+
+```vue
+<v-chip color="primary">Default (tonal implied)</v-chip>
+<v-chip color="success" variant="flat">Flat</v-chip>
+<v-chip color="error" variant="outlined">Outlined</v-chip>
+<v-chip closable @click:close="remove()">Closable</v-chip>
+<v-chip size="small" :prepend-icon="mdiTag">With icon</v-chip>
+```
+
+### Status chip pattern
+
+```vue
+<script setup>
+const statusColors = {
+  active: 'success',
+  pending: 'warning',
+  inactive: 'error',
+  draft: 'grey',
+};
+</script>
+<template>
+  <v-chip :color="statusColors[item.status]" size="small">
+    {{ t(`status.${item.status}`) }}
+  </v-chip>
+</template>
+```
+
+## v-avatar
+
+User avatar with image, icon, or initials.
+
+```vue
+<v-avatar size="40" color="primary">
+  <v-img v-if="user.avatar" :src="user.avatar" />
+  <span v-else>{{ user.name.charAt(0).toUpperCase() }}</span>
+</v-avatar>
+```
+
+## v-dialog
+
+Modal dialog overlay.
+
+### Standard dialog pattern
 
 ```vue
 <script setup>
@@ -97,72 +164,286 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
-const form = ref(null);
-const email = ref('');
-
-const rules = {
-  required: (v) => !!v || t('validation.required'),
-  email: (v) => /.+@.+\..+/.test(v) || t('validation.email'),
-};
-
-async function submit() {
-  const { valid } = await form.value.validate();
-  if (!valid) return;
-}
+const dialog = ref(false);
 </script>
 <template>
-  <v-form ref="form" @submit.prevent="submit">
-    <v-text-field v-model="email" :rules="[rules.required, rules.email]" />
-    <v-btn type="submit" color="primary">{{ t('actions.submit') }}</v-btn>
-  </v-form>
+  <v-btn color="primary" @click="dialog = true">
+    {{ t('actions.open') }}
+  </v-btn>
+
+  <v-dialog v-model="dialog" max-width="500">
+    <v-card>
+      <template #title>{{ t('dialog.title') }}</template>
+      <template #text>
+        <p>{{ t('dialog.content') }}</p>
+      </template>
+      <template #actions>
+        <v-spacer />
+        <v-btn variant="text" @click="dialog = false">
+          {{ t('actions.cancel') }}
+        </v-btn>
+        <v-btn color="primary" @click="confirm()">
+          {{ t('actions.confirm') }}
+        </v-btn>
+      </template>
+    </v-card>
+  </v-dialog>
 </template>
 ```
 
-See [references/form-components.md](./references/form-components.md) for detailed form patterns.
+### Key props
 
-## SSR integration
+| Prop         | Type          | Description                        |
+| ------------ | ------------- | ---------------------------------- |
+| `v-model`    | boolean       | Show/hide                          |
+| `max-width`  | number/string | Maximum dialog width               |
+| `persistent` | boolean       | Cannot dismiss by clicking outside |
+| `fullscreen` | boolean       | Full-screen dialog                 |
+| `scrollable` | boolean       | Scrollable content area            |
+| `transition` | string        | Open/close animation               |
 
-Vuetify must be instantiated with the `ssr` flag on the server:
-
-```javascript
-import { createApplicationVuetify } from '@/plugins/vuetify';
-
-const vuetify = createApplicationVuetify(true);
-app.use(vuetify);
-```
-
-On the client, pass `false` (or omit):
-
-```javascript
-const vuetify = createApplicationVuetify(false);
-```
-
-This ensures hydration works correctly. The SSR flag disables client-only features during server rendering.
-
-## Responsive patterns
-
-Use Vuetify's display composable for breakpoint-aware behavior:
+### Confirm dialog pattern (reusable composable)
 
 ```vue
 <script setup>
-import { useDisplay } from 'vuetify';
+import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { mdiAlert } from '@mdi/js';
 
-const { mobile, mdAndUp } = useDisplay();
+const { t } = useI18n();
+const show = ref(false);
+const resolvePromise = ref(null);
+const title = ref('');
+const message = ref('');
+const confirmColor = ref('primary');
+
+function open(options) {
+  title.value = options.title;
+  message.value = options.message;
+  confirmColor.value = options.color || 'primary';
+  show.value = true;
+  return new Promise((resolve) => {
+    resolvePromise.value = resolve;
+  });
+}
+
+function confirm() {
+  show.value = false;
+  resolvePromise.value(true);
+}
+
+function cancel() {
+  show.value = false;
+  resolvePromise.value(false);
+}
+
+defineExpose({ open });
 </script>
 <template>
-  <v-navigation-drawer :temporary="mobile" :rail="mdAndUp" />
+  <v-dialog v-model="show" max-width="400" persistent>
+    <v-card>
+      <template #prepend>
+        <v-icon :icon="mdiAlert" :color="confirmColor" />
+      </template>
+      <template #title>{{ title }}</template>
+      <template #text>{{ message }}</template>
+      <template #actions>
+        <v-spacer />
+        <v-btn variant="text" @click="cancel()">{{ t('actions.cancel') }}</v-btn>
+        <v-btn :color="confirmColor" @click="confirm()">{{ t('actions.confirm') }}</v-btn>
+      </template>
+    </v-card>
+  </v-dialog>
 </template>
 ```
 
-Breakpoints: xs (<600), sm (600-959), md (960-1279), lg (1280-1919), xl (1920+).
+Usage:
 
-## References
+```vue
+<script setup>
+const confirmDialog = ref(null);
 
-| File                                                  | Content                                                   |
-| ----------------------------------------------------- | --------------------------------------------------------- |
-| [form-components.md](./references/form-components.md) | Text fields, selects, switches, validation, form patterns |
-| [data-display.md](./references/data-display.md)       | Cards, data tables, lists, chips, avatars, pagination     |
-| [navigation.md](./references/navigation.md)           | App bar, drawer, menu, tabs, breadcrumbs, responsive      |
-| [feedback.md](./references/feedback.md)               | Dialogs, snackbars, alerts, tooltips, progress, skeletons |
-| [theming.md](./references/theming.md)                 | Theme config, dark mode, defaults, CSS utilities          |
-| [icons.md](./references/icons.md)                     | MDI icon imports, common icons, aliases                   |
+async function handleDelete() {
+  const confirmed = await confirmDialog.value.open({
+    title: t('confirm.deleteTitle'),
+    message: t('confirm.deleteMessage'),
+    color: 'error',
+  });
+  if (confirmed) await deleteItem();
+}
+</script>
+<template>
+  <ConfirmDialog ref="confirmDialog" />
+</template>
+```
+
+## v-snackbar
+
+Toast notification.
+
+### Pattern with composable-like usage
+
+```vue
+<script setup>
+import { ref } from 'vue';
+
+const snackbar = ref(false);
+const snackbarText = ref('');
+const snackbarColor = ref('success');
+
+function showNotification(text, color = 'success') {
+  snackbarText.value = text;
+  snackbarColor.value = color;
+  snackbar.value = true;
+}
+</script>
+<template>
+  <v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="4000" location="bottom end">
+    {{ snackbarText }}
+    <template #actions>
+      <v-btn variant="text" @click="snackbar = false">
+        {{ t('actions.close') }}
+      </v-btn>
+    </template>
+  </v-snackbar>
+</template>
+```
+
+### Key props
+
+| Prop         | Type    | Description                         |
+| ------------ | ------- | ----------------------------------- |
+| `v-model`    | boolean | Show/hide                           |
+| `color`      | string  | Background color                    |
+| `timeout`    | number  | Auto-dismiss (ms), -1 for permanent |
+| `location`   | string  | Position (top, bottom + start/end)  |
+| `multi-line` | boolean | Taller for longer text              |
+| `vertical`   | boolean | Stack text and action               |
+
+## v-alert
+
+Inline messages. Project defaults: `rounded="lg"`, `variant="tonal"`.
+
+### Variants
+
+```vue
+<v-alert type="success">{{ t('alerts.saved') }}</v-alert>
+<v-alert type="info">{{ t('alerts.info') }}</v-alert>
+<v-alert type="warning">{{ t('alerts.warning') }}</v-alert>
+<v-alert type="error">{{ t('alerts.error') }}</v-alert>
+```
+
+### With title and closable
+
+```vue
+<v-alert type="warning" :title="t('alerts.warningTitle')" closable @click:close="dismissed = true">
+  {{ t('alerts.warningMessage') }}
+</v-alert>
+```
+
+### Key props
+
+| Prop        | Type         | Description                           |
+| ----------- | ------------ | ------------------------------------- |
+| `type`      | string       | success, info, warning, error         |
+| `variant`   | string       | tonal, flat, outlined, elevated, text |
+| `title`     | string       | Alert title                           |
+| `closable`  | boolean      | Show dismiss button                   |
+| `icon`      | string/false | Custom icon or disable icon           |
+| `prominent` | boolean      | Larger icon                           |
+| `border`    | string       | top, end, bottom, start               |
+
+## v-tooltip
+
+Hover information.
+
+```vue
+<v-tooltip :text="t('tooltips.edit')">
+  <template #activator="{ props }">
+    <v-btn :icon="mdiPencil" v-bind="props" variant="text" />
+  </template>
+</v-tooltip>
+```
+
+Short form (Vuetify 4):
+
+```vue
+<v-btn :icon="mdiPencil" v-tooltip="t('tooltips.edit')" />
+```
+
+### Key props
+
+| Prop          | Type   | Description                                    |
+| ------------- | ------ | ---------------------------------------------- |
+| `text`        | string | Tooltip content                                |
+| `location`    | string | Position (default: bottom from project config) |
+| `open-delay`  | number | Delay before showing (ms)                      |
+| `close-delay` | number | Delay before hiding (ms)                       |
+
+## v-progress-linear
+
+Horizontal progress bar.
+
+```vue
+<v-progress-linear indeterminate color="primary" />
+
+<v-progress-linear :model-value="progress" color="primary" height="6" rounded />
+```
+
+### In cards (loading state)
+
+```vue
+<v-card :loading="isLoading">
+  <template #loader="{ isActive }">
+    <v-progress-linear :active="isActive" indeterminate color="primary" height="3" />
+  </template>
+</v-card>
+```
+
+## v-progress-circular
+
+Circular spinner.
+
+```vue
+<v-progress-circular indeterminate color="primary" />
+
+<v-progress-circular :model-value="progress" :size="64" :width="6" color="primary">
+  {{ progress }}%
+</v-progress-circular>
+```
+
+### Overlay loading pattern
+
+```vue
+<v-overlay v-model="loading" contained class="d-flex align-center justify-center">
+  <v-progress-circular indeterminate color="primary" size="64" />
+</v-overlay>
+```
+
+## v-skeleton-loader
+
+Placeholder while content loads.
+
+### Type patterns
+
+```vue
+<v-skeleton-loader type="card" />
+<v-skeleton-loader type="list-item-avatar-two-line" />
+<v-skeleton-loader type="article" />
+<v-skeleton-loader type="table-heading, table-row-divider@3, table-row" />
+<v-skeleton-loader type="image, card-heading, text@2, actions" />
+```
+
+### Conditional loading pattern
+
+```vue
+<template>
+  <v-skeleton-loader v-if="loading" type="card-heading, list-item@5" />
+  <v-card v-else>
+    <template #title>{{ data.title }}</template>
+    <v-list>
+      <v-list-item v-for="item in data.items" :key="item._id" :title="item.name" />
+    </v-list>
+  </v-card>
+</template>
+```

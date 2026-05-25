@@ -1,0 +1,35 @@
+{
+  "skill_name": "vue-ssr-server",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-add-api-route",
+      "prompt": "How do I add a new Express API route in this project?",
+      "assertions": [
+        {
+          "text": "Describes the setupXRoute(app, db) module pattern, registering it in createApiRouter(db) in router.js, and the try/catch + console.error + 500 error shape"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "trigger-mongo-access",
+      "prompt": "How should a route query MongoDB and validate the id?",
+      "assertions": [
+        {
+          "text": "Explains using the injected db (mongoConnect singleton) and validating ids with parseObjectId from dbHelpers.js before an _id query"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "negative-auth-flow",
+      "prompt": "How does the email security-code verification flow work?",
+      "assertions": [
+        {
+          "text": "Does NOT trigger vue-ssr-server; auth flow specifics route to vue-ssr-auth instead"
+        }
+      ]
+    }
+  ]
+}

@@ -22,7 +22,7 @@ Before any visual modification, load and apply these skills:
 
 - **design-ux** — design-first thinking, visual hierarchy, spacing rhythm, color semantics, micro-interactions, accessibility, responsive UX
 - **design-scss** — SCSS tokens, mixins, animations, utilities, component-scoped patterns, responsive strategy
-- **vuetify-components** — Vuetify 4 component selection, forms, data tables, theming, icons, dialogs
+- **vuetify-** skills — Vuetify 4 components: vuetify-overview (selection + defaults), vuetify-layout, vuetify-forms, vuetify-data, vuetify-components (cards/dialogs/feedback), vuetify-theming, vuetify-icons
 
 Complementary skills when relevant:
 

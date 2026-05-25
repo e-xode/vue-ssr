@@ -1,0 +1,33 @@
+{
+  "skill_name": "vuetify-data",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-data-table-pagination",
+      "prompt": "Build an admin users table with server-side pagination, sorting, and edit/delete action buttons.",
+      "assertions": [
+        { "text": "Uses v-data-table-server (not client-side v-data-table)" },
+        { "text": "Defines a headers array with title, key, sortable properties" },
+        { "text": "Implements v-model:options and passes items-length for the total count" },
+        { "text": "Uses a custom #item.actions slot for edit/delete buttons" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "trigger-pagination-control",
+      "prompt": "How do I add standalone pagination controls computed from a total item count?",
+      "assertions": [
+        { "text": "Uses v-pagination with v-model and :length set to the total pages" },
+        { "text": "Computes totalPages from totalItems and itemsPerPage" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "negative-card-list",
+      "prompt": "Create a card that shows a skeleton loader while data loads then renders a list.",
+      "assertions": [
+        { "text": "Does NOT trigger vuetify-data; routes to vuetify-components instead" }
+      ]
+    }
+  ]
+}

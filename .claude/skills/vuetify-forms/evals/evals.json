@@ -1,0 +1,33 @@
+{
+  "skill_name": "vuetify-forms",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-login-form",
+      "prompt": "Create a login form with email and password fields, including validation and a submit button.",
+      "assertions": [
+        { "text": "Uses v-form with ref and @submit.prevent" },
+        { "text": "Includes validation rules (required, email format) returning t() i18n keys" },
+        { "text": "Calls form.value.validate() before submitting" },
+        { "text": "Uses v-text-field relying on project defaults (outlined, comfortable, rounded)" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "trigger-select-input",
+      "prompt": "Add a dropdown to select a user role from Admin, Editor, Viewer with object items.",
+      "assertions": [
+        { "text": "Uses v-select with :items and item-title / item-value" },
+        { "text": "Binds the selection via v-model" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "negative-data-table",
+      "prompt": "Build an admin users table with server-side pagination and sortable columns.",
+      "assertions": [
+        { "text": "Does NOT trigger vuetify-forms; routes to vuetify-data instead" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "skill_name": "vuetify-overview",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-which-component",
+      "prompt": "Which Vuetify component should I use for a toast notification, and what is the project default for buttons?",
+      "assertions": [
+        { "text": "Recommends v-snackbar for toast notifications" },
+        { "text": "States the project default for v-btn (flat variant, rounded lg)" },
+        { "text": "References the component selection decision tree" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "trigger-color-token-and-ssr",
+      "prompt": "What hex value is the primary color token, and how do I instantiate Vuetify for SSR vs the client?",
+      "assertions": [
+        { "text": "Identifies primary as #2563eb" },
+        { "text": "Uses createApplicationVuetify(true) on the server and createApplicationVuetify(false) on the client" },
+        { "text": "Explains the ssr flag ensures correct hydration" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "negative-form-validation",
+      "prompt": "Write me a login form with email validation rules and a submit handler.",
+      "assertions": [
+        { "text": "Does NOT trigger vuetify-overview; routes to vuetify-forms instead" }
+      ]
+    }
+  ]
+}

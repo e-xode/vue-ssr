@@ -1,0 +1,32 @@
+{
+  "skill_name": "vuetify-icons",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-icon-usage",
+      "prompt": "How do I add a search icon to a text field and a plus icon to a button in this project?",
+      "assertions": [
+        { "text": "Imports mdiMagnify and mdiPlus from @mdi/js" },
+        { "text": "Uses :prepend-inner-icon or :append-inner-icon for v-text-field and :prepend-icon or :icon for v-btn" },
+        { "text": "Does NOT use string class names like 'mdi-magnify'" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "trigger-find-icon",
+      "prompt": "Where do I find available icon names, and how does an icon name map to its import?",
+      "assertions": [
+        { "text": "Mentions https://pictogrammers.com/library/mdi/" },
+        { "text": "Explains the import is the camelCase name prefixed with mdi (e.g. account-circle -> mdiAccountCircle)" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "negative-theming-color",
+      "prompt": "How do I configure the light and dark theme colors for the app?",
+      "assertions": [
+        { "text": "Does NOT trigger vuetify-icons; routes to vuetify-theming instead" }
+      ]
+    }
+  ]
+}

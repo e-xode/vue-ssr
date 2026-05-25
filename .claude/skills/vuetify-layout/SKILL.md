@@ -1,4 +1,28 @@
+---
+name: vuetify-layout
+description: "Vuetify 4 layout and navigation for the Vue SSR Starter Kit: application shell (v-app, v-main), the 12-column grid (v-container/v-row/v-col), top bar (v-app-bar), side navigation (v-navigation-drawer with rail/temporary), context menus (v-menu), tab navigation (v-tabs + v-tabs-window), breadcrumbs, and responsive navigation. Trigger on: building the page shell, grid layout, app bar, navigation drawer, menus, tabs, breadcrumbs, or responsive navigation. Don't use for: which-component decision tree and useDisplay breakpoint basics (→ vuetify-overview), cards/dialogs/alerts (→ vuetify-components), forms (→ vuetify-forms), data tables (→ vuetify-data), theming (→ vuetify-theming), SCSS layout mixins like flex-center/respond-to (→ design-scss)."
+---
+
 # Navigation Components
+
+## Grid layout
+
+The 12-column grid uses `v-container` + `v-row` + `v-col`. `v-container` centers and pads content, `v-row` creates a flex row, and each `v-col` spans columns out of 12 (with responsive breakpoint props like `cols`, `sm`, `md`, `lg`):
+
+```vue
+<template>
+  <v-container>
+    <v-row>
+      <v-col cols="12" md="8">
+        <MainContent />
+      </v-col>
+      <v-col cols="12" md="4">
+        <Sidebar />
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+```
 
 ## v-app-bar
 

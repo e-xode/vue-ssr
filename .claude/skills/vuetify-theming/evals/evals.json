@@ -1,0 +1,32 @@
+{
+  "skill_name": "vuetify-theming",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-dark-mode-toggle",
+      "prompt": "How do I add a button that toggles between light and dark theme in the app?",
+      "assertions": [
+        { "text": "Uses useTheme() composable from vuetify" },
+        { "text": "Toggles theme.global.name.value between 'light' and 'dark'" },
+        { "text": "Notes the dark theme overrides surface/background/on-* colors" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "trigger-defaults-and-utilities",
+      "prompt": "How are per-component defaults configured in createVuetify, and which utility class sets margin to 16px on all sides?",
+      "assertions": [
+        { "text": "Explains defaults are defined in createVuetify({ defaults: {...} })" },
+        { "text": "States ma-4 produces margin 16px on all sides" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "negative-color-token-name",
+      "prompt": "Which color token name should I pass to color= for a destructive delete button?",
+      "assertions": [
+        { "text": "Does NOT trigger vuetify-theming; routes to vuetify-overview instead" }
+      ]
+    }
+  ]
+}

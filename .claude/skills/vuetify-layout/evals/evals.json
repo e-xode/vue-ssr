@@ -1,0 +1,31 @@
+{
+  "skill_name": "vuetify-layout",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-responsive-drawer",
+      "prompt": "Create a side navigation that is a temporary drawer on mobile and a rail on desktop.",
+      "assertions": [
+        { "text": "Uses v-navigation-drawer with :temporary and :rail bound to useDisplay's mobile" },
+        { "text": "Uses v-list with v-list-item for nav items" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "trigger-tabs",
+      "prompt": "Build a settings page with tabs for profile, security, and notifications.",
+      "assertions": [
+        { "text": "Uses v-tabs with v-tab items and v-tabs-window / v-tabs-window-item" },
+        { "text": "Binds the active tab via v-model" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "negative-card-dialog",
+      "prompt": "Make a reusable confirmation dialog for delete actions.",
+      "assertions": [
+        { "text": "Does NOT trigger vuetify-layout; routes to vuetify-components instead" }
+      ]
+    }
+  ]
+}

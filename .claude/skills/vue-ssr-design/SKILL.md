@@ -41,7 +41,7 @@ Delegate to the `design` agent when a task is **primarily** about visual output:
 │  • SCSS files (create/edit)                                │
 │  • Vuetify component selection and configuration           │
 │  • Template markup for visual structure                    │
-│  • Loads skills: design-ux, design-scss, vuetify-components│
+│  • Loads skills: design-ux, design-scss, vuetify-* family  │
 └───────────────────────────────────────────────────────────┘
 ```
 
@@ -51,7 +51,7 @@ Delegate to the `design` agent when a task is **primarily** about visual output:
 | -------------------------- | ---------------------------------------------------------------------------------- |
 | `design-ux` skill          | **Methodology** — principles, hierarchy, spacing rules, accessibility requirements |
 | `design-scss` skill        | **Implementation reference** — tokens, mixins, animation classes, file patterns    |
-| `vuetify-components` skill | **Component API** — which component for which need, props, patterns                |
+| `vuetify-*` skill family   | **Component API** — which component for which need, props, patterns; enter via `vuetify-overview`, then vuetify-layout/forms/data/components/theming/icons |
 | `design` agent             | **Executor** — applies skills to produce actual code changes                       |
 
 Skills are **knowledge**. The agent is the **worker** that uses that knowledge.
@@ -60,7 +60,7 @@ Skills are **knowledge**. The agent is the **worker** that uses that knowledge.
 
 1. **Design direction** (orchestrator) — define the goal, user story, expected outcome
 2. **Delegate to `design` agent** — provide context: what view/component, what the user wants, existing patterns to follow
-3. **Design agent produces** — SCSS file + template updates, following design-ux/design-scss/vuetify-components skills
+3. **Design agent produces** — SCSS file + template updates, following design-ux/design-scss and the vuetify-* skill family (enter via vuetify-overview)
 4. **Parallel: `vue` agent** — handles `<script setup>` logic, composables, store integration
 5. **Parallel: `translate` agent** — adds i18n keys for any new user-visible text
 6. **Integration** (orchestrator) — merge outputs if needed
@@ -109,4 +109,4 @@ When the design agent reports follow-ups or debt, categorize:
 - `.claude/agents/design.md` — the design agent's full contract and principles
 - `.claude/skills/design-ux/SKILL.md` — UX methodology and decision frameworks
 - `.claude/skills/design-scss/SKILL.md` — SCSS token and mixin reference
-- `.claude/skills/vuetify-components/SKILL.md` — Vuetify 4 component patterns
+- `.claude/skills/vuetify-overview/SKILL.md` — entry point for the vuetify-* skill family (vuetify-overview, vuetify-layout, vuetify-forms, vuetify-data, vuetify-components, vuetify-theming, vuetify-icons) covering Vuetify 4 component patterns

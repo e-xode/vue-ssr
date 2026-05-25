@@ -25,7 +25,7 @@ Before any Vue modification, consider whether these project skills apply:
 - **vue3-builtin-components** — Teleport, Suspense, KeepAlive, Transition/TransitionGroup
 - **vue3-reusability** — custom directives and plugins
 - **vue3-performance** — shallowRef/markRaw, v-memo/v-once, async components, SSR perf
-- **vuetify-components** — Vuetify 4 component selection, forms, data tables, icons, theming, dialogs
+- **vuetify-** skills — Vuetify 4 components: vuetify-overview (selection + defaults), vuetify-layout, vuetify-forms, vuetify-data, vuetify-components (cards/dialogs/feedback), vuetify-theming, vuetify-icons
 - **vue-ssr-architecture** — file structure, SSR lifecycle, routing, shared utilities, layout system
 
 ## SSR constraints

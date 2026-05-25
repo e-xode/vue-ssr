@@ -117,4 +117,5 @@ If issues are found, propose corrections to the user. **Never silently rewrite**
 | Hook events and current project status           | [references/hooks-reference.md](./references/hooks-reference.md)     |
 | Full audit checklist (auto + manual)             | [references/audit-checklist.md](./references/audit-checklist.md)     |
 | Known anti-patterns and corrections              | [references/antipatterns.md](./references/antipatterns.md)           |
+| Why a given config decision was made             | [references/case-studies.md](./references/case-studies.md)           |
 | Anthropic official documentation                 | [references/official-links.md](./references/official-links.md)       |

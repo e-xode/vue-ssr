@@ -1,4 +1,26 @@
+---
+name: vuetify-icons
+description: "Vuetify 4 iconography for the Vue SSR Starter Kit using @mdi/js tree-shakeable SVG icons: importing named icon paths (mdiAccount, mdiEmail, ...), binding via :icon / prepend-icon / append-inner-icon, the common-icon catalog, and why icon font classes (mdi-account) are forbidden. Trigger on: adding an icon, importing from @mdi/js, icon props on buttons/fields, or the icon catalog. Don't use for: component selection (→ vuetify-overview), theming (→ vuetify-theming), form/field APIs beyond the icon prop (→ vuetify-forms), SCSS (→ design-scss)."
+---
+
 # Icons
+
+## Icon usage
+
+The project uses `@mdi/js` for tree-shakeable SVG icons:
+
+```vue
+<script setup>
+import { mdiAccount, mdiEmail, mdiLock } from '@mdi/js';
+</script>
+<template>
+  <v-icon :icon="mdiAccount" />
+  <v-btn :prepend-icon="mdiEmail">Send</v-btn>
+  <v-text-field :append-inner-icon="mdiLock" />
+</template>
+```
+
+Never use icon font classes (`mdi-account`). Always import from `@mdi/js`.
 
 ## @mdi/js
 
