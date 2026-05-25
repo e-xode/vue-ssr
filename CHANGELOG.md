@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.2.1
+
+### Changed
+
+- **format step** — Prettier now runs in check-only mode (`prettier --check`) in the hooks pipeline; the format script no longer mutates files during validation. Added `format` and `format:check` npm scripts.
+
+---
+
 ## 5.2.0
 
 ### Improvements
