@@ -22,7 +22,7 @@ You receive a dirty-list (output of `git diff --name-only HEAD && git diff --nam
 2. **Run commands in order** (stop at first failure):
 
 ```bash
-npx prettier --write .
+npm run format:check
 npm run lint
 npm run build
 npm run test:run
