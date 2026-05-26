@@ -34,7 +34,7 @@
     "compression": "^1.8.1",
     "cors": "^2.8.6",
     "cross-env": "^10.1.0",
-    "dompurify": "^3.4.5",
+    "dompurify": "^3.4.6",
     "express": "^5.2.1",
     "express-rate-limit": "^8.5.2",
     "express-session": "^1.19.0",
