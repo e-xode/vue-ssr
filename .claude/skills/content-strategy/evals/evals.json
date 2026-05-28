@@ -1,0 +1,75 @@
+{
+  "skill_name": "content-strategy",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-linkedin-post",
+      "prompt": "Write me a LinkedIn post about the Vue SSR starter kit for solo developers",
+      "assertions": [
+        {
+          "text": "Loads content-strategy, reads references/content-inventory.md before drafting, pulls product facts from marketing-content, applies the LinkedIn post template from channel-playbooks.md, and produces both a French and an English version with zero arrow characters and one clear CTA"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "inventory-anti-duplication-and-followups",
+      "prompt": "Give me a few topic ideas for the next LinkedIn article about the kit",
+      "assertions": [
+        {
+          "text": "Reads content-inventory.md and editorial-backlog.md, avoids topics already published, and proposes at least one new idea (and a follow-up once published pieces exist)"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "daily-growth-seo-advisory",
+      "prompt": "What can I do today for growth and SEO?",
+      "assertions": [
+        {
+          "text": "Loads references/content-seo-bridge.md, consults the seo skill, inspects inventory/backlog gaps, FR/EN parity, README/storefront freshness and meta keyword coverage, and returns a prioritized actionable list with quick wins first and items to delegate"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "bilingual-completion",
+      "prompt": "I only have the French version of a post, make it complete",
+      "assertions": [
+        {
+          "text": "Produces a native-reading English version (not a literal translation), keeps tech names and numbers identical, saves it as <topic>-en.md alongside the FR file, and updates the content-inventory.md status from missing EN to bilingual"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "page-copy-routes-to-translate",
+      "prompt": "Rewrite the hero copy on the landing page to be punchier",
+      "assertions": [
+        {
+          "text": "Drafts the FR and EN copy applying tone-and-voice, but delegates the actual i18n key placement in src/translate/fr.json and en.json to the translate skill/agent rather than editing the JSON directly, and notes seo meta implications if meta keys change"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "updates-inventory-and-changelog",
+      "prompt": "Publish a new LinkedIn post announcing the kit's admin panel",
+      "assertions": [
+        {
+          "text": "After writing FR+EN files under src/assets/linkedin/posts/, adds a new row to content-inventory.md with a fresh ID and adds a CHANGELOG.md entry under ## [Unreleased]"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "anti-trigger-product-facts",
+      "prompt": "What is the kit's stack and which auth features ship in the box?",
+      "assertions": [
+        {
+          "text": "Does NOT treat this as an editorial task; pure product/stack/feature facts come from the marketing-content skill, not content-strategy"
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- **Dev server env** — `npm run dev` now loads `.env` natively via Node's `--env-file-if-exists=.env`, so the server boots without Docker. Inside Docker the Compose-injected environment still takes precedence (no double-load), and a missing `.env` is a no-op rather than a crash.
+
+---
+
 ## 5.2.1
 
 ### Changed

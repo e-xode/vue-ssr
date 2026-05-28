@@ -181,7 +181,7 @@ Match the existing project style:
 
 Triggered by the **Task completion protocol** in `CLAUDE.md` (step 5), not by a release. The orchestrator does this inline and silently — no version bump, no commit, no tag, no user prompt.
 
-**When to add an entry (curated):** the task produced a user-facing feature, bug fix, dependency change, or behavior/UI/i18n change. **Skip** pure reformatting, lockfile-only, `.claude/` config, test-only, and internal-docs changes.
+**When to add an entry (curated):** the task produced a user-facing feature, bug fix, behavior/UI/i18n change, or a **product/runtime** dependency change. **Skip** pure reformatting, lockfile-only, test-only, internal-docs, and anything whose **sole purpose is the Claude config** — `.claude/` files **and** `package.json` deps/scripts added only for `.claude/` tooling (judge by purpose, not file path; e.g. a `playwright` devDependency + `screenshots` script that exist only for the `visual-qa` agent are NOT logged). See the `CHANGELOG.md` path rule `.claude/rules/changelog.md`.
 
 **How:**
 

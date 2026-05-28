@@ -60,15 +60,17 @@ All spacing must be multiples of 4px. Never use arbitrary pixel values.
 
 ## Color semantics
 
-| Role      | Color              | Usage                                  |
-| --------- | ------------------ | -------------------------------------- |
-| Primary   | `#2563eb` (blue)   | CTAs, active states, links             |
-| Secondary | `#7c3aed` (purple) | Supporting actions, accents            |
-| Accent    | `#06b6d4` (cyan)   | Highlights, badges, data viz           |
-| Success   | green              | Confirmations, positive feedback       |
-| Error     | red                | Validation errors, destructive actions |
-| Warning   | amber              | Caution states, degraded features      |
-| Neutral   | gray scale         | Chrome, borders, disabled states       |
+Values reflect the live Vuetify theme in `src/plugins/vuetify.js` (light mode).
+
+| Role      | Color                    | Usage                                  |
+| --------- | ------------------------ | -------------------------------------- |
+| Primary   | `#4f46e5` (indigo)       | CTAs, active states, links, focus      |
+| Secondary | `#525252` (neutral gray) | Supporting actions, chrome             |
+| Accent    | `#4f46e5` (= primary)    | Highlights (alias of primary indigo)   |
+| Success   | `#16a34a` (green)        | Confirmations, positive feedback       |
+| Error     | `#dc2626` (red)          | Validation errors, destructive actions |
+| Warning   | `#d97706` (amber)        | Caution states, degraded features      |
+| Neutral   | gray scale               | Chrome, borders, disabled states       |
 
 Rules:
 
@@ -101,7 +103,7 @@ WCAG 2.1 AA is the minimum bar. Key requirements:
 - Color contrast ≥ 4.5:1 (normal text), ≥ 3:1 (large text/UI)
 - All interactive elements reachable by keyboard
 - Logical focus order matching visual layout
-- `prefers-reduced-motion` respected (project handles this globally)
+- `prefers-reduced-motion` respected — **no global handler exists** (the `_animations.scss` reset is not bundled); every animated component must add its own `@media (prefers-reduced-motion: reduce)` guard (➜ design-scss)
 - Touch targets ≥ 44x44px on mobile
 - All text (including aria-label, title, placeholder) via `t()` keys
 
@@ -135,14 +137,9 @@ The project's design tokens live in `src/styles/variables.scss`:
 - Shadows: sm, md, lg, xl (soft, layered)
 - Vuetify defaults: rounded `lg`/`xl`, flat variant, outlined inputs, tonal alerts
 
-Utility classes available:
+Live helpers (auto-injected mixins): `flex-center`, `flex-col`, `hover-lift`, `transition`, `respond-to`, `visually-hidden`, etc. ➜ design-scss.
 
-- `.glass` / `.glass-dark` — frosted glass effects
-- `.text-gradient-primary` — gradient text
-- `.hover-lift` / `.hover-scale` — hover animations
-- `.skeleton` — loading placeholders
-- `.animate-fade-up`, `.delay-1` through `.delay-5` — entrance animations
-- `.sr-only` — screen reader only content
+> The class-based helpers (`.glass`, `.text-gradient-*`, `.hover-lift`, `.hover-scale`, `.skeleton`, `.animate-*`, `.delay-*`, `.sr-only`) live in `_utilities.scss` / `_animations.scss`, which are **not bundled** in this project — they render nothing. Use the live **mixins** (e.g. the `hover-lift` mixin, the `visually-hidden` mixin) and component-local keyframes instead. ➜ design-scss.
 
 ## References
 

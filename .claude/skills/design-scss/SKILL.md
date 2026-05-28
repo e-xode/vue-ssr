@@ -1,6 +1,6 @@
 ---
 name: design-scss
-description: "SCSS design-system reference for the Vue SSR Starter Kit: design tokens (spacing, radius, shadows, transitions, breakpoints in variables.scss), 11 mixins (flex-center, flex-between, flex-col, truncate, multiline-truncate, absolute-center, transition, hover-lift, button-reset, visually-hidden, respond-to), animations (_animations.scss), utilities (_utilities.scss: glass, badges, gradients, skeleton), auto-injection barrel (_inject.scss via Vite), and component-scoped SCSS conventions. Trigger on ANY styling work: writing SCSS, choosing tokens, animations, component .scss files, Vuetify style overrides, layout utilities, or design-system questions. This is the token/mixin reference — the design agent loads this skill to produce SCSS. Don't use for: app architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), Docker/CI (→ vue-ssr-deployment), validation (→ vue-ssr-hooks), Vuetify component API (→ vuetify-components), design delegation routing (→ vue-ssr-design)."
+description: "SCSS design-system reference for the Vue SSR Starter Kit: design tokens (spacing, radius, shadows, transitions, breakpoints in variables.scss), 11 mixins (flex-center, flex-between, flex-col, truncate, multiline-truncate, absolute-center, transition, hover-lift, button-reset, visually-hidden, respond-to), the auto-injection barrel (_inject.scss via Vite: variables/typography/mixins only), component-scoped SCSS conventions, and the inert _animations.scss/_utilities.scss partials (present but NOT bundled; classes render nothing). Trigger on ANY styling work: writing SCSS, choosing tokens, animations, component .scss files, Vuetify style overrides, layout utilities, or design-system questions. This is the token/mixin reference — the design agent loads this skill to produce SCSS. Don't use for: app architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), Docker/CI (→ vue-ssr-deployment), validation (→ vue-ssr-hooks), Vuetify component API (→ vuetify-components), design delegation routing (→ vue-ssr-design)."
 ---
 
 # Design SCSS
@@ -12,13 +12,16 @@ description: "SCSS design-system reference for the Vue SSR Starter Kit: design t
 ```
 src/styles/
 ├── variables.scss        # Design tokens (spacing, radius, shadow, transition, breakpoint)
+├── _typography.scss      # Base typography (injected)
 ├── mixins.scss           # 11 reusable mixins
-├── _inject.scss          # Barrel: @forward 'variables'; @forward 'mixins' (auto-injected)
-├── _animations.scss      # Keyframes + animation utility classes + stagger delays
-└── _utilities.scss       # Glass, badges, gradients, hover, skeleton, sr-only
+├── _inject.scss          # Barrel: @forward 'variables'; @forward 'typography'; @forward 'mixins'
+├── _animations.scss      # Keyframes + classes + stagger delays — NOT in the chain (inert; see note)
+└── _utilities.scss       # Glass, badges, gradients, hover, skeleton, sr-only — NOT in the chain (inert; see note)
 ```
 
-**Auto-injection:** `_inject.scss` is injected into every component SCSS via Vite's `css.preprocessorOptions.scss.additionalData`. Variables and mixins are available everywhere without explicit `@use`.
+**Auto-injection:** `_inject.scss` is injected into every component SCSS via Vite's `css.preprocessorOptions.scss.additionalData` (`@use ".../styles/inject" as *`). It forwards **only** `variables`, `typography`, and `mixins` — these are available everywhere without explicit `@use`.
+
+> **Reachability — `_animations.scss` and `_utilities.scss` are NOT live.** They are neither forwarded by `_inject.scss` nor imported anywhere (no `global.scss`, no `main.js` import). Their classes (`.animate-*`, `.delay-*`, `.glass`, `.text-gradient-*`, `.hover-lift`, `.hover-scale`, `.badge-*`, `.skeleton`, `.sr-only`) therefore emit **no CSS** and cannot be used from templates as shipped. There is also **no global `prefers-reduced-motion` handler**. To use these effects: build them from the live tokens/mixins in a component SCSS (and self-guard motion with `@media (prefers-reduced-motion: reduce)`), or wire the partials in once via a global import in `main.js` if you want them project-wide.
 
 **Component-scoped files:** Every Vue component that needs styles has a dedicated `.scss` file:
 
@@ -99,23 +102,11 @@ Breakpoint progression: base (mobile) → sm (640) → md (768) → lg (1024) �
 
 ## Animations
 
-Global keyframes and utility classes from `_animations.scss`:
-
-- Apply via class: `class="animate-fade-up delay-2"`
-- 12 keyframes available (fadeIn, fadeUp, fadeDown, scaleIn, reveal, slideLeft, slideRight, float, pulse, shimmer, glow, rotate)
-- Stagger with `.delay-1` through `.delay-8` (100ms increments)
-- `prefers-reduced-motion: reduce` automatically disables all animations
+`_animations.scss` defines keyframes (fadeIn, fadeUp, fadeDown, scaleIn, reveal, slideLeft, slideRight, float, pulse, shimmer, glow, rotate), `.animate-*` classes, `.delay-1`..`.delay-8` stagger, and a `prefers-reduced-motion` block — but the file is **not in the injection chain and is imported nowhere**, so none of it renders. Treat the catalog in [references/animations-reference.md](references/animations-reference.md) as patterns to reproduce in a component SCSS, not as ready-to-use classes. Any motion you add must carry its **own** `@media (prefers-reduced-motion: reduce)` guard — there is no global one. To make the catalog live project-wide, import `_animations.scss` once in `main.js`.
 
 ## Utility classes
 
-From `_utilities.scss`:
-
-- **Text gradients:** `.text-gradient-primary`, `.text-gradient-secondary`, `.text-gradient-accent`
-- **Hover effects:** `.hover-lift`, `.hover-scale`
-- **Glass:** `.glass`, `.glass-dark`
-- **Badges:** `.badge-primary`, `.badge-success`, `.badge-warning`, `.badge-error`, `.badge-neutral`
-- **Accessibility:** `.sr-only`
-- **Loading:** `.skeleton`
+`_utilities.scss` defines `.text-gradient-*`, `.hover-lift` / `.hover-scale`, `.glass` / `.glass-dark`, `.badge-*`, `.sr-only`, and `.skeleton` — but, like `_animations.scss`, the file is **not bundled**, so these classes emit no CSS. Use the live equivalents instead: the `hover-lift` **mixin** (not the `.hover-lift` class), the `visually-hidden` **mixin** (not the `.sr-only` class), and tokens for everything else. See [references/utilities-reference.md](references/utilities-reference.md) for what the file contains and how to reproduce each helper.
 
 ## Hard rules
 
@@ -131,6 +122,6 @@ From `_utilities.scss`:
 | ------------------------------------------------------------- | ----------------------------------- |
 | [variables-reference.md](references/variables-reference.md)   | Complete token inventory            |
 | [mixins-reference.md](references/mixins-reference.md)         | All 11 mixins with examples         |
-| [animations-reference.md](references/animations-reference.md) | Keyframes, classes, stagger, a11y   |
-| [utilities-reference.md](references/utilities-reference.md)   | Glass, badges, gradients, skeleton  |
+| [animations-reference.md](references/animations-reference.md) | Keyframes, classes, stagger, a11y — inert (not bundled) |
+| [utilities-reference.md](references/utilities-reference.md)   | Glass, badges, gradients, skeleton — inert (not bundled) |
 | [scss-patterns.md](references/scss-patterns.md)               | File naming, @use/@forward, nesting |

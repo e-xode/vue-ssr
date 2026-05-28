@@ -2,6 +2,8 @@
 
 > All keyframes, utility classes, stagger delays, and reduced-motion handling from `src/styles/_animations.scss`.
 
+> **STATUS — inert as shipped.** `_animations.scss` is NOT forwarded by `_inject.scss` and is imported nowhere, so every class and keyframe below emits **no CSS** in the current build. The `.animate-*` / `.delay-*` examples will do nothing if pasted into a template. Treat this file as a **catalog of patterns** to reproduce inside a component SCSS (copy the keyframe locally and self-guard reduced motion). To make it live project-wide, add a single global import of `_animations.scss` in `main.js`. See `➜ design-scss` SKILL → Animations.
+
 ## Keyframes inventory
 
 | Keyframe     | Effect                                     | Duration context        |
@@ -88,13 +90,21 @@ Default glow color: `rgba(99, 102, 241, 0.2)` (indigo).
 
 ## Reduced motion (accessibility)
 
-The file includes a global `prefers-reduced-motion: reduce` media query that:
+`_animations.scss` *contains* a global `prefers-reduced-motion: reduce` media query (setting `animation-duration`/`transition-duration` to `0.01ms` and `animation-iteration-count` to `1` on `*`, `*::before`, `*::after`). **But because the file is not bundled (see STATUS), this guard does NOT run.** There is no automatic reduced-motion handling in this project.
 
-- Sets all `animation-duration` to `0.01ms`
-- Sets all `animation-iteration-count` to `1`
-- Sets all `transition-duration` to `0.01ms`
+Therefore: every component that adds motion **must** include its own guard, e.g.
 
-This applies to all elements (`*`, `*::before`, `*::after`). No action needed from developers — animations are automatically disabled for users who prefer reduced motion.
+```scss
+.my-reveal {
+  animation: reveal $transition-base ease forwards;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+```
+
+Do not assume motion is disabled for you — it is not, until you guard it (or until `_animations.scss` is imported globally in `main.js`).
 
 ## Choosing the right animation
 

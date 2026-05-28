@@ -11,7 +11,7 @@
     "#src/*": "./src/*"
   },
   "scripts": {
-    "dev": "node --watch-path=./server.js server.js",
+    "dev": "node --env-file-if-exists=.env --watch-path=./server.js server.js",
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build --outDir dist/client --ssrManifest",
     "build:server": "vite build --ssr src/entry-server.js --outDir dist/server",
@@ -23,7 +23,8 @@
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "screenshots": "node .claude/skills/brand-art-direction/scripts/screenshots.mjs"
   },
   "dependencies": {
     "@fontsource/ibm-plex-mono": "^5.2.7",
@@ -60,6 +61,7 @@
     "eslint-plugin-vue": "^10.9.1",
     "globals": "^17.6.0",
     "happy-dom": "^20.9.0",
+    "playwright": "^1.60.0",
     "prettier": "^3.8.3",
     "sass-embedded": "^1.100.0",
     "vitest": "^4.1.7"

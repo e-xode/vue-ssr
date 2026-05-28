@@ -16,7 +16,7 @@ WCAG 2.1 AA compliance guidelines for the Vue SSR Starter Kit.
 ### Application
 
 - Test all color combinations against both light and dark mode backgrounds
-- Primary blue (#2563eb) on white: 4.6:1 — passes for large text, borderline for small
+- Primary indigo (#4f46e5, per `src/plugins/vuetify.js`) on white: ~6.7:1 — passes for normal and large text
 - Use darker shade for small text if needed
 - Error red must be distinguishable from primary blue (not just by hue)
 - Never rely on color alone to convey information — pair with icon, text, or pattern
@@ -100,9 +100,9 @@ Dynamic content updates need aria-live to announce changes:
 
 ## Screen readers
 
-### .sr-only pattern
+### Screen-reader-only pattern
 
-The project provides `.sr-only` (aliased as `.visually-hidden`) for content visible only to screen readers:
+Use the auto-injected `visually-hidden` **mixin** for content visible only to screen readers. (The `.sr-only` utility class lives in the non-bundled `_utilities.scss` and renders nothing — use the mixin in a component SCSS instead. ➜ design-scss.)
 
 Use for:
 
@@ -135,11 +135,11 @@ Do NOT use for:
 
 ### prefers-reduced-motion
 
-The project's `_animations.scss` globally disables animations when this preference is set:
+There is **no global reduced-motion handler** in this project. `_animations.scss` contains one, but the file is not bundled (➜ design-scss), so it never runs. Reduced motion is therefore a **per-component responsibility**:
 
-- All keyframe animations are set to `none`
-- Transitions are reduced to minimal or instant
-- This is automatic — no per-component configuration needed
+- Every component that animates must add its own `@media (prefers-reduced-motion: reduce)` block setting `animation`/`transition` to `none`
+- Do not assume motion is disabled for you — guard it explicitly
+- Prefer animating only `transform` / `opacity`
 
 ### Additional considerations
 

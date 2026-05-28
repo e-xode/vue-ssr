@@ -12,7 +12,7 @@ After completing ANY task that modifies the project, before responding to the us
 2. If any `.vue`/`.js`/`.scss`/`.css` appear → **delegate to the `hooks` agent** with the dirty-list as input. Wait for its result.
 3. If `hooks` reports failure → fix the errors yourself, then re-delegate to `hooks`. Repeat until clean.
 4. ⛔ Task is NOT done until `hooks` reports all-pass. No exceptions.
-5. **Changelog** — if the task produced changelog-worthy changes (user-facing feature, bug fix, dependency change, behavior/UI/i18n change), append a curated entry under `## [Unreleased]` in `CHANGELOG.md` per the `vue-ssr-release` skill. Skip pure reformatting, lockfile-only, `.claude/` config, test-only, or internal-docs changes. Run after `hooks` passes. Never bump version, never commit.
+5. **Changelog** — for changelog-worthy changes (feature, bug fix, behavior/UI/i18n, or **product** dependency change), add a curated entry under `## [Unreleased]` in `CHANGELOG.md` per `vue-ssr-release`. Skip by purpose, not path: `.claude/` config incl. deps/scripts added only for it, reformatting, lockfile-only, test-only, internal-docs. After `hooks`; never bump version or commit.
 
 **Never ask** — Do NOT ask the user whether to run validation or update the changelog, do NOT request permission. Just do it silently.
 
@@ -50,7 +50,7 @@ At session start, read and apply all files in `.claude/rules/`. Each rule declar
 
 ## Agents directory
 
-7-agent fleet. Orchestrator never validates itself — always delegates to `hooks` at task end.
+9-agent fleet. Orchestrator never validates itself — always delegates to `hooks` at task end.
 
 | Agent       | Trigger (delegate when…)                                                                      |
 | ----------- | --------------------------------------------------------------------------------------------- |
@@ -60,6 +60,8 @@ At session start, read and apply all files in `.claude/rules/`. Each rule declar
 | `vue`       | Vue component creation, composables, Pinia stores, routing, unit tests                        |
 | `server`    | server.js / `src/api/**` / server-only `src/shared/**`: Express routes, MongoDB, sessions     |
 | `design`    | UI/UX design, SCSS styling, Vuetify theming, visual quality, accessibility, responsive layout |
+| `content`   | Marketing/editorial content: LinkedIn, page copy, README, advisory |
+| `visual-qa` | Screenshots changed views; reports defects vs brand charter (read-only) |
 | `release`   | User says "release" — version bump, CHANGELOG, branch, commit/push/tag proposal               |
 
 ---
@@ -69,7 +71,7 @@ At session start, read and apply all files in `.claude/rules/`. Each rule declar
 1. **Validation is centralized** — NEVER run `npm test/lint/format` yourself. Only the **`hooks` agent** validates (workaround for Copilot bug — see `vue-ssr-hooks` skill). No other agent may run validation.
 2. **Sub-agent contract** — Scoped work → no validation → no comments → structured summary (what/files/blockers) → stay in scope.
 3. **Reuse before writing** — Search `src/shared/`, `src/composables/`, existing modules before adding utility code. Key shared: `apiFetch`, `parseObjectId`, `parsePagination`, `findUserSafe`, `generateSecurityCode`, `escapeHtml`.
-4. **Delegation routing** — Vue component/store/composable/test work → `vue` agent. Express routes / MongoDB / sessions / server-only shared (`server.js`, `src/api/**`) → `server` agent. i18n key operations → `translate` agent (fleet mode by default). UI/UX design, styling, Vuetify theming, responsive layout → `design` agent. Review → `review` agent. Release → `release` agent. Multiple agents can work in parallel on independent scopes.
+4. **Delegation routing** — Vue component/store/composable/test work → `vue` agent. Express routes / MongoDB / sessions / server-only shared (`server.js`, `src/api/**`) → `server` agent. i18n key operations → `translate` agent (fleet mode by default). UI/UX design, styling, Vuetify theming, responsive layout → `design` agent. Content → `content` agent. Visual QA of changed views → `visual-qa` agent. Review → `review` agent. Release → `release` agent. Multiple agents can work in parallel on independent scopes.
 
 ---
 
@@ -94,7 +96,7 @@ This file loads every turn. Budget: ≤ 10 KB / ~2500 tokens. Knowledge → skil
 
 ## Skills index
 
-Skills load on demand by description matching. This index aids discovery.
+Skills load on demand by description match.
 
 | Skill                     | Triggers on                                                                                               |
 | ------------------------- | --------------------------------------------------------------------------------------------------------- |
@@ -116,6 +118,7 @@ Skills load on demand by description matching. This index aids discovery.
 | `design-ux`               | UI quality, design decisions, visual hierarchy, accessibility, responsive UX, micro-interactions          |
 | `design-scss`             | SCSS design system: tokens, mixins, animations, utilities, component-scoped patterns                      |
 | `vue-ssr-design`          | Design delegation routing, when to use design agent, mixed-task splitting, starter-kit design philosophy  |
+| `brand-art-direction` | MD3 visual charter (visual-qa rubric): rhythm, hovers, palette roles |
 | `vuetify-overview`        | Vuetify 4 component selection tree, project defaults, color palette, SSR setup, useDisplay breakpoints     |
 | `vuetify-theming`         | Vuetify 4 theme config, light/dark mode, defaults provider, CSS utility classes                          |
 | `vuetify-layout`          | Vuetify 4 app shell, 12-col grid, app-bar, navigation drawer, menus, tabs, breadcrumbs                    |
@@ -124,5 +127,8 @@ Skills load on demand by description matching. This index aids discovery.
 | `vuetify-components`      | Vuetify 4 display/feedback: cards, lists, chips, avatars, dialogs, snackbars, alerts, progress           |
 | `vuetify-icons`           | Vuetify 4 @mdi/js tree-shakeable SVG icons, icon props, catalog                                          |
 | `frontend-design`         | Greenfield/standalone distinctive UI (non-kit); in-kit UI → design agent + design-scss/vuetify-components |
+| `marketing-content` | Facts for marketing the kit: stack, features, differentiator, assets |
+| `content-strategy` | Editorial method: tone/voice, channel playbooks, personas, growth advisory |
+| `seo` | Kit SEO: entry-server meta, JSON-LD, hreflang, sitemap/robots |
 | `review`                  | Code review of branch / PR / diff                                                                         |
 | `vue-ssr-release`         | Release workflow, version bump, CHANGELOG generation, release branch                                      |

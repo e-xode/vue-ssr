@@ -2,6 +2,8 @@
 
 Detailed guidance on designing meaningful, restrained, and accessible micro-interactions.
 
+> **Note on class-based effects.** The `.hover-lift`, `.hover-scale`, `.glow`, `.skeleton`, `.animate-*`, `.reveal`, and `.delay-*` classes referenced below live in `_utilities.scss` / `_animations.scss`, which are **not bundled** in this project — they render nothing as classes. Treat them as named patterns: reproduce the effect in a component SCSS using the live tokens/mixins (the `hover-lift` mixin, `transition` mixin, component-local keyframes). ➜ design-scss.
+
 ## Hover states
 
 Every interactive element must respond to hover (on devices that support it).
@@ -168,10 +170,9 @@ For lists or card grids entering view, stagger the animation:
 
 ## Motion accessibility
 
-All animations in this project respect `prefers-reduced-motion`:
+Reduced motion is **not** handled globally (the `_animations.scss` reset is not bundled — ➜ design-scss):
 
-- The `_animations.scss` file disables keyframes and transitions
-- This is automatic — no per-component work needed
+- Each animated component must add its own `@media (prefers-reduced-motion: reduce)` guard
 - Still provide state feedback through non-motion means (color, icon changes)
 - Test with reduced motion enabled to ensure usability
 
