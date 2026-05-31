@@ -1,0 +1,24 @@
+name: security
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 6 * * 1'
+jobs:
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: gitleaks (free OSS image, blocking)
+        run: docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:latest detect --source=/repo --redact --exit-code=1 --no-banner
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: npm audit (informational)
+        run: npm audit --omit=dev || true
