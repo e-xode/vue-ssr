@@ -1,0 +1,6 @@
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Documentation example value (sample COOKIE_SECRET in deployment docs, not a real credential)"
+paths = ['''docs/DEPLOYMENT\.md''']
