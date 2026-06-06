@@ -55,7 +55,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@testing-library/vue": "^8.1.0",
-    "@vitest/ui": "^4.1.7",
+    "@vitest/ui": "^4.1.8",
     "@vue/test-utils": "^2.4.10",
     "eslint": "^10.4.0",
     "eslint-plugin-vue": "^10.9.1",
