@@ -54,4 +54,10 @@ RUN npm prune --production
 
 EXPOSE $NODE_PORT
 
+# Run as the built-in non-root `node` user (UID/GID 1000). Own /app (app code + node_modules) and
+# /home/node so the process can read/execute everything it needs. Runtime writes go to the
+# bind-mounted /app/logs + /app/public, which must be 1000:1000 on the host.
+RUN chown -R node:node /app /home/node
+USER node
+
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

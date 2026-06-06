@@ -6,6 +6,10 @@
 
 - **Dev server env** — `npm run dev` now loads `.env` natively via Node's `--env-file-if-exists=.env`, so the server boots without Docker. Inside Docker the Compose-injected environment still takes precedence (no double-load), and a missing `.env` is a no-op rather than a crash.
 
+### Security
+
+- **Non-root container** — the production image now runs as the built-in non-root `node` user (UID/GID 1000) instead of root. The runner stage `chown`s `/app` + `/home/node` and adds `USER node`; supervisord's pidfile moved `/run` → `/tmp` to work unprivileged. Reduces the blast radius of any RCE and stops the app writing host bind-mounts as root. **Operational note:** the host bind-mounts `/home/e-xode.vue-ssr/{logs,public}` must be owned `1000:1000` (applied by the deploy script) or the app cannot write sessions/uploads/logs.
+
 ---
 
 ## 5.2.1
