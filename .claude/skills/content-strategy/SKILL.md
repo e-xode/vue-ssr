@@ -17,6 +17,7 @@ description: "Editorial method and content operations for the Vue SSR Starter Ki
 | What the kit is, stack, features, differentiator, asset locations      | `marketing-content` (the facts) |
 | Editorial workflow, tone/voice, channel templates, personas            | `content-strategy` (the method) |
 | Content inventory (what's published) and backlog (what's next)         | `content-strategy` references   |
+| Strategy, monetization stance, campaigns, channel mix, positioning     | `marketing-strategy`            |
 | i18n key placement                                                     | ➜ delegate to translate         |
 | Meta, JSON-LD, hreflang, sitemap                                       | ➜ See skill: seo                |
 | Visuals, layout, components                                            | ➜ delegate to design            |
@@ -30,6 +31,9 @@ do not duplicate the facts here.
 produced content, back claims with real numbers (re-read `package.json` for versions), save LinkedIn
 assets under `src/assets/linkedin/`, document each piece. The operational _how_ for each rule is in
 `references/tone-and-voice.md`.
+
+➜ See skill: marketing-strategy — the strategy layer (positioning, monetization stance, campaigns,
+channels) that decides what content to produce and why; this skill executes those decisions.
 
 ## Workflow
 

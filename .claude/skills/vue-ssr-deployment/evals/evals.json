@@ -17,7 +17,7 @@
       "prompt": "What GitHub Actions workflows exist?",
       "assertions": [
         {
-          "text": "Lists the CI/CD workflows: CodeQL, npm-publish on tags, npm-test on PR, docker-build to GHCR"
+          "text": "Lists the CI/CD workflows: npm-publish on tags, npm-test on PR, docker-build to GHCR"
         }
       ]
     },

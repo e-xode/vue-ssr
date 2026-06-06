@@ -31,6 +31,8 @@ Before writing anything, load and apply:
 
 Complementary when relevant:
 
+- **marketing-strategy** — the strategy layer (positioning, monetization stance, campaigns, channels)
+  that decides what to produce and why; read it to align a piece with the current strategy.
 - **seo** — when content touches meta, hreflang, sitemap, or structured data.
 - **translate** — when copy must become i18n keys.
 - **brand-art-direction** — when content lands on a page, so copy respects the clean-minimal MD3

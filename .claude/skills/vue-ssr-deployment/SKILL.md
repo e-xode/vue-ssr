@@ -1,6 +1,6 @@
 ---
 name: vue-ssr-deployment
-description: "Deployment and CI/CD reference for the Vue SSR Starter Kit: Docker multi-stage build, docker-compose split into a base (app, remote DB) plus a docker-compose.local.yml override (local mongo) switched via the COMPOSE_FILE variable in .env, GitHub Actions workflows (CodeQL, npm-publish on tags, npm-test on PR, docker-build to GHCR), production configuration (Helmet CSP, COOKIE_SECRET, graceful shutdown SIGTERM/SIGINT), Dependabot weekly npm updates. Trigger on any deployment, Docker, docker-compose local-vs-remote DB switch, CI/CD, production config, or infrastructure question. Don't use for: app architecture (→ vue-ssr-architecture), auth flow (→ vue-ssr-auth), post-task validation (→ vue-ssr-hooks)."
+description: "Deployment and CI/CD reference for the Vue SSR Starter Kit: Docker multi-stage build, docker-compose split into a base (app, remote DB) plus a docker-compose.local.yml override (local mongo) switched via the COMPOSE_FILE variable in .env, GitHub Actions workflows (npm-publish on tags, npm-test on PR, docker-build to GHCR), production configuration (Helmet CSP, COOKIE_SECRET, graceful shutdown SIGTERM/SIGINT), Dependabot weekly npm updates. Trigger on any deployment, Docker, docker-compose local-vs-remote DB switch, CI/CD, production config, or infrastructure question. Don't use for: app architecture (→ vue-ssr-architecture), auth flow (→ vue-ssr-auth), post-task validation (→ vue-ssr-hooks)."
 ---
 
 # Vue SSR Deployment
@@ -14,11 +14,10 @@ description: "Deployment and CI/CD reference for the Vue SSR Starter Kit: Docker
 - **docker-compose.local.yml** (override): adds a local `mongo` container and redirects the app to it (`MONGO_HOST=mongo`, `MONGO_TYPE=mongodb`, overriding `.env`)
 - **Switch local ↔ remote**: via the `COMPOSE_FILE` variable in `.env` (set in `.env.example`). Uncommented = local (node + mongo); commented = remote. See `references/docker-ci.md`
 
-## GitHub Actions (4 workflows)
+## GitHub Actions (3 workflows)
 
 | Workflow           | Trigger                     | Steps                                    |
 | ------------------ | --------------------------- | ---------------------------------------- |
-| `codeql.yml`       | Push master/dev, PR, weekly | CodeQL security analysis                 |
 | `npm-publish.yml`  | Tags `v*`                   | ci → lint → test → build → npm publish   |
 | `npm-test.yml`     | Push master/dev, PR         | ci → lint → test                         |
 | `docker-build.yml` | Push master                 | Build + push to GHCR (SHA + latest tags) |

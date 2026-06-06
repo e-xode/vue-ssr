@@ -16,8 +16,10 @@ This skill owns the **facts**. The editorial **method** (how to research, write,
 | What the kit is, its stack, features, differentiator, license, asset locations | `marketing-content` (here)                         |
 | Editorial workflow, tone/voice, channel templates, personas, inventory, backlog | `content-strategy`                               |
 | Inventory of everything published (glossary)                                  | `content-strategy/references/content-inventory.md` |
+| Strategy, monetization stance, campaigns, channel mix, positioning, competitive | `marketing-strategy`                            |
 
 ➜ See skill: content-strategy — the writing method that consumes these facts.
+➜ See skill: marketing-strategy — the strategy layer that decides what content to produce and why.
 
 ## Content rules (mandatory)
 
@@ -53,7 +55,7 @@ Vue 3.5+, Vite, Express 5, MongoDB 7 driver, Vuetify 4 (Material Design 3), Pini
 - **Contact form** with rate limiting.
 - **Design system** — Vuetify 4 MD3 components + an SCSS token/mixin system.
 - **Testing** — Vitest with a unit-test suite (re-read the suite for the current count).
-- **Deployment** — Docker multi-stage build, GitHub Actions CI (CodeQL, npm-publish on tags, npm-test on PR, docker-build to GHCR). ➜ See skill: vue-ssr-deployment.
+- **Deployment** — Docker multi-stage build, GitHub Actions CI (npm-publish on tags, npm-test on PR, docker-build to GHCR). ➜ See skill: vue-ssr-deployment.
 
 ## Differentiator (the standout angle)
 

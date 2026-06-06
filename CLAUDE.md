@@ -50,7 +50,7 @@ At session start, read and apply all files in `.claude/rules/`. Each rule declar
 
 ## Agents directory
 
-9-agent fleet. Orchestrator never validates itself — always delegates to `hooks` at task end.
+10-agent fleet. Orchestrator never validates itself — always delegates to `hooks` at task end.
 
 | Agent       | Trigger (delegate when…)                                                                      |
 | ----------- | --------------------------------------------------------------------------------------------- |
@@ -61,6 +61,7 @@ At session start, read and apply all files in `.claude/rules/`. Each rule declar
 | `server`    | server.js / `src/api/**` / server-only `src/shared/**`: Express routes, MongoDB, sessions     |
 | `design`    | UI/UX design, SCSS styling, Vuetify theming, visual quality, accessibility, responsive layout |
 | `content`   | Marketing/editorial content: LinkedIn, page copy, README, advisory |
+| `marketing` | Marketing strategy: positioning, monetization stance, campaigns, channels, growth |
 | `visual-qa` | Screenshots changed views; reports defects vs brand charter (read-only) |
 | `release`   | User says "release" — version bump, CHANGELOG, branch, commit/push/tag proposal               |
 
@@ -71,7 +72,7 @@ At session start, read and apply all files in `.claude/rules/`. Each rule declar
 1. **Validation is centralized** — NEVER run `npm test/lint/format` yourself. Only the **`hooks` agent** validates (workaround for Copilot bug — see `vue-ssr-hooks` skill). No other agent may run validation.
 2. **Sub-agent contract** — Scoped work → no validation → no comments → structured summary (what/files/blockers) → stay in scope.
 3. **Reuse before writing** — Search `src/shared/`, `src/composables/`, existing modules before adding utility code. Key shared: `apiFetch`, `parseObjectId`, `parsePagination`, `findUserSafe`, `generateSecurityCode`, `escapeHtml`.
-4. **Delegation routing** — Vue component/store/composable/test work → `vue` agent. Express routes / MongoDB / sessions / server-only shared (`server.js`, `src/api/**`) → `server` agent. i18n key operations → `translate` agent (fleet mode by default). UI/UX design, styling, Vuetify theming, responsive layout → `design` agent. Content → `content` agent. Visual QA of changed views → `visual-qa` agent. Review → `review` agent. Release → `release` agent. Multiple agents can work in parallel on independent scopes.
+4. **Delegation routing** — Vue component/store/composable/test work → `vue` agent. Express routes / MongoDB / sessions / server-only shared (`server.js`, `src/api/**`) → `server` agent. i18n key operations → `translate` agent (fleet mode by default). UI/UX design, styling, Vuetify theming, responsive layout → `design` agent. Content → `content` agent. Marketing strategy (positioning, campaigns, channels) → `marketing` agent. Visual QA of changed views → `visual-qa` agent. Review → `review` agent. Release → `release` agent. Multiple agents can work in parallel on independent scopes.
 
 ---
 
@@ -100,35 +101,36 @@ Skills load on demand by description match.
 
 | Skill                     | Triggers on                                                                                               |
 | ------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `vue-ssr-architecture`    | App architecture, file structure, routing, SSR lifecycle, shared utils, Vuetify, env vars                 |
+| `vue-ssr-architecture`    | App architecture, file structure, routing, SSR lifecycle, shared utils, env vars |
 | `vue-ssr-auth`            | Auth flow, security codes, sessions, rate limiting, captcha                                               |
 | `vue-ssr-deployment`      | Docker, GitHub Actions CI/CD, production config, graceful shutdown                                        |
-| `vue-ssr-server`          | Express 5 API routes (setupXRoute), router/middleware guards, MongoDB access, rate limiters               |
+| `vue-ssr-server`          | Express 5 API routes, middleware guards, MongoDB access, rate limiters |
 | `vue-ssr-hooks`           | Post-task validation, hook scripts, format/lint/build/test battery                                        |
 | `claude-anthropic`        | Claude config rules + audit; Anthropic doctrine. Co-load with skill-creator                               |
 | `skill-creator`           | Authoring/editing skills (workflow, eval, iterate)                                                        |
 | `starter-kit-adapt`       | Post-fork/clone adaptation, customizing Claude config for new project                                     |
 | `translate`               | i18n, translations, locale keys, vue-i18n usage, locale parity                                            |
-| `vue3-composition`        | Vue 3 Composition API, reactivity, composables, lifecycle, script setup, watchers                         |
-| `vue3-components`         | Vue 3 component design: props, events, slots, provide/inject, dynamic/async components                    |
+| `vue3-composition`        | Vue 3 Composition API, reactivity, composables, lifecycle, watchers |
+| `vue3-components`         | Vue 3 components: props, events, slots, provide/inject, dynamic/async |
 | `vue3-templates`          | Vue 3 template syntax: directives, list/conditional rendering, bindings, native v-model                   |
 | `vue3-builtin-components` | Vue 3 built-ins: Teleport, Suspense, KeepAlive, Transition, TransitionGroup                               |
 | `vue3-reusability`        | Vue 3 custom directives and plugins (composables → vue3-composition)                                      |
 | `vue3-performance`        | Vue 3 perf: shallowRef/markRaw, v-memo/v-once, async components, SSR perf                                 |
-| `design-ux`               | UI quality, design decisions, visual hierarchy, accessibility, responsive UX, micro-interactions          |
+| `design-ux`               | UI quality, visual hierarchy, accessibility, responsive UX, micro-interactions |
 | `design-scss`             | SCSS design system: tokens, mixins, animations, utilities, component-scoped patterns                      |
-| `vue-ssr-design`          | Design delegation routing, when to use design agent, mixed-task splitting, starter-kit design philosophy  |
+| `vue-ssr-design`          | Design delegation routing, mixed-task splitting, starter-kit design philosophy |
 | `brand-art-direction` | MD3 visual charter (visual-qa rubric): rhythm, hovers, palette roles |
-| `vuetify-overview`        | Vuetify 4 component selection tree, project defaults, color palette, SSR setup, useDisplay breakpoints     |
+| `vuetify-overview`        | Vuetify 4 component selection, project defaults, palette, SSR setup, breakpoints |
 | `vuetify-theming`         | Vuetify 4 theme config, light/dark mode, defaults provider, CSS utility classes                          |
-| `vuetify-layout`          | Vuetify 4 app shell, 12-col grid, app-bar, navigation drawer, menus, tabs, breadcrumbs                    |
+| `vuetify-layout`          | Vuetify 4 app shell, grid, app-bar, drawer, menus, tabs, breadcrumbs |
 | `vuetify-forms`           | Vuetify 4 form inputs, v-form validation rules, async submit, input defaults                              |
 | `vuetify-data`            | Vuetify 4 data tables (v-data-table-server), server-side pagination, v-pagination                        |
-| `vuetify-components`      | Vuetify 4 display/feedback: cards, lists, chips, avatars, dialogs, snackbars, alerts, progress           |
+| `vuetify-components`      | Vuetify 4 display/feedback: cards, lists, chips, dialogs, snackbars, alerts, progress |
 | `vuetify-icons`           | Vuetify 4 @mdi/js tree-shakeable SVG icons, icon props, catalog                                          |
-| `frontend-design`         | Greenfield/standalone distinctive UI (non-kit); in-kit UI → design agent + design-scss/vuetify-components |
+| `frontend-design`         | Greenfield/standalone distinctive UI (non-kit); in-kit UI → design agent |
 | `marketing-content` | Facts for marketing the kit: stack, features, differentiator, assets |
 | `content-strategy` | Editorial method: tone/voice, channel playbooks, personas, growth advisory |
+| `marketing-strategy` | Marketing strategy: positioning, monetization stance, campaigns, channels, competitive |
 | `seo` | Kit SEO: entry-server meta, JSON-LD, hreflang, sitemap/robots |
 | `review`                  | Code review of branch / PR / diff                                                                         |
 | `vue-ssr-release`         | Release workflow, version bump, CHANGELOG generation, release branch                                      |

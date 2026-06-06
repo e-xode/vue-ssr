@@ -24,7 +24,7 @@ RUN npm run build
 FROM node:24-slim AS runner
 
 ARG NODE_HOST=https://www.mywebsite.com
-ARG NODE_PORT=3006
+ARG NODE_PORT=3002
 
 ENV NODE_ENV=production
 ENV NODE_PORT=$NODE_PORT

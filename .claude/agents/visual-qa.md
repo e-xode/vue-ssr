@@ -80,6 +80,10 @@ Use the same rubric as the `review` agent:
 "`index-hover-desktop.png`: card lifts with a shadow; `contact-hover-desktop.png`: border tint only
 -> sibling inconsistency between peer content cards, 🟠".
 
+### Re-verification passes (delta mode)
+
+The FIRST visual-qa pass on a task always captures the full battery (every touched route, viewport, and interaction state) — never reduce that coverage. On any SUBSEQUENT pass that only re-checks fixes for findings you already reported, run in **delta mode**: re-capture and re-look at ONLY the states and selectors tied to the still-open 🔴/🟠 (plus the sibling block when the finding was a consistency one). Skip the routes, viewports, and states that already passed and were not touched by the fix. Scope `--routes` / `--hover` / `--focus` to just the affected target. This preserves soundness (full coverage happened on pass 1) while avoiding a full re-shoot and re-analysis on every loop iteration.
+
 ## Hard constraints
 
 - **No code modification.** Read-only by contract. Route fixes back to the `design` agent.

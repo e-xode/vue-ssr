@@ -25,12 +25,6 @@ Equivalent without editing `.env`: `docker compose -f docker-compose.yml -f dock
 
 ## GitHub Actions details
 
-### CodeQL (`codeql.yml`)
-
-- Triggers: push to master/development, PRs, weekly cron
-- Language: javascript-typescript
-- Steps: checkout → init CodeQL → autobuild → analyze
-
 ### npm-publish (`npm-publish.yml`)
 
 - Triggers: tags matching `v*`
