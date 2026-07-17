@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Security
+
+- **npm audit advisories cleared** — bumped `nodemailer` 8.0.10 → 9.0.3, `multer` 2.1.1 → 2.2.0, `dompurify` 3.4.8 → 3.4.12 and `ws` 8.20.1 → 8.21.1, taking the repo from 6 open Dependabot alerts (3 high) to 0. The high-severity ones: nodemailer's `raw` option bypassing `disableFileAccess`/`disableUrlAccess` (arbitrary file read + SSRF), multer's DoS via deeply nested field names, and a `ws` memory-exhaustion DoS. **`nodemailer` 9 is a major**: it now validates TLS certificates by default when fetching remote content (URL attachments, OAuth2 token endpoints, HTTP proxies). `src/shared/email.js` uses none of these — plain SMTP with inline HTML — and the same version has been running in production on `e-xode.www` since 2026-06-22 with mail delivery confirmed working.
+
 ## 5.2.2
 
 ### Changed
