@@ -56,12 +56,7 @@ async function handleSubmit() {
       {{ t('meta.signin.title') }}
     </v-card-title>
 
-    <v-alert
-      v-if="errorMessage"
-      type="error"
-      class="mb-4"
-      closable
-    >
+    <v-alert v-if="errorMessage" type="error" class="mb-4" closable>
       {{ errorMessage }}
     </v-alert>
 
@@ -89,21 +84,12 @@ async function handleSubmit() {
       />
 
       <div class="text-right mb-4">
-        <router-link
-          :to="localePath('/forgot-password')"
-          class="text-primary text-caption"
-        >
+        <router-link :to="localePath('/forgot-password')" class="text-primary text-caption">
           {{ t('forgotPassword.link') }}
         </router-link>
       </div>
 
-      <v-btn
-        type="submit"
-        color="primary"
-        block
-        size="large"
-        :loading="isSubmitting"
-      >
+      <v-btn type="submit" color="primary" block size="large" :loading="isSubmitting">
         {{ t('nav.signin') }}
       </v-btn>
     </v-form>
@@ -112,10 +98,7 @@ async function handleSubmit() {
 
     <p class="text-center mb-0">
       {{ t('meta.signup.description') }}
-      <router-link
-        :to="localePath('/signup')"
-        class="link"
-      >
+      <router-link :to="localePath('/signup')" class="link">
         {{ t('nav.signup') }}
       </router-link>
     </p>

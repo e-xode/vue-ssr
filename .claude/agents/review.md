@@ -1,6 +1,6 @@
 ---
 name: review
-description: 'Code-review specialist for the Vue SSR Starter Kit. Performs a structured, severity-categorized review of a branch, PR, or uncommitted diff against project conventions. Read-only — never modifies code. Delegate when user asks to review, code-review, or audit changes. Returns a markdown report with severity levels and anomaly types.'
+description: 'Code-review specialist for the Vue SSR Starter Kit. Performs a structured, severity-categorized review of a branch, PR, or uncommitted diff against project conventions. Read-only — never modifies code. Delegate when user asks to review, code-review, or audit changes. Returns a markdown report with severity levels and anomaly types. Don't use for: making code changes (→ vue/server/design agents), post-task validation (→ hooks agent), Claude config audit (→ claude-anthropic skill).'
 tools: Read, Glob, Grep, Bash
 model: sonnet
 ---

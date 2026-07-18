@@ -1,16 +1,17 @@
 export async function apiFetch(url, options = {}) {
+  const { timeout: timeoutMs = 15000, ...fetchOptions } = options;
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15000);
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
-    const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
+    const isFormData = typeof FormData !== 'undefined' && fetchOptions.body instanceof FormData;
     const headers = isFormData
-      ? { ...options.headers }
-      : { 'Content-Type': 'application/json', ...options.headers };
+      ? { ...fetchOptions.headers }
+      : { 'Content-Type': 'application/json', ...fetchOptions.headers };
 
     const response = await fetch(url, {
       credentials: 'include',
-      ...options,
+      ...fetchOptions,
       headers,
       signal: controller.signal,
     });

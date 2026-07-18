@@ -282,7 +282,7 @@ Sitemap: ${siteUrl}/sitemap.xml`);
 
       const gaId = process.env.GA_MEASUREMENT_ID || '';
       const gaScript = gaId
-        ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${gaId}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');</script>`
+        ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${gaId}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500});gtag('config','${gaId}');</script>`
         : '';
 
       const recaptchaKey = process.env.RECAPTCHA_SITE_KEY || '';

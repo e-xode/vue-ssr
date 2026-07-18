@@ -13,15 +13,8 @@ const appVersion = __APP_VERSION__;
   <v-footer class="app-footer pa-0">
     <v-container>
       <v-row>
-        <v-col
-          cols="12"
-          md="4"
-          class="app-footer__brand"
-        >
-          <router-link
-            :to="localePath('/')"
-            class="app-footer__logo"
-          >
+        <v-col cols="12" md="4" class="app-footer__brand">
+          <router-link :to="localePath('/')" class="app-footer__logo">
             <v-icon :icon="mdiHome" />
             <span>{{ t('app.name') }}</span>
           </router-link>
@@ -30,10 +23,7 @@ const appVersion = __APP_VERSION__;
           </p>
         </v-col>
 
-        <v-col
-          cols="6"
-          md="4"
-        >
+        <v-col cols="6" md="4">
           <h4 class="app-footer__title">
             {{ t('footer.links') }}
           </h4>
@@ -56,10 +46,7 @@ const appVersion = __APP_VERSION__;
           </ul>
         </v-col>
 
-        <v-col
-          cols="6"
-          md="4"
-        >
+        <v-col cols="6" md="4">
           <h4 class="app-footer__title">
             {{ t('footer.legal') }}
           </h4>
@@ -80,22 +67,11 @@ const appVersion = __APP_VERSION__;
 
       <v-divider class="my-6" />
 
-      <v-row
-        class="app-footer__bottom"
-        align="center"
-      >
-        <v-col
-          cols="12"
-          md="6"
-          class="text-center text-md-start"
-        >
+      <v-row class="app-footer__bottom" align="center">
+        <v-col cols="12" md="6" class="text-center text-md-start">
           <p>{{ t('footer.copyright', { year: currentYear }) }}</p>
         </v-col>
-        <v-col
-          cols="12"
-          md="6"
-          class="text-center text-md-end"
-        >
+        <v-col cols="12" md="6" class="text-center text-md-end">
           <p>v{{ appVersion }}</p>
         </v-col>
       </v-row>

@@ -17,6 +17,7 @@ A comprehensive Vue 3 Server-Side Rendering (SSR) starter kit with authenticatio
 - **Locale-Prefixed Routing** - SEO-friendly `/:locale/` URL prefix
 - **Contact Page** - Built-in contact form with rate limiting
 - **Security** - Helmet CSP, SHA-256 codes, timingSafeEqual, session destruction
+- **Cookie Consent (GDPR)** - Consent banner with Google Consent Mode, choice persisted in localStorage
 - **SCSS** - Advanced styling with variables and mixins
 - **Express.js** - Server framework
 - **Session Management** - File-based session storage
@@ -130,6 +131,15 @@ npm run lint
 ```
 
 The project uses ESLint + Prettier for code quality with Vue 3 best practices.
+
+### Full Validation
+
+```bash
+# Run the full validation battery (format, lint, build, test)
+npm run validate
+```
+
+`npm run validate` chains format, lint, build, and test in one pass, with caching for faster repeated runs.
 
 ## Building
 

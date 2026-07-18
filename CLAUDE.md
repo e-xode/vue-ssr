@@ -6,15 +6,14 @@
 
 ## 🚨 Task completion protocol
 
-After completing ANY task that modifies the project, before responding to the user:
+After completing ANY task that changes the project, before responding:
 
 1. Run: `git diff --name-only HEAD && git diff --name-only --cached && git ls-files --others --exclude-standard`
-2. If any `.vue`/`.js`/`.scss`/`.css` appear → **delegate to the `hooks` agent** with the dirty-list as input. Wait for its result.
-3. If `hooks` reports failure → fix the errors yourself, then re-delegate to `hooks`. Repeat until clean.
-4. ⛔ Task is NOT done until `hooks` reports all-pass. No exceptions.
-5. **Changelog** — for changelog-worthy changes (feature, bug fix, behavior/UI/i18n, or **product** dependency change), add a curated entry under `## [Unreleased]` in `CHANGELOG.md` per `vue-ssr-release`. Skip by purpose, not path: `.claude/` config incl. deps/scripts added only for it, reformatting, lockfile-only, test-only, internal-docs. After `hooks`; never bump version or commit.
+2. **Changelog** — for changelog-worthy changes (feature, bug fix, behavior/UI/i18n, or **product** dependency change), silently add a curated entry under `## [Unreleased]` in `CHANGELOG.md` per `vue-ssr-release`. Skip by purpose, not path: `.claude/` config incl. its deps, reformatting, lockfile-only, test-only, internal-docs. Never bump version or commit.
+3. **Validation is opt-in** — if any `.vue`/`.js`/`.scss`/`.css` changed, do NOT validate automatically. Ask the user, wait, and delegate to `hooks` ONLY on their yes or an explicit request this turn — never otherwise.
+4. When validation runs and fails → fix it yourself, re-delegate, repeat until all-pass.
 
-**Never ask** — Do NOT ask the user whether to run validation or update the changelog, do NOT request permission. Just do it silently.
+**Never ask about the changelog** — add it silently; only validation is gated (step 3).
 
 ---
 
@@ -50,7 +49,7 @@ At session start, read and apply all files in `.claude/rules/`. Each rule declar
 
 ## Agents directory
 
-10-agent fleet. Orchestrator never validates itself — always delegates to `hooks` at task end.
+10-agent fleet. Orchestrator never validates itself — it delegates to `hooks` only on the user's opt-in.
 
 | Agent       | Trigger (delegate when…)                                                                      |
 | ----------- | --------------------------------------------------------------------------------------------- |
@@ -69,7 +68,7 @@ At session start, read and apply all files in `.claude/rules/`. Each rule declar
 
 ## Sub-agent orchestration
 
-1. **Validation is centralized** — NEVER run `npm test/lint/format` yourself. Only the **`hooks` agent** validates (workaround for Copilot bug — see `vue-ssr-hooks` skill). No other agent may run validation.
+1. **Validation is centralized and opt-in** — NEVER run `npm test/lint/format/validate` yourself. Only the **`hooks` agent** validates, and only when the user opts in per the Task completion protocol (workaround for Copilot bug — see `vue-ssr-hooks` skill). No other agent may run validation.
 2. **Sub-agent contract** — Scoped work → no validation → no comments → structured summary (what/files/blockers) → stay in scope.
 3. **Reuse before writing** — Search `src/shared/`, `src/composables/`, existing modules before adding utility code. Key shared: `apiFetch`, `parseObjectId`, `parsePagination`, `findUserSafe`, `generateSecurityCode`, `escapeHtml`.
 4. **Delegation routing** — Vue component/store/composable/test work → `vue` agent. Express routes / MongoDB / sessions / server-only shared (`server.js`, `src/api/**`) → `server` agent. i18n key operations → `translate` agent (fleet mode by default). UI/UX design, styling, Vuetify theming, responsive layout → `design` agent. Content → `content` agent. Marketing strategy (positioning, campaigns, channels) → `marketing` agent. Visual QA of changed views → `visual-qa` agent. Review → `review` agent. Release → `release` agent. Multiple agents can work in parallel on independent scopes.

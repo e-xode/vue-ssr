@@ -22,75 +22,104 @@ export async function render(url, db, theme) {
   return { html, head, locale, statusCode: route.meta?.statusCode || 200 };
 }
 
-function generateHead(route, locale, t, theme) {
+function buildHeadContext(route, locale, t, theme) {
   const siteUrl = (process.env.NODE_HOST || 'http://localhost:3002').replace(/\/$/, '');
   const appName = process.env.APP_NAME || 'App';
   const is404 = route.meta?.statusCode === 404;
   const canonical = `${siteUrl}${route.path}`;
-  const robots = route.meta?.robots || 'index, follow';
 
   const pageMeta = resolvePageMeta(route, t);
   const title = pageMeta.title ? `${pageMeta.title} — ${appName}` : appName;
-  const description = pageMeta.description || '';
-  const keywords = pageMeta.keywords || '';
-  const ogImage = `${siteUrl}/og-image.png`;
 
-  const pathWithoutLocale = route.path.replace(/^\/[a-z]{2}(\/|$)/, '/');
-  const altLocales = LOCALE_CODES.filter((l) => l !== locale);
-  const fbAppId = process.env.FACEBOOK_APP_ID || '';
+  return {
+    siteUrl,
+    appName,
+    is404,
+    canonical,
+    locale,
+    robots: route.meta?.robots || 'index, follow',
+    title,
+    description: pageMeta.description || '',
+    keywords: pageMeta.keywords || '',
+    ogImage: `${siteUrl}/og-image.png`,
+    ogUrl: is404 ? siteUrl : canonical,
+    pathWithoutLocale: route.path.replace(/^\/[a-z]{2}(\/|$)/, '/'),
+    fbAppId: process.env.FACEBOOK_APP_ID || '',
+    themeColor: theme === 'dark' ? '#0a0a0a' : '#ffffff',
+    schemaOrg: getSchemaMarkup(route, {
+      siteUrl,
+      appName,
+      description: pageMeta.description || '',
+      locale,
+    }),
+  };
+}
 
-  const hreflangTags = is404
-    ? ''
-    : LOCALE_CODES.map(
-        (l) => `<link rel="alternate" hreflang="${l}" href="${siteUrl}/${l}${pathWithoutLocale}">`
-      ).join('\n');
+function buildConditionalTags(ctx) {
+  const altLocales = LOCALE_CODES.filter((l) => l !== ctx.locale);
 
-  const ogAltTags = is404
-    ? ''
-    : altLocales
-        .map((l) => `<meta property="og:locale:alternate" content="${getOgLocale(l)}">`)
-        .join('\n');
+  return {
+    keywords: ctx.keywords ? `<meta name="keywords" content="${escapeHtml(ctx.keywords)}">` : '',
+    canonical: ctx.is404 ? '' : `<link rel="canonical" href="${ctx.canonical}">`,
+    hreflang: ctx.is404
+      ? ''
+      : LOCALE_CODES.map(
+          (l) =>
+            `<link rel="alternate" hreflang="${l}" href="${ctx.siteUrl}/${l}${ctx.pathWithoutLocale}">`
+        ).join('\n'),
+    xDefault: ctx.is404
+      ? ''
+      : `<link rel="alternate" hreflang="x-default" href="${ctx.siteUrl}/en${ctx.pathWithoutLocale}">`,
+    ogAlt: ctx.is404
+      ? ''
+      : altLocales
+          .map((l) => `<meta property="og:locale:alternate" content="${getOgLocale(l)}">`)
+          .join('\n'),
+    fbAppId: ctx.fbAppId ? `<meta property="fb:app_id" content="${ctx.fbAppId}">` : '',
+  };
+}
 
-  const schemaOrg = getSchemaMarkup(route, siteUrl, appName, title, description, locale);
-  const themeColor = theme === 'dark' ? '#0a0a0a' : '#ffffff';
+function generateHead(route, locale, t, theme) {
+  const ctx = buildHeadContext(route, locale, t, theme);
+  const tags = buildConditionalTags(ctx);
 
   return `<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="${escapeHtml(description)}">
-${keywords ? `<meta name="keywords" content="${escapeHtml(keywords)}">` : ''}
-<meta name="robots" content="${robots}">
-<meta name="theme-color" content="${themeColor}">
+<meta name="description" content="${escapeHtml(ctx.description)}">
+${tags.keywords}
+<meta name="robots" content="${ctx.robots}">
+<meta name="theme-color" content="${ctx.themeColor}">
 <meta name="revisit-after" content="7 days">
-<meta name="author" content="${escapeHtml(appName)}">
-<title>${escapeHtml(title)}</title>
-${is404 ? '' : `<link rel="canonical" href="${canonical}">`}
-${hreflangTags}
-${is404 ? '' : `<link rel="alternate" hreflang="x-default" href="${siteUrl}/en${pathWithoutLocale}">`}
-<meta property="og:title" content="${escapeHtml(title)}">
-<meta property="og:description" content="${escapeHtml(description)}">
-<meta property="og:url" content="${is404 ? siteUrl : canonical}">
+<meta name="author" content="${escapeHtml(ctx.appName)}">
+<title>${escapeHtml(ctx.title)}</title>
+${tags.canonical}
+${tags.hreflang}
+${tags.xDefault}
+<meta property="og:title" content="${escapeHtml(ctx.title)}">
+<meta property="og:description" content="${escapeHtml(ctx.description)}">
+<meta property="og:url" content="${ctx.ogUrl}">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="${escapeHtml(appName)}">
-<meta property="og:image" content="${ogImage}">
+<meta property="og:site_name" content="${escapeHtml(ctx.appName)}">
+<meta property="og:image" content="${ctx.ogImage}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="${escapeHtml(title)}">
-<meta property="og:locale" content="${getOgLocale(locale)}">
-${ogAltTags}
-${fbAppId ? `<meta property="fb:app_id" content="${fbAppId}">` : ''}
+<meta property="og:image:alt" content="${escapeHtml(ctx.title)}">
+<meta property="og:locale" content="${getOgLocale(ctx.locale)}">
+${tags.ogAlt}
+${tags.fbAppId}
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="${escapeHtml(title)}">
-<meta name="twitter:description" content="${escapeHtml(description)}">
-<meta name="twitter:image" content="${ogImage}">
+<meta name="twitter:title" content="${escapeHtml(ctx.title)}">
+<meta name="twitter:description" content="${escapeHtml(ctx.description)}">
+<meta name="twitter:image" content="${ctx.ogImage}">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="${escapeHtml(appName)}">
+<meta name="apple-mobile-web-app-title" content="${escapeHtml(ctx.appName)}">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="icon" href="/favicon.ico">
 <link rel="manifest" href="/manifest.json">
-${schemaOrg}`;
+${ctx.schemaOrg}`;
 }
 
 function resolvePageMeta(route, t) {
@@ -103,7 +132,7 @@ function resolvePageMeta(route, t) {
   };
 }
 
-function getSchemaMarkup(route, siteUrl, appName, title, description, locale) {
+function getSchemaMarkup(route, { siteUrl, appName, description, locale }) {
   const schemas = [];
 
   if (route.meta?.robots?.includes('noindex')) return '';

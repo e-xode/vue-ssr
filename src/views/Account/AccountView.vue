@@ -193,10 +193,7 @@ async function changePassword() {
           {{ t('account.title') }}
         </h1>
 
-        <v-tabs
-          v-model="tab"
-          class="mb-6"
-        >
+        <v-tabs v-model="tab" class="mb-6">
           <v-tab value="profile">
             {{ t('account.tabs.profile') }}
           </v-tab>
@@ -214,19 +211,13 @@ async function changePassword() {
               <v-card-title>{{ t('account.profile.title') }}</v-card-title>
               <v-card-text>
                 <div class="d-flex align-center ga-4 mb-6">
-                  <v-avatar
-                    size="72"
-                    color="primary"
-                  >
+                  <v-avatar size="72" color="primary">
                     <v-img
                       v-if="authStore.user?.avatar"
                       :src="authStore.user.avatar"
                       :alt="authStore.user?.name"
                     />
-                    <span
-                      v-else
-                      class="text-h6"
-                    >
+                    <span v-else class="text-h6">
                       {{ authStore.user?.name?.charAt(0)?.toUpperCase() }}
                     </span>
                   </v-avatar>
@@ -255,7 +246,7 @@ async function changePassword() {
                       accept="image/jpeg,image/png,image/webp"
                       class="d-none"
                       @change="uploadAvatar"
-                    >
+                    />
                   </div>
                 </div>
 
@@ -295,11 +286,7 @@ async function changePassword() {
                     :disabled="profileSaving"
                     required
                   />
-                  <v-btn
-                    type="submit"
-                    color="primary"
-                    :loading="profileSaving"
-                  >
+                  <v-btn type="submit" color="primary" :loading="profileSaving">
                     {{ t('form.save') }}
                   </v-btn>
                 </v-form>
@@ -334,10 +321,7 @@ async function changePassword() {
                   {{ emailSuccess }}
                 </v-alert>
 
-                <v-form
-                  v-if="emailStep === 1"
-                  @submit.prevent="requestEmailChange"
-                >
+                <v-form v-if="emailStep === 1" @submit.prevent="requestEmailChange">
                   <v-text-field
                     v-model="emailForm.newEmail"
                     :label="t('account.email.new')"
@@ -346,19 +330,12 @@ async function changePassword() {
                     :disabled="emailSaving"
                     required
                   />
-                  <v-btn
-                    type="submit"
-                    color="primary"
-                    :loading="emailSaving"
-                  >
+                  <v-btn type="submit" color="primary" :loading="emailSaving">
                     {{ t('account.email.sendCode') }}
                   </v-btn>
                 </v-form>
 
-                <v-form
-                  v-else
-                  @submit.prevent="verifyEmailChange"
-                >
+                <v-form v-else @submit.prevent="verifyEmailChange">
                   <p class="text-body-2 mb-4">
                     {{ t('account.email.codeSent', { email: emailForm.newEmail }) }}
                   </p>
@@ -370,18 +347,10 @@ async function changePassword() {
                     required
                   />
                   <div class="d-flex ga-2">
-                    <v-btn
-                      type="submit"
-                      color="primary"
-                      :loading="emailSaving"
-                    >
+                    <v-btn type="submit" color="primary" :loading="emailSaving">
                       {{ t('form.submit') }}
                     </v-btn>
-                    <v-btn
-                      variant="text"
-                      :disabled="emailSaving"
-                      @click="emailStep = 1"
-                    >
+                    <v-btn variant="text" :disabled="emailSaving" @click="emailStep = 1">
                       {{ t('form.cancel') }}
                     </v-btn>
                   </div>
@@ -437,16 +406,8 @@ async function changePassword() {
                     :disabled="passwordSaving"
                     required
                   />
-                  <v-checkbox
-                    v-model="showPassword"
-                    :label="t('form.showPassword')"
-                    class="mb-4"
-                  />
-                  <v-btn
-                    type="submit"
-                    color="primary"
-                    :loading="passwordSaving"
-                  >
+                  <v-checkbox v-model="showPassword" :label="t('form.showPassword')" class="mb-4" />
+                  <v-btn type="submit" color="primary" :loading="passwordSaving">
                     {{ t('account.password.submit') }}
                   </v-btn>
                 </v-form>

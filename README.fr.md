@@ -35,6 +35,7 @@ Un starter kit complet et moderne pour créer des applications web avec **Vue 3*
 - ✅ **Vuetify 4** - Composants Material Design complets
 - ✅ **SCSS** - Variables globales, mixins et thèmes
 - ✅ **Vue i18n** - Support multi-langues (EN, FR)
+- ✅ **Consentement Cookies (RGPD)** - Bannière de consentement bilingue et accessible pilotant Google Consent Mode, choix persisté dans localStorage
 
 ### Backend
 

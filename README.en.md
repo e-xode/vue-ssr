@@ -35,6 +35,7 @@ A complete and modern starter kit for building web applications with **Vue 3**, 
 - ✅ **Vuetify 4** - Complete Material Design components
 - ✅ **SCSS** - Global variables, mixins and themes
 - ✅ **Vue i18n** - Multi-language support (EN, FR)
+- ✅ **Cookie Consent (GDPR)** - Bilingual, accessible consent banner driving Google Consent Mode, choice persisted in localStorage
 
 ### Backend
 

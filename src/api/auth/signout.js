@@ -8,7 +8,12 @@ export function setupSignoutRoute(app, db) {
       if (err) {
         return res.status(500).json({ error: 'error.server' });
       }
-      res.clearCookie('app.sid');
+      res.clearCookie('app.sid', {
+        path: '/',
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+      });
       if (userId) {
         logEvent(db, { event: 'user-signout', userId, ip: req.ip });
       }

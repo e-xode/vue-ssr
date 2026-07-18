@@ -14,7 +14,7 @@ export function setupSigninRoute(app, db) {
     }
 
     if (!EMAIL_REGEX.test(email)) {
-      return res.status(400).json({ error: 'error.validation.invalidEmail' });
+      return res.status(400).json({ error: 'error.auth.invalidCredentials' });
     }
 
     try {

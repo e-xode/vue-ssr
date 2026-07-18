@@ -23,10 +23,5 @@ const toggle = () => {
 </script>
 
 <template>
-  <v-btn
-    :icon="icon"
-    variant="text"
-    :aria-label="t('a11y.toggleTheme')"
-    @click="toggle"
-  />
+  <v-btn :icon="icon" variant="text" :aria-label="t('a11y.toggleTheme')" @click="toggle" />
 </template>

@@ -327,5 +327,13 @@
     "submit": "Envoyer le message",
     "success": "Votre message a été envoyé. Nous vous répondrons rapidement.",
     "error": "Échec de l'envoi du message. Veuillez réessayer."
+  },
+  "component": {
+    "cookieConsent": {
+      "accept": "Accepter",
+      "description": "Nous utilisons des cookies pour mesurer l'audience et améliorer votre expérience. Vous pouvez accepter ou refuser.",
+      "refuse": "Refuser",
+      "title": "Cookies"
+    }
   }
 }

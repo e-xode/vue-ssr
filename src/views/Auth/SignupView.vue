@@ -53,12 +53,7 @@ async function handleSubmit() {
       {{ t('meta.signup.title') }}
     </v-card-title>
 
-    <v-alert
-      v-if="errorMessage"
-      type="error"
-      class="mb-4"
-      closable
-    >
+    <v-alert v-if="errorMessage" type="error" class="mb-4" closable>
       {{ errorMessage }}
     </v-alert>
 
@@ -95,13 +90,7 @@ async function handleSubmit() {
         @click:append="showPassword = !showPassword"
       />
 
-      <v-btn
-        type="submit"
-        color="primary"
-        block
-        size="large"
-        :loading="isSubmitting"
-      >
+      <v-btn type="submit" color="primary" block size="large" :loading="isSubmitting">
         {{ t('nav.signup') }}
       </v-btn>
     </v-form>
@@ -110,10 +99,7 @@ async function handleSubmit() {
 
     <p class="text-center mb-0">
       {{ t('meta.signin.description') }}
-      <router-link
-        :to="localePath('/signin')"
-        class="link"
-      >
+      <router-link :to="localePath('/signin')" class="link">
         {{ t('nav.signin') }}
       </router-link>
     </p>

@@ -1,11 +1,7 @@
 <template>
   <v-container class="contact-page">
     <v-row justify="center">
-      <v-col
-        cols="12"
-        md="8"
-        lg="6"
-      >
+      <v-col cols="12" md="8" lg="6">
         <h1 class="text-display-small mb-2">
           {{ t('contact.title') }}
         </h1>
@@ -13,28 +9,15 @@
           {{ t('contact.subtitle') }}
         </p>
 
-        <v-alert
-          v-if="success"
-          type="success"
-          class="mb-6"
-        >
+        <v-alert v-if="success" type="success" class="mb-6">
           {{ t('contact.success') }}
         </v-alert>
 
-        <v-alert
-          v-if="error"
-          type="error"
-          class="mb-6"
-          closable
-          @click:close="error = ''"
-        >
+        <v-alert v-if="error" type="error" class="mb-6" closable @click:close="error = ''">
           {{ error }}
         </v-alert>
 
-        <v-form
-          v-if="!success"
-          @submit.prevent="handleSubmit"
-        >
+        <v-form v-if="!success" @submit.prevent="handleSubmit">
           <v-text-field
             v-model="form.name"
             :label="t('contact.name')"

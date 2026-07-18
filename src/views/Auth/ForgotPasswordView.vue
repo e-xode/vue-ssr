@@ -45,21 +45,13 @@ async function handleSubmit() {
     </v-card-title>
 
     <template v-if="sent">
-      <v-alert
-        type="success"
-        class="mb-4"
-      >
+      <v-alert type="success" class="mb-4">
         {{ t('forgotPassword.sent') }}
       </v-alert>
       <p class="text-center text-body-2 text-medium-emphasis">
         {{ t('forgotPassword.sentHint') }}
       </p>
-      <v-btn
-        :to="localePath('/reset-password')"
-        color="primary"
-        block
-        class="mt-4"
-      >
+      <v-btn :to="localePath('/reset-password')" color="primary" block class="mt-4">
         {{ t('forgotPassword.enterCode') }}
       </v-btn>
     </template>
@@ -69,12 +61,7 @@ async function handleSubmit() {
         {{ t('forgotPassword.description') }}
       </p>
 
-      <v-alert
-        v-if="errorMessage"
-        type="error"
-        class="mb-4"
-        closable
-      >
+      <v-alert v-if="errorMessage" type="error" class="mb-4" closable>
         {{ errorMessage }}
       </v-alert>
 
@@ -89,13 +76,7 @@ async function handleSubmit() {
           required
         />
 
-        <v-btn
-          type="submit"
-          color="primary"
-          block
-          size="large"
-          :loading="isSubmitting"
-        >
+        <v-btn type="submit" color="primary" block size="large" :loading="isSubmitting">
           {{ t('forgotPassword.submit') }}
         </v-btn>
       </v-form>
@@ -103,10 +84,7 @@ async function handleSubmit() {
       <v-divider class="my-4" />
 
       <p class="text-center mb-0">
-        <router-link
-          :to="localePath('/signin')"
-          class="link"
-        >
+        <router-link :to="localePath('/signin')" class="link">
           {{ t('nav.signin') }}
         </router-link>
       </p>

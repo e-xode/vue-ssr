@@ -123,12 +123,7 @@ onMounted(() => {
             >
               {{ t('admin.logs.deleteSelected', { count: selected.length }) }}
             </v-btn>
-            <v-btn
-              :prepend-icon="mdiRefresh"
-              variant="tonal"
-              :loading="loading"
-              @click="fetchLogs"
-            >
+            <v-btn :prepend-icon="mdiRefresh" variant="tonal" :loading="loading" @click="fetchLogs">
               {{ t('form.loading') }}
             </v-btn>
           </div>
@@ -137,10 +132,7 @@ onMounted(() => {
         <v-card class="mb-4">
           <v-card-text>
             <v-row>
-              <v-col
-                cols="12"
-                sm="4"
-              >
+              <v-col cols="12" sm="4">
                 <v-text-field
                   v-model="filters.search"
                   :label="t('admin.logs.search')"
@@ -148,10 +140,7 @@ onMounted(() => {
                   @keyup.enter="applyFilters"
                 />
               </v-col>
-              <v-col
-                cols="12"
-                sm="3"
-              >
+              <v-col cols="12" sm="3">
                 <v-select
                   v-model="filters.event"
                   :label="t('admin.logs.event')"
@@ -159,60 +148,33 @@ onMounted(() => {
                   clearable
                 />
               </v-col>
-              <v-col
-                cols="12"
-                sm="2"
-              >
+              <v-col cols="12" sm="2">
                 <v-text-field
                   v-model="filters.from"
                   :label="t('admin.logs.filter.from')"
                   type="date"
                 />
               </v-col>
-              <v-col
-                cols="12"
-                sm="2"
-              >
-                <v-text-field
-                  v-model="filters.to"
-                  :label="t('admin.logs.filter.to')"
-                  type="date"
-                />
+              <v-col cols="12" sm="2">
+                <v-text-field v-model="filters.to" :label="t('admin.logs.filter.to')" type="date" />
               </v-col>
-              <v-col
-                cols="12"
-                sm="1"
-                class="d-flex align-center ga-2"
-              >
-                <v-btn
-                  color="primary"
-                  @click="applyFilters"
-                >
+              <v-col cols="12" sm="1" class="d-flex align-center ga-2">
+                <v-btn color="primary" @click="applyFilters">
                   {{ t('form.submit') }}
                 </v-btn>
               </v-col>
             </v-row>
-            <v-btn
-              variant="text"
-              size="small"
-              @click="resetFilters"
-            >
+            <v-btn variant="text" size="small" @click="resetFilters">
               {{ t('admin.logs.filter.reset') }}
             </v-btn>
           </v-card-text>
         </v-card>
 
-        <v-alert
-          v-if="error"
-          type="error"
-          class="mb-4"
-        >
+        <v-alert v-if="error" type="error" class="mb-4">
           {{ error }}
         </v-alert>
 
-        <p class="text-body-2 text-medium-emphasis mb-2">
-          {{ total }} {{ t('admin.logs.total') }}
-        </p>
+        <p class="text-body-2 text-medium-emphasis mb-2">{{ total }} {{ t('admin.logs.total') }}</p>
 
         <v-table>
           <thead>
@@ -234,43 +196,24 @@ onMounted(() => {
           </thead>
           <tbody>
             <tr v-if="loading">
-              <td
-                colspan="7"
-                class="text-center py-8"
-              >
-                <v-progress-circular
-                  indeterminate
-                  color="primary"
-                />
+              <td colspan="7" class="text-center py-8">
+                <v-progress-circular indeterminate color="primary" />
               </td>
             </tr>
             <tr v-else-if="!logs.length">
-              <td
-                colspan="7"
-                class="text-center py-8 text-medium-emphasis"
-              >
+              <td colspan="7" class="text-center py-8 text-medium-emphasis">
                 {{ t('admin.logs.empty') }}
               </td>
             </tr>
-            <tr
-              v-for="log in logs"
-              v-else
-              :key="log._id"
-            >
+            <tr v-for="log in logs" v-else :key="log._id">
               <td>
-                <v-checkbox
-                  v-model="selected"
-                  :value="log._id"
-                />
+                <v-checkbox v-model="selected" :value="log._id" />
               </td>
               <td class="text-body-2">
                 {{ formatDate(log.createdAt) }}
               </td>
               <td>
-                <v-chip
-                  size="small"
-                  variant="tonal"
-                >
+                <v-chip size="small" variant="tonal">
                   {{ log.event }}
                 </v-chip>
               </td>
@@ -296,10 +239,7 @@ onMounted(() => {
           </tbody>
         </v-table>
 
-        <div
-          v-if="pageCount > 1"
-          class="d-flex justify-center mt-4"
-        >
+        <div v-if="pageCount > 1" class="d-flex justify-center mt-4">
           <v-pagination
             v-model="pagination.page"
             :length="pageCount"

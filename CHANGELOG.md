@@ -2,9 +2,29 @@
 
 ## [Unreleased]
 
+## 5.3.0
+
+### Added
+
+- **GDPR cookie-consent banner** — a new `CookieConsentBanner` (mounted app-wide in `App.vue`) and a `useConsent` composable let visitors accept or decline analytics cookies. The choice persists in `localStorage` and drives Google Consent Mode (`gtag('consent','update', …)` over `analytics_storage` + the `ad_*` signals), re-applied on load. Signals default to denied until the visitor chooses; the banner is bilingual (`component.cookieConsent.*`), keyboard-accessible, and respects `prefers-reduced-motion`.
+- **HTML sanitizer utility** — `src/shared/sanitize.js` (`sanitize()` + `isEmptyHtml()`), a curated `sanitize-html` wrapper with a tag/attribute/style allowlist, YouTube/Vimeo iframe hosts, and forced `rel="noopener noreferrer"` + `target="_blank"` on links — a ready XSS-safe primitive for any rich/user-supplied HTML. Adds the `sanitize-html` dependency.
+
+### Changed
+
+- **`apiFetch` timeout is now configurable** — pass `{ timeout: ms }` to override the 15s default abort (useful for slow uploads or long requests). Backward-compatible.
+- **Versioned container images** — the GHCR Docker image now builds on `v*` tags (aligned with npm publish) and is tagged by semver (`{{version}}`, `{{major}}.{{minor}}`, `latest`) instead of an unversioned image rebuilt on every `master` push, giving reproducible release images.
+
+### Fixed
+
+- **Session cookie cleared on signout** — `res.clearCookie('app.sid')` now passes the same `path`/`sameSite`/`secure`/`httpOnly` attributes the cookie was set with, so browsers actually remove it; previously a stale session cookie could survive signout.
+
 ### Security
 
+- **reCAPTCHA can no longer be bypassed** — signup and contact previously verified the captcha only when a token was present, so omitting `captchaToken` skipped verification entirely; verification is now mandatory on both endpoints. `verifyCaptcha` was hardened to check the expected v3 action (blocks cross-action token replay), URL-encode the verify request, honor a configurable `RECAPTCHA_MIN_SCORE`, and short-circuit to success only outside production / when no secret is set (dev and local stay frictionless).
+- **Login no longer distinguishes a malformed email from wrong credentials** — signin returns the generic `error.auth.invalidCredentials` for an invalid email format, reducing user enumeration.
 - **npm audit advisories cleared** — bumped `nodemailer` 8.0.10 → 9.0.3, `multer` 2.1.1 → 2.2.0, `dompurify` 3.4.8 → 3.4.12 and `ws` 8.20.1 → 8.21.1, taking the repo from 6 open Dependabot alerts (3 high) to 0. The high-severity ones: nodemailer's `raw` option bypassing `disableFileAccess`/`disableUrlAccess` (arbitrary file read + SSRF), multer's DoS via deeply nested field names, and a `ws` memory-exhaustion DoS. **`nodemailer` 9 is a major**: it now validates TLS certificates by default when fetching remote content (URL attachments, OAuth2 token endpoints, HTTP proxies). `src/shared/email.js` uses none of these — plain SMTP with inline HTML — and the same version has been running in production on `e-xode.www` since 2026-06-22 with mail delivery confirmed working.
+
+---
 
 ## 5.2.2
 

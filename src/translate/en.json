@@ -327,5 +327,13 @@
     "submit": "Send Message",
     "success": "Your message has been sent. We'll get back to you soon.",
     "error": "Failed to send your message. Please try again."
+  },
+  "component": {
+    "cookieConsent": {
+      "accept": "Accept",
+      "description": "We use cookies to measure audience and improve your experience. You can accept or decline.",
+      "refuse": "Decline",
+      "title": "Cookies"
+    }
   }
 }

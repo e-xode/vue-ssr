@@ -53,10 +53,11 @@ See [references/ssr-lifecycle.md](./references/ssr-lifecycle.md).
 | `dbHelpers.js` | parseObjectId(), parsePagination(), findUserSafe(), getUserWithCounts()                       |
 | `email.js`     | generateSecurityCode(), hashCode(), verifyCode(), sendSecurityCodeEmail(), sendContactEmail() |
 | `security.js`  | getClientIp(), isIpBlocked(), recordLoginIp(), destroyUserSessions()                          |
-| `api.js`       | apiFetch() — client fetch wrapper (AbortController 15s, rate-limit detection)                 |
+| `api.js`       | apiFetch() — client fetch wrapper (AbortController, configurable `timeout` default 15s, rate-limit detection) |
 | `mongo.js`     | connectDB(), getDB(), closeDB() — connection pooling + ensureIndexes                          |
 | `analytics.js` | Google Analytics gtag injection (SSR head, GA_MEASUREMENT_ID)                                 |
-| `captcha.js`   | Server-side reCAPTCHA v3 verification                                                         |
+| `captcha.js`   | Server-side reCAPTCHA v3 verify (expectedAction check, RECAPTCHA_MIN_SCORE, `{success,score,reason}`) |
+| `sanitize.js`  | sanitize(), isEmptyHtml() — curated sanitize-html allowlist for XSS-safe rich HTML            |
 | `utils.js`     | escapeHtml()                                                                                  |
 | `log.js`       | logInfo(), logWarn(), logError(), logDebug()                                                  |
 | `logger.js`    | logEvent(db, event, meta) — MongoDB events collection                                         |

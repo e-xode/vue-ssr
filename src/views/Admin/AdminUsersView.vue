@@ -98,16 +98,12 @@ onMounted(fetchUsers);
             {{ t('admin.users.title') }}
           </h1>
           <v-spacer />
-          <span class="text-body-2 text-medium-emphasis">{{ total }} {{ t('admin.users.total') }}</span>
+          <span class="text-body-2 text-medium-emphasis"
+            >{{ total }} {{ t('admin.users.total') }}</span
+          >
         </div>
 
-        <v-alert
-          v-if="error"
-          type="error"
-          class="mb-4"
-          closable
-          @click:close="error = ''"
-        >
+        <v-alert v-if="error" type="error" class="mb-4" closable @click:close="error = ''">
           {{ error }}
         </v-alert>
 
@@ -138,29 +134,16 @@ onMounted(fetchUsers);
             </thead>
             <tbody>
               <tr v-if="loading">
-                <td
-                  colspan="5"
-                  class="text-center py-8"
-                >
-                  <v-progress-circular
-                    indeterminate
-                    color="primary"
-                  />
+                <td colspan="5" class="text-center py-8">
+                  <v-progress-circular indeterminate color="primary" />
                 </td>
               </tr>
               <tr v-else-if="!users.length">
-                <td
-                  colspan="5"
-                  class="text-center py-8 text-medium-emphasis"
-                >
+                <td colspan="5" class="text-center py-8 text-medium-emphasis">
                   {{ t('admin.users.empty') }}
                 </td>
               </tr>
-              <tr
-                v-for="user in users"
-                v-else
-                :key="user._id"
-              >
+              <tr v-for="user in users" v-else :key="user._id">
                 <td>
                   {{ user.name }}
                   <v-chip
@@ -175,10 +158,7 @@ onMounted(fetchUsers);
                 </td>
                 <td>{{ user.email }}</td>
                 <td>
-                  <v-chip
-                    size="small"
-                    variant="tonal"
-                  >
+                  <v-chip size="small" variant="tonal">
                     {{ user.type }}
                   </v-chip>
                 </td>
@@ -202,10 +182,7 @@ onMounted(fetchUsers);
             </tbody>
           </v-table>
 
-          <v-card-text
-            v-if="totalPages > 1"
-            class="d-flex align-center justify-center ga-2 pt-4"
-          >
+          <v-card-text v-if="totalPages > 1" class="d-flex align-center justify-center ga-2 pt-4">
             <v-btn
               :icon="mdiChevronLeft"
               :disabled="page === 1"
@@ -226,10 +203,7 @@ onMounted(fetchUsers);
       </v-col>
     </v-row>
 
-    <v-dialog
-      v-model="deleteDialog"
-      max-width="400"
-    >
+    <v-dialog v-model="deleteDialog" max-width="400">
       <v-card>
         <v-card-title>{{ t('admin.users.deleteConfirm.title') }}</v-card-title>
         <v-card-text>
@@ -237,17 +211,10 @@ onMounted(fetchUsers);
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn
-            variant="text"
-            @click="deleteDialog = false"
-          >
+          <v-btn variant="text" @click="deleteDialog = false">
             {{ t('form.cancel') }}
           </v-btn>
-          <v-btn
-            color="error"
-            :loading="deleteLoading"
-            @click="executeDelete"
-          >
+          <v-btn color="error" :loading="deleteLoading" @click="executeDelete">
             {{ t('form.delete') }}
           </v-btn>
         </v-card-actions>

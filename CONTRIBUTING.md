@@ -59,6 +59,7 @@ docker run -d -p 27017:27017 \
 # 7. Vérifier que tout fonctionne
 npm run lint:check  # Check code style
 npm run test:run    # Run tests
+npm run validate    # Run the full validation battery (format, lint, build, test)
 
 # 8. Lancer le dev
 npm run dev

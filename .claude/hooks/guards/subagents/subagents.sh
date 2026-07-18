@@ -18,7 +18,7 @@ block() {
 case "$tool_name" in
   task)
     prompt=$(printf '%s' "$payload" | jq -r '.tool_input.prompt // ""')
-    forbidden_re='(npm[[:space:]]+test|npm[[:space:]]+run[[:space:]]+(test|build|lint|format)|vitest)'
+    forbidden_re='(npm[[:space:]]+test|npm[[:space:]]+run[[:space:]]+(test|build|lint|format|validate)|eslint|prettier|vitest)'
     if printf '%s\n' "$prompt" | grep -qiE "$forbidden_re"; then
       match=$(printf '%s\n' "$prompt" | grep -oiE "$forbidden_re" | head -1)
       block "Sub-agent prompt contains a forbidden global validation command (matched: \"$match\"). Validation is centralized in the hooks agent. Never instruct sub-agents to run it — see orchestration rule 1 in CLAUDE.md."

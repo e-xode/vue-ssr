@@ -142,13 +142,7 @@ onMounted(fetchUser);
           {{ t('admin.users.detailTitle') }}
         </h1>
 
-        <v-alert
-          v-if="error"
-          type="error"
-          class="mb-4"
-          closable
-          @click:close="error = ''"
-        >
+        <v-alert v-if="error" type="error" class="mb-4" closable @click:close="error = ''">
           {{ error }}
         </v-alert>
 
@@ -162,30 +156,17 @@ onMounted(fetchUser);
           {{ successMessage }}
         </v-alert>
 
-        <div
-          v-if="loading"
-          class="text-center py-12"
-        >
-          <v-progress-circular
-            indeterminate
-            color="primary"
-          />
+        <div v-if="loading" class="text-center py-12">
+          <v-progress-circular indeterminate color="primary" />
         </div>
 
         <template v-else-if="user">
           <v-row>
-            <v-col
-              cols="12"
-              md="6"
-            >
+            <v-col cols="12" md="6">
               <v-card class="mb-4">
                 <v-card-title class="d-flex align-center justify-space-between">
                   {{ t('admin.users.info') }}
-                  <v-chip
-                    v-if="user.isBlocked"
-                    color="error"
-                    size="small"
-                  >
+                  <v-chip v-if="user.isBlocked" color="error" size="small">
                     {{ t('admin.users.blocked') }}
                   </v-chip>
                 </v-card-title>
@@ -236,10 +217,7 @@ onMounted(fetchUser);
               </v-card>
             </v-col>
 
-            <v-col
-              cols="12"
-              md="6"
-            >
+            <v-col cols="12" md="6">
               <v-card class="mb-4">
                 <v-card-title>{{ t('admin.users.edit') }}</v-card-title>
                 <v-card-text>
@@ -259,12 +237,7 @@ onMounted(fetchUser);
                       class="mb-4"
                       :disabled="saving"
                     />
-                    <v-btn
-                      type="submit"
-                      color="primary"
-                      block
-                      :loading="saving"
-                    >
+                    <v-btn type="submit" color="primary" block :loading="saving">
                       {{ t('form.save') }}
                     </v-btn>
                   </v-form>
@@ -273,10 +246,7 @@ onMounted(fetchUser);
             </v-col>
           </v-row>
 
-          <v-card
-            v-if="recentLogs.length"
-            class="mt-4"
-          >
+          <v-card v-if="recentLogs.length" class="mt-4">
             <v-card-title>{{ t('admin.users.recentActivity') }}</v-card-title>
             <v-card-text>
               <v-table density="compact">
@@ -288,18 +258,12 @@ onMounted(fetchUser);
                   </tr>
                 </thead>
                 <tbody>
-                  <tr
-                    v-for="log in recentLogs"
-                    :key="log._id"
-                  >
+                  <tr v-for="log in recentLogs" :key="log._id">
                     <td class="text-body-2">
                       {{ formatDate(log.createdAt) }}
                     </td>
                     <td>
-                      <v-chip
-                        size="small"
-                        variant="tonal"
-                      >
+                      <v-chip size="small" variant="tonal">
                         {{ log.event }}
                       </v-chip>
                     </td>
@@ -315,34 +279,21 @@ onMounted(fetchUser);
       </v-col>
     </v-row>
 
-    <v-dialog
-      v-model="blockDialog"
-      max-width="400"
-    >
+    <v-dialog v-model="blockDialog" max-width="400">
       <v-card>
         <v-card-title>{{ t('admin.users.blockConfirm.title') }}</v-card-title>
         <v-card-text>
           <p class="mb-4">
             {{ t('admin.users.blockConfirm.message') }}
           </p>
-          <v-checkbox
-            v-model="blockIps"
-            :label="t('admin.users.blockConfirm.blockIps')"
-          />
+          <v-checkbox v-model="blockIps" :label="t('admin.users.blockConfirm.blockIps')" />
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn
-            variant="text"
-            @click="blockDialog = false"
-          >
+          <v-btn variant="text" @click="blockDialog = false">
             {{ t('form.cancel') }}
           </v-btn>
-          <v-btn
-            color="error"
-            :loading="blocking"
-            @click="blockUser"
-          >
+          <v-btn color="error" :loading="blocking" @click="blockUser">
             {{ t('admin.users.block') }}
           </v-btn>
         </v-card-actions>

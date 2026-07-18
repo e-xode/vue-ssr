@@ -46,22 +46,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <v-app-bar
-    class="app-header"
-    :class="{ 'app-header--scrolled': scrolled }"
-  >
+  <v-app-bar class="app-header" :class="{ 'app-header--scrolled': scrolled }">
     <v-container class="d-flex align-center">
-      <router-link
-        :to="localePath('/')"
-        class="app-header__logo mr-2"
-        aria-label="Home"
-      >
+      <router-link :to="localePath('/')" class="app-header__logo mr-2" aria-label="Home">
         <v-icon :icon="mdiHome" />
       </router-link>
-      <router-link
-        :to="localePath('/')"
-        class="app-header__title"
-      >
+      <router-link :to="localePath('/')" class="app-header__title">
         {{ t('app.name') }}
       </router-link>
 
@@ -96,11 +86,7 @@ onUnmounted(() => {
         <template v-if="isAuthenticated">
           <v-menu location="bottom end">
             <template #activator="{ props }">
-              <v-btn
-                v-bind="props"
-                :icon="mdiAccount"
-                :aria-label="t('a11y.userMenu')"
-              />
+              <v-btn v-bind="props" :icon="mdiAccount" :aria-label="t('a11y.userMenu')" />
             </template>
             <v-list>
               <v-list-item :to="localePath('/dashboard')">
@@ -109,10 +95,7 @@ onUnmounted(() => {
               <v-list-item :to="localePath('/account')">
                 <v-list-item-title>{{ t('nav.account') }}</v-list-item-title>
               </v-list-item>
-              <v-list-item
-                v-if="isAdmin"
-                :to="localePath('/admin/users')"
-              >
+              <v-list-item v-if="isAdmin" :to="localePath('/admin/users')">
                 <template #prepend>
                   <v-icon :icon="mdiShieldAccount" />
                 </template>
@@ -129,19 +112,10 @@ onUnmounted(() => {
           </v-menu>
         </template>
         <template v-else>
-          <v-btn
-            :to="localePath('/signin')"
-            variant="text"
-            size="small"
-          >
+          <v-btn :to="localePath('/signin')" variant="text" size="small">
             {{ t('nav.signin') }}
           </v-btn>
-          <v-btn
-            :to="localePath('/signup')"
-            variant="flat"
-            color="primary"
-            size="small"
-          >
+          <v-btn :to="localePath('/signup')" variant="flat" color="primary" size="small">
             {{ t('nav.signup') }}
           </v-btn>
         </template>
@@ -157,22 +131,12 @@ onUnmounted(() => {
     </v-container>
   </v-app-bar>
 
-  <v-navigation-drawer
-    v-model="drawer"
-    location="top"
-    temporary
-  >
+  <v-navigation-drawer v-model="drawer" location="top" temporary>
     <v-list class="pa-4">
-      <v-list-item
-        :to="localePath('/')"
-        @click="drawer = false"
-      >
+      <v-list-item :to="localePath('/')" @click="drawer = false">
         <v-list-item-title>{{ t('nav.home') }}</v-list-item-title>
       </v-list-item>
-      <v-list-item
-        :to="localePath('/contact')"
-        @click="drawer = false"
-      >
+      <v-list-item :to="localePath('/contact')" @click="drawer = false">
         <v-list-item-title>{{ t('nav.contact') }}</v-list-item-title>
       </v-list-item>
 
@@ -201,23 +165,13 @@ onUnmounted(() => {
       <v-divider class="my-4" />
 
       <template v-if="isAuthenticated">
-        <v-list-item
-          :to="localePath('/dashboard')"
-          @click="drawer = false"
-        >
+        <v-list-item :to="localePath('/dashboard')" @click="drawer = false">
           <v-list-item-title>{{ t('nav.dashboard') }}</v-list-item-title>
         </v-list-item>
-        <v-list-item
-          :to="localePath('/account')"
-          @click="drawer = false"
-        >
+        <v-list-item :to="localePath('/account')" @click="drawer = false">
           <v-list-item-title>{{ t('nav.account') }}</v-list-item-title>
         </v-list-item>
-        <v-list-item
-          v-if="isAdmin"
-          :to="localePath('/admin/users')"
-          @click="drawer = false"
-        >
+        <v-list-item v-if="isAdmin" :to="localePath('/admin/users')" @click="drawer = false">
           <template #prepend>
             <v-icon :icon="mdiShieldAccount" />
           </template>
@@ -232,19 +186,11 @@ onUnmounted(() => {
         </v-list-item>
       </template>
       <template v-else>
-        <v-list-item
-          :to="localePath('/signin')"
-          @click="drawer = false"
-        >
+        <v-list-item :to="localePath('/signin')" @click="drawer = false">
           <v-list-item-title>{{ t('nav.signin') }}</v-list-item-title>
         </v-list-item>
         <v-list-item class="mt-2">
-          <v-btn
-            block
-            color="primary"
-            :to="localePath('/signup')"
-            @click="drawer = false"
-          >
+          <v-btn block color="primary" :to="localePath('/signup')" @click="drawer = false">
             {{ t('nav.signup') }}
           </v-btn>
         </v-list-item>

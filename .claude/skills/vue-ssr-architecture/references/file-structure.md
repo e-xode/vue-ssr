@@ -35,11 +35,13 @@ src/
     log.js                      # logInfo, logWarn, logError, logDebug
     logger.js                   # logEvent(db, event, meta)
     mongo.js                    # connectDB, getDB, closeDB
+    sanitize.js                 # sanitize(), isEmptyHtml() — sanitize-html allowlist wrapper
     security.js                 # getClientIp, isIpBlocked, recordLoginIp, destroyUserSessions
     utils.js                    # escapeHtml()
 
   composables/
     useCaptcha.js               # Client-side reCAPTCHA v3
+    useConsent.js               # Cookie consent (GDPR) + Google Consent Mode signals
     useLocalePath.js            # localePath(path), switchLocale(code)
 
   stores/

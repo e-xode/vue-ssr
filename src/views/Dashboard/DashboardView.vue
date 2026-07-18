@@ -25,20 +25,10 @@ const isAdmin = computed(() => authStore.isAdmin);
         </p>
       </v-col>
 
-      <v-col
-        v-if="isAdmin"
-        cols="12"
-        md="4"
-      >
-        <v-card
-          :to="localePath('/admin/users')"
-          class="pa-4"
-        >
+      <v-col v-if="isAdmin" cols="12" md="4">
+        <v-card :to="localePath('/admin/users')" class="pa-4">
           <div class="d-flex align-center ga-3">
-            <v-icon
-              :icon="mdiShieldAccount"
-              size="32"
-            />
+            <v-icon :icon="mdiShieldAccount" size="32" />
             <div>
               <div class="text-subtitle-1 font-weight-bold">
                 {{ t('nav.admin') }}

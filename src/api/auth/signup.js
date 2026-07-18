@@ -31,10 +31,8 @@ export function setupSignupRoute(app, db) {
       return res.status(400).json({ error: 'error.validation.nameTooShort' });
     }
 
-    if (captchaToken) {
-      const captchaValid = await verifyCaptcha(captchaToken);
-      if (!captchaValid) return res.status(400).json({ error: 'error.auth.captchaFailed' });
-    }
+    const captcha = await verifyCaptcha(captchaToken, 'signup');
+    if (!captcha.success) return res.status(400).json({ error: 'error.auth.captchaFailed' });
 
     try {
       const ip = getClientIp(req);

@@ -23,10 +23,8 @@ export function setupContactRoute(app, db) {
       }
 
       const { captchaToken } = req.body;
-      if (captchaToken) {
-        const captchaValid = await verifyCaptcha(captchaToken);
-        if (!captchaValid) return res.status(400).json({ error: 'error.auth.captchaFailed' });
-      }
+      const captcha = await verifyCaptcha(captchaToken, 'contact');
+      if (!captcha.success) return res.status(400).json({ error: 'error.auth.captchaFailed' });
 
       const ip = getClientIp(req);
       const data = {

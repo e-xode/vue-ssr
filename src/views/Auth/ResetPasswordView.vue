@@ -66,12 +66,7 @@ async function handleSubmit() {
       {{ t('resetPassword.description') }}
     </p>
 
-    <v-alert
-      v-if="errorMessage"
-      type="error"
-      class="mb-4"
-      closable
-    >
+    <v-alert v-if="errorMessage" type="error" class="mb-4" closable>
       {{ errorMessage }}
     </v-alert>
 
@@ -116,13 +111,7 @@ async function handleSubmit() {
         required
       />
 
-      <v-btn
-        type="submit"
-        color="primary"
-        block
-        size="large"
-        :loading="isSubmitting"
-      >
+      <v-btn type="submit" color="primary" block size="large" :loading="isSubmitting">
         {{ t('resetPassword.submit') }}
       </v-btn>
     </v-form>
@@ -130,10 +119,7 @@ async function handleSubmit() {
     <v-divider class="my-4" />
 
     <p class="text-center mb-0">
-      <router-link
-        :to="localePath('/forgot-password')"
-        class="link"
-      >
+      <router-link :to="localePath('/forgot-password')" class="link">
         {{ t('forgotPassword.resend') }}
       </router-link>
     </p>

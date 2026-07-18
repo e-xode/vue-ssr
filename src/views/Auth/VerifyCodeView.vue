@@ -174,10 +174,7 @@ async function handleResend() {
     </p>
 
     <div class="text-center mb-5">
-      <p
-        class="text-caption mb-1"
-        :class="timerWarning ? 'text-warning' : 'text-medium-emphasis'"
-      >
+      <p class="text-caption mb-1" :class="timerWarning ? 'text-warning' : 'text-medium-emphasis'">
         {{ t('verify.timerExpiring', { minutes: timerMinutes, seconds: timerSeconds }) }}
       </p>
       <v-progress-linear
@@ -198,11 +195,7 @@ async function handleResend() {
       {{ errorMessage }}
     </v-alert>
 
-    <v-alert
-      v-if="attemptsRemaining !== null"
-      type="warning"
-      class="mb-4"
-    >
+    <v-alert v-if="attemptsRemaining !== null" type="warning" class="mb-4">
       {{ t('verify.attemptsRemaining', { remaining: attemptsRemaining }) }}
     </v-alert>
 
@@ -222,7 +215,7 @@ async function handleResend() {
           @input="handleInput(index)"
           @keydown="handleKeyDown(index, $event)"
           @paste="handlePaste"
-        >
+        />
       </div>
 
       <v-btn
@@ -254,11 +247,7 @@ async function handleResend() {
     </p>
 
     <div class="text-center">
-      <v-btn
-        variant="text"
-        :to="localePath('/signin')"
-        class="mt-2"
-      >
+      <v-btn variant="text" :to="localePath('/signin')" class="mt-2">
         {{ t('verify.backToLogin') }}
       </v-btn>
     </div>

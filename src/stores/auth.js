@@ -2,6 +2,25 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { apiFetch } from '@/shared/api';
 
+async function submitAuthCredentials(endpoint, payload, context, refs) {
+  refs.loading.value = true;
+  refs.error.value = null;
+  try {
+    const data = await apiFetch(endpoint, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    refs.verificationContext.value = context;
+    refs.pendingEmail.value = payload.email;
+    return { status: 'success', data };
+  } catch (e) {
+    refs.error.value = e.error || e.message;
+    return { status: 'error', error: e.error || e.message };
+  } finally {
+    refs.loading.value = false;
+  }
+}
+
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null);
   const loading = ref(false);
@@ -64,41 +83,21 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function signup({ email, password, name, captchaToken }) {
-    loading.value = true;
-    error.value = null;
-    try {
-      const data = await apiFetch('/api/auth/signup', {
-        method: 'POST',
-        body: JSON.stringify({ email, password, name, captchaToken }),
-      });
-      verificationContext.value = 'signup';
-      pendingEmail.value = email;
-      return { status: 'success', data };
-    } catch (e) {
-      error.value = e.error || e.message;
-      return { status: 'error', error: e.error || e.message };
-    } finally {
-      loading.value = false;
-    }
+    return submitAuthCredentials(
+      '/api/auth/signup',
+      { email, password, name, captchaToken },
+      'signup',
+      { loading, error, pendingEmail, verificationContext }
+    );
   }
 
   async function signin({ email, password, captchaToken }) {
-    loading.value = true;
-    error.value = null;
-    try {
-      const data = await apiFetch('/api/auth/signin', {
-        method: 'POST',
-        body: JSON.stringify({ email, password, captchaToken }),
-      });
-      verificationContext.value = 'signin';
-      pendingEmail.value = email;
-      return { status: 'success', data };
-    } catch (e) {
-      error.value = e.error || e.message;
-      return { status: 'error', error: e.error || e.message };
-    } finally {
-      loading.value = false;
-    }
+    return submitAuthCredentials('/api/auth/signin', { email, password, captchaToken }, 'signin', {
+      loading,
+      error,
+      pendingEmail,
+      verificationContext,
+    });
   }
 
   async function verifyCode(email, code) {
