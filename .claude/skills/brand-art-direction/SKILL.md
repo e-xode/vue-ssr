@@ -1,6 +1,6 @@
 ---
 name: brand-art-direction
-description: "Material Design 3 / Vuetify 4 art-direction charter for the Vue SSR Starter Kit (e-xode/vue-ssr): the opinionated, screenshot-verifiable brand-identity layer above design-scss and design-ux. Defines the clean-minimal direction (single indigo brand accent, neutral-gray chrome, bordered flat MD3 surfaces, 8px rhythm, restraint over decoration) as DECIDABLE screenshot-checkable systems: quiet surface rhythm, canonical hover/elevation per component archetype with sibling consistency, palette roles, decorative restraint, and an evidence-based pre-delivery checklist graded by the visual-qa agent. Trigger on ANY visual/finition or polish work on rendered views: card hovers, surface backgrounds, elevation, accent usage, hero/CTA styling. Load BEFORE design-scss/design-ux when styling views. Don't use for: SCSS token/mixin mechanics (→ design-scss), UX methodology (→ design-ux), Vuetify component API (→ vuetify-components), design routing (→ vue-ssr-design), marketing copy (→ content-strategy)."
+description: "Material Design 3 / Vuetify 4 art-direction charter for the Vue SSR Starter Kit (e-xode/vue-ssr): the opinionated, screenshot-verifiable brand-identity layer above design-scss and design-ux. Defines the clean-minimal direction as DECIDABLE screenshot-checkable systems, plus the evidence-based pre-delivery checklist graded by the visual-qa agent. Trigger on ANY visual/finishing or polish work on rendered views: card hovers, surface backgrounds, elevation, accent usage, hero/CTA styling. Load BEFORE design-scss/design-ux when styling views. Don't use for: SCSS token/mixin mechanics (→ design-scss), UX methodology (→ design-ux), Vuetify component API (→ vuetify-components), design routing (→ vue-ssr-design), marketing copy (→ content-strategy)."
 ---
 
 # Brand Art Direction — Clean Minimal (MD3)
@@ -86,7 +86,7 @@ Indigo functional brand; gray neutral chrome; feedback colors for feedback only;
 
 ## Pre-delivery checklist (every item answered from a screenshot)
 
-Capture the page(s) with `scripts/screenshots.mjs`, then confirm from the PNGs:
+Capture the page(s) with `.claude/skills/brand-art-direction/scripts/screenshots.mjs`, then confirm from the PNGs:
 
 1. **Surface rhythm** — in `<page>-desktop.png`, are sections quietly distinguishable (hairline/shadow), with no loud color band?
 2. **Sibling hover** — in the first-card vs last-card `:hover` clips of each block, is the treatment identical?
@@ -109,7 +109,7 @@ Any 🔴/🟠 from `visual-qa` → fix and re-capture. Done means the PNGs are c
 | SCSS token/mixin mechanics and file map                 | ➜ See skill: design-scss — implementation reference           |
 | UX hierarchy / spacing methodology                      | ➜ See skill: design-ux — methodology                          |
 | Vuetify theme tokens and component defaults             | ➜ See skill: vuetify-theming, vuetify-overview                |
-| To capture and grade the result                         | The `visual-qa` agent + `scripts/screenshots.mjs`             |
+| To capture and grade the result                         | The `visual-qa` agent + `.claude/skills/brand-art-direction/scripts/screenshots.mjs` |
 
 ## How to evolve this charter
 

@@ -1,6 +1,6 @@
 ---
 name: skill-creator
-description: "Create new skills, modify and improve existing skills, and measure skill performance for the Vue SSR Starter Kit. Use when users want to create a skill from scratch, edit or optimize an existing skill, run evals to test a skill, or optimize a skill's description for better triggering accuracy. ALWAYS load together with the claude-anthropic skill: skill-creator owns the create/eval/iterate workflow, claude-anthropic owns the project rules (naming, placement, frontmatter conventions, anti-triggers, references layout, post-creation audit checklist). Don't use for: project-specific skill conventions, audit of existing skills, or CLAUDE.md/agents/hooks governance (→ claude-anthropic skill)."
+description: "Create new skills, modify and improve existing skills, and measure skill performance for the Vue SSR Starter Kit. Use when users want to create a skill from scratch, edit or optimize an existing skill, run evals to test a skill, or optimize a skill's description for better triggering accuracy. ALWAYS load together with the claude-anthropic skill: skill-creator owns the create/eval/iterate workflow, claude-anthropic owns the project rules (naming, placement, frontmatter conventions, anti-triggers, references layout, post-creation audit checklist). Don't use for: project-specific skill conventions, audit of existing skills, or CLAUDE.md/agents/rules governance (→ claude-anthropic skill)."
 ---
 
 # Skill Creator
@@ -41,7 +41,7 @@ Handoff convention: `➜ See skill: claude-anthropic — <reason>`.
 
 ### Write the SKILL.md
 
-- **name**: kebab-case, prefix `vue-ssr-` for project-scoped skills
+- **name**: kebab-case, prefixed by domain — `vue-ssr-*` (project-specific), `vue3-*` (Vue 3), `vuetify-*` (Vuetify 4), `design-*` (SCSS/UX/art-direction), `marketing-*` (acquisition); cross-cutting skills (`translate`, `review`, `seo`, `skill-creator`, `claude-anthropic`, `starter-kit-adapt`) stay unprefixed. See `claude-anthropic` rule 14 for the authoritative list.
 - **description**: Discriminating, pushy, with anti-triggers. Min 80 chars.
 - **body**: Method + index. Knowledge in `references/`.
 
@@ -56,6 +56,10 @@ Handoff convention: `➜ See skill: claude-anthropic — <reason>`.
 └── evals/              (optional, test cases)
     └── evals.json
 ```
+
+### Size budgets
+
+Every file kind has a budget and an enforcement point — see [references/size-budget-table.md](references/size-budget-table.md). When a file outgrows its budget, move content down the disclosure chain (CLAUDE.md → skill body → reference → script), never trim the trigger surface.
 
 ## Running evals
 
@@ -88,5 +92,5 @@ Create `evals/evals.json` with test prompts and assertions:
 - **Discriminating**: State exact domain, file paths, key types, trigger keywords
 - **Pushy**: "Trigger whenever...", "Always load when..."
 - **Anti-triggered**: "Don't use for: X (→ alternative-skill)"
-- **Budget**: 1,536 characters max (combined description + when_to_use)
+- **Budget**: the binding constraint for this project is a 23,000-char AGGREGATE sub-budget across ALL skill descriptions combined (audit-warned) — check the current aggregate total (`scripts/audit.py` INFO output) before adding chars to any description. The 1,536-char single-skill hard cap is a per-skill listing ceiling and rarely the actual limiting factor.
 - **Min length**: 80 characters

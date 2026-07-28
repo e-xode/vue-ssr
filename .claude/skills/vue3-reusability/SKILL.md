@@ -120,7 +120,7 @@ const appConfig = inject('appConfig');
 | Component-based reuse (props/slots)           | vue3-components               |
 
 ➜ See skill: vue3-composition — composables are the primary reuse mechanism; use them before a directive or plugin.
-➜ See skill: vuetify-components — Vuetify ships its own directives/components; do not reimplement them.
+➜ See skill: vuetify-overview — Vuetify ships its own directives/components; do not reimplement them.
 ➜ See skill: vue-ssr-architecture — where plugins are wired (`main.js`, `src/plugins/`) and the SSR lifecycle.
 
 ## References

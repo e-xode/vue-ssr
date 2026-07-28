@@ -1,51 +1,56 @@
 ---
-name: vue-ssr-hooks
-description: "Post-task validation system for the Vue SSR Starter Kit: the hooks agent runs a format → lint → build → test battery via the single `npm run validate` orchestrator, on user opt-in only. Covers the opt-in trigger (never automatic), the validate.mjs orchestrator (parallel stages, prettier/eslint --cache, git-digest sentinel skip), the short-circuit table (skip validation for non-code files, build only on .vue/.js), the dormant settings._json hooks, and the subagent validation blocker. Trigger on: validation failures, understanding why lint/build/test ran or didn't run, modifying the validation pipeline. Don't use for: app code architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), deployment (→ vue-ssr-deployment), Claude config governance (→ claude-anthropic)."
+name: vue-ssr-validation
+description: "Post-task validation pipeline for the Vue SSR Starter Kit: the validation agent's format/lint/build/test battery behind the single `npm run validate` orchestrator, on user opt-in only. Covers the opt-in trigger (never automatic), validate.mjs (serial lint prefix then parallel stages, prettier/eslint --cache, git-digest sentinel skip) and the dirty-list short-circuit table. Trigger on: validation failures, why a stage ran or was skipped, changing the pipeline, or phrasings like 'run the checks', 'npm run validate', 'lint is failing', 'the build broke', 'format check', 'did the tests pass'. Don't use for: Claude config governance and audit.py (→ claude-anthropic), native Claude Code hooks — none exist in this project (→ claude-anthropic), Vue's lifecycle hooks — a framework concept (→ vue3-composition), app architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), deployment (→ vue-ssr-deployment)."
 ---
 
-# Vue SSR Hooks (Validation System)
+# Vue SSR Validation (post-task battery)
 
-> Owns the post-task validation pipeline: format → lint → build → test, executed by the `hooks` agent via `npm run validate`.
+> Owns the post-task validation pipeline: format → lint → build → test, executed by the `validation` agent through `npm run validate`.
 
 ## When validation runs — opt-in only
 
-Validation is **never automatic**. Per the Task completion protocol in CLAUDE.md, the orchestrator runs it in exactly two cases:
+Validation is **never automatic**. Per the Task completion protocol in CLAUDE.md, it runs in exactly two cases:
 
-1. On task completion the orchestrator asks the user whether to validate, and delegates to `hooks` only on an explicit yes.
-2. The user explicitly requests validation this turn.
+1. The orchestrator offers validation at task end and the user accepts.
+2. The user explicitly requests it this turn.
 
-Never otherwise. This keeps normal turns fast and token-light; the full battery only fires when the user wants it.
+Never otherwise. Normal turns stay fast and token-light; the battery fires only when the user wants it.
 
 ## The orchestrator: `npm run validate`
 
-`scripts/validate.mjs` is the single entry point. The `hooks` agent runs it once and judges success by exit code (0 = pass), never piping it. It:
+`scripts/validate.mjs` is the single entry point. The `validation` agent runs it once and judges success by exit code (0 = pass), never piping it. It:
 
 1. Derives the dirty-list itself (`git diff --name-only HEAD`, `--cached`, `ls-files --others --exclude-standard`).
-2. Applies the short-circuit table in code to select stages.
-3. Runs the mutating `lint` (`eslint --cache . --fix`) as a serial prefix, then `format:check`, `build`, and `test:run` **in parallel**.
-4. Stores a git-content SHA digest sentinel under the git dir; when the tree is unchanged since the last run it prints `mode: cached` and returns the previous result instantly.
+2. Applies the short-circuit table below in code to select stages.
+3. Runs the mutating `lint` (`eslint --cache . --fix`) as a serial prefix, then `format:check`, `build` and `test:run` **in parallel**, aggregating every result.
+4. Stores a git-content SHA digest sentinel under the git dir; when the tree is unchanged since the last run it prints `mode: cached` and returns the previous verdict instantly, so a re-delegation after no edits is near-free.
 5. Exits non-zero on any stage failure, printing only the failing stage's output tail.
 
-Prettier and ESLint run with `--cache` (`.eslintcache` is gitignored), so repeat runs only re-process changed files.
+Prettier and ESLint run with `--cache` (`.eslintcache` is gitignored), so repeat runs only re-process changed files. The individual scripts stay runnable on their own: `format:check`, `lint`, `build`, `test:run`.
 
 ## Short-circuit table
 
-Enforced in `scripts/validate.mjs`:
+Enforced in `scripts/validate.mjs` (the table is the reference spec, the script is the enforcement):
 
-| Files modified              | format:check | lint | build   | test    |
-| --------------------------- | ------------ | ---- | ------- | ------- |
-| `.vue`, `.js`, `.ts`, `.mjs`, `.cjs` | ✅  | ✅   | ✅      | ✅      |
-| `.scss`, `.css` only        | ✅           | ✅   | ❌ skip | ❌ skip |
-| `.md`, `.json`, config only | ❌ skip all  | ❌   | ❌      | ❌      |
+| Files modified                       | format:check | lint | build | test |
+| ------------------------------------ | ------------ | ---- | ----- | ---- |
+| `.vue`, `.js`, `.ts`, `.mjs`, `.cjs` | yes          | yes  | yes   | yes  |
+| `.scss`, `.css` only                 | yes          | yes  | skip  | skip |
+| `.md`, `.json`, config only          | skip         | skip | skip  | skip |
 
-The `build` step compiles both SSR bundles (`build:client` + `build:server`). It catches import errors, server/client boundary leaks, and SSR-incompatible code that lint and unit tests miss — the highest-value guard for an SSR project, and the slow one, so it is short-circuited to code changes only.
+Any mix that includes `.vue`/`.js`/`.ts`/`.mjs`/`.cjs` runs the full battery.
 
-## The `hooks` agent
+The `build` stage compiles both SSR bundles (`build:client` + `build:server`). It catches import errors, client/server boundary leaks and SSR-incompatible code that lint and unit tests miss — the highest-value guard for an SSR project, and the slow one, hence its short-circuit to code changes only.
 
-The `hooks` agent (model: haiku, tools: Bash) is the sole validation executor. It runs `npm run validate`, relays the report verbatim, and distinguishes a pre-existing baseline failure from a regression introduced by the current change (see `.claude/agents/hooks.md`). No other agent may run validation.
+## The `validation` agent
 
-## Dormant native hooks
+The `validation` agent (model `haiku`, tools `Bash`) is the sole validation executor and the only sub-agent allowed to run validation. It runs `npm run validate`, relays the report, and distinguishes a pre-existing baseline failure from a regression introduced by the current change. It never fixes code. See `.claude/agents/validation.md`.
 
-`.claude/settings._json` (note the `_` prefix) holds a native Stop/PreToolUse hook chain that is **disabled** — the extension keeps it from being loaded by Claude Code. It exists for dual Copilot/Claude-Code compatibility and is a legacy of the automatic-validation era; do NOT rename it to `settings.json`. The live path is the opt-in `hooks`-agent flow above.
+## History
 
-The one guard still worth keeping in mind: `guards/subagents/subagents.sh` blocks sub-agent prompts that contain forbidden validation commands (`npm run validate`, `npm test/lint/format/build`, direct `eslint`/`prettier`, `vitest`) and blocks code comments in `.vue/.js/.scss/.css` writes — enforcing the centralized-validation and no-comments rules if the native hooks are ever enabled.
+The former native-hook wiring (`.claude/hooks/` shell scripts, the dormant `settings._json` kill switch, `hooks-reference.md`) was removed on 2026-07-26 — validation has a single path, the `validation` agent. Decision history: `claude-anthropic` case-studies CS-6.
+
+## See also
+
+- `validation` agent — the validation executor (`.claude/agents/validation.md`).
+- `claude-anthropic` — Claude config governance and `audit.py`.

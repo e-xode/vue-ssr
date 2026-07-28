@@ -1,6 +1,6 @@
 ---
 name: vuetify-overview
-description: "Vuetify 4 (Material Design 3) entry point and global configuration for the Vue SSR Starter Kit: component selection decision tree (which v-component for which UI need), project-wide defaults in src/plugins/vuetify.js (rounded, variants, density per component), the semantic color palette (primary/secondary/accent/success/warning/error), SSR-safe instantiation (createApplicationVuetify(ssr) flag), and responsive breakpoints via the useDisplay composable. Trigger on: choosing which Vuetify component to use, project default props, color tokens by name, SSR Vuetify setup, useDisplay/breakpoint behavior, or a general 'which Vuetify component' question. Don't use for: specific component APIs — forms (→ vuetify-forms), data tables (→ vuetify-data), cards/dialogs/alerts (→ vuetify-components), app-bar/drawer/tabs (→ vuetify-layout), theming/dark mode (→ vuetify-theming), icons (→ vuetify-icons), SCSS tokens (→ design-scss)."
+description: "Vuetify 4 (Material Design 3) entry point and global configuration for the Vue SSR Starter Kit: the component-selection decision tree, project-wide defaults in src/plugins/vuetify.js, the semantic color palette, SSR-safe instantiation, and responsive breakpoints via useDisplay. Trigger on: choosing which Vuetify component to use, project default props, color tokens by name, SSR Vuetify setup, useDisplay/breakpoint behavior, or a general 'which Vuetify component' question. Don't use for: specific component APIs — forms (→ vuetify-forms), data tables (→ vuetify-data), cards/dialogs/alerts (→ vuetify-components), app-bar/drawer/tabs (→ vuetify-layout), theming/dark mode (→ vuetify-theming), icons (→ vuetify-icons), SCSS tokens (→ design-scss)."
 ---
 
 # Vuetify Overview
@@ -11,22 +11,29 @@ description: "Vuetify 4 (Material Design 3) entry point and global configuration
 
 This skill is the entry point. Specific component APIs and patterns live in sibling skills:
 
-- **vuetify-theming** — theme config, dark mode, defaults object, Vuetify CSS utility classes
+- **vuetify-theming** — hex color values (single owner), theme config, dark mode, defaults object, Vuetify CSS utility classes
 - **vuetify-layout** — app shell, grid, app bar, navigation drawer, menus, tabs, breadcrumbs
 - **vuetify-forms** — inputs, validation rules, v-form wrapper, form submission
 - **vuetify-data** — data tables (server-side pagination), v-pagination
 - **vuetify-components** — cards, lists, chips, avatars, dialogs, snackbars, alerts, tooltips, progress, skeletons
 - **vuetify-icons** — @mdi/js tree-shakeable SVG icons
 
+## Division of responsibilities (color)
+
+| Skill                | Owns                                                          |
+| --------------------- | ---------------------------------------------------------------- |
+| `vuetify-theming`     | Every hex value, single source of truth (its `references/color-palette.md`) |
+| **vuetify-overview**  | Which semantic token name fits a given intent (this page's table below) |
+
 ## Component selection decision tree
 
 | UI need            | Component                                   | Notes                                     |
-| ------------------ | ------------------------------------------- | ----------------------------------------- |
+| ------------------- | -------------------------------------------- | ------------------------------------------ |
 | Text input         | `v-text-field`                              | outlined, comfortable density, rounded lg |
 | Dropdown           | `v-select`                                  | same defaults as text-field               |
 | Toggle             | `v-switch`                                  | primary color, inset                      |
 | Action button      | `v-btn`                                     | flat variant, rounded lg                  |
-| Card container     | `v-card`                                    | rounded xl, no elevation, border          |
+| Card container     | `v-card`                                    | rounded lg, no elevation, border          |
 | Data grid          | `v-data-table`                              | server-side pagination preferred          |
 | Navigation list    | `v-list` + `v-list-item`                    | with prepend icons                        |
 | Tag/badge          | `v-chip`                                    | rounded lg                                |
@@ -44,75 +51,33 @@ This skill is the entry point. Specific component APIs and patterns live in sibl
 
 ## Project defaults
 
-The project configures global defaults in `src/plugins/vuetify.js`:
+Global component defaults (`VBtn`, `VCard`, `VTextField`, etc.) are configured once in `src/plugins/vuetify.js` and owned by `vuetify-theming` — see its "Project defaults" table for the full list, or the decision tree above for the default relevant to a specific component.
 
-```javascript
-defaults: {
-  VBtn: { variant: 'flat', rounded: 'lg' },
-  VCard: { rounded: 'xl', elevation: 0, border: true },
-  VTextField: { variant: 'outlined', density: 'comfortable', rounded: 'lg' },
-  VSelect: { variant: 'outlined', density: 'comfortable', rounded: 'lg' },
-  VSwitch: { color: 'primary', inset: true },
-  VChip: { rounded: 'lg' },
-  VAlert: { rounded: 'lg', variant: 'tonal' },
-  VTooltip: { location: 'bottom' }
-}
-```
+## Semantic color tokens by intent
 
-These apply globally. Override per-instance when needed (e.g. `<v-btn variant="outlined">`).
+| Intent                    | Token       |
+| --------------------------- | ------------ |
+| Main actions, links, active state | `primary`  |
+| Secondary actions            | `secondary`  |
+| Highlights/accents           | `accent`     |
+| Success feedback             | `success`    |
+| Warning feedback             | `warning`    |
+| Error, destructive           | `error`      |
+| Informational                | `info`       |
+| Card/sheet background        | `surface`    |
+| Page background               | `background` |
 
-## Color system
+Use semantic color names in components: `color="primary"`, `color="error"`, etc. Never hardcode hex values — see `vuetify-theming` for the underlying hex.
 
-| Token               | Value   | Use                                |
-| ------------------- | ------- | ---------------------------------- |
-| `primary`           | #2563eb | Main actions, links, active states |
-| `primary-darken-1`  | #1e40af | Hover states                       |
-| `primary-darken-2`  | #1e3a8a | Active/pressed states              |
-| `primary-lighten-1` | #60a5fa | Subtle backgrounds                 |
-| `primary-lighten-2` | #93c5fd | Very subtle backgrounds            |
-| `secondary`         | #7c3aed | Secondary actions                  |
-| `accent`            | #06b6d4 | Highlights, accents                |
-| `success`           | #00c853 | Success states                     |
-| `warning`           | #ff9800 | Warning states                     |
-| `error`             | #f44336 | Error states, destructive          |
-| `info`              | #2196f3 | Informational                      |
-| `surface`           | #ffffff | Card/sheet backgrounds             |
-| `background`        | #f8fafc | Page background                    |
+## Hard rules
 
-Use semantic color names in components: `color="primary"`, `color="error"`, etc. Never hardcode hex values.
+- **`VCard`'s project default is `rounded: 'lg'`**, not `'xl'` — this is the single most-cited fact from this skill family; verify against `vuetify-theming`'s reference before repeating it.
+- **Hex values belong solely to `vuetify-theming`** — this skill only names tokens, never redefines their color.
+- **Two different breakpoint scales exist — never conflate them.** Vuetify's `useDisplay` JS breakpoints (`xs`<600, `sm` 600–959, `md` 960–1279, `lg` 1280–1919, `xl` 1920+) are unrelated to the SCSS `respond-to()` mixin's breakpoints (owned by `design-scss`). A layout that must behave consistently in both JS and SCSS needs both checked explicitly — they do not share thresholds.
 
-## SSR integration
+## Reference files
 
-Vuetify must be instantiated with the `ssr` flag on the server:
-
-```javascript
-import { createApplicationVuetify } from '@/plugins/vuetify';
-
-const vuetify = createApplicationVuetify(true);
-app.use(vuetify);
-```
-
-On the client, pass `false` (or omit):
-
-```javascript
-const vuetify = createApplicationVuetify(false);
-```
-
-This ensures hydration works correctly. The SSR flag disables client-only features during server rendering.
-
-## Responsive patterns
-
-Use Vuetify's display composable for breakpoint-aware behavior:
-
-```vue
-<script setup>
-import { useDisplay } from 'vuetify';
-
-const { mobile, mdAndUp } = useDisplay();
-</script>
-<template>
-  <v-navigation-drawer :temporary="mobile" :rail="mdAndUp" />
-</template>
-```
-
-Breakpoints: xs (<600), sm (600-959), md (960-1279), lg (1280-1919), xl (1920+).
+| Need                                            | File                                  |
+| ------------------------------------------------ | --------------------------------------- |
+| SSR-safe instantiation (`createApplicationVuetify`) | `references/ssr-integration.md`        |
+| `useDisplay` breakpoint values and responsive code patterns | `references/responsive-breakpoints.md` |

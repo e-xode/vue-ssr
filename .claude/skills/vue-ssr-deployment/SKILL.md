@@ -1,6 +1,6 @@
 ---
 name: vue-ssr-deployment
-description: "Deployment and CI/CD reference for the Vue SSR Starter Kit: Docker multi-stage build, docker-compose split into a base (app, remote DB) plus a docker-compose.local.yml override (local mongo) switched via the COMPOSE_FILE variable in .env, GitHub Actions workflows (npm-publish on tags, npm-test on PR, docker-build to GHCR), production configuration (Helmet CSP, COOKIE_SECRET, graceful shutdown SIGTERM/SIGINT), Dependabot weekly npm updates. Trigger on any deployment, Docker, docker-compose local-vs-remote DB switch, CI/CD, production config, or infrastructure question. Don't use for: app architecture (→ vue-ssr-architecture), auth flow (→ vue-ssr-auth), post-task validation (→ vue-ssr-hooks)."
+description: "Deployment and CI/CD reference for the Vue SSR Starter Kit: Docker builds, the docker-compose local-vs-remote DB switch, GitHub Actions workflows, production configuration, and Dependabot updates. Trigger on any deployment, Docker, docker-compose local-vs-remote DB switch, CI/CD, production config, or infrastructure question. Don't use for: app architecture (→ vue-ssr-architecture), auth flow (→ vue-ssr-auth), post-task validation (→ vue-ssr-validation), sitemap/robots (→ seo)."
 ---
 
 # Vue SSR Deployment
@@ -33,7 +33,7 @@ description: "Deployment and CI/CD reference for the Vue SSR Starter Kit: Docker
 Server listens to SIGTERM and SIGINT:
 
 1. Stops accepting new connections
-2. Closes MongoDB connection (`closeDB`)
+2. Closes MongoDB connection (`mongoClose`)
 3. Exits process cleanly
 
 Ensures zero data loss during Docker stop / rolling updates.
@@ -42,10 +42,6 @@ Ensures zero data loss during Docker stop / rolling updates.
 
 Weekly npm updates (`dependabot.yml`): increasing version strategy.
 
-## Dynamic sitemap
+## SEO artifacts
 
-GET /sitemap.xml:
-
-- Cached in memory with 1h TTL
-- Includes all public locale-prefixed routes
-- Excludes auth/admin routes
+The dynamic `robots.txt`/`sitemap.xml` served by `server.js` are owned by the `seo` skill — see there, not here.

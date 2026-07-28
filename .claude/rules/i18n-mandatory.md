@@ -6,10 +6,6 @@ paths:
 
 # i18n mandatory
 
-All user-visible text in Vue templates MUST use `t('key')` from vue-i18n. Never hardcode display strings.
+All user-visible text in Vue templates MUST use `t('key')` from vue-i18n. Never hardcode display strings — attribute text (aria-label, title, placeholder) included.
 
-- Import `useI18n` from `vue-i18n` in `<script setup>`
-- Destructure: `const { t } = useI18n()`
-- Template usage: `{{ t('key.path') }}` or `:label="t('key.path')"`
-- Add keys to both `src/translate/en.json` AND `src/translate/fr.json`
-- Attribute text (aria-label, title, placeholder) also uses `t()`
+Keys are added by the `translate` agent — never edit `src/translate/*.json` yourself (rule `locale-delegation`).

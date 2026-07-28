@@ -1,11 +1,19 @@
 ---
 name: review
-description: "Code-review specialist for the Vue SSR Starter Kit (e-xode/vue-ssr). Performs a structured, severity-categorized review of a branch, PR, or uncommitted diff against the project's documented conventions and skills. Read-only — never modifies code. Delegate to this agent whenever the user asks to review, code-review, audit a branch/PR, check changes against conventions, or wants a second opinion on a diff before merge. Returns a markdown report tagged with anomaly types (security, bug, regression, perf, i18n, convention, test-gap). Don't use for: making code changes (do it yourself or use task agents), post-task validation (→ vue-ssr-hooks + hooks agent), Claude config audit (→ claude-anthropic)."
+description: "Code-review method for the Vue SSR Starter Kit (e-xode/vue-ssr): the severity rubric (🔴🟠🟡🟢ℹ️), the anomaly-type taxonomy (security, bug, regression, perf, i18n, convention, test-gap), the citation doctrine (every finding traces to a CLAUDE.md hard rule, a path-scoped rule, a project skill, or an objective concern — else downgrade the severity), and the markdown report format the `review` agent uses to grade a branch/PR/diff against this project's documented conventions. Trigger when structuring, grading, or sourcing a code review, or defining what counts as a citable convention. Don't use for: making code changes (→ vue/server/design agents), post-task validation (→ vue-ssr-validation + validation agent), Claude config audit (→ claude-anthropic)."
 ---
 
 # Review
 
 > Read-only structured code review against project conventions.
+
+This skill is report-only. Never edit files, never stage changes, never commit, never run validation commands.
+
+## Citation doctrine
+
+Every 🔴, 🟠 and 🟡 finding must cite a source: a `CLAUDE.md` hard rule, a path-scoped rule under `.claude/rules/`, a project skill, or an objective security / accessibility / performance / SSR / correctness concern. **If a rule cannot be cited, downgrade the finding to 🟢 or ℹ️.** Never invent a project convention.
+
+Route each changed file to its domain and its citable skills with [references/domain-routing.md](references/domain-routing.md).
 
 ## Severity rubric
 
@@ -31,14 +39,14 @@ security, bug, regression, perf, a11y, i18n, convention, test-gap, docs-gap, typ
 
 ## Conventions to check
 
-- No code comments (CLAUDE.md rule)
-- SCSS externalized (separate .scss file)
-- i18n mandatory (no hardcoded text)
-- SCSS variables (no hardcoded colors/spacings)
-- ObjectId validation (parseObjectId before queries)
-- catch blocks (console.error, never empty)
-- Composition API only (script setup)
-- Shared factorization (no duplication)
+- No code comments — CLAUDE.md hard rule
+- SCSS externalized (separate .scss file) — rule `scss-externalized`
+- i18n mandatory (no hardcoded text) — rule `i18n-mandatory`
+- SCSS variables (no hardcoded colors/spacings) — skill `design-scss`
+- ObjectId validation (parseObjectId before queries) — rule `server-scope-guard`
+- catch blocks (console.error, never empty) — rule `api-error-handling`
+- Composition API only (script setup) — CLAUDE.md hard rule
+- Shared factorization (no duplication) — rule `code-quality`
 
 ## Output format
 
@@ -66,9 +74,19 @@ security, bug, regression, perf, a11y, i18n, convention, test-gap, docs-gap, typ
 **Recommendation:** merge as-is / fix critique+important / request changes
 ```
 
+## `.claude/` configuration review
+
+When the diff touches `.claude/` files or `CLAUDE.md`, additionally run the config audit and report its findings alongside the code review:
+
+```bash
+python3 .claude/skills/claude-anthropic/scripts/audit.py
+```
+
+➜ See skill: claude-anthropic — owns the audit method, checklist, and anti-pattern catalog for `.claude/` configuration.
+
 ## Hard constraints
 
 - Never modify code
-- Never run lint/build/test
-- Every finding must cite a source (CLAUDE.md rule, skill, or objective concern)
+- Never run lint/build/test (the config audit above is read-only and is the sole exception)
+- Every finding must cite a source (CLAUDE.md rule, path-scoped rule, skill, or objective concern)
 - No subjective taste opinions

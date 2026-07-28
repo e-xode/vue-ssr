@@ -1,5 +1,5 @@
 {
-  "skill_name": "vue-ssr-hooks",
+  "skill_name": "vue-ssr-validation",
   "evals": [
     {
       "id": 1,
@@ -17,7 +17,7 @@
       "prompt": "How does the validation pipeline work?",
       "assertions": [
         {
-          "text": "Describes the format → lint → test battery, hook scripts, guard scripts, and git digest sentinel for change detection"
+          "text": "Describes the format/lint/build/test battery behind npm run validate, the serial lint prefix then parallel stages, and the git digest sentinel for change detection"
         }
       ]
     },
@@ -27,7 +27,7 @@
       "prompt": "How do I add a new API route?",
       "assertions": [
         {
-          "text": "Does NOT trigger the hooks skill; API routing questions route to vue-ssr-architecture instead"
+          "text": "Does NOT trigger the validation skill; API routing questions route to vue-ssr-architecture instead"
         }
       ]
     }

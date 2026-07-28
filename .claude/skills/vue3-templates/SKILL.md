@@ -1,6 +1,6 @@
 ---
 name: vue3-templates
-description: "Vue 3 template syntax for the Vue SSR Starter Kit: text interpolation, directives (v-bind/:, v-on/@, v-if/v-else/v-show, v-for with mandatory key), class and style bindings (array/object syntax), event handling (inline vs method handlers, .stop/.prevent/.self and key modifiers), native-element v-model (.lazy/.number/.trim), and rendering best practices (v-if vs v-show, never v-if together with v-for). JavaScript only, <script setup>. Trigger on: writing template markup, directives, list/conditional rendering, event handling and modifiers, class/style bindings, v-model on native HTML inputs. Don't use for: component props/slots/emits/component v-model (→ vue3-components), Vuetify form components and validation (→ vuetify-components), choosing color/spacing tokens (→ design-scss), reactivity primitives (→ vue3-composition)."
+description: "Vue 3 template syntax for the Vue SSR Starter Kit: text interpolation, directives (v-bind, v-on, v-if/v-else/v-show, v-for with mandatory key), class and style bindings, event handling with modifiers, native-element v-model, and rendering best practices (v-if vs v-show, never v-if together with v-for). JavaScript only, <script setup>. Trigger on: writing template markup, directives, list/conditional rendering, event handling and modifiers, class/style bindings, v-model on native HTML inputs. Don't use for: component props/slots/emits/component v-model (→ vue3-components), Vuetify form components and validation (→ vuetify-forms), choosing color/spacing tokens (→ design-scss), reactivity primitives (→ vue3-composition)."
 ---
 
 # Vue 3 Template Syntax
@@ -36,7 +36,7 @@ description: "Vue 3 template syntax for the Vue SSR Starter Kit: text interpolat
 3. **Never `v-if` and `v-for` on the same element** — filter with a `computed`, or wrap in `<template>`
 4. **`v-show` for frequent toggles**, `v-if` for conditions that rarely flip or carry cost
 5. **No logic in templates** — single expressions only; move anything non-trivial to `computed`
-6. **Native `v-model` here only** — Vuetify inputs (`v-text-field`, `v-select`…) belong to vuetify-components
+6. **Native `v-model` here only** — Vuetify inputs (`v-text-field`, `v-select`…) belong to vuetify-forms
 7. **All visible text via `t('key')`** — never hardcode strings in markup
 8. **`v-html` is forbidden** unless the source is provably sanitized — prefer interpolation
 
@@ -130,7 +130,7 @@ Templates render to a string on the server, then hydrate on the client. Binding 
 | Concern                                          | Owner                       |
 | ------------------------------------------------ | --------------------------- |
 | Native HTML `v-model` + modifiers, directives    | vue3-templates (this skill) |
-| Vuetify form components + validation rules       | vuetify-components          |
+| Vuetify form components + validation rules       | vuetify-forms               |
 | Component `v-model` (`defineModel`), props/slots | vue3-components             |
 | Color/spacing/token choices for class/style      | design-scss                 |
 
