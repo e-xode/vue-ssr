@@ -21,8 +21,8 @@ Replace all occurrences of starter-kit identity:
 Each skill description references the project name. Update the project identifier:
 
 ```diff
--description: "Architecture reference for the Vue SSR Starter Kit (e-xode/vue-ssr): Vue 3.5 + Vite 7..."
-+description: "Architecture reference for MyProject (myorg/myrepo): Vue 3.5 + Vite 7..."
+-description: "Architecture reference for the Vue SSR Starter Kit (e-xode/vue-ssr): Vue 3.5 + Vite 8..."
++description: "Architecture reference for MyProject (myorg/myrepo): Vue 3.5 + Vite 8..."
 ```
 
 ### In agent files
@@ -125,7 +125,7 @@ description: "Domain knowledge for MyProject (myorg/myrepo): [brief tech/domain 
 ```markdown
 | Agent       | Trigger (delegate when…)                    |
 | ----------- | ------------------------------------------- |
-| `hooks`     | Post-task validation (format → lint → test) |
+| `hooks`     | Post-task validation (format, lint, build, test) |
 | `review`    | User asks to review a branch / PR / diff    |
 | `migration` | Database migration tasks or schema changes  |
 ```

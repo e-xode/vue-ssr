@@ -1,11 +1,15 @@
 ---
 name: design-scss
-description: "SCSS design-system reference for the Vue SSR Starter Kit: design tokens (spacing, radius, shadows, transitions, breakpoints in variables.scss), 11 mixins (flex-center, flex-between, flex-col, truncate, multiline-truncate, absolute-center, transition, hover-lift, button-reset, visually-hidden, respond-to), the auto-injection barrel (_inject.scss via Vite: variables/typography/mixins only), component-scoped SCSS conventions, and the inert _animations.scss/_utilities.scss partials (present but NOT bundled; classes render nothing). Trigger on ANY styling work: writing SCSS, choosing tokens, animations, component .scss files, Vuetify style overrides, layout utilities, or design-system questions. This is the token/mixin reference — the design agent loads this skill to produce SCSS. Don't use for: app architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), Docker/CI (→ vue-ssr-deployment), validation (→ vue-ssr-hooks), Vuetify component API (→ vuetify-components), design delegation routing (→ vue-ssr-design)."
+description: "SCSS design-system reference for the Vue SSR Starter Kit: design tokens in variables.scss, the 11 mixins, the auto-injection barrel (_inject.scss via Vite), component-scoped SCSS conventions, and the inert _animations.scss/_utilities.scss partials. Trigger on ANY styling work: writing SCSS, choosing tokens, animations, component .scss files, Vuetify style overrides, layout utilities, or design-system questions. This is the token/mixin reference — the design agent loads it to produce SCSS. Don't use for: brand identity decisions and the screenshot checklist (→ brand-art-direction, load it first), app architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), Docker/CI (→ vue-ssr-deployment), validation (→ vue-ssr-validation), Vuetify component API (→ vuetify-components), design delegation routing (→ vue-ssr-design)."
 ---
 
 # Design SCSS
 
 > Owns the SCSS design system: tokens, mixins, animations, utilities, component-scoped patterns, and responsive strategy.
+
+## Division of responsibilities
+
+`brand-art-direction` owns the opinionated brand-identity charter and loads **before** this skill for any visual work on rendered views. This skill owns the token/mixin mechanics the charter is built on.
 
 ## Architecture overview
 
@@ -102,11 +106,11 @@ Breakpoint progression: base (mobile) → sm (640) → md (768) → lg (1024) �
 
 ## Animations
 
-`_animations.scss` defines keyframes (fadeIn, fadeUp, fadeDown, scaleIn, reveal, slideLeft, slideRight, float, pulse, shimmer, glow, rotate), `.animate-*` classes, `.delay-1`..`.delay-8` stagger, and a `prefers-reduced-motion` block — but the file is **not in the injection chain and is imported nowhere**, so none of it renders. Treat the catalog in [references/animations-reference.md](references/animations-reference.md) as patterns to reproduce in a component SCSS, not as ready-to-use classes. Any motion you add must carry its **own** `@media (prefers-reduced-motion: reduce)` guard — there is no global one. To make the catalog live project-wide, import `_animations.scss` once in `main.js`.
+`_animations.scss` defines keyframes (fadeIn, fadeUp, fadeDown, scaleIn, reveal, slideLeft, slideRight, float, pulse, shimmer, glow, rotate), `.animate-*` classes, `.delay-1`..`.delay-8` stagger, and a `prefers-reduced-motion` block — inert, see the blockquote above. Treat the catalog in [references/animations-reference.md](references/animations-reference.md) as patterns to reproduce in a component SCSS, each with its own `@media (prefers-reduced-motion: reduce)` guard.
 
 ## Utility classes
 
-`_utilities.scss` defines `.text-gradient-*`, `.hover-lift` / `.hover-scale`, `.glass` / `.glass-dark`, `.badge-*`, `.sr-only`, and `.skeleton` — but, like `_animations.scss`, the file is **not bundled**, so these classes emit no CSS. Use the live equivalents instead: the `hover-lift` **mixin** (not the `.hover-lift` class), the `visually-hidden` **mixin** (not the `.sr-only` class), and tokens for everything else. See [references/utilities-reference.md](references/utilities-reference.md) for what the file contains and how to reproduce each helper.
+`_utilities.scss` defines `.text-gradient-*`, `.hover-lift` / `.hover-scale`, `.glass` / `.glass-dark`, `.badge-*`, `.sr-only`, and `.skeleton` — inert, see the blockquote above. Use the live equivalents instead: the `hover-lift` **mixin** (not the `.hover-lift` class), the `visually-hidden` **mixin** (not the `.sr-only` class), and tokens for everything else. See [references/utilities-reference.md](references/utilities-reference.md) for what the file contains and how to reproduce each helper.
 
 ## Hard rules
 
@@ -121,7 +125,8 @@ Breakpoint progression: base (mobile) → sm (640) → md (768) → lg (1024) �
 | File                                                          | Content                             |
 | ------------------------------------------------------------- | ----------------------------------- |
 | [variables-reference.md](references/variables-reference.md)   | Complete token inventory            |
-| [mixins-reference.md](references/mixins-reference.md)         | All 11 mixins with examples         |
-| [animations-reference.md](references/animations-reference.md) | Keyframes, classes, stagger, a11y — inert (not bundled) |
-| [utilities-reference.md](references/utilities-reference.md)   | Glass, badges, gradients, skeleton — inert (not bundled) |
+| [mixins-layout.md](references/mixins-layout.md)               | Flex, truncate, absolute-center mixins |
+| [mixins-interaction.md](references/mixins-interaction.md)     | Transition, hover-lift, button-reset, visually-hidden, respond-to |
+| [animations-reference.md](references/animations-reference.md) | Keyframes, classes, stagger, a11y — inert |
+| [utilities-reference.md](references/utilities-reference.md)   | Glass, badges, gradients, skeleton — inert |
 | [scss-patterns.md](references/scss-patterns.md)               | File naming, @use/@forward, nesting |

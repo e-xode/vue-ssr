@@ -16,7 +16,7 @@ Data grid with sorting, pagination, and custom rendering.
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { mdiPencil, mdiDelete } from '@mdi/js';
-import { apiFetch } from '@/shared/apiFetch';
+import { apiFetch } from '@/shared/api';
 
 const { t } = useI18n();
 const items = ref([]);

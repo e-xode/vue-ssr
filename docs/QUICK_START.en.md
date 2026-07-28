@@ -29,7 +29,7 @@ Edit `.env` with your settings (or leave defaults for dev):
 ```env
 NODE_PORT=3002
 NODE_HOST=http://localhost:3002
-MONGO_HOST=localhost:27017
+MONGO_HOST=localhost
 MONGO_DB=app
 MONGO_USER=root
 MONGO_PWD=password

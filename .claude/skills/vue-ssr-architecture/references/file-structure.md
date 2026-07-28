@@ -34,7 +34,7 @@ src/
     email.js                    # Code gen/hash/verify, email sending
     log.js                      # logInfo, logWarn, logError, logDebug
     logger.js                   # logEvent(db, event, meta)
-    mongo.js                    # connectDB, getDB, closeDB
+    mongo.js                    # mongoConnect(), mongoClose() — pooled singleton client
     sanitize.js                 # sanitize(), isEmptyHtml() — sanitize-html allowlist wrapper
     security.js                 # getClientIp, isIpBlocked, recordLoginIp, destroyUserSessions
     utils.js                    # escapeHtml()

@@ -2,56 +2,101 @@
 
 ## What rules are
 
-Rules are lightweight, path-scoped instruction files that load automatically when Claude works on files matching their glob pattern.
+Rules are lightweight, path-scoped instruction files that load **automatically** when Claude works on files matching their glob pattern. They live in `.claude/rules/` and complement skills and `CLAUDE.md`.
 
-## Loading behaviour
+## Loading behaviour (official Anthropic)
 
-- Rules **with** `paths:` frontmatter load ONLY when Claude reads or edits matching files.
-- Rules **without** `paths:` load unconditionally (same cost as CLAUDE.md).
-- Multiple rules can load simultaneously.
+- Rules **without** `paths:` frontmatter load unconditionally (same priority as `.claude/CLAUDE.md`).
+- Rules **with** `paths:` frontmatter load ONLY when Claude reads or edits files matching the glob.
+- Multiple rules can load simultaneously if several globs match the active file.
+- Rules are merged into the system prompt alongside `CLAUDE.md` content — they do not override it.
 
 ## File format
 
 ```yaml
 ---
 paths:
-  - 'src/api/**/*.js'
+  - 'src/**/*.vue'
 ---
-# Title
+# Title (optional but recommended)
 
-Instruction text. Short, imperative, guardrail-style.
+Instruction text in markdown. Short, imperative, guardrail-style.
 ```
+
+### Frontmatter fields
+
+| Field   | Required             | Description                                                         |
+| ------- | -------------------- | ------------------------------------------------------------------- |
+| `paths` | No (but recommended) | YAML list of glob patterns. Without it, rule loads unconditionally. |
+
+No other frontmatter fields are used. Rules are intentionally minimal.
 
 ## When to use rules vs skills vs CLAUDE.md
 
-| Criterion    | `.claude/rules/`             | `.claude/skills/`            | `CLAUDE.md`        |
-| ------------ | ---------------------------- | ---------------------------- | ------------------ |
-| **Content**  | Guardrails, hard DON'Ts      | Knowledge, procedures        | Global hard rules  |
-| **Loading**  | Deterministic by path (100%) | Semantic matching (may miss) | Every turn         |
-| **Size**     | Short (< 2 KB)               | Rich (up to 50 KB)           | Minimal (< 10 KB)  |
-| **Use when** | Constraint on specific files | Teaching domain knowledge    | Rule on every turn |
+| Criterion        | `.claude/rules/`                                         | `.claude/skills/`                         | `CLAUDE.md`                          |
+| ---------------- | -------------------------------------------------------- | ----------------------------------------- | ------------------------------------ |
+| **Content type** | Guardrails, constraints, hard DON'Ts                     | Knowledge, procedures, how-to             | Global hard rules                    |
+| **Loading**      | Deterministic by file path (100% hit)                    | Semantic/description matching (may miss)  | Every turn                           |
+| **Size**         | Short (< 2 KB recommended)                               | Rich (up to 50 KB + references)           | Minimal (< 10 KB)                    |
+| **Structure**    | Flat markdown, no references                             | SKILL.md + references/ + scripts/         | Sections with tables                 |
+| **Maintenance**  | Near-zero (set and forget)                               | Active (needs audit, evals)               | Careful (token budget)               |
+| **Use when…**    | You need a constraint to fire reliably on specific files | You need to teach Claude domain knowledge | You need a rule on every single turn |
 
 ### Decision flowchart
 
-1. Needed on **every turn**? → `CLAUDE.md`
-2. Tied to **specific file path**? → Rule
-3. Needs **more than ~20 lines**? → Skill
-4. Is a **constraint** (not knowledge)? → Rule
-5. Needs **examples or procedures**? → Skill
+1. Is this needed on **every turn**, regardless of file context? → `CLAUDE.md`
+2. Is this tied to a **specific file path or pattern**? → Rule
+3. Does it require **more than ~20 lines** to explain? → Skill
+4. Is it a **constraint** ("don't do X") rather than knowledge ("here's how to do X")? → Rule
+5. Does Claude need **examples, references, or procedures**? → Skill
 
-## Project conventions
+### Complementary use (rule + skill)
 
-- `kebab-case.md` filenames
-- Imperative voice
-- English only
-- Concise (< 2 KB)
-- Flat directory (no subdirectories in `.claude/rules/`)
+A rule and a skill can cover the same domain at different levels:
 
-## Current inventory
+- **Rule** = lightweight guardrail that always fires (e.g., "never import server modules from client code")
+- **Skill** = deep knowledge loaded on demand (e.g., full SSR architecture and browser API patterns)
 
-| Rule file                | `paths:`                                        | Purpose                                   |
-| ------------------------ | ----------------------------------------------- | ----------------------------------------- |
-| `testing-conventions.md` | `tests/**/*.test.js`, `src/**/*.test.js`        | Vitest + happy-dom patterns               |
-| `i18n-mandatory.md`      | `src/views/**/*.vue`, `src/components/**/*.vue` | No hardcoded text                         |
-| `scss-externalized.md`   | `src/views/**/*.vue`, `src/components/**/*.vue` | Separate .scss files                      |
-| `api-error-handling.md`  | `src/api/**/*.js`                               | try/catch + parseObjectId + rate limiters |
+The rule prevents mistakes. The skill teaches the right approach.
+
+## Project conventions (Vue SSR Starter Kit)
+
+### Naming
+
+- `kebab-case.md` (e.g., `testing-conventions.md`, `locale-delegation.md`)
+- Descriptive — the filename should indicate what the rule guards
+
+### Content style
+
+- **Imperative voice** — "Do X", "Never Y", "Always Z"
+- **No code comments** in prose (same rule as skills and CLAUDE.md)
+- **English only** (same rule as all persisted artefacts)
+- **Concise** — aim for < 2 KB. If growing beyond that, consider a skill instead.
+
+### Placement
+
+All rules live in `.claude/rules/` (flat — no subdirectories).
+
+## Current project inventory (11 rules)
+
+Globs live in each file's `paths:` frontmatter — the authoritative source; this table records intent only.
+
+| Rule file                   | Purpose                                                   |
+| --------------------------- | --------------------------------------------------------- |
+| `api-error-handling.md`     | try/catch shape and ObjectId validation on API handlers   |
+| `changelog.md`              | Judge changelog entries by product impact, not path       |
+| `claude-config.md`          | Constraints on CLAUDE.md / skills / agents / rules edits  |
+| `client-server-boundary.md` | No server-only imports in client code                     |
+| `code-quality.md`           | ESLint-enforced size/complexity/constants discipline      |
+| `i18n-mandatory.md`         | No hardcoded user-visible strings in templates            |
+| `locale-delegation.md`      | Hard stop — delegate `src/translate/**` to translate      |
+| `scss-externalized.md`      | Component styles live in a sibling `.scss` file           |
+| `server-scope-guard.md`     | Server-side constraints on `server.js` and `src/api/**`   |
+| `server-security.md`        | Security constraints on server entry points               |
+| `testing-conventions.md`    | Vitest-only, @vue/test-utils, SSR-safe tests              |
+
+## Anti-patterns (rules-specific)
+
+- **F1.** Rule that duplicates a skill's body (bloats context on every matching file)
+- **F2.** Rule without `paths:` that could be a line in `CLAUDE.md` (unconditional rule = same cost)
+- **F3.** Rule > 2 KB (should probably be a skill with proper structure)

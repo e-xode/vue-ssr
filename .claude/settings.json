@@ -1,0 +1,19 @@
+{
+  "skillListingBudgetFraction": 0.025,
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "allow": [
+      "Agent",
+      "Bash",
+      "Edit",
+      "Glob",
+      "Grep",
+      "LS",
+      "NotebookEdit",
+      "Read",
+      "WebFetch",
+      "WebSearch",
+      "Write"
+    ]
+  }
+}

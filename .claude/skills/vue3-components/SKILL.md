@@ -1,6 +1,6 @@
 ---
 name: vue3-components
-description: "Vue 3 component design and communication for the Vue SSR Starter Kit: props (definition, validation, one-way data flow), emits/events (declaration + validation), component v-model via defineModel, slots (default, named, scoped, conditional), provide/inject (reactive injection, injection keys), fallthrough attributes (inheritAttrs), dynamic components (<component :is>), and async components (defineAsyncComponent). JavaScript only, <script setup>, SSR-safe. Trigger on: designing component props/events, parent-child communication, slot patterns, provide/inject, dynamic or async components, building reusable custom components. Don't use for: ref/computed/watch/lifecycle reactivity (→ vue3-composition), Vuetify component API/props (→ vuetify-components), template directives/v-for/native v-model (→ vue3-templates), SCSS styling (→ design-scss), app architecture/routing (→ vue-ssr-architecture)."
+description: "Vue 3 component design and communication for the Vue SSR Starter Kit: props and one-way data flow, emits/events, component v-model via defineModel, slots (default, named, scoped), provide/inject, fallthrough attributes, dynamic components and async components. JavaScript only, <script setup>, SSR-safe. Trigger on: designing component props/events, parent-child communication, slot patterns, provide/inject, dynamic or async components, building reusable custom components. Don't use for: ref/computed/watch/lifecycle reactivity (→ vue3-composition), Vuetify component API/props (→ vuetify-overview), template directives/v-for/native v-model (→ vue3-templates), SCSS styling (→ design-scss), app architecture/routing (→ vue-ssr-architecture)."
 ---
 
 # Vue 3 Components
@@ -38,7 +38,7 @@ description: "Vue 3 component design and communication for the Vue SSR Starter K
 3. **One-way data flow** — props are read-only. Derive with `computed`, or emit / `defineModel` to change a value the parent owns.
 4. **Declare every emit** — undeclared events leak as fallthrough listeners.
 5. **`defineModel()` for component v-model** — never hand-write `modelValue` + `update:modelValue`.
-6. **Prefer Vuetify for UI** — Vuetify components are globally registered (no import); reach for custom components for project-specific composition. (→ vuetify-components)
+6. **Prefer Vuetify for UI** — Vuetify components are globally registered (no import); reach for custom components for project-specific composition. (→ vuetify-overview)
 7. **Local registration** for custom components — import in `<script setup>`; PascalCase tags.
 8. **provide/inject for subtree context only** — app-wide state belongs in Pinia.
 9. **i18n all user-visible text** — `t('key')`, never hardcoded strings. (→ translate)
@@ -115,7 +115,7 @@ In `<script>`, read fallthrough attrs with `useAttrs()`. Components with multipl
 | ------------------------------------------------------ | ---------------------------- |
 | `defineProps`/`defineEmits`/`defineModel` macro syntax | vue3-composition             |
 | Prop/slot/inject design & communication patterns       | vue3-components (this skill) |
-| Vuetify component props/API                            | vuetify-components           |
+| Vuetify component props/API                            | vuetify-overview             |
 | Template directives, native-element `v-model`          | vue3-templates               |
 
 ## Common pitfalls

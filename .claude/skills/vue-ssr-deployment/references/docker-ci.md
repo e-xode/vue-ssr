@@ -10,7 +10,7 @@ Stage 2 (production): Node 24-slim, copy dist/, npm ci --omit=dev, expose port
 Split into a base file and a local override so the dev DB target switches without editing service or connection config:
 
 - `docker-compose.yml` (base): `node` service only. Reads `.env` as-is, so by default the app connects to the **remote** MongoDB (Atlas) defined by `MONGO_HOST`/`MONGO_TYPE`.
-- `docker-compose.local.yml` (override): re-adds the `mongo` service, restores `node.depends_on: mongo (service_healthy)`, and overrides `node.environment` with `MONGO_HOST=mongo` + `MONGO_TYPE=mongodb`. `environment:` wins over `env_file:`, so the Atlas values in `.env` are redirected to the local container without touching `.env`.
+- `docker-compose.local.yml` (override): re-adds the `mongo` service, restores `node.depends_on: mongo (service_healthy)`, and overrides `node.environment` with `MONGO_HOST=mongo` + `MONGO_TYPE=mongodb`. `environment:` wins over `env_file:`, so the Atlas values in `.env` are redirected to the local container without touching `.env`. The host-side port publish is `${MONGO_PORT:-27017}:27017` — the internal container port always stays `27017`, so `MONGO_PORT` only needs to change to avoid a host port clash when running more than one local Mongo-backed Compose stack at once.
 
 `MONGO_USER`/`MONGO_PWD`/`MONGO_DB` stay in `.env` and serve both modes. Only host + type differ.
 
@@ -35,7 +35,7 @@ Equivalent without editing `.env`: `docker compose -f docker-compose.yml -f dock
 ### npm-test (`npm-test.yml`)
 
 - Triggers: push master/development, PRs
-- Node 20
+- Node 24
 - Steps: npm ci → lint → test:run
 
 ### docker-build (`docker-build.yml`)

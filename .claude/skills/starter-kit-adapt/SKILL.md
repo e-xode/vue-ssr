@@ -12,7 +12,7 @@ description: "Post-fork/clone adaptation guide for the Vue SSR Starter Kit Claud
 When you fork/clone the Vue SSR Starter Kit for a new project, the `.claude/` configuration needs adaptation. This skill provides a structured process to:
 
 - Strip starter-kit specifics that don't apply
-- Retain the proven orchestration patterns (hooks, review, audit)
+- Retain the proven orchestration patterns (agent-delegated validation, review, config audit)
 - Add domain-specific knowledge for your new project
 - Keep version references accurate
 
@@ -23,7 +23,7 @@ When you fork/clone the Vue SSR Starter Kit for a new project, the `.claude/` co
 
 1. **Rename project references in `CLAUDE.md`** — Update project name, description, repository identifier (`e-xode/vue-ssr` → your org/repo), and the commit co-author trailer identity in the Hard rules section (a tool-agnostic placeholder you can replace).
 
-2. **Review and update skill descriptions** — Dependency versions are hardcoded in descriptions (Vue 3.5, Vite 7, Express 5, Vuetify 4, etc.). Update to match your `package.json`.
+2. **Review and update skill descriptions** — Dependency versions are hardcoded in descriptions (Vue 3.5, Vite 8, Express 5, Vuetify 4, etc.). Update to match your `package.json`.
 
 3. **Remove skills that don't apply** — Delete skill folders and their `CLAUDE.md` index entries. See the table below for guidance.
 
@@ -39,14 +39,16 @@ When you fork/clone the Vue SSR Starter Kit for a new project, the `.claude/` co
 
 ## What to keep vs customize vs remove
 
-| Keep as-is                                     | Customize                                    | Remove if N/A                                    |
-| ---------------------------------------------- | -------------------------------------------- | ------------------------------------------------ |
-| `claude-anthropic` skill                       | `vue-ssr-architecture` (your stack)          | `vue-ssr-auth` (if no auth)                      |
-| `skill-creator` skill                          | `CLAUDE.md` hard rules                       | Specific rules (`objectid` if no MongoDB)        |
-| `vue-ssr-hooks` skill + `hooks` agent          | Agent fleet for your domain                  | `vuetify-components` (if not using Vuetify)      |
-| `review` skill + agent                         | `translate` skill (your locales)             | `design-scss` (if different styling approach)    |
-| Audit script (`scripts/audit.py`)              | `vue-ssr-deployment` (your CI/CD)            | `vue-ssr-design` (if different UI framework)     |
-| `vue-ssr-design` skill (coordination patterns) | `design` agent (adapt for your UI framework) | `design-ux` (if using a different design system) |
+| Keep as-is                                     | Customize                                    | Remove if N/A                                                  |
+| ---------------------------------------------- | -------------------------------------------- | --------------------------------------------------------------- |
+| `claude-anthropic` skill                       | `vue-ssr-architecture` (your stack)          | `vue-ssr-auth` (if no auth)                                     |
+| `skill-creator` skill                          | `CLAUDE.md` hard rules                       | Specific rules (`objectid` if no MongoDB)                       |
+| `vue-ssr-validation` skill + `validation` agent | Agent fleet for your domain                  | The `vuetify-*` family (7 skills) (if not using Vuetify)        |
+| `review` skill + agent                         | `translate` skill (your locales)             | `design-scss` (if different styling approach)                  |
+| Audit script (`scripts/audit.py`)              | `vue-ssr-deployment` (your CI/CD)            | `vue-ssr-design` (if different UI framework)                   |
+| `vue-ssr-design` skill (coordination patterns) | `design` agent (adapt for your UI framework) | `design-ux` (if using a different design system)                |
+| —                                               | `brand-art-direction` (your brand's charter) | —                                                                |
+| —                                               | —                                             | `frontend-design` (vendored Anthropic skill)                    |
 
 ## Adapting the design agent post-fork
 
@@ -55,7 +57,7 @@ The `design` agent (`.claude/agents/design.md`) is written for **Vue 3 + Vuetify
 1. **Same stack (Vuetify)** — keep as-is, only update version references if needed.
 2. **Different Vue UI library** (Quasar, PrimeVue, Naive UI) — rewrite the agent body:
    - Replace Vuetify references with your library's component system
-   - Update skill references (remove `vuetify-components`, add your library's skill)
+   - Update skill references (remove the `vuetify-*` family (7 skills), add your library's skill)
    - Keep the sub-agent contract, workflow, and anti-patterns sections intact
 3. **Non-Vue framework** (React, Angular, Svelte) — full rewrite needed:
    - Keep the structural template (mission, principles, scope, contract, return format)
@@ -72,7 +74,7 @@ These locations contain hardcoded dependency versions — update after forking:
 | ---------------------------------------- | ----------------------------------------------------------- |
 | `vue-ssr-architecture` skill description | Vue, Vite, Express, MongoDB, Vuetify, Pinia versions        |
 | `vue-ssr-deployment` skill / references  | Docker base image, Node.js version, GitHub Actions versions |
-| `vuetify-components` skill description   | Vuetify major version, Material Design version              |
+| The `vuetify-*` family (7 skills)         | Vuetify major version, Material Design version              |
 | `vue3-composition` skill description     | Vue version                                                 |
 | `translate` skill description            | `vue-i18n` version                                          |
 | `design-scss` skill description          | SCSS tooling versions                                       |

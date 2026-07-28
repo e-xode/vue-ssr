@@ -1,6 +1,6 @@
 ---
 name: vue3-builtin-components
-description: "Vue 3 built-in components for the Vue SSR Starter Kit: Teleport (overlays/modals, SSR notes), Suspense (async setup, SSR caveats), KeepAlive (component caching, include/exclude, with router-view), Transition and TransitionGroup (enter/leave classes, JS hooks, list move transitions, key requirement). JavaScript only, <script setup>, SSR-safe. Trigger on: Teleport, Suspense, KeepAlive, Transition or TransitionGroup usage, custom overlays/modals at Vue level, async-component loading states, animating element or list enter/leave. Don't use for: Vuetify dialogs/menus/overlays and their built-in transitions (→ vuetify-components), SCSS animations and prefers-reduced-motion (→ design-scss), reactivity (→ vue3-composition), SSR lifecycle/architecture (→ vue-ssr-architecture)."
+description: "Vue 3 built-in components for the Vue SSR Starter Kit: Teleport, Suspense, KeepAlive, Transition and TransitionGroup, with their SSR caveats and the key requirement on lists. JavaScript only, <script setup>, SSR-safe. Trigger on: Teleport, Suspense, KeepAlive, Transition or TransitionGroup usage, custom overlays/modals at Vue level, async-component loading states, animating element or list enter/leave. Don't use for: Vuetify dialogs/overlays and their built-in transitions (→ vuetify-components), Vuetify menus (→ vuetify-layout), SCSS animations and prefers-reduced-motion (→ design-scss), reactivity (→ vue3-composition), SSR lifecycle/architecture (→ vue-ssr-architecture)."
 ---
 
 # Vue 3 Built-in Components
@@ -92,7 +92,8 @@ Suspense around an async child with a fallback (experimental — see reference):
 | Concern                                                     | Owner                                |
 | ----------------------------------------------------------- | ------------------------------------ |
 | Vue-level Teleport/Suspense/KeepAlive/Transition mechanics  | vue3-builtin-components (this skill) |
-| Vuetify dialogs/menus/overlays + their built-in transitions | vuetify-components                   |
+| Vuetify dialogs/overlays + their built-in transitions       | vuetify-components                   |
+| Vuetify menus                                                | vuetify-layout                        |
 | SCSS animations, transition tokens, prefers-reduced-motion  | design-scss                          |
 | SSR lifecycle & hydration                                   | vue-ssr-architecture                 |
 

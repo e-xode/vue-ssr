@@ -1,6 +1,6 @@
 ---
 name: vue-ssr-deployment
-description: "Deployment and CI/CD reference for the Vue SSR Starter Kit: Docker multi-stage build, docker-compose split into a base (app, remote DB) plus a docker-compose.local.yml override (local mongo) switched via the COMPOSE_FILE variable in .env, GitHub Actions workflows (npm-publish on tags, npm-test on PR, docker-build to GHCR), production configuration (Helmet CSP, COOKIE_SECRET, graceful shutdown SIGTERM/SIGINT), Dependabot weekly npm updates. Trigger on any deployment, Docker, docker-compose local-vs-remote DB switch, CI/CD, production config, or infrastructure question. Don't use for: app architecture (→ vue-ssr-architecture), auth flow (→ vue-ssr-auth), post-task validation (→ vue-ssr-hooks)."
+description: "Deployment and CI/CD reference for the Vue SSR Starter Kit: Docker builds, the docker-compose local-vs-remote DB switch, GitHub Actions workflows, production configuration, and Dependabot updates. Trigger on any deployment, Docker, docker-compose local-vs-remote DB switch, CI/CD, production config, or infrastructure question. Don't use for: app architecture (→ vue-ssr-architecture), auth flow (→ vue-ssr-auth), post-task validation (→ vue-ssr-validation), sitemap/robots (→ seo), the actual production rollout procedure (private, → e-xode.scripts)."
 ---
 
 # Vue SSR Deployment
@@ -33,7 +33,7 @@ description: "Deployment and CI/CD reference for the Vue SSR Starter Kit: Docker
 Server listens to SIGTERM and SIGINT:
 
 1. Stops accepting new connections
-2. Closes MongoDB connection (`closeDB`)
+2. Closes MongoDB connection (`mongoClose`)
 3. Exits process cleanly
 
 Ensures zero data loss during Docker stop / rolling updates.
@@ -42,10 +42,10 @@ Ensures zero data loss during Docker stop / rolling updates.
 
 Weekly npm updates (`dependabot.yml`): increasing version strategy.
 
-## Dynamic sitemap
+## SEO artifacts
 
-GET /sitemap.xml:
+The dynamic `robots.txt`/`sitemap.xml` served by `server.js` are owned by the `seo` skill — see there, not here.
 
-- Cached in memory with 1h TTL
-- Includes all public locale-prefixed routes
-- Excludes auth/admin routes
+## Production rollout (external)
+
+Production deployment of this application happens **outside this repository**, via a private internal Ops tooling repo (`e-xode.scripts`) shared across a fleet of related projects — this repo owns build + CI/CD only. **A tag or a merge to master does not deploy by itself.** The rollout is a pull-based Docker pattern: fetch the versioned registry image, recreate the container with server-side runtime configuration and mounted directories, and verify a health check before declaring success. No hostnames, ports, credentials, paths, or other infrastructure facts are — or will ever be — documented in this public repository; they are single-sourced privately. ➜ See repo: e-xode.scripts — production rollout (private, not in this repo).
