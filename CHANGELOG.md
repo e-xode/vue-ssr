@@ -9,6 +9,7 @@
 ### Security
 
 - **GitHub Secret Scanning and Push Protection enabled** on this public repository — pushes containing a recognized secret pattern are now rejected automatically, and the full history is scanned for existing exposures. A full audit of the git history (including previously unfetched pull-request refs) found no leaked application secrets.
+- **npm audit advisories cleared (4 -> 0)** — bumped transitive `body-parser` (DoS via silently-disabled size limit) and `brace-expansion` (exponential-time/unbounded-expansion DoS), resolving all reported `immutable` and `postcss` advisories as a side effect of the lockfile update. No direct dependency changed.
 
 ---
 
