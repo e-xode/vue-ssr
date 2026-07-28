@@ -1,10 +1,16 @@
 # Changelog
 
-## [Unreleased]
+## 5.3.1
 
 ### Changed
 
 - **Local MongoDB port is configurable** — a new `MONGO_PORT` environment variable (default `27017`) controls the host port `docker-compose.local.yml` maps to the local `mongo` container; `MONGO_HOST` no longer needs an embedded port suffix (was `localhost:27017`, now `localhost`). Backward-compatible — omit `MONGO_PORT` to keep the default.
+
+### Security
+
+- **GitHub Secret Scanning and Push Protection enabled** on this public repository — pushes containing a recognized secret pattern are now rejected automatically, and the full history is scanned for existing exposures. A full audit of the git history (including previously unfetched pull-request refs) found no leaked application secrets.
+
+---
 
 ## 5.3.0
 
