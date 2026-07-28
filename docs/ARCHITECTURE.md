@@ -567,7 +567,7 @@ services:
   mongo:
     build: docker/dev/mongo/
     volumes: ['./docker/dev/mongo/init-scripts:/docker-entrypoint-initdb.d']
-    ports: ['27017:27017']
+    ports: ['${MONGO_PORT:-27017}:27017']
     healthcheck: → Ping MongoDB
 ```
 

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- **Local MongoDB port is configurable** — a new `MONGO_PORT` environment variable (default `27017`) controls the host port `docker-compose.local.yml` maps to the local `mongo` container; `MONGO_HOST` no longer needs an embedded port suffix (was `localhost:27017`, now `localhost`). Backward-compatible — omit `MONGO_PORT` to keep the default.
+
 ## 5.3.0
 
 ### Added
