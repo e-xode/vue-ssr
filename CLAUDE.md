@@ -29,6 +29,8 @@ At most two end-of-task questions are sanctioned, each firing only when its cond
 
 **English only** — All persisted artefacts (code, markdown, skills, commits, PR descriptions) in English. Conversation with the user: any language. Non-English in a persisted file = defect to fix before completing.
 
+**No confidential information** — This is a public, open-source repository (MIT). Never write real credentials, API keys, tokens, passwords, private hostnames/IPs, SSH details, or any other confidential value anywhere in this repo — code, docs, examples, commits, or `.claude/` config. `.env.example` and all documentation carry placeholders only. Production infrastructure is referenced by name only (private Ops tooling) — never inlined.
+
 **No code comments** — No `//`/`/* */`/`<!--` in `.vue/.js/.scss/.css`. Exception: empty catch blocks need `console.error(err)`. Refactor with self-explanatory names and named helpers, never an explanatory comment.
 
 **SCSS externalized** — Every Vue component with styles has its own `.scss` file referenced via `<style lang="scss" scoped src="./ComponentName.scss"></style>`.

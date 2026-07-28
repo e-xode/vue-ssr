@@ -1,6 +1,6 @@
 ---
 name: vue-ssr-deployment
-description: "Deployment and CI/CD reference for the Vue SSR Starter Kit: Docker builds, the docker-compose local-vs-remote DB switch, GitHub Actions workflows, production configuration, and Dependabot updates. Trigger on any deployment, Docker, docker-compose local-vs-remote DB switch, CI/CD, production config, or infrastructure question. Don't use for: app architecture (→ vue-ssr-architecture), auth flow (→ vue-ssr-auth), post-task validation (→ vue-ssr-validation), sitemap/robots (→ seo)."
+description: "Deployment and CI/CD reference for the Vue SSR Starter Kit: Docker builds, the docker-compose local-vs-remote DB switch, GitHub Actions workflows, production configuration, and Dependabot updates. Trigger on any deployment, Docker, docker-compose local-vs-remote DB switch, CI/CD, production config, or infrastructure question. Don't use for: app architecture (→ vue-ssr-architecture), auth flow (→ vue-ssr-auth), post-task validation (→ vue-ssr-validation), sitemap/robots (→ seo), the actual production rollout procedure (private, → e-xode.scripts)."
 ---
 
 # Vue SSR Deployment
@@ -45,3 +45,7 @@ Weekly npm updates (`dependabot.yml`): increasing version strategy.
 ## SEO artifacts
 
 The dynamic `robots.txt`/`sitemap.xml` served by `server.js` are owned by the `seo` skill — see there, not here.
+
+## Production rollout (external)
+
+Production deployment of this application happens **outside this repository**, via a private internal Ops tooling repo (`e-xode.scripts`) shared across a fleet of related projects — this repo owns build + CI/CD only. **A tag or a merge to master does not deploy by itself.** The rollout is a pull-based Docker pattern: fetch the versioned registry image, recreate the container with server-side runtime configuration and mounted directories, and verify a health check before declaring success. No hostnames, ports, credentials, paths, or other infrastructure facts are — or will ever be — documented in this public repository; they are single-sourced privately. ➜ See repo: e-xode.scripts — production rollout (private, not in this repo).

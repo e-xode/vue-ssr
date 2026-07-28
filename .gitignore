@@ -1,8 +1,8 @@
 node_modules/
 dist/
 logs/sessions/*
-.env
-.env.local
+.env*
+!.env.example
 .DS_Store
 *.log
 logs/coverage/
