@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.3.3
+
+Claude Code configuration only (`.claude/` agents, skills, rules, audit tooling) and `CLAUDE.md` — no application changes.
+
+---
+
 ## 5.3.2
 
 ### Security
