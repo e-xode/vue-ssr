@@ -25,7 +25,7 @@ At most two end-of-task questions are sanctioned, each firing only when its cond
 
 ## Hard rules
 
-**No auto-commit** — Never `git commit`/`push`/`tag`/`rebase`/`reset --hard` unless the user explicitly requests it this turn ("ok"/"finalise" ≠ a request; read-only git is always allowed). Commit format: `[$branch] content`. Co-authored-by trailer, if any, uses the real git account in use (`git config user.name`/`user.email`) — never a placeholder identity. **Exception: "release"** — full release process (CHANGELOG, version bump, commit, push, tag).
+**No auto-commit** — Never `git commit`/`push`/`tag`/`rebase`/`reset --hard` unless the user explicitly requests it this turn ("ok"/"finalise" ≠ a request; read-only git is always allowed). Commit format: `[$branch] content`. **No `Co-authored-by` trailer or any mention of a non-human contributor on any commit, ever** — commit author is always the user's own git account, full stop. **Exception: "release"** — full release process (CHANGELOG, version bump, commit, push, tag).
 
 **English only** — All persisted artefacts (code, markdown, skills, commits, PR descriptions) in English. Conversation with the user: any language. Non-English in a persisted file = defect to fix before completing.
 
