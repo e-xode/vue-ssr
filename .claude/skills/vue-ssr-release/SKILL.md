@@ -24,7 +24,7 @@ description: "Release workflow for the Vue SSR Starter Kit (e-xode/vue-ssr): ver
 
 1. **Never auto-commit/push/tag.** Always propose and wait for explicit user confirmation before executing any git write operation.
 2. **Commit format:** `[release/vX.Y.Z] release vX.Y.Z`
-3. **Co-authored-by trailer** on every commit: `Co-authored-by: <name> <email>` sourced from `git config user.name`/`user.email` — never a placeholder like "AI" or "Assistant"
+3. **No `Co-authored-by` trailer, ever** — no trailer and no mention of a non-human contributor on any commit. Commit author is always the user's own git account, full stop.
 4. **Tag format:** `vX.Y.Z` (prefixed with `v`)
 5. **Branch must be main or master** to start a release. If on another branch, abort and inform the user.
 

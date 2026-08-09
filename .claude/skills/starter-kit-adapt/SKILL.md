@@ -22,7 +22,7 @@ When you fork/clone the Vue SSR Starter Kit for a new project, the `.claude/` co
 
 ## Post-fork adaptation checklist
 
-1. **Rename project references in `CLAUDE.md`** — Update project name, description, repository identifier (`e-xode/vue-ssr` → your org/repo), and the commit co-author trailer identity in the Hard rules section (a tool-agnostic placeholder you can replace).
+1. **Rename project references in `CLAUDE.md`** — Update project name, description, and repository identifier (`e-xode/vue-ssr` → your org/repo) in the Hard rules section.
 
 2. **Review and update skill descriptions** — Dependency versions are hardcoded in descriptions (Vue 3.5, Vite 8, Express 5, Vuetify 4, etc.). Update to match your `package.json`.
 

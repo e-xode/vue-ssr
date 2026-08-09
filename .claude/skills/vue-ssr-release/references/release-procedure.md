@@ -88,9 +88,7 @@ Present the exact command to the user:
 
 ```bash
 git add package.json package-lock.json CHANGELOG.md
-git commit -m "[release/vX.Y.Z] release vX.Y.Z
-
-Co-authored-by: $(git config user.name) <$(git config user.email)>"
+git commit -m "[release/vX.Y.Z] release vX.Y.Z"
 ```
 
 **Wait for user confirmation** before executing.
