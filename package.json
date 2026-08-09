@@ -28,7 +28,7 @@
     "screenshots": "node .claude/skills/brand-art-direction/scripts/screenshots.mjs"
   },
   "dependencies": {
-    "@fontsource/ibm-plex-mono": "^5.2.7",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
     "@fontsource/inter": "^5.2.8",
     "@mdi/js": "^7.4.47",
     "@vitejs/plugin-vue": "^6.0.7",
