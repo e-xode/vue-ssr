@@ -131,3 +131,4 @@ The project runs zero native hooks — the previous wiring was removed on 2026-0
 | Known anti-patterns and corrections                    | [references/antipatterns.md](./references/antipatterns.md)           |
 | Why the project is organised this way (real decisions) | [references/case-studies.md](./references/case-studies.md)           |
 | Anthropic official documentation                       | [references/official-links.md](./references/official-links.md)       |
+| Task-tracking / parallelization mechanics               | [references/orchestration-procedures.md](./references/orchestration-procedures.md) |
