@@ -1,0 +1,35 @@
+{
+  "skill_name": "seo",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-meta-injection-site",
+      "prompt": "Where does the meta title and description get injected for a new public page in this app? I need to add SEO tags for a new pricing page.",
+      "assertions": [
+        {
+          "text": "Identifies src/entry-server.js (generateHead / resolvePageMeta) as the injection point, driven by route meta.title/meta.description i18n keys defined in src/router.js — not a seo.config.js (this skill states none exists)"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "trigger-hreflang-set",
+      "prompt": "I'm adding a new public route /pricing. What hreflang tags does it need, and does the 404 page need them too?",
+      "assertions": [
+        {
+          "text": "States hreflang alternates for en, fr, and x-default (pointing at the en URL) are required for indexable public routes, and correctly states 404 pages carry no canonical and no hreflang per the meta.robots/statusCode 404 branch"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "trigger-sitemap-generator",
+      "prompt": "I just added a new public /pricing page, fully indexable. What do I need to touch so it shows up in the sitemap?",
+      "assertions": [
+        {
+          "text": "Points to server.js's generateSitemap and the publicPaths array as the place to add the new path, notes robots.txt/sitemap.xml are dynamically generated (never static files under public/), and correctly delegates the actual server.js edit to the server agent rather than doing it itself"
+        }
+      ]
+    }
+  ]
+}

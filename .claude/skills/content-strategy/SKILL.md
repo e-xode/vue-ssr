@@ -1,6 +1,6 @@
 ---
 name: content-strategy
-description: "Editorial method and content operations for the Vue SSR Starter Kit (e-xode/vue-ssr): the how-to-produce layer on top of the marketing-content facts. Covers the editorial workflow (research, propose, draft FR+EN, verify, optimize), operational tone and voice, the per-channel playbooks, audience personas and angles, the content inventory glossary, the editorial backlog, and the daily growth/SEO advisory playbook. Trigger when writing or improving a LinkedIn post or article, page marketing copy, README/storefront copy, brainstorming content ideas, or asking what to do today for content/SEO. Don't use for: canonical product/stack/feature facts (→ marketing-content), i18n key placement (→ translate), meta/JSON-LD/sitemap (→ seo), visuals or layout (→ design)."
+description: "Editorial method and content operations for the Vue SSR Starter Kit (e-xode/vue-ssr): the how-to-produce layer on top of the marketing-content facts. Trigger when writing or improving a LinkedIn post or article, page marketing copy, README/storefront copy, brainstorming content ideas, or asking what to do today for content/SEO. Don't use for: canonical product/stack/feature facts (→ marketing-content), i18n key placement (→ translate), meta/JSON-LD/sitemap (→ seo), visuals or layout (→ design)."
 ---
 
 # Content strategy — Vue SSR Starter Kit

@@ -1,6 +1,7 @@
 ---
 name: translate
 description: "i18n and translation reference for the Vue SSR Starter Kit (e-xode/vue-ssr): the 2-locale EN/FR system with vue-i18n 11 in Composition API mode, the nested JSON locale files under src/translate/, key naming conventions, interpolation syntax, locale-aware routing via useLocalePath, and parity enforcement between locales. Trigger on any i18n work: adding/editing translations, creating new locale keys, fixing missing translations, checking locale parity, using t() in templates, locale routing, or internationalization questions. Don't use for: app architecture (→ vue-ssr-architecture), auth flow (→ vue-ssr-auth), post-task validation (→ vue-ssr-validation), component styling (→ design-scss)."
+allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/check_locales.py *)
 ---
 
 # Translate

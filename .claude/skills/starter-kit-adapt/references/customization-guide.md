@@ -55,7 +55,7 @@ Common version references to update:
 1. Delete the skill folder: `rm -rf .claude/skills/<skill-name>/`
 2. Remove the entry from the skills index table in `CLAUDE.md`
 3. Remove any cross-references in other skills' descriptions (anti-triggers pointing to removed skill)
-4. Run `scripts/audit.py` to catch broken references
+4. Run `.claude/skills/claude-anthropic/scripts/audit.py` to catch broken references
 
 ### Common removal scenarios
 
@@ -135,7 +135,7 @@ description: "Domain knowledge for MyProject (myorg/myrepo): [brief tech/domain 
 1. Delete the agent file from `.claude/agents/`
 2. Remove from fleet table in `CLAUDE.md`
 3. Update any skills that reference the agent in anti-triggers
-4. Run `scripts/audit.py`
+4. Run `.claude/skills/claude-anthropic/scripts/audit.py`
 
 ## Step 6: Update path-scoped rules
 
@@ -209,7 +209,7 @@ paths: ['src/api/**', 'server/**']
 After all changes, run the full audit:
 
 ```bash
-python scripts/audit.py
+python3 .claude/skills/claude-anthropic/scripts/audit.py
 ```
 
 This checks:

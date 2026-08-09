@@ -1,6 +1,6 @@
 ---
 name: design-scss
-description: "SCSS design-system reference for the Vue SSR Starter Kit: design tokens in variables.scss, the 11 mixins, the auto-injection barrel (_inject.scss via Vite), component-scoped SCSS conventions, and the inert _animations.scss/_utilities.scss partials. Trigger on ANY styling work: writing SCSS, choosing tokens, animations, component .scss files, Vuetify style overrides, layout utilities, or design-system questions. This is the token/mixin reference — the design agent loads it to produce SCSS. Don't use for: brand identity decisions and the screenshot checklist (→ brand-art-direction, load it first), app architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), Docker/CI (→ vue-ssr-deployment), validation (→ vue-ssr-validation), Vuetify component API (→ vuetify-components), design delegation routing (→ vue-ssr-design)."
+description: "SCSS design-system reference for the Vue SSR Starter Kit: design tokens in variables.scss, the 11 mixins, and component-scoped SCSS conventions. Trigger on ANY styling work: writing SCSS, choosing tokens, animations, component .scss files, Vuetify style overrides, layout utilities, or design-system questions. This is the token/mixin reference — the design agent loads it to produce SCSS. Don't use for: brand identity decisions and the screenshot checklist (→ brand-art-direction, load it first), app architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), Docker/CI (→ vue-ssr-deployment), validation (→ vue-ssr-validation), Vuetify component API (→ vuetify-components), design delegation routing (→ vue-ssr-design)."
 ---
 
 # Design SCSS
@@ -37,11 +37,14 @@ src/styles/
 
 | Category      | Tokens                                                                 | Base                  |
 | ------------- | ---------------------------------------------------------------------- | --------------------- |
+| Colors        | `$white`, `$gray-50`..`$gray-900`, `$accent-indigo`{,-hover,-active}   | Only hex allowed in component SCSS |
 | Spacing       | xs (4px), sm (8px), md (16px), lg (24px), xl (32px), 2xl (48px)        | $spacing-unit: 8px    |
 | Border-radius | sm (4px), md (8px), lg (12px), xl (16px)                               | —                     |
 | Shadows       | sm, md, lg, xl                                                         | rgba-based box-shadow |
 | Transitions   | fast (150ms), base (300ms), slow (500ms)                               | —                     |
 | Breakpoints   | xs (0), sm (640px), md (768px), lg (1024px), xl (1280px), 2xl (1536px) | Mobile-first          |
+| Layout        | `$border-width-hairline`, `$header-height`, `$container-sm`..`xl`, `$section-py-sm`/`$section-py`/`$section-py-lg` | — |
+| Z-index       | `$z-base`, `$z-dropdown`, `$z-sticky`, `$z-header`, `$z-overlay`, `$z-modal`, `$z-skip-link` | — |
 
 **Rule:** Never hardcode colors, spacings, or font sizes. Always use tokens.
 

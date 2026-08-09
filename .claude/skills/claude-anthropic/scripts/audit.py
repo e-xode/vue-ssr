@@ -25,7 +25,7 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Iterable
 
-CLAUDE_MD_MAX_BYTES = 10 * 1024
+CLAUDE_MD_MAX_BYTES = 10 * 1024 + 512
 SKILL_MD_WARN_BYTES = 50 * 1024
 REFERENCE_WARN_LINES = 300
 DESCRIPTION_MIN_CHARS = 80
@@ -34,6 +34,10 @@ AGENT_DESCRIPTION_MAX_CHARS = 900
 ALWAYS_LOADED_WARN_CHARS = 43000
 ALWAYS_LOADED_ERROR_CHARS = 47000
 SKILL_DESC_AGGREGATE_WARN_CHARS = 23000
+TOC_SCAN_LINES = 25
+TOC_PATTERN = re.compile(
+    r"^\s*(\*\*Contents:?\*\*|##+\s+(Table of contents|Contents))", re.IGNORECASE | re.MULTILINE
+)
 
 CHECKS = (
     "claude-md size + code-comments",
@@ -42,11 +46,11 @@ CHECKS = (
     "skill description length + anti-trigger",
     "skill SKILL.md size",
     "skill duplicate name",
-    "skill broken relative links",
+    "skill broken relative links (SKILL.md + references/)",
     "agent frontmatter (name/description/tools)",
     "agent description budget + anti-trigger",
     "agent <-> CLAUDE.md cross-refs",
-    "english-only heuristic (skills + src content)",
+    "english-only heuristic (CLAUDE.md + agents + skills + src content)",
     "no code comments in SKILL.md",
     "no global scripts pool",
     "rules structure (size/paths/comments/english)",
@@ -54,6 +58,9 @@ CHECKS = (
     "reference file size",
     "always-loaded context budget",
     "see-skill cross-reference targets",
+    "agent skill-reachability (tools/skills vs body)",
+    "rule paths glob liveness",
+    "settings.json hygiene",
 )
 FRENCH_HEURISTIC_WORDS = {
     "avec", "pour", "dans", "cette", "celui", "celle", "ceux", "celles",
@@ -273,22 +280,33 @@ def check_skills(root: Path, report: Report) -> dict[str, dict]:
         elif name:
             seen_names[name] = entry.name
 
-        for link, _ in iter_relative_links(text):
-            target = (skill_md.parent / link).resolve()
+        check_broken_links(skill_md, text, root, report)
+        for ref in sorted(entry.glob("references/*.md")):
             try:
-                target.relative_to(skill_md.parent.resolve())
-            except ValueError:
+                ref_text = ref.read_text(encoding="utf-8")
+            except UnicodeDecodeError:
                 continue
-            if not target.exists():
-                report.add(
-                    "07-skill-broken-link",
-                    "ERROR",
-                    f"SKILL.md in '{entry.name}' links to non-existent '{link}'",
-                    str(skill_md),
-                )
+            check_broken_links(ref, ref_text, root, report)
 
         skills[entry.name] = {"name": name, "description": desc, "path": str(skill_md)}
     return skills
+
+
+def check_broken_links(source: Path, text: str, root: Path, report: Report) -> None:
+    root_resolved = root.resolve()
+    for link, _ in iter_relative_links(strip_code_fences(text)):
+        target = (source.parent / link).resolve()
+        try:
+            target.relative_to(root_resolved)
+        except ValueError:
+            continue  # link escapes the repo entirely (e.g. a filesystem path outside it) — not ours to check
+        if not target.exists():
+            report.add(
+                "07-skill-broken-link",
+                "ERROR",
+                f"'{source.relative_to(root_resolved)}' links to non-existent '{link}'",
+                str(source),
+            )
 
 
 def check_agents(root: Path, report: Report) -> dict[str, dict]:
@@ -391,8 +409,10 @@ def check_always_loaded_budget(
             "17-always-loaded-budget",
             "WARN",
             f"Skill descriptions alone total {skill_chars} chars (> {SKILL_DESC_AGGREGATE_WARN_CHARS}): "
-            "the harness truncated the skills listing between ~23.1k and ~23.5k chars (bounded 2026-07-19, cap undocumented) "
-            "and every skill past the cutoff loses its trigger surface. Trim descriptions.",
+            "the harness sizes the skills listing at 1% of the model's context window (scaled by "
+            "skillListingBudgetFraction in .claude/settings.json) and, on overflow, drops descriptions "
+            "least-invoked-first while keeping every skill name. Prefer 'disable-model-invocation: true' on "
+            "deliberately-invoked skills over trimming a trigger surface. Run /doctor for the live estimate.",
             str(claude_md),
         )
 
@@ -458,6 +478,14 @@ def check_cross_refs(
 
 def check_english_only(root: Path, report: Report) -> None:
     targets: list[Path] = []
+    claude_md = root / "CLAUDE.md"
+    if claude_md.exists():
+        targets.append(claude_md)
+    agents_dir = root / ".claude" / "agents"
+    if agents_dir.is_dir():
+        targets.extend(sorted(agents_dir.glob("*.md")))
+    # .claude/rules/*.md is deliberately not scanned here — check_rules() already
+    # runs the same French heuristic over every rule file under its own check id.
     skills_dir = root / ".claude" / "skills"
     if skills_dir.is_dir():
         for skill in skills_dir.iterdir():
@@ -573,6 +601,107 @@ def check_rules(root: Path, report: Report) -> None:
             )
 
 
+def check_settings(root: Path, report: Report) -> None:
+    settings_path = root / ".claude" / "settings.json"
+    if not settings_path.exists():
+        return
+    try:
+        data = json.loads(settings_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, UnicodeDecodeError) as err:
+        report.add("19-settings-json", "ERROR", f".claude/settings.json is not valid JSON: {err}", str(settings_path))
+        return
+    default_mode = (data.get("permissions") or {}).get("defaultMode")
+    if default_mode == "bypassPermissions":
+        report.add(
+            "19-settings-json",
+            "ERROR",
+            "Tracked .claude/settings.json sets permissions.defaultMode: bypassPermissions — this "
+            "suppresses every prompt, including writes to .git and .claude, for anyone who clones "
+            "this public repo. Move it to an untracked .claude/settings.local.json instead.",
+            str(settings_path),
+        )
+    else:
+        report.add("19-settings-json", "OK", "settings.json has no bypassPermissions in the tracked file.", str(settings_path))
+
+
+SKILL_MENTION_RE = re.compile(r"^## Skills\b", re.IGNORECASE | re.MULTILINE)
+
+
+def extract_frontmatter_list(raw_value: str) -> list[str]:
+    items = []
+    for line in raw_value.splitlines():
+        line = line.strip()
+        if line.startswith("- "):
+            items.append(line[2:].strip().strip("'\""))
+    return items
+
+
+def check_agent_skill_reachability(root: Path, report: Report) -> None:
+    agents_dir = root / ".claude" / "agents"
+    if not agents_dir.is_dir():
+        return
+    skills_dir = root / ".claude" / "skills"
+    for entry in sorted(agents_dir.iterdir()):
+        if not entry.is_file() or entry.suffix != ".md":
+            continue
+        text = entry.read_text(encoding="utf-8")
+        fm, _ = parse_frontmatter(text)
+        if not fm:
+            continue
+        tools_raw = fm.get("tools", "")
+        has_skill_tool = bool(re.search(r"\bSkill\b", tools_raw))
+        preloaded = extract_frontmatter_list(fm.get("skills", ""))
+        for skill_name in preloaded:
+            if skills_dir.is_dir() and not (skills_dir / skill_name / "SKILL.md").exists():
+                report.add(
+                    "20-agent-skill-reachability",
+                    "ERROR",
+                    f"Agent '{entry.stem}' preloads skill '{skill_name}' in its skills: field, but "
+                    f".claude/skills/{skill_name}/SKILL.md does not exist.",
+                    str(entry),
+                )
+        if SKILL_MENTION_RE.search(text) and not has_skill_tool and not preloaded:
+            report.add(
+                "20-agent-skill-reachability",
+                "ERROR",
+                f"Agent '{entry.stem}' has a '## Skills' body section but declares no 'skills:' "
+                "preload and no 'Skill' in tools: — it cannot reach any skill it names. Add the "
+                "non-negotiable skill(s) to 'skills:' and/or add 'Skill' to 'tools:' for the rest.",
+                str(entry),
+            )
+
+
+def check_rule_glob_liveness(root: Path, report: Report) -> None:
+    rules_dir = root / ".claude" / "rules"
+    if not rules_dir.is_dir():
+        return
+    import fnmatch
+    import subprocess
+
+    try:
+        tracked = subprocess.run(
+            ["git", "-C", str(root), "ls-files"], capture_output=True, text=True, check=True, timeout=10
+        ).stdout.splitlines()
+    except (subprocess.SubprocessError, FileNotFoundError, OSError):
+        return  # not a git repo, or git unavailable — skip silently rather than false-positive
+    for entry in sorted(rules_dir.iterdir()):
+        if not entry.is_file() or entry.suffix != ".md":
+            continue
+        text = entry.read_text(encoding="utf-8")
+        fm, _ = parse_frontmatter(text)
+        if not fm:
+            continue
+        for glob in extract_frontmatter_list(fm.get("paths", "")):
+            if not any(fnmatch.fnmatch(f, glob) for f in tracked):
+                report.add(
+                    "21-rule-glob-liveness",
+                    "WARN",
+                    f"Rule '{entry.name}' path glob '{glob}' matches zero tracked files — it can "
+                    "never fire. Fix the glob or confirm it is deliberately forward-looking.",
+                    str(entry),
+                )
+
+
 def check_skill_index(root: Path, report: Report, skills: dict[str, dict]) -> None:
     claude_md = root / "CLAUDE.md"
     if not claude_md.exists() or not skills:
@@ -615,16 +744,22 @@ def check_reference_sizes(root: Path, report: Report) -> None:
         return
     for ref in skills_dir.glob("*/references/*.md"):
         try:
-            lines = ref.read_text(encoding="utf-8").count("\n") + 1
+            text = ref.read_text(encoding="utf-8")
         except UnicodeDecodeError:
             continue
-        if lines > REFERENCE_WARN_LINES:
-            report.add(
-                "16-reference-size",
-                "WARN",
-                f"Reference '{ref.parent.parent.name}/{ref.name}' is {lines} lines (> {REFERENCE_WARN_LINES}). Split it or ship a table of contents.",
-                str(ref),
-            )
+        lines = text.count("\n") + 1
+        if lines <= REFERENCE_WARN_LINES:
+            continue
+        head = "\n".join(text.splitlines()[:TOC_SCAN_LINES])
+        if TOC_PATTERN.search(head):
+            continue
+        report.add(
+            "16-reference-size",
+            "WARN",
+            f"Reference '{ref.parent.parent.name}/{ref.name}' is {lines} lines (> {REFERENCE_WARN_LINES}) "
+            "and has no table of contents in its first lines. Split it or add one.",
+            str(ref),
+        )
 
 
 def print_text_report(report: Report) -> None:
@@ -670,6 +805,9 @@ def main(argv: list[str]) -> int:
     check_reference_sizes(root, report)
     check_always_loaded_budget(root, report, skills, agents)
     check_see_skill_targets(root, report, skills)
+    check_agent_skill_reachability(root, report)
+    check_rule_glob_liveness(root, report)
+    check_settings(root, report)
 
     if args.json:
         out = {

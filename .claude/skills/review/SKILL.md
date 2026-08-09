@@ -1,6 +1,6 @@
 ---
 name: review
-description: "Code-review method for the Vue SSR Starter Kit (e-xode/vue-ssr): the severity rubric (🔴🟠🟡🟢ℹ️), the anomaly-type taxonomy (security, bug, regression, perf, i18n, convention, test-gap), the citation doctrine (every finding traces to a CLAUDE.md hard rule, a path-scoped rule, a project skill, or an objective concern — else downgrade the severity), and the markdown report format the `review` agent uses to grade a branch/PR/diff against this project's documented conventions. Trigger when structuring, grading, or sourcing a code review, or defining what counts as a citable convention. Don't use for: making code changes (→ vue/server/design agents), post-task validation (→ vue-ssr-validation + validation agent), Claude config audit (→ claude-anthropic)."
+description: "Code-review method for the Vue SSR Starter Kit (e-xode/vue-ssr): the severity rubric (🔴🟠🟡🟢ℹ️), the anomaly-type taxonomy (security, bug, regression, perf, i18n, convention, test-gap), the citation doctrine, and the markdown report format the `review` agent uses to grade a branch/PR/diff. Trigger when structuring, grading, or sourcing a code review, or defining what counts as a citable convention. Don't use for: making code changes (→ vue/server/design agents), post-task validation (→ vue-ssr-validation + validation agent), Claude config audit (→ claude-anthropic)."
 ---
 
 # Review

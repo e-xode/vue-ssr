@@ -1,7 +1,6 @@
 ---
 paths:
   - 'src/**/*.js'
-  - 'src/**/*.mjs'
   - 'src/**/*.vue'
   - 'server.js'
 ---

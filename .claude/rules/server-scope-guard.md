@@ -13,7 +13,7 @@ paths:
 - Never import Vue, Vuetify, Pinia, vue-router, or vue-i18n here.
 - Never reference `window`, `document`, `localStorage`, or other browser APIs.
 - Use `src/shared/mongo.js` for MongoDB access (singleton client: `mongoConnect` / `mongoClose`).
-- Validate every ObjectId with `parseObjectId()` from `src/shared/dbHelpers.js` before a query — return early on failure with the `error.invalidId` i18n key (see rule `api-error-handling`).
+- Validate every ObjectId with `parseObjectId()` from `src/shared/dbHelpers.js` before a query — return early on failure with the `error.invalidId` i18n key (see rule `api-error-handling`). An unvalidated string passed straight to the MongoDB driver throws on malformed input, surfacing as an unhandled 500 instead of the intended 400.
 - Use `src/shared/log.js` (`logInfo` / `logWarn`) for structured server logging.
 - Route handlers are `async`/`await` wrapped in try/catch — see rule `api-error-handling` (do not duplicate that pattern here).
 - Shutdown lifecycle: handle SIGTERM/SIGINT → `await mongoClose()` → `process.exit(0)`.

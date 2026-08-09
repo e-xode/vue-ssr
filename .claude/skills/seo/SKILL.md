@@ -1,6 +1,6 @@
 ---
 name: seo
-description: "SEO reference for the Vue SSR Starter Kit (e-xode/vue-ssr): how the kit's server-side SEO is wired and the per-page checklist. Covers meta injection in src/entry-server.js from route meta i18n keys, JSON-LD structured data, Open Graph + Twitter Cards, bilingual hreflang alternates (en/fr + x-default), and the dynamic robots.txt + sitemap.xml served by server.js. Trigger on any SEO work: meta tags, canonical, structured data, sitemap, robots, hreflang, Core Web Vitals, or per-page SEO checklists. Don't use for: routing internals (→ vue-ssr-architecture), translation copy of meta keys (→ translate), off-site/LinkedIn marketing content (→ marketing-content/content-strategy), visual/CSS styling (→ design-scss), performance and Core Web Vitals (→ vue3-performance)."
+description: "SEO reference for the Vue SSR Starter Kit (e-xode/vue-ssr): how the kit's server-side SEO is wired and the per-page checklist. Trigger on any SEO work: meta tags, canonical, structured data, sitemap, robots, hreflang, or per-page SEO checklists. Don't use for: routing internals (→ vue-ssr-architecture), translation copy of meta keys (→ translate), off-site/LinkedIn marketing content (→ marketing-content/content-strategy), visual/CSS styling (→ design-scss), render/bundle performance tuning (→ vue3-performance)."
 ---
 
 # SEO — Vue SSR Starter Kit

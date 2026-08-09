@@ -26,16 +26,17 @@ prod the router is built once at startup.
 
 ## Endpoints inventory
 
-### Auth (authLimiter: 10/15min, accountLimiter: 20/15min)
+### Auth (signupLimiter: 5/15min; authLimiter: 10/15min; accountLimiter: 20/15min)
 
-POST /api/auth/signup, /signin, /verify-code, /resend-code, /forgot-password, /reset-password (no auth)
-POST /api/auth/signout, GET /me, PUT /profile, POST /avatar, /change-password, /change-email (auth required)
+POST /api/auth/signup (signupLimiter)
+POST /api/auth/signin, /verify-code, /resend-code, /forgot-password, /reset-password (authLimiter, no auth required)
+POST /api/auth/signout, GET /me, PUT /profile, POST /avatar, /change-password, /change-email (accountLimiter, auth required)
 
 ### Contact (contactLimiter: 3/15min)
 
 POST /api/contact (no auth)
 
-### Admin (apiLimiter: 100/15min, requiresAdmin)
+### Admin (requireAdmin — no rate limiter)
 
 GET/PUT/DELETE /api/admin/users[/:id], POST /block
 GET/DELETE /api/admin/logs[/:id], POST /bulk-delete
@@ -46,12 +47,10 @@ GET /sitemap.xml — Dynamic generation from routes, cached 1h TTL
 
 ## Rate limiting strategy
 
-| Limiter        | Limit   | Window | Endpoints                        |
-| -------------- | ------- | ------ | -------------------------------- |
-| authLimiter    | 10 req  | 15 min | signup, signin, verify, reset    |
-| accountLimiter | 20 req  | 15 min | profile, password, email changes |
-| contactLimiter | 3 req   | 15 min | POST /api/contact                |
-| apiLimiter     | 100 req | 15 min | admin endpoints                  |
+Limiter names and values are owned by the `vue-ssr-server` skill (its "Rate limiting" section) —
+this inventory only maps limiters to endpoints; read there for the authoritative numbers.
+`signupLimiter`, `authLimiter`, `accountLimiter`, `contactLimiter` — that is the complete set.
+Admin endpoints are protected by the `requireAdmin` middleware guard, not a rate limiter.
 
 ## apiFetch (client-side)
 

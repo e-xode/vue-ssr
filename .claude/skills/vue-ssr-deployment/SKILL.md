@@ -9,18 +9,24 @@ description: "Deployment and CI/CD reference for the Vue SSR Starter Kit: Docker
 
 ## Docker
 
-- **Dockerfile**: Multi-stage build (build → production)
+- **Dockerfile**: `docker/build/Dockerfile` — multi-stage build (build → production). There is no
+  root-level `Dockerfile`.
 - **docker-compose.yml** (base): dev env, runs the `node` app only and reads `.env` → connects to a **remote** MongoDB (e.g. Atlas) via `MONGO_HOST`/`MONGO_TYPE`
 - **docker-compose.local.yml** (override): adds a local `mongo` container and redirects the app to it (`MONGO_HOST=mongo`, `MONGO_TYPE=mongodb`, overriding `.env`)
 - **Switch local ↔ remote**: via the `COMPOSE_FILE` variable in `.env` (set in `.env.example`). Uncommented = local (node + mongo); commented = remote. See `references/docker-ci.md`
 
-## GitHub Actions (3 workflows)
+## GitHub Actions (5 workflows)
 
-| Workflow           | Trigger                     | Steps                                    |
-| ------------------ | --------------------------- | ---------------------------------------- |
-| `npm-publish.yml`  | Tags `v*`                   | ci → lint → test → build → npm publish   |
-| `npm-test.yml`     | Push master/dev, PR         | ci → lint → test                         |
-| `docker-build.yml` | Push master                 | Build + push to GHCR (SHA + latest tags) |
+| Workflow           | Trigger                              | Purpose                                                       |
+| ------------------- | -------------------------------------- | ---------------------------------------------------------------- |
+| `npm-test.yml`      | Push/PR to `master`/`development`     | 3 **parallel, separate** jobs: `lint`, `test`, `build` — kept apart so a lint bump doesn't hide a test result |
+| `docker-build.yml`  | Tags `v*`                             | Builds and pushes to GHCR, tagged semver + `latest` (no SHA tag) |
+| `npm-publish.yml`   | Tags `v*`                             | `npm ci` → `lint:check` → `test:run` → `build` → `npm publish`  |
+| `security.yml`      | Push/PR to `master`/`development`     | `secrets` job (gitleaks, always); `deps-review` job (PR-only, fails on new high-severity advisories) — this is the PR gate |
+| `audit.yml`         | Weekly cron + manual dispatch          | `npm audit --omit=dev --audit-level=high` against repo state — a debt signal, **never** a merge gate (can go red with zero new commits) |
+
+A tag push (`v1.2.3`) fires `docker-build` and `npm-publish` simultaneously — releasing a version
+publishes to both GHCR and npm in the same action.
 
 ## Production requirements
 

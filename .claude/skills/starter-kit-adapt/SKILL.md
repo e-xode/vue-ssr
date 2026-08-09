@@ -1,6 +1,7 @@
 ---
 name: starter-kit-adapt
 description: "Post-fork/clone adaptation guide for the Vue SSR Starter Kit Claude configuration. Trigger when: setting up a new project from this starter, customizing Claude config after fork, updating skill descriptions after dependency changes, removing starter-kit-specific skills, adding project-specific skills/rules/agents, or adapting the agent fleet for a new domain. Don't use for: day-to-day feature work (→ domain skills), Claude config governance rules (→ claude-anthropic), skill authoring workflow (→ skill-creator)."
+disable-model-invocation: true
 ---
 
 # Starter Kit Adaptation Guide
@@ -33,7 +34,7 @@ When you fork/clone the Vue SSR Starter Kit for a new project, the `.claude/` co
 
 6. **Update `.claude/rules/`** — Remove path-scoped rules that don't apply (e.g., `objectid-validation` if no MongoDB). Add rules for your project constraints.
 
-7. **Run `scripts/audit.py`** — Validates that `CLAUDE.md` index, skill descriptions, agent references, and cross-links are consistent.
+7. **Run `.claude/skills/claude-anthropic/scripts/audit.py`** — Validates that `CLAUDE.md` index, skill descriptions, agent references, and cross-links are consistent.
 
 8. **Update the translate skill** — If your locale set differs (add/remove languages), update the translate skill description and locale file paths.
 
@@ -45,7 +46,7 @@ When you fork/clone the Vue SSR Starter Kit for a new project, the `.claude/` co
 | `skill-creator` skill                          | `CLAUDE.md` hard rules                       | Specific rules (`objectid` if no MongoDB)                       |
 | `vue-ssr-validation` skill + `validation` agent | Agent fleet for your domain                  | The `vuetify-*` family (7 skills) (if not using Vuetify)        |
 | `review` skill + agent                         | `translate` skill (your locales)             | `design-scss` (if different styling approach)                  |
-| Audit script (`scripts/audit.py`)              | `vue-ssr-deployment` (your CI/CD)            | `vue-ssr-design` (if different UI framework)                   |
+| Audit script (`.claude/skills/claude-anthropic/scripts/audit.py`) | `vue-ssr-deployment` (your CI/CD)            | `vue-ssr-design` (if different UI framework)                   |
 | `vue-ssr-design` skill (coordination patterns) | `design` agent (adapt for your UI framework) | `design-ux` (if using a different design system)                |
 | —                                               | `brand-art-direction` (your brand's charter) | —                                                                |
 | —                                               | —                                             | `frontend-design` (vendored Anthropic skill)                    |
@@ -86,7 +87,9 @@ These locations contain hardcoded dependency versions — update after forking:
 1. Create `src/translate/{code}.json` with all keys from `en.json`
 2. Update the `translate` skill description — add the new locale code to the locale list
 3. Update route regex in architecture references (`/:locale(en|fr)/` → `/:locale(en|fr|de)/`)
-4. The translate agent fleet scales automatically — no agent changes needed
+4. The `translate` agent handles the extra file directly in one invocation while the locale count
+   stays small — no agent changes needed. See `translate.md`'s "Handling multiple locales" for when
+   a real fan-out would be worth adding.
 5. Run `audit.py` to verify cross-references
 
 ## Extending the agent fleet

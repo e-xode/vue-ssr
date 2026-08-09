@@ -79,7 +79,7 @@ Each anti-pattern includes a **symptom**, a **why it is bad**, and a **correctio
 ### D1. Reintroducing native hooks ad hoc
 
 - **Symptom.** A `PreToolUse`/`PostToolUse`/`Stop` hook appears in `.claude/settings.json`, e.g. re-running `eslint` after every Edit or re-adding a Stop-time validation chain.
-- **Why bad.** The project removed its native-hook wiring on 2026-07-26 (case-studies CS-2/CS-7): validation is centralised in the `validation` agent and offer-gated. Per-edit hooks are slow, noisy, and duplicate that path.
+- **Why bad.** The project removed its native-hook wiring on 2026-07-26 (case-studies CS-6): validation is centralised in the `validation` agent and offer-gated. Per-edit hooks are slow, noisy, and duplicate that path.
 - **Fix.** Treat any new hook as an architecture decision — explicit user approval plus a case-studies entry — never an ad-hoc addition.
 
 ## E. Workflow / process

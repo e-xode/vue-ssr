@@ -1,8 +1,6 @@
 ---
 paths:
   - 'tests/**/*.test.js'
-  - 'src/**/*.test.js'
-  - '**/*.spec.js'
 ---
 
 # Testing conventions

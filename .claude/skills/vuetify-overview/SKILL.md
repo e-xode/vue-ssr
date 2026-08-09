@@ -72,7 +72,7 @@ Use semantic color names in components: `color="primary"`, `color="error"`, etc.
 ## Hard rules
 
 - **`VCard`'s project default is `rounded: 'lg'`**, not `'xl'` — this is the single most-cited fact from this skill family; verify against `vuetify-theming`'s reference before repeating it.
-- **Hex values belong solely to `vuetify-theming`** — this skill only names tokens, never redefines their color.
+- **`vuetify-theming` is the doc home for hex values** (the code source of truth is `src/plugins/vuetify.js`) — this skill only names tokens, never redefines their color.
 - **Two different breakpoint scales exist — never conflate them.** Vuetify's `useDisplay` JS breakpoints (`xs`<600, `sm` 600–959, `md` 960–1279, `lg` 1280–1919, `xl` 1920+) are unrelated to the SCSS `respond-to()` mixin's breakpoints (owned by `design-scss`). A layout that must behave consistently in both JS and SCSS needs both checked explicitly — they do not share thresholds.
 
 ## Reference files

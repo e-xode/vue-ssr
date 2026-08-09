@@ -17,7 +17,7 @@ description: "Architecture reference for the Vue SSR Starter Kit (e-xode/vue-ssr
 | i18n         | Vue i18n v11 (EN/FR, Composition API legacy: false)          |
 | Backend      | Express 5 + express-session + session-file-store             |
 | Database     | MongoDB 7 (native driver, connection pooling)                |
-| Email        | Nodemailer 8                                                 |
+| Email        | Nodemailer 9                                                 |
 | Sanitization | DOMPurify 3                                                  |
 | Security     | Helmet 8 + CSP (production only) + express-rate-limit + CORS |
 | Build        | Vite 8 (client + server bundles)                             |
@@ -49,7 +49,7 @@ See [references/ssr-lifecycle.md](./references/ssr-lifecycle.md).
 
 | Module         | Exports                                                                                       |
 | -------------- | --------------------------------------------------------------------------------------------- |
-| `const.js`     | BCRYPT_ROUNDS, SECURITY_CODE_EXPIRY_MS, LOCALES, USER_SAFE_PROJECTION, EMAIL_REGEX, isAdmin() |
+| `const.js`     | BCRYPT_ROUNDS, SECURITY_CODE_EXPIRY_MS, SECURITY_CODE_MAX_ATTEMPTS, RESEND_COOLDOWN_MS, USER_SAFE_PROJECTION, USER_TYPES, EMAIL_REGEX, SUPPORTED_LOCALES, DEFAULT_LOCALE, LOCALE_CODES, LOCALE_ROUTE_REGEX, isAdmin(), getIntlLocale(), getOgLocale() |
 | `dbHelpers.js` | parseObjectId(), parsePagination(), findUserSafe(), getUserWithCounts()                       |
 | `email.js`     | generateSecurityCode(), hashCode(), verifyCode(), sendSecurityCodeEmail(), sendContactEmail() |
 | `security.js`  | getClientIp(), isIpBlocked(), recordLoginIp(), destroyUserSessions()                          |

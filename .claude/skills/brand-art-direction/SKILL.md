@@ -1,6 +1,6 @@
 ---
 name: brand-art-direction
-description: "Material Design 3 / Vuetify 4 art-direction charter for the Vue SSR Starter Kit (e-xode/vue-ssr): the opinionated, screenshot-verifiable brand-identity layer above design-scss and design-ux. Defines the clean-minimal direction as DECIDABLE screenshot-checkable systems, plus the evidence-based pre-delivery checklist graded by the visual-qa agent. Trigger on ANY visual/finishing or polish work on rendered views: card hovers, surface backgrounds, elevation, accent usage, hero/CTA styling. Load BEFORE design-scss/design-ux when styling views. Don't use for: SCSS token/mixin mechanics (→ design-scss), UX methodology (→ design-ux), Vuetify component API (→ vuetify-components), design routing (→ vue-ssr-design), marketing copy (→ content-strategy)."
+description: "Material Design 3 / Vuetify 4 art-direction charter for the Vue SSR Starter Kit (e-xode/vue-ssr): the opinionated, screenshot-verifiable brand-identity layer above design-scss and design-ux, graded by the visual-qa agent. Trigger on ANY visual/finishing or polish work on rendered views: card hovers, surface backgrounds, elevation, accent usage, hero/CTA styling. Load BEFORE design-scss/design-ux when styling views. Don't use for: SCSS token/mixin mechanics (→ design-scss), UX methodology (→ design-ux), Vuetify component API (→ vuetify-components), design routing (→ vue-ssr-design), marketing copy (→ content-strategy)."
 ---
 
 # Brand Art Direction — Clean Minimal (MD3)

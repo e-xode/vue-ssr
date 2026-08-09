@@ -1,7 +1,7 @@
 ---
 paths:
   - 'docker-compose*.yml'
-  - 'Dockerfile'
+  - 'docker/**/Dockerfile'
   - '.github/workflows/**'
 ---
 

@@ -8,3 +8,7 @@ logs/sessions/*
 logs/coverage/
 .vitest/
 .eslintcache
+.claude/skill-workspaces/
+.claude/settings.local.json
+__pycache__/
+*.pyc
