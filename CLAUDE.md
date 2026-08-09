@@ -93,6 +93,34 @@ Apply every `.claude/rules/` file whose `paths:` frontmatter glob matches the fi
 
 ---
 
+## Fleet verification contract
+
+Read by fleet-wide campaigns driven from `e-xode/scripts` (dependency/security updates across all
+apps — see `e-xode/scripts#9`). Those campaigns are **not** run by this repo's agents and must not
+guess these values. Keep this block accurate; it is the interface, not documentation.
+
+| Clé | Valeur |
+| --- | --- |
+| `install` | `npm ci` |
+| `test` | `npm run test:run` |
+| `lint` | `npm run lint:check` |
+| `build` | `npm run build` |
+| `full` | `npm run validate` (lint en série, puis format:check + build + test:run en parallèle) |
+| `server` | vps671607 |
+| `container` | `e-xode.vue-ssr` (port 3002, derrière `e-xode.proxy`) |
+| `deploy` | `cd /home/e-xode.vue-ssr && ./deploy.sh` (symlink → `e-xode/scripts`) |
+| `smoke` | `curl -sf https://vue-ssr.e-xode.net/` → 200 |
+| `rollback` | ⚠️ **aucun levier direct** — `deploy.sh` fait `docker pull …:latest` sans version épinglée. Revenir en arrière impose de reconstruire un commit antérieur via la CI. Voir `e-xode/scripts#10`. |
+
+🚨 **`npm test` (sans `:run`) lance vitest en mode watch** et bloque indéfiniment hors CI. Une
+campagne automatisée doit appeler `npm run test:run`. C'est le premier piège de ce dépôt.
+
+🚨 **`audit` n'est pas une porte de merge** — il juge l'état du dépôt, pas le diff, et devient rouge
+sans qu'aucun commit n'ait eu lieu. Ne jamais l'ajouter aux `required_status_checks`, ni le lire
+comme un verdict sur un changement. Le garde-fou de PR est `deps-review`.
+
+---
+
 ## Meta
 
 Governance → `claude-anthropic` skill. Skill authoring → `skill-creator` skill.

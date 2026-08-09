@@ -25,7 +25,15 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
       exclude: ['node_modules/', 'dist/', 'tests/', '**/*.config.js', '**/mockData.js'],
     },
-    include: ['tests/**/*.test.js', 'src/**/*.test.js'],
+    // 🚨 `*.spec.js` et `__tests__/` sont inclus délibérément : ce sont des conventions
+    // courantes, et un test écrit ainsi était jusqu'ici ignoré EN SILENCE — vitest ne signale
+    // pas un fichier non collecté. Un filet de sécurité qui se réduit sans prévenir est pire
+    // qu'une absence de filet, surtout pendant une campagne de mise à jour de dépendances.
+    include: [
+      'tests/**/*.{test,spec}.js',
+      'src/**/*.{test,spec}.js',
+      '**/__tests__/**/*.{test,spec}.js',
+    ],
     exclude: ['node_modules', 'dist', '.idea', '.git', '.cache'],
   },
 });
