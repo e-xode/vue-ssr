@@ -93,17 +93,39 @@ git commit -m "[release/vX.Y.Z] release vX.Y.Z"
 
 **Wait for user confirmation** before executing.
 
-## Step 11 — Propose push + tag
+## Step 11 — Propose push + PR + merge
 
 Present:
 
 ```bash
 git push -u origin release/vX.Y.Z
+gh pr create --base master --head release/vX.Y.Z --title "release vX.Y.Z" --body "..."
+gh pr merge --admin --squash --delete-branch
+```
+
+**Wait for user confirmation** before executing each operation. This repo requires 1 approving
+review to land on `master`; self-approval is forbidden, so `--admin` is required to merge your own
+release PR. `--squash` matches the repo's merge-method restriction (squash/rebase only) and keeps
+history linear.
+
+## Step 12 — Verify the merge, then tag
+
+**Tag only after the release branch has merged into `master` — never on the still-unmerged release
+branch.** A squash-merge rewrites the SHA, so the commit you just pushed on `release/vX.Y.Z` is
+never the one that ends up on `master`; tagging it there would tag a commit `master` doesn't
+contain.
+
+Once the merge from Step 11 is confirmed, re-fetch and check that `master`'s HEAD actually reflects
+it before tagging:
+
+```bash
+git checkout master
+git pull
 git tag vX.Y.Z
 git push origin vX.Y.Z
 ```
 
-**Wait for user confirmation** before executing each operation.
+**Wait for user confirmation** before executing.
 
 ## CHANGELOG format reference
 
@@ -141,4 +163,4 @@ Match the existing project style:
 
 - **No commits since last tag:** Abort with "No unreleased changes found."
 - **No existing tags:** Use first commit as baseline: `git log --oneline --all`
-- **User cancels at any step:** Offer to delete the release branch: `git checkout master && git branch -D release/vX.Y.Z`
+- **User cancels at any step:** Offer to delete the release branch: `git checkout master && git branch -D release/vX.Y.Z`. If a PR was already opened (Step 11) but not yet merged, also offer `gh pr close release/vX.Y.Z --delete-branch`.

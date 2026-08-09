@@ -1,6 +1,6 @@
 ---
 name: vue-ssr-release
-description: "Release workflow for the Vue SSR Starter Kit (e-xode/vue-ssr): version bumping (patch/minor/major), CHANGELOG generation from git log, release branch creation (release/vX.Y.Z), package-lock sync, commit/push/tag proposal. Also loaded at ordinary task completion — not just on 'release' — for the silent curated CHANGELOG `## [Unreleased]` entry the orchestrator adds after any changelog-worthy change. Trigger on any release request, version bump, changelog update, or when the user says 'release'. Delegates to the release agent. Don't use for: deployment/CI (→ vue-ssr-deployment), code changes (→ vue agent), post-task validation (→ vue-ssr-validation)."
+description: "Release workflow for the Vue SSR Starter Kit (e-xode/vue-ssr): version bumping (patch/minor/major), CHANGELOG generation from git log, release branch creation (release/vX.Y.Z), package-lock sync, commit/push/PR/merge/tag proposal. Also loaded at ordinary task completion — not just on 'release' — for the silent curated CHANGELOG `## [Unreleased]` entry the orchestrator adds after any changelog-worthy change. Trigger on any release request, version bump, changelog update, or when the user says 'release'. Delegates to the release agent. Don't use for: deployment/CI (→ vue-ssr-deployment), code changes (→ vue agent), post-task validation (→ vue-ssr-validation)."
 ---
 
 # Release workflow — Vue SSR Starter Kit
@@ -18,7 +18,7 @@ description: "Release workflow for the Vue SSR Starter Kit (e-xode/vue-ssr): ver
 | Gather unreleased changes from git log     |                                                  |
 | Format and write CHANGELOG entry           |                                                  |
 | Maintain `[Unreleased]` between releases   |                                                  |
-| Propose commit, push, and tag              |                                                  |
+| Propose commit, push, PR, merge, and tag   |                                                  |
 
 ## Hard constraints
 
@@ -27,6 +27,10 @@ description: "Release workflow for the Vue SSR Starter Kit (e-xode/vue-ssr): ver
 3. **No `Co-authored-by` trailer, ever** — no trailer and no mention of a non-human contributor on any commit. Commit author is always the user's own git account, full stop.
 4. **Tag format:** `vX.Y.Z` (prefixed with `v`)
 5. **Branch must be main or master** to start a release. If on another branch, abort and inform the user.
+6. **Tag only after the release branch has merged into `master`** — never on the still-unmerged
+   release branch. Branch protection requires 1 approving review and forbids self-approval, so the
+   merge step uses `gh pr merge --admin`; confirm the merge landed (re-fetch, check `master`'s HEAD)
+   before tagging, since a squash-merge changes the SHA.
 
 ## Commit categories
 
