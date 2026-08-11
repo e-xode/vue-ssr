@@ -1,4 +1,4 @@
-FROM node:24-alpine AS builder
+FROM node:26-alpine AS builder
 
 ARG NODE_HOST=https://www.mywebsite.com
 ARG NODE_PORT=3002
@@ -29,7 +29,7 @@ RUN npm run build
 
 # ----------------------------------------
 
-FROM node:24-slim AS runner
+FROM node:26-slim AS runner
 
 ARG NODE_HOST=https://www.mywebsite.com
 ARG NODE_PORT=3002
