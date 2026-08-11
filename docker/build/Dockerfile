@@ -15,7 +15,7 @@ ADD . /app
 WORKDIR /app
 
 RUN mkdir /home/node/.npm-global
-RUN npm install -g npm@latest
+RUN npm install -g npm@12.0.2
 # 🚨 `npm ci` et non `npm install` : l'image doit installer EXACTEMENT l'arbre décrit par
 # package-lock.json. Avec `npm install`, la résolution se refaisait dans les plages semver et se
 # figeait au gré du cache de couches Docker — donc le lockfile qu'auditent Dependabot et la CI
