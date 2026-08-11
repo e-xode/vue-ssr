@@ -74,9 +74,9 @@ Saturated colors carry more visual weight than muted colors.
 ### Attention gradient
 
 ```
-High attention: Saturated primary (#2563eb) → buttons, active links
+High attention: Saturated primary (#4f46e5) → buttons, active links
 ↓
-Medium attention: Secondary (#7c3aed) → supporting actions, badges
+Medium attention: Secondary (#525252) → supporting actions, badges
 ↓
 Low attention: Muted neutrals (gray-400/500) → borders, secondary text
 ↓

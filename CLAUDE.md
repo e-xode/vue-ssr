@@ -4,24 +4,34 @@
 
 ---
 
+## 🎨 Visual gate (rendered output)
+
+**Verification is consent-gated.** After ANY task that changes rendered output (`.vue`/`.scss` under `src/views/` or `src/components/`), end the reply with a visual-QA offer alongside the validation offer — never uninvited, never omitted. It captures the touched routes and grades them against `brand-art-direction`; route findings to `design`, then re-run until clean. Quality never depends on the offer being accepted.
+
+---
+
 ## 🚨 Task completion protocol
 
 After completing ANY task that changes the project, before responding:
 
-1. Run: `git diff --name-only HEAD && git diff --name-only --cached && git ls-files --others --exclude-standard`
-2. **Changelog** — for changelog-worthy changes (feature, bug fix, behavior/UI/i18n, or **product** dependency change), silently add a curated entry under `## [Unreleased]` in `CHANGELOG.md` per `vue-ssr-release`. Skip by purpose, not path: `.claude/` config incl. its deps, reformatting, lockfile-only, test-only, internal-docs. Never bump version or commit.
-3. **Validation is opt-in** — if any `.vue`/`.js`/`.scss`/`.css` changed, do NOT validate automatically. Ask the user, wait, and delegate to `hooks` ONLY on their yes or an explicit request this turn — never otherwise.
-4. When validation runs and fails → fix it yourself, re-delegate, repeat until all-pass.
+1. Run: `git diff --name-only HEAD && git ls-files --others --exclude-standard`
+2. **Changelog** — for changelog-worthy changes (feature, bug fix, behavior/UI/i18n, or **product** dependency change), silently add a curated entry under `## [Unreleased]` in `CHANGELOG.md` per `vue-ssr-release`. Skip by purpose, not path: `.claude/` config incl. its deps, reformatting, lockfile-only, test-only, internal-docs. Unconditional — never waits on validation; never bump the version or commit.
+3. **Validation is opt-in** — if any `.vue`/`.js`/`.mjs`/`.scss`/`.css` changed, do NOT validate automatically. Offer it at the end of the reply; delegate to `validation` ONLY on acceptance or an explicit request this turn.
+4. On failure → fix it yourself, re-delegate, repeat until `validation` reports all-pass.
 
-**Never ask about the changelog** — add it silently; only validation is gated (step 3).
+At most two end-of-task questions are sanctioned, each firing only when its condition holds: the visual gate above and this validation offer. **Never ask about the changelog** — add it silently. An agent workflow the user explicitly invoked (e.g. `release`) may prompt within its own flow — not governed by this count. Omitting an offer whose condition holds, or running a gate unasked, is a protocol violation.
 
 ---
 
 ## Hard rules
 
-**No auto-commit** — Never `git commit`/`push`/`tag`/`rebase`/`reset --hard` unless user explicitly requests it this turn. Commit format: `[$branch] content`. Always append: `Co-authored-by: AI Assistant <ai-assistant@users.noreply.github.com>`. **Exception: "release"** — full release process (CHANGELOG, version bump, commit, push, tag).
+**No auto-commit** — Never `git commit`/`push`/`tag`/`rebase`/`reset --hard` unless the user explicitly requests it this turn ("ok"/"finalise" ≠ a request; read-only git is always allowed). Commit format: `[$branch] content`. **No `Co-authored-by` trailer or any mention of a non-human contributor on any commit, ever** — commit author is always the user's own git account, full stop. **Exception: "release"** — full release process (CHANGELOG, version bump, commit, push, tag).
 
-**No code comments** — No `//`/`/* */`/`<!--` in `.vue/.js/.scss/.css`. Exception: empty catch blocks need `console.error(err)`.
+**English only** — All persisted artefacts (code, markdown, skills, commits, PR descriptions) in English. Conversation with the user: any language. Non-English in a persisted file = defect to fix before completing.
+
+**No confidential information** — Public, open-source (MIT) repository. Never write real credentials, keys, tokens, passwords, private hostnames/IPs, or SSH details anywhere in it — code, docs, commits, or `.claude/` config. `.env.example` and docs carry placeholders only; production infra is referenced by name only (private Ops tooling), never inlined.
+
+**No code comments** — No `//`/`/* */`/`<!--` in `.vue/.js/.scss/.css`. Exception: empty catch blocks need `console.error(err)`. Refactor with self-explanatory names and named helpers, never an explanatory comment.
 
 **SCSS externalized** — Every Vue component with styles has its own `.scss` file referenced via `<style lang="scss" scoped src="./ComponentName.scss"></style>`.
 
@@ -37,99 +47,89 @@ After completing ANY task that changes the project, before responding:
 
 **catch blocks** — Always `console.error(err)`. Never empty catch.
 
+**Regression = audit, not patch** — Never iterate patches on a regression. Stop, restart the analysis, find the real root cause, fix the cause not the symptom. Applies everywhere (SCSS, JS, SSR, MongoDB).
+
 **No over-engineering** — Keep it simple. YAGNI.
-
----
-
-## Path-scoped rules
-
-At session start, read and apply all files in `.claude/rules/`. Each rule declares a `paths:` frontmatter — enforce its constraints whenever you touch a matching file.
 
 ---
 
 ## Agents directory
 
-10-agent fleet. Orchestrator never validates itself — it delegates to `hooks` only on the user's opt-in.
+10-agent fleet. Validation: `validation` only, orchestrator-delegated (see Sub-agent orchestration).
 
-| Agent       | Trigger (delegate when…)                                                                      |
+| Agent       | Trigger (delegate when…)                                                                    |
 | ----------- | --------------------------------------------------------------------------------------------- |
-| `hooks`     | Post-task validation only (format → lint → build → test battery)                              |
-| `review`    | User asks to review a branch / PR / diff — read-only, structured report                       |
-| `translate` | Adding/editing/deleting i18n keys, locale parity audits, bulk i18n work                       |
-| `vue`       | Vue component creation, composables, Pinia stores, routing, unit tests                        |
-| `server`    | server.js / `src/api/**` / server-only `src/shared/**`: Express routes, MongoDB, sessions     |
-| `design`    | UI/UX design, SCSS styling, Vuetify theming, visual quality, accessibility, responsive layout |
-| `content`   | Marketing/editorial content: LinkedIn, page copy, README, advisory |
-| `marketing` | Marketing strategy: positioning, monetization stance, campaigns, channels, growth |
-| `visual-qa` | Screenshots changed views; reports defects vs brand charter (read-only) |
-| `release`   | User says "release" — version bump, CHANGELOG, branch, commit/push/tag proposal               |
+| `vue`       | Vue components **(logic/state — styling → `design`)**, composables, Pinia stores, routing, unit tests |
+| `server`    | `server.js`, `src/api/**`, server-only `src/shared/**` — Express, MongoDB, sessions           |
+| `design`    | UI/UX, SCSS, Vuetify theming, accessibility, responsive layout — **produces** visual work (grading → `visual-qa`) |
+| `translate` | Any change to `src/translate/*.json`                                                          |
+| `content`   | Editorial content: LinkedIn, page copy, README, **daily execution** growth advisory (what to write next) |
+| `marketing` | Strategy: positioning, monetization stance, campaigns, channels, **funnel-level** growth      |
+| `visual-qa` | Offer-gated visual **grading** of changed views — read-only, never uninvited, never edits     |
+| `review`    | Review a branch / PR / diff — read-only, structured report                                   |
+| `release`   | User says "release" — version bump, CHANGELOG, branch, commit/push/tag proposal              |
+| `validation`| Post-task validation only — orchestrator-called, never by sub-agents                         |
+
+**Quick delegation card** — route by file path first, then intent. Multiple agents can work in parallel on independent scopes.
 
 ---
 
 ## Sub-agent orchestration
 
-1. **Validation is centralized and opt-in** — NEVER run `npm test/lint/format/validate` yourself. Only the **`hooks` agent** validates, and only when the user opts in per the Task completion protocol (workaround for Copilot bug — see `vue-ssr-hooks` skill). No other agent may run validation.
-2. **Sub-agent contract** — Scoped work → no validation → no comments → structured summary (what/files/blockers) → stay in scope.
-3. **Reuse before writing** — Search `src/shared/`, `src/composables/`, existing modules before adding utility code. Key shared: `apiFetch`, `parseObjectId`, `parsePagination`, `findUserSafe`, `generateSecurityCode`, `escapeHtml`.
-4. **Delegation routing** — Vue component/store/composable/test work → `vue` agent. Express routes / MongoDB / sessions / server-only shared (`server.js`, `src/api/**`) → `server` agent. i18n key operations → `translate` agent (fleet mode by default). UI/UX design, styling, Vuetify theming, responsive layout → `design` agent. Content → `content` agent. Marketing strategy (positioning, campaigns, channels) → `marketing` agent. Visual QA of changed views → `visual-qa` agent. Review → `review` agent. Release → `release` agent. Multiple agents can work in parallel on independent scopes.
+These rules override any contrary suggestion from a skill or tool documentation. A user instruction in the current turn always wins.
+
+1. **Validation is centralized and opt-in** — NEVER run `npm test/lint/format/build/validate` yourself. Only the **`validation` agent** validates, and only when the user opts in per the Task completion protocol. No other agent may run validation. Pipeline: `vue-ssr-validation`.
+2. **Sub-agent contract** — Scoped work → no validation → no comments → structured summary (what/files/blockers) → stay in scope. Report out-of-scope discoveries, don't act on them.
+3. **Fleet** — Split by independent file boundaries, self-contained prompts (no prior context); fleet members never run validation and never delegate to another sub-agent (flat only — see `claude-anthropic` rule 16).
+4. **Reuse before writing** — Search `src/shared/`, `src/composables/`, existing modules before adding utility code. Key shared: `apiFetch`, `parseObjectId`, `parsePagination`, `findUserSafe`, `generateSecurityCode`, `escapeHtml`.
+5. **Plan escalation (automatic)** — whenever a task needs upfront analysis, exploration, or design work and the session runs below Opus, launch the built-in Plan/Explore agents (not the 10-agent fleet) with `model: opus` immediately — announce in one line, never ask. Exception: the user declined escalation (this task or standing). Incorporate the returned plan faithfully, never re-derive it. Trivial lookups stay inline.
+6. **Every incoming request is tracked** — never leave a request untracked, never ask before deciding to parallelize. Mechanics: `claude-anthropic` → `references/orchestration-procedures.md`.
 
 ---
 
-## Commands
+## Path-scoped rules
 
-```bash
-npm run dev          # Dev server (SSR + HMR)
-npm run build        # Build client + server bundles
-npm run prod         # Production mode (requires build first)
-npm run test:run     # Vitest single run
-npm run lint         # ESLint fix
-npm run lint:check   # ESLint check only
-```
+Apply every `.claude/rules/` file whose `paths:` frontmatter glob matches the files being edited. Rules are lightweight guardrails; skills carry the workflows.
+
+---
+
+## Fleet verification contract
+
+Read by fleet-wide campaigns driven from `e-xode/scripts` (dependency/security updates across all
+apps — see `e-xode/scripts#9`). Those campaigns are **not** run by this repo's agents and must not
+guess these values. Keep this block accurate; it is the interface, not documentation. Two traps:
+`npm test` without `:run` starts Vitest in watch mode and hangs forever outside CI — always call
+`npm run test:run`. `audit` is not a merge gate — it judges repo state, not a diff, and can go red
+with no new commit; never add it to `required_status_checks`. The PR gate is `deps-review`.
+
+| Key | Value |
+| --- | --- |
+| `install` | `npm ci` |
+| `test` | `npm run test:run` |
+| `lint` | `npm run lint:check` |
+| `build` | `npm run build` |
+| `full` | `npm run validate` (lint serially, then format:check + build + test:run in parallel) |
+| `server` | vps671607 |
+| `container` | `e-xode.vue-ssr` (port 3002, behind `e-xode.proxy`) |
+| `deploy` | `cd /home/e-xode.vue-ssr && ./deploy.sh` (symlink → `e-xode/scripts`) |
+| `smoke` | `curl -sf https://vue-ssr.e-xode.net/` → 200 |
+| `rollback` | ⚠️ no direct lever — `deploy.sh` runs `docker pull …:latest` unpinned. Rolling back means rebuilding an earlier commit via CI. See `e-xode/scripts#10`. |
 
 ---
 
 ## Meta
 
-This file loads every turn. Budget: ≤ 10 KB / ~2500 tokens. Knowledge → skills. Rules → here. See `skill-creator` for governance details.
+Governance → `claude-anthropic` skill. Skill authoring → `skill-creator` skill.
 
 ---
 
 ## Skills index
 
-Skills load on demand by description match.
+Skills load on demand by description matching. Families:
 
-| Skill                     | Triggers on                                                                                               |
-| ------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `vue-ssr-architecture`    | App architecture, file structure, routing, SSR lifecycle, shared utils, env vars |
-| `vue-ssr-auth`            | Auth flow, security codes, sessions, rate limiting, captcha                                               |
-| `vue-ssr-deployment`      | Docker, GitHub Actions CI/CD, production config, graceful shutdown                                        |
-| `vue-ssr-server`          | Express 5 API routes, middleware guards, MongoDB access, rate limiters |
-| `vue-ssr-hooks`           | Post-task validation, hook scripts, format/lint/build/test battery                                        |
-| `claude-anthropic`        | Claude config rules + audit; Anthropic doctrine. Co-load with skill-creator                               |
-| `skill-creator`           | Authoring/editing skills (workflow, eval, iterate)                                                        |
-| `starter-kit-adapt`       | Post-fork/clone adaptation, customizing Claude config for new project                                     |
-| `translate`               | i18n, translations, locale keys, vue-i18n usage, locale parity                                            |
-| `vue3-composition`        | Vue 3 Composition API, reactivity, composables, lifecycle, watchers |
-| `vue3-components`         | Vue 3 components: props, events, slots, provide/inject, dynamic/async |
-| `vue3-templates`          | Vue 3 template syntax: directives, list/conditional rendering, bindings, native v-model                   |
-| `vue3-builtin-components` | Vue 3 built-ins: Teleport, Suspense, KeepAlive, Transition, TransitionGroup                               |
-| `vue3-reusability`        | Vue 3 custom directives and plugins (composables → vue3-composition)                                      |
-| `vue3-performance`        | Vue 3 perf: shallowRef/markRaw, v-memo/v-once, async components, SSR perf                                 |
-| `design-ux`               | UI quality, visual hierarchy, accessibility, responsive UX, micro-interactions |
-| `design-scss`             | SCSS design system: tokens, mixins, animations, utilities, component-scoped patterns                      |
-| `vue-ssr-design`          | Design delegation routing, mixed-task splitting, starter-kit design philosophy |
-| `brand-art-direction` | MD3 visual charter (visual-qa rubric): rhythm, hovers, palette roles |
-| `vuetify-overview`        | Vuetify 4 component selection, project defaults, palette, SSR setup, breakpoints |
-| `vuetify-theming`         | Vuetify 4 theme config, light/dark mode, defaults provider, CSS utility classes                          |
-| `vuetify-layout`          | Vuetify 4 app shell, grid, app-bar, drawer, menus, tabs, breadcrumbs |
-| `vuetify-forms`           | Vuetify 4 form inputs, v-form validation rules, async submit, input defaults                              |
-| `vuetify-data`            | Vuetify 4 data tables (v-data-table-server), server-side pagination, v-pagination                        |
-| `vuetify-components`      | Vuetify 4 display/feedback: cards, lists, chips, dialogs, snackbars, alerts, progress |
-| `vuetify-icons`           | Vuetify 4 @mdi/js tree-shakeable SVG icons, icon props, catalog                                          |
-| `frontend-design`         | Greenfield/standalone distinctive UI (non-kit); in-kit UI → design agent |
-| `marketing-content` | Facts for marketing the kit: stack, features, differentiator, assets |
-| `content-strategy` | Editorial method: tone/voice, channel playbooks, personas, growth advisory |
-| `marketing-strategy` | Marketing strategy: positioning, monetization stance, campaigns, channels, competitive |
-| `seo` | Kit SEO: entry-server meta, JSON-LD, hreflang, sitemap/robots |
-| `review`                  | Code review of branch / PR / diff                                                                         |
-| `vue-ssr-release`         | Release workflow, version bump, CHANGELOG generation, release branch                                      |
+- **Project:** `vue-ssr-architecture`, `vue-ssr-auth`, `vue-ssr-server`, `vue-ssr-deployment`, `vue-ssr-validation`, `vue-ssr-design`, `vue-ssr-release`
+- **Vue 3:** `vue3-composition`, `vue3-components`, `vue3-templates`, `vue3-builtin-components`, `vue3-reusability`, `vue3-performance`
+- **Vuetify 4:** `vuetify-overview`, `vuetify-theming`, `vuetify-layout`, `vuetify-components`, `vuetify-forms`, `vuetify-data`, `vuetify-icons`
+- **Design:** `brand-art-direction`, `design-ux`, `design-scss`, `frontend-design`
+- **Marketing:** `marketing-strategy`, `marketing-content`, `content-strategy`, `seo`
+- **Workflow:** `translate`, `review`, `skill-creator`, `claude-anthropic`, `starter-kit-adapt`

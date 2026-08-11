@@ -2,6 +2,44 @@
 
 > Complete inventory of design tokens in `src/styles/variables.scss`.
 
+**Contents:** [Colors](#colors) · [Spacing](#spacing) · [Border radius](#border-radius) · [Shadows](#shadows) · [Transitions](#transitions) · [Breakpoints](#breakpoints) · [Layout](#layout) · [Z-index](#z-index)
+
+## Colors
+
+| Token                    | Value     | Use case                                          |
+| ------------------------- | --------- | -------------------------------------------------- |
+| `$white`                 | `#ffffff` | Default content surface (`surface`)               |
+| `$gray-50`                | `#fafafa` | Light section surface (`background`)               |
+| `$gray-100`                | `#f5f5f5` | Inset panels (`surface-variant`)                    |
+| `$gray-200`                | `#e5e5e5` | Hairline borders (`outline`)                        |
+| `$gray-300`–`$gray-800`   | —         | Intermediate neutrals — chrome, disabled states, text |
+| `$gray-900`                | `#171717` | Primary text (light theme)                          |
+| `$accent-indigo`           | `#4f46e5` | The single brand accent — CTAs, links, active states, focus |
+| `$accent-indigo-hover`     | `#4338ca` | Hover state for indigo-filled elements               |
+| `$accent-indigo-active`    | `#3730a3` | Active/pressed state for indigo-filled elements      |
+
+Never hardcode these hex values in component SCSS — reference the token. For the full light/dark
+Vuetify theme palette (including feedback colors), see the `vuetify-theming` skill's
+`references/color-palette.md`, the single source of truth for hex outside this file.
+
+### Usage guidance
+
+```scss
+.card {
+  background: $white;
+  border: 1px solid $gray-200;
+  color: $gray-900;
+}
+
+.link {
+  color: $accent-indigo;
+
+  &:hover {
+    color: $accent-indigo-hover;
+  }
+}
+```
+
 ## Spacing
 
 Base unit: `$spacing-unit: 8px`
@@ -135,3 +173,28 @@ Do not use breakpoint variables directly in `@media` queries. Use the `respond-t
   }
 }
 ```
+
+## Layout
+
+| Token                | Value  | Use case                                    |
+| ---------------------- | ------ | ---------------------------------------------- |
+| `$border-width-hairline` | 1px    | The hairline border that separates surfaces (System 1 of `brand-art-direction`) |
+| `$header-height`         | —      | Fixed app-bar height, used to offset sticky/absolute content |
+| `$container-sm`..`$container-xl` | —      | Max-width caps for `v-container`-equivalent layout wrappers |
+| `$section-py-sm`         | 48px   | Compact section vertical padding               |
+| `$section-py`            | 80px   | Standard section vertical padding              |
+| `$section-py-lg`         | 128px  | Hero / landing section vertical padding        |
+
+## Z-index
+
+| Token          | Use case                                    |
+| ---------------- | ---------------------------------------------- |
+| `$z-base`        | Default stacking context                       |
+| `$z-dropdown`     | Menus, select dropdowns                        |
+| `$z-sticky`       | Sticky headers, sticky table headers           |
+| `$z-header`       | The app bar                                     |
+| `$z-overlay`      | Backdrop behind a modal/dialog                 |
+| `$z-modal`        | Dialogs, modals                                 |
+| `$z-skip-link`    | The accessibility skip-to-content link (always on top) |
+
+Never hardcode a raw `z-index` number — pick the token matching the element's actual stacking role.

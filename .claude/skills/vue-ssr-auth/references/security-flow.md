@@ -20,12 +20,9 @@ verifyCode(input, hash) → boolean
 
 ## Rate limiting (disabled in dev)
 
-| Limiter        | Limit   | Window | Endpoints                     |
-| -------------- | ------- | ------ | ----------------------------- |
-| authLimiter    | 10 req  | 15 min | signup, signin, verify, reset |
-| accountLimiter | 20 req  | 15 min | profile, password, email      |
-| contactLimiter | 3 req   | 15 min | POST /api/contact             |
-| apiLimiter     | 100 req | 15 min | admin endpoints               |
+Limiter names and values are owned by the `vue-ssr-server` skill (its "Rate limiting" section) —
+read there for the current numbers rather than trusting a copy here. Auth-relevant limiters cover
+signup, signin/verify/resend/reset, and account changes.
 
 ## IP security
 

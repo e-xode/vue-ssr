@@ -1,6 +1,6 @@
 ---
 name: marketing-strategy
-description: "Pure-marketing strategy for the Vue SSR Starter Kit (e-xode/vue-ssr): the strategic layer above the content factory, for marketing the open-source MIT kit. Owns global strategy, the no-price monetization model (the kit is free; success = developer adoption that funnels inbound to E-XODE services), campaign planning, channel and social strategy (LinkedIn, GitHub, dev.to, Reddit r/vuejs, npm), positioning and ICP, competitive analysis, and growth/funnel thinking (stars, installs, forks). Decisions persist as references (positioning, pricing, campaigns, gtm, competitive) and are handed to the content agent. Trigger when defining strategy, the monetization stance, planning a campaign, choosing channels, analysing competitors, or reasoning about the adoption funnel. Don't use for: writing the actual posts/articles/README/page copy (→ content agent + content-strategy), product facts (→ marketing-content), i18n keys (→ translate), meta/JSON-LD/sitemap (→ seo), code (→ vue/server), visuals (→ design)."
+description: "Pure-marketing strategy for the Vue SSR Starter Kit (e-xode/vue-ssr): the strategic layer above the content factory. Owns global strategy, the no-price monetization model, campaign planning, channel and social strategy, positioning and ICP, competitive analysis, and growth/funnel thinking. Trigger when defining strategy, the monetization stance, planning a campaign, choosing channels, analysing competitors, or reasoning about the adoption funnel. Don't use for: writing the actual posts/articles/README/page copy (→ content agent + content-strategy), product facts (→ marketing-content), i18n keys (→ translate), meta/JSON-LD/sitemap (→ seo), code (→ vue/server), visuals (→ design)."
 ---
 
 # Marketing strategy — Vue SSR Starter Kit
@@ -13,17 +13,12 @@ description: "Pure-marketing strategy for the Vue SSR Starter Kit (e-xode/vue-ss
 
 ## Division of responsibilities
 
-| Concern                                                                       | Where                            |
-| ----------------------------------------------------------------------------- | -------------------------------- |
-| Strategy, monetization stance, campaigns, channel/GTM, growth, competitive    | `marketing-strategy` (here)      |
-| Product facts, stack, features, differentiator, license, repo/npm, assets     | `marketing-content` (the facts)  |
-| Editorial workflow, tone/voice, channel playbooks, inventory, backlog         | `content-strategy` (the method)  |
-| Producing the posts/articles/README/page copy                                 | ➜ delegate to the content agent  |
-| Authoritative stack/versions (runtime source of truth)                        | `package.json`                   |
-| i18n keys                                                                      | ➜ delegate to translate          |
-| Meta, JSON-LD, hreflang, sitemap                                              | ➜ See skill: seo                 |
-| Code changes                                                                  | ➜ delegate to vue / server       |
-| Visuals, layout, components                                                   | ➜ delegate to design             |
+| Concern                                                                        | Owner                            |
+| ------------------------------------------------------------------------------- | --------------------------------- |
+| Product facts: stack, features, differentiator, license, assets                | `marketing-content`               |
+| Editorial method: tone/voice, channel playbooks, inventory, backlog            | `content-strategy`                |
+| Strategy: monetization stance, campaigns, channel mix, positioning, competitive | `marketing-strategy`              |
+| Producing the posts/articles/README/page copy                                  | ➜ delegate to the content agent   |
 
 ➜ See skill: marketing-content — the facts this strategy reasons about.
 ➜ See skill: content-strategy — the editorial method that executes this strategy.
@@ -76,8 +71,3 @@ job, propagated via the translate agent.
 | The campaign frame and calendar                            | `references/campaigns.md`      |
 | Go-to-market, channel mix, launch sequencing               | `references/gtm.md`            |
 | Competitor map, benchmark, watch list                      | `references/competitive.md`    |
-
-## Evals
-
-Trigger and behavior checks live in `evals/evals.json` (judged via the `skill-creator` loop; no
-automated runner). Validate structure with `python3 .claude/skills/claude-anthropic/scripts/audit.py`.

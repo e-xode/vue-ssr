@@ -16,7 +16,15 @@ WORKDIR /app
 
 RUN mkdir /home/node/.npm-global
 RUN npm install -g npm@latest
-RUN npm install --production=false
+# 🚨 `npm ci` et non `npm install` : l'image doit installer EXACTEMENT l'arbre décrit par
+# package-lock.json. Avec `npm install`, la résolution se refaisait dans les plages semver et se
+# figeait au gré du cache de couches Docker — donc le lockfile qu'auditent Dependabot et la CI
+# n'était pas ce qui partait en production. Constaté sur la flotte le 2026-08-09 : deux applis du
+# même socle, même lockfile, embarquaient des versions différentes (l'une déjà corrigée, l'autre
+# vulnérable) selon la date de build. `npm ci` échoue aussi si lockfile et package.json divergent,
+# au lieu de diverger en silence. `--include=dev` est requis : NODE_ENV=production ci-dessus ferait
+# sinon sauter les devDependencies dont `npm run build` a besoin. Voir e-xode/scripts#9.
+RUN npm ci --include=dev
 RUN npm run build
 
 # ----------------------------------------

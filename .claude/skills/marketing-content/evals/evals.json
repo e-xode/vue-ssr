@@ -1,0 +1,35 @@
+{
+  "skill_name": "marketing-content",
+  "evals": [
+    {
+      "id": 1,
+      "name": "trigger-product-facts-lookup",
+      "prompt": "Quick check before I post on LinkedIn: what license is the vue-ssr kit under, and what's the npm package name?",
+      "assertions": [
+        {
+          "text": "Answers MIT license and @e-xode/vue-ssr from this skill's facts, and notes package.json is the authoritative source for anything version-specific rather than quoting a stale snapshot"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "trigger-differentiator-lookup",
+      "prompt": "Someone asked me in the comments why this starter kit is different from every other Vue SSR boilerplate on GitHub. What do I tell them?",
+      "assertions": [
+        {
+          "text": "Names the curated Claude Code agent/skill fleet as the differentiator, sourced from this skill rather than invented on the spot"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "negative-route-to-content-strategy",
+      "prompt": "I want to write a LinkedIn post about our new SSR feature — can you draft the French and English versions with a hook and a CTA?",
+      "assertions": [
+        {
+          "text": "Does NOT answer by drafting the post itself from this skill alone; this is editorial production (drafting, tone/voice, channel template) which belongs to content-strategy / the content agent — marketing-content only supplies the underlying facts"
+        }
+      ]
+    }
+  ]
+}

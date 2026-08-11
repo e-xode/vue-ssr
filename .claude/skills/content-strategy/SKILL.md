@@ -1,6 +1,6 @@
 ---
 name: content-strategy
-description: "Editorial method and content operations for the Vue SSR Starter Kit (e-xode/vue-ssr): the how-to-produce layer on top of the marketing-content facts, for content that markets the open-source kit. Covers the editorial workflow (research, propose, draft FR+EN, verify, optimize), operational tone and voice (Avoid/Prefer, no arrow character, bilingual discipline), per-channel playbooks (LinkedIn posts and long-form articles, landing/contact page copy via i18n, the GitHub/npm README storefront), audience personas and angles, the content inventory glossary (anti-duplication, follow-up radar), the editorial backlog, and the daily growth/SEO advisory playbook. Trigger when writing or improving a LinkedIn post or article, page marketing copy, README/storefront copy, brainstorming content ideas, or asking what to do today for content/SEO. Don't use for: canonical product/stack/feature facts (→ marketing-content), i18n key placement (→ translate), meta/JSON-LD/sitemap (→ seo), visuals or layout (→ design)."
+description: "Editorial method and content operations for the Vue SSR Starter Kit (e-xode/vue-ssr): the how-to-produce layer on top of the marketing-content facts. Trigger when writing or improving a LinkedIn post or article, page marketing copy, README/storefront copy, brainstorming content ideas, or asking what to do today for content/SEO. Don't use for: canonical product/stack/feature facts (→ marketing-content), i18n key placement (→ translate), meta/JSON-LD/sitemap (→ seo), visuals or layout (→ design)."
 ---
 
 # Content strategy — Vue SSR Starter Kit
@@ -12,15 +12,12 @@ description: "Editorial method and content operations for the Vue SSR Starter Ki
 
 ## Division of responsibilities
 
-| Concern                                                                | Skill                           |
-| ---------------------------------------------------------------------- | ------------------------------- |
-| What the kit is, stack, features, differentiator, asset locations      | `marketing-content` (the facts) |
-| Editorial workflow, tone/voice, channel templates, personas            | `content-strategy` (the method) |
-| Content inventory (what's published) and backlog (what's next)         | `content-strategy` references   |
-| Strategy, monetization stance, campaigns, channel mix, positioning     | `marketing-strategy`            |
-| i18n key placement                                                     | ➜ delegate to translate         |
-| Meta, JSON-LD, hreflang, sitemap                                       | ➜ See skill: seo                |
-| Visuals, layout, components                                            | ➜ delegate to design            |
+| Concern                                                                        | Owner                            |
+| ------------------------------------------------------------------------------- | --------------------------------- |
+| Product facts: stack, features, differentiator, license, assets                | `marketing-content`               |
+| Editorial method: tone/voice, channel playbooks, inventory, backlog            | `content-strategy`                |
+| Strategy: monetization stance, campaigns, channel mix, positioning, competitive | `marketing-strategy`              |
+| Producing the posts/articles/README/page copy                                  | ➜ delegate to the content agent   |
 
 ## Core rules
 
@@ -64,8 +61,3 @@ channels) that decides what content to produce and why; this skill executes thos
 | What already exists (anti-duplication, follow-ups)        | `references/content-inventory.md`  |
 | Ideas for what to write next                              | `references/editorial-backlog.md`  |
 | Content that touches SEO, or the daily growth/SEO advisory | `references/content-seo-bridge.md` |
-
-## Evals
-
-Trigger and behavior checks live in `evals/evals.json` (judged via the `skill-creator` loop; no
-automated runner). Validate structure with `python3 .claude/skills/claude-anthropic/scripts/audit.py`.

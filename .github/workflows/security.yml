@@ -1,9 +1,26 @@
 name: security
+
+# 🚨 Ce workflow ne juge QUE le diff. L'audit de l'état du dépôt vit désormais dans audit.yml,
+# sur planification — et surtout plus sur les pull requests.
+#
+# Pourquoi : `npm audit --audit-level=high` auditait l'arbre entier, donc il était rouge tant
+# qu'une vulnérabilité restait ouverte — y compris sur une PR qui en corrigeait une. Constaté
+# deux fois en trois semaines (runs 29870358431 et 30256414555). Conséquence : la couleur de la
+# CI ne disait rien de la qualité du changement, et plus personne ne pouvait s'en servir comme
+# garde-fou. Voir e-xode/scripts#9.
+#
+# Le garde-fou vulnérabilités reste présent sur la PR, mais borné au diff : dependency-review
+# ne signale que les advisories INTRODUITES par le changement. Dépôt public, donc gratuit.
+
 on:
   push:
+    branches: ['master', 'development']
   pull_request:
-  schedule:
-    - cron: '0 6 * * 1'
+
+concurrency:
+  group: '${{ github.workflow }}-${{ github.ref }}'
+  cancel-in-progress: true
+
 jobs:
   secrets:
     runs-on: ubuntu-latest
@@ -13,12 +30,17 @@ jobs:
           fetch-depth: 0
       - name: gitleaks (free OSS image, blocking)
         run: docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:latest detect --source=/repo --redact --exit-code=1 --no-banner
-  audit:
+
+  deps-review:
+    # Uniquement sur PR : l'action compare deux réfs, elle n'a pas de sens sur un push.
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/dependency-review-action@v4
         with:
-          node-version: 24
-      - name: npm audit (blocking on high/critical)
-        run: npm audit --omit=dev --audit-level=high
+          fail-on-severity: high
+          comment-summary-in-pr: on-failure

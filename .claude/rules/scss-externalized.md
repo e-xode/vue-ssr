@@ -6,10 +6,6 @@ paths:
 
 # SCSS externalized
 
-Every Vue component with styles MUST have a separate `.scss` file.
+Never write a `<style>` block with inline CSS/SCSS in a Vue file. Every component with styles has its own `.scss` file (see CLAUDE.md hard rules for the naming and `<style>` reference convention, and `styles/variables.scss` for tokens).
 
-- File naming: `ComponentName.vue` → `ComponentName.scss` (same directory)
-- Reference: `<style lang="scss" scoped src="./ComponentName.scss"></style>`
-- Never write `<style>` blocks with inline CSS/SCSS in Vue files
-- Use SCSS variables from `styles/variables.scss` — no hardcoded colors, spacings, or font sizes
-- The `styles/_inject.scss` is auto-injected globally via vite.config.js (variables + mixins available everywhere)
+Why: Vite's `_inject.scss` barrel only reaches files compiled as `.scss` — an inline `<style lang="scss">` block still gets Sass syntax support, but auto-injected tokens and mixins are wired through the same `additionalData` mechanism regardless of block-vs-file, so the real cost of inlining is losing the project's one-file-per-component convention (harder to find, harder to reuse, `design-scss` skill patterns assume a sibling file exists).

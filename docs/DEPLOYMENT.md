@@ -121,10 +121,10 @@ LOG_FILE=/var/log/app/app.log
 openssl rand -base64 32
 
 # Example output:
-# 5mJ8kL2xPoQ9nV3rT7wY+1aB4cD6eF9gH0iJ2kL3mN4o
+# <paste-the-generated-value-here>
 
 # Use this in .env:
-COOKIE_SECRET=5mJ8kL2xPoQ9nV3rT7wY+1aB4cD6eF9gH0iJ2kL3mN4o
+COOKIE_SECRET=<paste-the-generated-value-here>
 ```
 
 ---
