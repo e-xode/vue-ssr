@@ -1,11 +1,18 @@
 ---
 name: vue-ssr-server
-description: "Server/backend reference for the Vue SSR Starter Kit (e-xode/vue-ssr): Express 5 API layer (createApiRouter(db) entry, setupXRoute(app, db) route-module pattern, routes under src/api/auth|admin|contact), auth/admin middleware guards (requireAuth, requireAdmin, setMiddlewareDb), MongoDB singleton lifecycle (mongoConnect/mongoClose, ensureIndexes), data-access helpers (parseObjectId, parsePagination from dbHelpers.js), per-endpoint rate limiters (createLimiter, production-only), and server-only shared utilities (email, security, captcha, log). Trigger on backend/API route work: adding or editing an Express route, wiring the router, MongoDB queries and indexes, request validation, rate limiting, or server-side shared utilities. Don't use for: auth flow specifics like security codes/sessions/captcha logic (→ vue-ssr-auth), file structure/SSR lifecycle/routing (→ vue-ssr-architecture), Docker/CI/production config (→ vue-ssr-deployment), post-task validation (→ vue-ssr-hooks), Vue/client code (→ vue agent)."
+description: "Server/backend reference for the Vue SSR Starter Kit (e-xode/vue-ssr): Express 5 API route mechanics, middleware guards, MongoDB access, and server-only shared utilities. Trigger on backend/API route work: adding or editing an Express route, wiring the router, MongoDB queries and indexes, request validation, rate limiting, or server-side shared utilities. Don't use for: auth flow specifics like security codes/sessions/captcha logic (→ vue-ssr-auth), file structure/SSR lifecycle/routing (→ vue-ssr-architecture), Docker/CI/production config (→ vue-ssr-deployment), post-task validation (→ vue-ssr-validation), Vue/client code (→ vue agent)."
 ---
 
 # Vue SSR Server (Backend: Express 5 + MongoDB)
 
 > Owns Express 5 API route mechanics and MongoDB data access. Auth domain logic → `vue-ssr-auth`; file structure/SSR lifecycle → `vue-ssr-architecture`. Security guardrails live in rule `server-security`; error/ObjectId handling in rule `api-error-handling`.
+
+## Division of responsibilities (vue-ssr-architecture ↔ vue-ssr-server)
+
+| Concern                                                                   | Owner                 |
+| -------------------------------------------------------------------------- | --------------------- |
+| File structure, SSR lifecycle, locale routing, new view/feature scaffolding | `vue-ssr-architecture` |
+| Express route mechanics, middleware guards, rate limiters, MongoDB queries/indexes | `vue-ssr-server` |
 
 ## Server entry (`server.js`)
 

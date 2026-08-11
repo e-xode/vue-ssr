@@ -1,12 +1,36 @@
 name: 'npm-test'
 
+# 🚨 Trois jobs SÉPARÉS, volontairement. Ils tenaient auparavant dans un seul job où
+# `lint:check` précédait `test:run` : un bump d'eslint ou d'eslint-plugin-vue rendait le job
+# rouge sans jamais dire si les tests passaient. Pendant une campagne de mise à jour de
+# dépendances, c'est exactement le signal qu'il faut pouvoir lire séparément.
+#
+# `build` est nouveau ici. Il ne tournait qu'au tag (npm-publish.yml), donc APRÈS le merge :
+# la casse typique d'un bump vite / vue / vuetify / sass-embedded restait invisible jusqu'à la
+# release. C'est le job le plus utile des trois pour valider une mise à jour de dépendances.
+
 on:
   push:
     branches: ['master', 'development']
   pull_request:
     branches: ['master', 'development']
 
+concurrency:
+  group: '${{ github.workflow }}-${{ github.ref }}'
+  cancel-in-progress: true
+
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint:check
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -14,6 +38,17 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 24
+          cache: 'npm'
       - run: npm ci
-      - run: npm run lint:check
       - run: npm run test:run
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build

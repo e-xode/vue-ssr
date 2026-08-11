@@ -1,6 +1,55 @@
 # Changelog
 
-## [Unreleased]
+## 5.3.3
+
+Claude Code configuration only (`.claude/` agents, skills, rules, audit tooling) and `CLAUDE.md` — no application changes.
+
+---
+
+## 5.3.2
+
+### Security
+
+- **npm audit advisories cleared (3 -> 0)** — bumped transitive `ip-address` 10.2.0 -> 10.4.0
+  (high: `Address4` decoded leading-zero octets as decimal, plus two medium misclassification
+  advisories), `nanoid` -> 3.3.18 (high: custom generators could loop indefinitely on size zero)
+  and `dompurify` -> 3.4.13 (moderate: `IN_PLACE` hook removal left a detached subtree
+  executable). Lockfile only — no direct dependency and no source file changed.
+
+### Changed
+
+- **The Docker image now installs with `npm ci` instead of `npm install`.** The lockfile audited
+  by Dependabot and by CI was not what shipped: `npm install` re-resolved within semver ranges and
+  froze at the mercy of the Docker layer cache. Measured across the fleet on 2026-08-09 — two apps
+  built from the same starter and the same lockfile were running *different* transitive versions,
+  one already patched, the other still vulnerable, decided purely by build date. `npm ci` also
+  fails loudly when the lockfile and `package.json` diverge, instead of diverging silently.
+- **CI now reports three independent signals — `lint`, `test` and `build` — instead of one.**
+  They previously shared a job where `lint:check` ran before `test:run`, so an eslint bump turned
+  the job red without ever saying whether the tests passed. `build` is new to pull requests: it
+  only ran on tags, i.e. *after* merge, so a breaking `vite`/`vue`/`vuetify` bump stayed invisible
+  until release.
+- **`npm audit` moved out of the pull-request path** into a scheduled `audit` workflow. It audited
+  the whole tree, so it was red as long as any advisory remained open — including on a pull request
+  that fixed one (observed twice in three weeks). Pull requests are now guarded by
+  `dependency-review-action`, which only reports advisories *introduced by the diff*. The audit
+  workflow keeps reporting repository debt on its own schedule, and must never be added to
+  `required_status_checks`.
+- **Vitest now collects `*.spec.js` and `__tests__/` files.** They were silently ignored — vitest
+  does not warn about a file it never collected, so a safety net could shrink without notice.
+
+## 5.3.1
+
+### Changed
+
+- **Local MongoDB port is configurable** — a new `MONGO_PORT` environment variable (default `27017`) controls the host port `docker-compose.local.yml` maps to the local `mongo` container; `MONGO_HOST` no longer needs an embedded port suffix (was `localhost:27017`, now `localhost`). Backward-compatible — omit `MONGO_PORT` to keep the default.
+
+### Security
+
+- **GitHub Secret Scanning and Push Protection enabled** on this public repository — pushes containing a recognized secret pattern are now rejected automatically, and the full history is scanned for existing exposures. A full audit of the git history (including previously unfetched pull-request refs) found no leaked application secrets.
+- **npm audit advisories cleared (4 -> 0)** — bumped transitive `body-parser` (DoS via silently-disabled size limit) and `brace-expansion` (exponential-time/unbounded-expansion DoS), resolving all reported `immutable` and `postcss` advisories as a side effect of the lockfile update. No direct dependency changed.
+
+---
 
 ## 5.3.0
 

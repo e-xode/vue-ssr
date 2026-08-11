@@ -5,10 +5,6 @@ paths:
 
 # Changelog scope
 
-Decide entries by what touches the **product**, not by which file changed.
+Entries go under the `## [Unreleased]` section at the top of the file, one line per change, grouped under `### Added`/`### Changed`/`### Fixed`/`### Security` as applicable. Never bump the version number or create a commit as part of a changelog edit — that is the `release` agent's job.
 
-**Add an entry** only when the change affects users/consumers of the project: a feature, bug fix, behavior/UI/i18n change, or a **product/runtime dependency** change.
-
-**Skip** anything whose sole purpose is the Claude configuration — `.claude/` agents/skills/rules/hooks **and** `package.json` devDependencies, npm scripts, or config added only to power Claude tooling. Example: a `playwright` devDependency plus a `screenshots` script that exist only for the `visual-qa` agent are Claude tooling, not product — do not log them. Judge by purpose, not by file path.
-
-Also skip: pure reformatting, lockfile-only, test-only, and internal-docs changes. Never bump the version or commit as part of a changelog edit.
+What counts as changelog-worthy is decided by CLAUDE.md's Task completion protocol §2: product-facing changes only (feature, bug fix, behavior/UI/i18n, product/runtime dependency) — never `.claude/` agents/skills/rules/settings, Claude-tooling-only `package.json` entries, reformatting, lockfile-only, test-only, or internal-docs changes. This rule covers where and how the entry is written, not whether one is warranted.

@@ -15,7 +15,8 @@ configuration baked in: AI-pair-programming-ready foundation, not a bare boilerp
 - **Production-grade defaults** — Helmet CSP, per-endpoint rate limiting, Vitest suite, Docker
   multi-stage build, GitHub Actions CI (npm-test, npm-publish, docker-build to GHCR).
 - **AI-ready out of the box** — a curated Claude Code multi-agent fleet, skill library, path-scoped
-  rules, and a post-task validation hooks battery ship with the repo. This is the standout differentiator.
+  rules, and a single-command validation pipeline (`npm run validate`) driven by a dedicated agent ship
+  with the repo. This is the standout differentiator.
 - **Free and open** — MIT-licensed, published to npm and GitHub; clone, read, and learn from real code.
 
 ## ICP and segments
@@ -32,8 +33,8 @@ AI-ready config is the strongest pull) and **Vue developers** (the kit as a refe
 
 ## Differentiation
 
-- **AI-pair-programming-ready** — the curated Claude Code fleet/skills/rules/hooks ship with the kit,
-  versus a plain boilerplate that leaves AI tooling to the user.
+- **AI-pair-programming-ready** — the curated Claude Code fleet/skills/rules/validation pipeline ship
+  with the kit, versus a plain boilerplate that leaves AI tooling to the user.
 - **Production-grade, not a toy** — security, CI, Docker, tests included, versus a starter that stops at
   "hello world".
 - **Free and readable** — MIT, full source on GitHub, versus paid or closed templates.

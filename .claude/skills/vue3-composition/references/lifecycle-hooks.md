@@ -26,7 +26,7 @@ setup()              ← runs on BOTH server and client
 
 ```js
 import { ref, onMounted } from 'vue';
-import { apiFetch } from '@/shared/apiFetch';
+import { apiFetch } from '@/shared/api';
 
 const data = ref(null);
 const loading = ref(true);

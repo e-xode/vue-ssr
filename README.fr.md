@@ -215,7 +215,7 @@ NODE_HOST=http://localhost:3002
 
 # Base de données MongoDB
 MONGO_DB=app
-MONGO_HOST=localhost:27017
+MONGO_HOST=localhost
 MONGO_USER=user
 MONGO_PWD=password
 MONGO_TYPE=mongodb
@@ -286,7 +286,7 @@ NODE_HOST=http://localhost:3002   # URL base du serveur
 
 # MongoDB
 MONGO_TYPE=mongodb                # Type de connexion
-MONGO_HOST=localhost:27017        # Hôte:Port MongoDB
+MONGO_HOST=localhost              # Hôte MongoDB
 MONGO_DB=app                      # Nom de la base de données
 MONGO_USER=user                   # Utilisateur MongoDB
 MONGO_PWD=password                # Mot de passe MongoDB
@@ -814,7 +814,7 @@ const colors = {
 
 ```env
 MONGO_TYPE=mongodb
-MONGO_HOST=localhost:27017
+MONGO_HOST=localhost
 MONGO_DB=app
 MONGO_USER=user
 MONGO_PWD=password

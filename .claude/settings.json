@@ -1,0 +1,19 @@
+{
+  "skillListingBudgetFraction": 0.025,
+  "permissions": {
+    "allow": [
+      "Agent",
+      "Bash",
+      "Edit",
+      "Glob",
+      "Grep",
+      "LS",
+      "NotebookEdit",
+      "Read",
+      "Skill",
+      "WebFetch",
+      "WebSearch",
+      "Write"
+    ]
+  }
+}

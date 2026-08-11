@@ -1,6 +1,6 @@
 ---
 name: design-ux
-description: "Design and UX methodology for the Vue SSR Starter Kit: design-first thinking, visual hierarchy (size > color > weight > position), Material Design 3 alignment via Vuetify 4, 8px spacing rhythm ($spacing-unit multiples), color semantics (primary for CTAs, success/error for feedback, neutral for chrome), micro-interactions (meaningful, restrained, accessible), responsive UX (mobile-first, breakpoint semantics), and WCAG 2.1 AA accessibility. Trigger on: UI quality, design direction, visual hierarchy, accessibility audit, responsive decisions, animation design, color review, UX patterns, user feedback design. This is methodology — the design agent is the executor. Don't use for: SCSS implementation (→ design-scss), Vuetify component API (→ vuetify-components), app architecture (→ vue-ssr-architecture), auth flow (→ vue-ssr-auth), deciding when to delegate design work (→ vue-ssr-design)."
+description: "Design and UX methodology for the Vue SSR Starter Kit: design-first thinking, visual hierarchy, Material Design 3 alignment via Vuetify 4, the 8px spacing rhythm, color semantics, micro-interactions, responsive UX (mobile-first) and WCAG 2.1 AA accessibility. Trigger on: UI quality, design direction, visual hierarchy, accessibility audit, responsive decisions, animation design, color review, UX patterns, user feedback design. This is methodology — the design agent is the executor. Don't use for: SCSS implementation (→ design-scss), Vuetify component API (→ vuetify-components), app architecture (→ vue-ssr-architecture), auth flow (→ vue-ssr-auth), deciding when to delegate design work (→ vue-ssr-design), brand identity decisions and the screenshot checklist (→ brand-art-direction, load it first)."
 ---
 
 # Design & UX
@@ -8,6 +8,10 @@ description: "Design and UX methodology for the Vue SSR Starter Kit: design-firs
 > **Contents:** [Philosophy](#philosophy) · [Method](#method) · [Visual hierarchy](#visual-hierarchy) · [Spacing](#spacing-rhythm) · [Color](#color-semantics) · [Micro-interactions](#micro-interactions) · [Accessibility](#accessibility) · [Responsive](#responsive-ux) · [References](#references)
 
 Design-first methodology for the Vue SSR Starter Kit. Principles and decision frameworks for building interfaces that are beautiful, accessible, and consistent.
+
+## Division of responsibilities
+
+`brand-art-direction` owns the opinionated brand-identity charter (indigo accent, MD3 surfaces, the screenshot-verifiable checklist) and loads **before** this skill for any visual work on rendered views. This skill owns the underlying UX methodology — hierarchy, spacing rhythm, accessibility — that the charter is built on.
 
 ## Philosophy
 
@@ -54,9 +58,16 @@ The project uses an **8px base unit** (`$spacing-unit`).
 | `$spacing-lg`  | 24px  | Section padding            |
 | `$spacing-xl`  | 32px  | Major section breaks       |
 | `$spacing-2xl` | 48px  | Page-level margins         |
-| `$spacing-3xl` | 64px  | Hero sections              |
 
 All spacing must be multiples of 4px. Never use arbitrary pixel values.
+
+Vertical section rhythm has its own scale, built on the same 8px unit:
+
+| Token              | Value | Use case                        |
+| ------------------ | ----- | -------------------------------- |
+| `$section-py-sm`   | 48px  | Compact sections                |
+| `$section-py`      | 80px  | Standard section vertical padding |
+| `$section-py-lg`   | 128px | Hero / landing sections          |
 
 ## Color semantics
 

@@ -36,10 +36,10 @@
       "prompt": "I'm writing a new sub-agent for reviewing Vue components. In its instructions I want it to run 'npm run lint' to verify its own changes. Is that correct?",
       "assertions": [
         { "text": "Clearly states this is an anti-pattern / violates the sub-agent contract" },
-        { "text": "Explains that validation is centralized on the hooks agent only" },
-        { "text": "States no sub-agent (except hooks) should run npm test/lint/format" },
+        { "text": "Explains that validation is centralized on the validation agent only" },
+        { "text": "States no sub-agent (except validation) should run npm test/lint/format" },
         { "text": "Recommends removing the lint step from the sub-agent" },
-        { "text": "References the orchestrator's responsibility to delegate to hooks at task end" }
+        { "text": "References the orchestrator's responsibility to delegate to validation at task end" }
       ]
     },
     {

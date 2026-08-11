@@ -1,6 +1,6 @@
 ---
 name: marketing-content
-description: "Marketing and product-knowledge FACTS for the Vue SSR Starter Kit (e-xode/vue-ssr): the source of truth for acquisition content that markets the open-source kit itself. Covers the canonical content rules (bilingual FR+EN, humble tone, concrete numbers, never the → arrow character), where assets live (src/assets/linkedin/, page copy via i18n, the GitHub/npm storefront), and product facts: what the kit is (Vue 3.5 + Vite + Express 5 + MongoDB 7 + Vuetify 4 SSR boilerplate with auth, i18n, admin), its stack/version snapshot (authoritative source = package.json), feature inventory, and differentiator (a curated Claude Code agent/skill fleet). Trigger when you need the facts behind acquisition content: what the kit is, its features, stack, positioning, audience, license, repo/npm location, or asset locations. Don't use for: the editorial method, tone/voice, inventory/backlog and writing workflow (→ content-strategy), i18n keys (→ translate), page meta/structured data (→ seo), visual/layout design (→ design)."
+description: "Marketing and product-knowledge FACTS for the Vue SSR Starter Kit (e-xode/vue-ssr): the source of truth for acquisition content that markets the open-source kit itself. Covers the canonical content rules, and the product facts: what the kit is, its stack snapshot (authoritative source = package.json), feature inventory, and differentiator. Trigger when you need the facts behind acquisition content: what the kit is, its features, stack, positioning, audience, license, repo/npm location, or asset locations. Don't use for: the editorial method, tone/voice, inventory/backlog and writing workflow (→ content-strategy), i18n keys (→ translate), page meta/structured data (→ seo), visual/layout design (→ design)."
 ---
 
 # Marketing content — Vue SSR Starter Kit
@@ -11,12 +11,12 @@ description: "Marketing and product-knowledge FACTS for the Vue SSR Starter Kit 
 
 This skill owns the **facts**. The editorial **method** (how to research, write, and optimize) lives in the `content-strategy` skill, executed by the `content` agent.
 
-| Concern                                                                       | Where                                              |
-| ----------------------------------------------------------------------------- | -------------------------------------------------- |
-| What the kit is, its stack, features, differentiator, license, asset locations | `marketing-content` (here)                         |
-| Editorial workflow, tone/voice, channel templates, personas, inventory, backlog | `content-strategy`                               |
-| Inventory of everything published (glossary)                                  | `content-strategy/references/content-inventory.md` |
-| Strategy, monetization stance, campaigns, channel mix, positioning, competitive | `marketing-strategy`                            |
+| Concern                                                                        | Owner                            |
+| ------------------------------------------------------------------------------- | --------------------------------- |
+| Product facts: stack, features, differentiator, license, assets                | `marketing-content`               |
+| Editorial method: tone/voice, channel playbooks, inventory, backlog            | `content-strategy`                |
+| Strategy: monetization stance, campaigns, channel mix, positioning, competitive | `marketing-strategy`              |
+| Producing the posts/articles/README/page copy                                  | ➜ delegate to the content agent   |
 
 ➜ See skill: content-strategy — the writing method that consumes these facts.
 ➜ See skill: marketing-strategy — the strategy layer that decides what content to produce and why.
@@ -59,7 +59,7 @@ Vue 3.5+, Vite, Express 5, MongoDB 7 driver, Vuetify 4 (Material Design 3), Pini
 
 ## Differentiator (the standout angle)
 
-The kit ships a **curated Claude Code configuration**: a multi-agent fleet (`design`, `vue`, `server`, `translate`, `review`, `hooks`, `release`, `content`, `visual-qa`), an extensive on-demand skill library, path-scoped rules, and a post-task validation hooks battery. This makes it not just a code boilerplate but an **AI-pair-programming-ready** foundation — a genuinely differentiating, concrete story for the developer audience.
+The kit ships a **curated Claude Code configuration**: a multi-agent fleet (`design`, `vue`, `server`, `translate`, `review`, `validation`, `release`, `content`, `visual-qa`), an extensive on-demand skill library, path-scoped rules, and a single-command validation pipeline (`npm run validate`) driven by a dedicated agent. This makes it not just a code boilerplate but an **AI-pair-programming-ready** foundation — a genuinely differentiating, concrete story for the developer audience.
 
 ## Audience
 

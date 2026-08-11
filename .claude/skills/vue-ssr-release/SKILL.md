@@ -1,11 +1,11 @@
 ---
 name: vue-ssr-release
-description: "Release workflow for the Vue SSR Starter Kit (e-xode/vue-ssr): version bumping (patch/minor/major), CHANGELOG generation from git log, release branch creation (release/vX.Y.Z), package-lock sync, commit/push/tag proposal. Trigger on any release request, version bump, changelog update, or when the user says 'release'. Delegates to the release agent. Don't use for: deployment/CI (→ vue-ssr-deployment), code changes (→ vue agent), post-task validation (→ vue-ssr-hooks)."
+description: "Release workflow for the Vue SSR Starter Kit (e-xode/vue-ssr): version bumping (patch/minor/major), CHANGELOG generation from git log, release branch creation (release/vX.Y.Z), package-lock sync, commit/push/PR/merge/tag proposal. Also loaded at ordinary task completion — not just on 'release' — for the silent curated CHANGELOG `## [Unreleased]` entry the orchestrator adds after any changelog-worthy change. Trigger on any release request, version bump, changelog update, or when the user says 'release'. Delegates to the release agent. Don't use for: deployment/CI (→ vue-ssr-deployment), code changes (→ vue agent), post-task validation (→ vue-ssr-validation)."
 ---
 
 # Release workflow — Vue SSR Starter Kit
 
-> Owns the release procedure: branch creation, version bump, CHANGELOG update, and commit/push/tag proposal. The `release` agent executes this workflow.
+> Owns the release procedure: branch creation, version bump, CHANGELOG update, and commit/push/tag proposal — executed by the `release` agent. Also owns the continuous `## [Unreleased]` CHANGELOG update fired by CLAUDE.md's Task completion protocol at the end of ordinary tasks (see "Continuous `[Unreleased]` update" below), independent of any actual release.
 
 ## What this skill does (and does not)
 
@@ -14,75 +14,27 @@ description: "Release workflow for the Vue SSR Starter Kit (e-xode/vue-ssr): ver
 | Detect current branch (main/master)        | Deploying to production (→ `vue-ssr-deployment`) |
 | Create release branch `release/vX.Y.Z`     | Writing application code (→ `vue` agent)         |
 | Bump `version` in `package.json`           | CI/CD pipeline changes (→ `vue-ssr-deployment`)  |
-| Sync `package-lock.json` via `npm install` | Post-task code validation (→ `hooks` agent)      |
+| Sync `package-lock.json` via `npm install` | Post-task code validation (→ `validation` agent) |
 | Gather unreleased changes from git log     |                                                  |
 | Format and write CHANGELOG entry           |                                                  |
 | Maintain `[Unreleased]` between releases   |                                                  |
-| Propose commit, push, and tag              |                                                  |
+| Propose commit, push, PR, merge, and tag   |                                                  |
 
 ## Hard constraints
 
 1. **Never auto-commit/push/tag.** Always propose and wait for explicit user confirmation before executing any git write operation.
 2. **Commit format:** `[release/vX.Y.Z] release vX.Y.Z`
-3. **Co-authored-by trailer** on every commit: `Co-authored-by: AI Assistant <ai-assistant@users.noreply.github.com>` (tool-agnostic placeholder — forks may replace this identity)
+3. **No `Co-authored-by` trailer, ever** — no trailer and no mention of a non-human contributor on any commit. Commit author is always the user's own git account, full stop.
 4. **Tag format:** `vX.Y.Z` (prefixed with `v`)
 5. **Branch must be main or master** to start a release. If on another branch, abort and inform the user.
+6. **Tag only after the release branch has merged into `master`** — never on the still-unmerged
+   release branch. Branch protection requires 1 approving review and forbids self-approval, so the
+   merge step uses `gh pr merge --admin`; confirm the merge landed (re-fetch, check `master`'s HEAD)
+   before tagging, since a squash-merge changes the SHA.
 
-## Release procedure (step by step)
+## Commit categories
 
-### Step 1 — Verify branch
-
-```bash
-git branch --show-current
-```
-
-Must be `main` or `master`. If not, abort: "You must be on main/master to start a release."
-
-### Step 2 — Ensure clean working tree
-
-```bash
-git status --porcelain
-```
-
-If dirty, abort: "Working tree is not clean. Please commit or stash your changes first."
-
-### Step 3 — Ask bump type
-
-Ask the user: **patch**, **minor**, or **major**.
-
-Compute new version from current `package.json` version:
-
-- `patch`: 3.0.2 → 3.0.3
-- `minor`: 3.0.2 → 3.1.0
-- `major`: 3.0.2 → 4.0.0
-
-### Step 4 — Create release branch
-
-```bash
-git checkout -b release/vX.Y.Z
-```
-
-### Step 5 — Bump version in package.json
-
-Edit `package.json` → update `"version": "X.Y.Z"`.
-
-### Step 6 — Sync lockfile
-
-```bash
-npm install
-```
-
-This updates `package-lock.json` to match the new version.
-
-### Step 7 — Gather unreleased changes
-
-If a `## [Unreleased]` section already exists in `CHANGELOG.md` (maintained continuously — see "Continuous `[Unreleased]` update" below), use it as the primary source and only cross-check git log for anything missed. Otherwise gather from git log:
-
-```bash
-git log --oneline $(git describe --tags --abbrev=0)..HEAD
-```
-
-Parse commit messages. Group them into categories:
+Used both to classify git log commits during a release and to place a curated entry under the correct `## [Unreleased]` subsection (see "Continuous `[Unreleased]` update" below):
 
 | Category         | Commit patterns                            |
 | ---------------- | ------------------------------------------ |
@@ -94,88 +46,9 @@ Parse commit messages. Group them into categories:
 
 If commits don't follow conventional format, list them as bullet points and let the user categorize.
 
-### Step 8 — Present CHANGELOG draft
+## Release procedure
 
-Show the user the formatted CHANGELOG section:
-
-```markdown
-## X.Y.Z
-
-### New Features
-
-- Description of feature
-
-### Improvements
-
-- Description of improvement
-
-### Bug Fixes
-
-- Description of fix
-```
-
-Ask the user to **approve**, **edit**, or **provide corrections**.
-
-### Step 9 — Write CHANGELOG
-
-If a `## [Unreleased]` section exists, rename its header to `## X.Y.Z` (merging any additions from Steps 7–8). Otherwise insert the approved `## X.Y.Z` section at the top of `CHANGELOG.md`, below `# Changelog` and any blank line, above the first existing `## X.Y.Z` entry. Either way, leave no empty `[Unreleased]` section behind.
-
-### Step 10 — Propose commit
-
-Present the exact command to the user:
-
-```bash
-git add package.json package-lock.json CHANGELOG.md
-git commit -m "[release/vX.Y.Z] release vX.Y.Z
-
-Co-authored-by: AI Assistant <ai-assistant@users.noreply.github.com>"
-```
-
-**Wait for user confirmation** before executing.
-
-### Step 11 — Propose push + tag
-
-Present:
-
-```bash
-git push -u origin release/vX.Y.Z
-git tag vX.Y.Z
-git push origin vX.Y.Z
-```
-
-**Wait for user confirmation** before executing each operation.
-
-## CHANGELOG format reference
-
-Match the existing project style:
-
-```markdown
-# Changelog
-
-## X.Y.Z
-
-### New Features
-
-- **component/scope** — Description of the change
-
-### Improvements
-
-- Description
-
-### Bug Fixes
-
-- Description
-
----
-
-## previous version...
-```
-
-- Use `---` separator between versions
-- Use `###` for categories
-- Use `- ` bullet points with optional `**scope**` prefix
-- No date in header (project convention — dates are in older entries but dropped from v3.0.0+)
-- An `## [Unreleased]` section may sit at the very top between releases; it uses the same category structure and is converted to `## X.Y.Z` at release time (Step 9)
+The full step-by-step procedure (branch verification through the commit/push/tag proposal), the CHANGELOG format reference, and edge cases live in [references/release-procedure.md](./references/release-procedure.md) — read it before executing a release.
 
 ## Continuous `[Unreleased]` update (between releases)
 
@@ -190,10 +63,4 @@ Triggered by the **Task completion protocol** in `CLAUDE.md` (step 5), not by a 
 3. Place each bullet under the matching category: `Package Updates`, `New Features`, `Improvements`, `Bug Fixes`, `Removed` (`Security` if relevant). Create a category subsection only when needed.
 4. **Deduplicate and merge** into existing `[Unreleased]` bullets under the same category — never add a second `[Unreleased]` section and never restate an existing bullet.
 
-**Constraints:** never bump the `package.json` version, never `git commit`/`tag`, no dates. The section stays `[Unreleased]` until a release converts it (Step 9).
-
-## Edge cases
-
-- **No commits since last tag:** Abort with "No unreleased changes found."
-- **No existing tags:** Use first commit as baseline: `git log --oneline --all`
-- **User cancels at any step:** Offer to delete the release branch: `git checkout master && git branch -D release/vX.Y.Z`
+**Constraints:** never bump the `package.json` version, never `git commit`/`tag`, no dates. The section stays `[Unreleased]` until a release converts it (see Step 9 in [references/release-procedure.md](./references/release-procedure.md)).

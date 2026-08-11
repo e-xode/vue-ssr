@@ -1,0 +1,29 @@
+name: audit
+
+# Audit de l'ÉTAT du dépôt — délibérément séparé de security.yml, qui juge le diff.
+#
+# 🚨 Ce workflow a le droit d'être rouge sans que ce soit la faute de qui que ce soit : il
+# devient rouge dès qu'une vulnérabilité est publiée sur une dépendance déjà installée, sans
+# qu'aucun commit n'ait eu lieu. C'est un indicateur de dette, pas une porte de merge — et
+# c'est exactement pour ça qu'il ne doit PAS tourner sur les pull requests. Tant qu'il y
+# tournait, une PR corrigeant une vulnérabilité était marquée rouge par le job vulnérabilités.
+# Voir e-xode/scripts#9.
+#
+# Ne jamais l'ajouter aux `required_status_checks` de master.
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: 'npm'
+      - name: npm audit (runtime, high et au-delà)
+        run: npm audit --omit=dev --audit-level=high

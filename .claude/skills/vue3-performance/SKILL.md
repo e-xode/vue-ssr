@@ -1,6 +1,6 @@
 ---
 name: vue3-performance
-description: "Vue 3 performance optimization for the Vue SSR Starter Kit: reactivity perf (shallowRef/shallowReactive, markRaw, computed caching, avoiding over-reactivity), rendering perf (v-memo, v-once, stable keys), component perf (async/lazy components + code splitting), large lists (virtual scrolling via Vuetify, pagination), and SSR perf (light setup, avoiding hydration mismatches). JavaScript only, <script setup>, SSR-safe. Trigger on: optimizing render/update performance, slow large lists or tables, shallowRef/markRaw decisions, v-memo/v-once, lazy-loading components, hydration-mismatch or SSR performance issues. Don't use for: build/bundle/production deployment config (→ vue-ssr-deployment), reactivity basics (→ vue3-composition), Vuetify component API (→ vuetify-components), app architecture (→ vue-ssr-architecture)."
+description: "Vue 3 performance optimization for the Vue SSR Starter Kit: reactivity perf (shallowRef, markRaw, computed caching), rendering perf (v-memo, v-once, stable keys), async/lazy components and code splitting, large lists (virtual scrolling, pagination), and SSR perf. JavaScript only, <script setup>, SSR-safe. Trigger on: optimizing render/update performance, slow large lists or tables, shallowRef/markRaw decisions, v-memo/v-once, lazy-loading components, hydration-mismatch or SSR performance issues. Don't use for: build/bundle/production deployment config (→ vue-ssr-deployment), reactivity basics (→ vue3-composition), Vuetify component API (→ vuetify-components), app architecture (→ vue-ssr-architecture)."
 ---
 
 # Vue 3 Performance
@@ -82,7 +82,8 @@ const editor = markRaw(createHeavyEditor());
 | Build/bundle/production deployment config               | vue-ssr-deployment            |
 
 ➜ See skill: vue3-composition — `ref`/`computed`/`watch` semantics.
-➜ See skill: vuetify-components — virtual scroller and `v-data-table` server-side pagination API.
+➜ See skill: vuetify-components — virtual scroller (`v-virtual-scroll`).
+➜ See skill: vuetify-data — `v-data-table-server` pagination API.
 ➜ See skill: vue3-builtin-components — `Suspense`/`KeepAlive` around async components.
 
 ## References

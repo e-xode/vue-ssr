@@ -1,11 +1,22 @@
 ---
 name: vue-ssr-auth
-description: "Authentication and security reference for the Vue SSR Starter Kit: email-based security code flow (signup → verify → dashboard), 6-digit code generation (crypto.randomInt), SHA-256 hashing, timingSafeEqual verification, bcryptjs password hashing, express-session with file-store, rate limiting per endpoint type, IP blocking, session destruction, reCAPTCHA v3 integration (client composable + server verification). Trigger on any auth work: login, signup, password reset, session management, security code, rate limiting, or captcha. Don't use for: general app architecture (→ vue-ssr-architecture), Docker/CI (→ vue-ssr-deployment), post-task validation (→ vue-ssr-hooks), UI/UX design (→ design agent)."
+description: "Authentication and security reference for the Vue SSR Starter Kit: the email-based security code flow, session management, IP blocking, and reCAPTCHA v3 integration. Trigger on any auth work: login, signup, password reset, session management, security code, or captcha. Don't use for: rate limiter definitions/values (→ vue-ssr-server), general app architecture (→ vue-ssr-architecture), Docker/CI (→ vue-ssr-deployment), post-task validation (→ vue-ssr-validation), UI/UX design (→ design agent)."
 ---
 
 # Vue SSR Auth
 
 > Owns the authentication flow, security patterns, session management, and access control.
+
+## Division of responsibilities (vue-ssr-auth ↔ vue-ssr-server)
+
+| Concern                                                                | Owner            |
+| ------------------------------------------------------------------------ | ------------------ |
+| Rate limiter definitions, values, and which middleware mounts them       | `vue-ssr-server`   |
+| Which endpoints need auth protection, and the auth-domain logic itself   | `vue-ssr-auth`     |
+
+The two facts drifted apart once before (a stale limiter table here disagreed with the router) —
+see `vue-ssr-server`'s "Rate limiting" section for the current names and values; don't duplicate them
+here.
 
 ## Auth flow: Signup → Verify → Dashboard
 
