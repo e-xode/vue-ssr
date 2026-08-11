@@ -1,5 +1,18 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- **Product dependencies bumped**: `vue` 3.5.34 -> 3.5.41, `vue-router` 5.0.7 -> 5.2.0, `vuetify`
+  4.1.0 -> 4.1.5, `@fontsource/ibm-plex-mono` 5.2.7 -> 5.3.0. All patch/minor, merged from
+  Dependabot with green `lint`/`test`/`build`/`deps-review` CI.
+- **Docker image's global npm install is now pinned** — `npm install -g npm@latest` ->
+  `npm install -g npm@12.0.2` in `docker/build/Dockerfile`. Was the last unpinned, non-deterministic
+  step in the image build (see `e-xode/scripts#9`).
+- **Dependabot now also tracks the base image** — added a `docker` ecosystem entry (weekly,
+  `docker/build/`) to `.github/dependabot.yml`, alongside the existing `npm` entry.
+
 ## 5.3.3
 
 Claude Code configuration only (`.claude/` agents, skills, rules, audit tooling) and `CLAUDE.md` — no application changes.
