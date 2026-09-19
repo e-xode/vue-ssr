@@ -2,8 +2,6 @@ import { createRouter, createMemoryHistory, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth';
 import { LOCALE_CODES, LOCALE_ROUTE_REGEX, DEFAULT_LOCALE } from '@/shared/const';
 
-const history = typeof window === 'undefined' ? createMemoryHistory() : createWebHistory();
-
 const localeRoutes = [
   {
     path: '',
@@ -183,49 +181,60 @@ const routes = [
   },
 ];
 
-export const router = createRouter({
-  history,
-  routes,
-  scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) return savedPosition;
-    if (to.hash) return { el: to.hash };
-    return { top: 0 };
-  },
-});
+// Un routeur PAR REQUETE. Le partager entre les requetes SSR est un anti-pattern documente par Vue :
+// `createMemoryHistory()` empile a chaque `router.push()` et n'est jamais reinitialise, donc la pile
+// grossit sans borne et retient les arbres applicatifs des requetes precedentes. Mesure le
+// 2026-09-19 (e-xode/scripts#17) : 5 applications de la flotte mouraient en boucle sur
+// `JavaScript heap out of memory` — jusqu'a 113 fois en 6 semaines — la seule epargnee etant la
+// seule a creer son routeur par requete. Second effet, moins visible : deux requetes concurrentes
+// partageaient `router.currentRoute`, donc l'une pouvait lire la route poussee par l'autre.
+export const createAppRouter = () => {
+  const router = createRouter({
+    history: typeof window === 'undefined' ? createMemoryHistory() : createWebHistory(),
+    routes,
+    scrollBehavior(to, from, savedPosition) {
+      if (savedPosition) return savedPosition;
+      if (to.hash) return { el: to.hash };
+      return { top: 0 };
+    },
+  });
 
-router.beforeEach(async (to) => {
-  if (typeof window === 'undefined') return true;
+  router.beforeEach(async (to) => {
+    if (typeof window === 'undefined') return true;
 
-  const locale = to.params.locale;
-  if (locale) {
-    localStorage.setItem('locale', locale);
-  }
-
-  const authStore = useAuthStore();
-
-  if (!authStore.user && !authStore.loading) {
-    try {
-      await authStore.fetchUser();
-    } catch (e) {
-      console.error('Auth check failed:', e);
+    const locale = to.params.locale;
+    if (locale) {
+      localStorage.setItem('locale', locale);
     }
-  }
 
-  if (to.meta.guest && authStore.isAuthenticated) {
-    return { name: 'Dashboard', params: { locale: locale || DEFAULT_LOCALE } };
-  }
+    const authStore = useAuthStore();
 
-  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    return {
-      name: 'Signin',
-      params: { locale: locale || DEFAULT_LOCALE },
-      query: { redirect: to.fullPath },
-    };
-  }
+    if (!authStore.user && !authStore.loading) {
+      try {
+        await authStore.fetchUser();
+      } catch (e) {
+        console.error('Auth check failed:', e);
+      }
+    }
 
-  if (to.meta.requiresAdmin && !authStore.isAdmin) {
-    return { name: 'Dashboard', params: { locale: locale || DEFAULT_LOCALE } };
-  }
+    if (to.meta.guest && authStore.isAuthenticated) {
+      return { name: 'Dashboard', params: { locale: locale || DEFAULT_LOCALE } };
+    }
 
-  return true;
-});
+    if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+      return {
+        name: 'Signin',
+        params: { locale: locale || DEFAULT_LOCALE },
+        query: { redirect: to.fullPath },
+      };
+    }
+
+    if (to.meta.requiresAdmin && !authStore.isAdmin) {
+      return { name: 'Dashboard', params: { locale: locale || DEFAULT_LOCALE } };
+    }
+
+    return true;
+  });
+
+  return router;
+};

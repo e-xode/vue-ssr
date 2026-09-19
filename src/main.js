@@ -13,7 +13,7 @@ import { createApplicationVuetify } from './plugins/vuetify';
 import { DEFAULT_THEME, parseThemeCookie } from '@/shared/theme';
 import en from '@/translate/en.json';
 import fr from '@/translate/fr.json';
-import { router } from './router';
+import { createAppRouter } from './router';
 import App from './App.vue';
 
 const ssr = typeof window === 'undefined';
@@ -34,6 +34,8 @@ export function createApp(initialTheme) {
     locale: savedLocale,
     messages: { en, fr },
   });
+
+  const router = createAppRouter();
 
   app.use(router).use(vuetify).use(pinia).use(i18n);
 

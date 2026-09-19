@@ -2,6 +2,29 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- **Le routeur est créé par requête, plus partagé entre elles.** `src/router.js` exportait un
+  singleton (`export const router`), réutilisé par toutes les requêtes SSR, avec un
+  `createMemoryHistory()` créé une seule fois au niveau module. Chaque `router.push()` empilait donc
+  dans un historique jamais réinitialisé, qui grossissait sans borne et retenait les arbres
+  applicatifs des requêtes précédentes. Mesuré sur la flotte (`e-xode/scripts#17`) : 5 applications
+  bâties sur ce starter mouraient en boucle sur `JavaScript heap out of memory` — jusqu'à 113 fois
+  en 6 semaines — la seule épargnée étant la seule à créer son routeur par requête. Remplacé par une
+  fabrique `createAppRouter()`, appelée depuis `createApp()` comme le sont déjà Pinia, Vuetify et
+  i18n. ⚠️ Corrige aussi une **course entre requêtes concurrentes**, qui partageaient
+  `router.currentRoute` : une requête pouvait lire la route poussée par une autre.
+
+### Security
+
+- **Vulnérabilités des dépendances de production ramenées à zéro** — `multer` 2.4.0 (DoS par noms de
+  champs imbriqués) et `nodemailer` 9.1.1 (lecture de fichier arbitraire + SSRF via l'option `raw`,
+  injection CRLF d'en-têtes), les deux *high* que `e-xode/scripts#9` suivait depuis juillet, plus 6
+  correctifs *moderate*/*low* transitifs. `npm audit --omit=dev` : **0 vulnérabilité**. Aucun
+  changement de `package.json` — lockfile uniquement, donc aucune montée de version majeure. Les 3
+  vulnérabilités restantes visent l'outillage de test (`vitest`), retiré de l'image par
+  `npm prune --production`.
+
 ### Changed
 
 - **Product dependencies bumped**: `vue` 3.5.34 -> 3.5.41, `vue-router` 5.0.7 -> 5.2.0, `vuetify`

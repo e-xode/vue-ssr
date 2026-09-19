@@ -1,6 +1,10 @@
 // tests/unit/router.test.js
 import { describe, it, expect } from 'vitest';
-import { router } from '#src/router';
+import { createAppRouter } from '#src/router';
+
+// Le routeur est desormais cree PAR REQUETE (e-xode/scripts#17) : on en instancie un pour la suite.
+// Ces tests n'inspectent que la table des routes, qui est statique — une instance suffit.
+const router = createAppRouter();
 
 describe('router.js', () => {
   it('should have correct routes defined', () => {
