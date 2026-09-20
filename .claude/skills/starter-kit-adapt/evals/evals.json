@@ -1,9 +1,11 @@
 {
   "skill_name": "starter-kit-adapt",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "trigger-post-fork",
+      "kind": "content",
       "prompt": "I just forked this starter kit for a new project — how do I adapt the Claude configuration?",
       "assertions": [
         {
@@ -14,6 +16,7 @@
     {
       "id": 2,
       "name": "trigger-stack-change",
+      "kind": "content",
       "prompt": "Our fork dropped MongoDB and Vuetify — which Claude config should I strip?",
       "assertions": [
         {
@@ -24,6 +27,7 @@
     {
       "id": 3,
       "name": "negative-feature-work",
+      "kind": "content",
       "prompt": "Add a new dashboard component to the app",
       "assertions": [
         {

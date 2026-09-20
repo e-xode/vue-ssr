@@ -1,9 +1,11 @@
 {
   "skill_name": "translate",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "add-key-both-locales",
+      "kind": "content",
       "prompt": "Add a new translation key for a 'Terms accepted' success message on the signup page",
       "assertions": [
         {
@@ -14,6 +16,7 @@
     {
       "id": 2,
       "name": "interpolation-key",
+      "kind": "content",
       "prompt": "I need to display 'Your session expires in {minutes} minutes' on the dashboard",
       "assertions": [
         {
@@ -24,6 +27,7 @@
     {
       "id": 3,
       "name": "fix-missing-french",
+      "kind": "content",
       "prompt": "The French translation for error.auth.blocked is missing, fix it",
       "assertions": [
         {
@@ -34,6 +38,7 @@
     {
       "id": 4,
       "name": "key-naming-guidance",
+      "kind": "content",
       "prompt": "Where should I put a translation key for a new 'notifications' page title?",
       "assertions": [
         {
@@ -44,6 +49,7 @@
     {
       "id": 5,
       "name": "parity-check",
+      "kind": "content",
       "prompt": "Check if the locale files are in sync",
       "assertions": [
         {
@@ -54,6 +60,7 @@
     {
       "id": 6,
       "name": "interpolation-confirm-dialog",
+      "kind": "content",
       "prompt": "Add a confirmation dialog message for deleting a contact submission: 'Are you sure you want to delete the message from {name}?'",
       "assertions": [
         {

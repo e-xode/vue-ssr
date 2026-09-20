@@ -1,9 +1,11 @@
 {
   "skill_name": "marketing-content",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "trigger-product-facts-lookup",
+      "kind": "content",
       "prompt": "Quick check before I post on LinkedIn: what license is the vue-ssr kit under, and what's the npm package name?",
       "assertions": [
         {
@@ -14,6 +16,7 @@
     {
       "id": 2,
       "name": "trigger-differentiator-lookup",
+      "kind": "content",
       "prompt": "Someone asked me in the comments why this starter kit is different from every other Vue SSR boilerplate on GitHub. What do I tell them?",
       "assertions": [
         {
@@ -24,6 +27,7 @@
     {
       "id": 3,
       "name": "negative-route-to-content-strategy",
+      "kind": "content",
       "prompt": "I want to write a LinkedIn post about our new SSR feature — can you draft the French and English versions with a hook and a CTA?",
       "assertions": [
         {

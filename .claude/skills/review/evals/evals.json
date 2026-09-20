@@ -1,9 +1,11 @@
 {
   "skill_name": "review",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "trigger-branch-review",
+      "kind": "content",
       "prompt": "Review the changes on branch feature-login",
       "assertions": [
         {
@@ -14,6 +16,7 @@
     {
       "id": 2,
       "name": "trigger-uncommitted-review",
+      "kind": "content",
       "prompt": "Can you code-review my uncommitted changes?",
       "assertions": [
         {
@@ -24,6 +27,7 @@
     {
       "id": 3,
       "name": "negative-fix-bug",
+      "kind": "content",
       "prompt": "Fix the bug in the auth module",
       "assertions": [
         {

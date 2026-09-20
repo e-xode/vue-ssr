@@ -1,9 +1,11 @@
 {
   "skill_name": "vue3-builtin-components",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "teleport-custom-overlay",
+      "kind": "content",
       "prompt": "I need a custom full-screen overlay that escapes a parent with overflow:hidden, rendered at body level. How do I do this in Vue without Vuetify?",
       "assertions": [
         {
@@ -14,6 +16,7 @@
     {
       "id": 2,
       "name": "suspense-async-loading",
+      "kind": "content",
       "prompt": "How do I show a loading spinner while an async child component with top-level await in setup resolves?",
       "assertions": [
         {
@@ -24,6 +27,7 @@
     {
       "id": 3,
       "name": "transitiongroup-list-reorder",
+      "kind": "content",
       "prompt": "My v-for list animates items in and out, but when items reorder they jump instead of sliding. How do I fix this?",
       "assertions": [
         {
@@ -34,6 +38,7 @@
     {
       "id": 4,
       "name": "vuetify-dialog-not-builtin",
+      "kind": "content",
       "prompt": "How do I open a confirmation dialog with a fade transition when the user clicks delete?",
       "assertions": [
         {

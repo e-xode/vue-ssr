@@ -1,9 +1,11 @@
 {
   "skill_name": "vue-ssr-auth",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "trigger-signup-flow",
+      "kind": "content",
       "prompt": "How does the signup flow work?",
       "assertions": [
         {
@@ -14,6 +16,7 @@
     {
       "id": 2,
       "name": "trigger-rate-limiting",
+      "kind": "content",
       "prompt": "I need to add rate limiting to a new endpoint",
       "assertions": [
         {
@@ -24,6 +27,7 @@
     {
       "id": 3,
       "name": "negative-locale-addition",
+      "kind": "content",
       "prompt": "How do I add a new locale?",
       "assertions": [
         {

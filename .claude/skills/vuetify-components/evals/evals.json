@@ -1,33 +1,53 @@
 {
   "skill_name": "vuetify-components",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "trigger-confirm-dialog",
+      "kind": "content",
       "prompt": "Create a reusable confirmation dialog that I can use for delete confirmations across the app.",
       "assertions": [
-        { "text": "Uses v-dialog with v-model, max-width, and persistent" },
-        { "text": "Uses v-card with title, text, and actions slots" },
-        { "text": "Uses a Promise-based pattern with defineExpose for parent usage" },
-        { "text": "Accepts a color parameter for destructive actions (color='error')" }
+        {
+          "text": "Uses v-dialog with v-model, max-width, and persistent"
+        },
+        {
+          "text": "Uses v-card with title, text, and actions slots"
+        },
+        {
+          "text": "Uses a Promise-based pattern with defineExpose for parent usage"
+        },
+        {
+          "text": "Accepts a color parameter for destructive actions (color='error')"
+        }
       ]
     },
     {
       "id": 2,
       "name": "trigger-card-with-skeleton",
+      "kind": "content",
       "prompt": "Create a card that shows a skeleton loader while data is fetched, then displays the content.",
       "assertions": [
-        { "text": "Uses v-skeleton-loader with an appropriate type" },
-        { "text": "Conditionally renders skeleton vs content with v-if/v-else" },
-        { "text": "Uses v-card for the content container" }
+        {
+          "text": "Uses v-skeleton-loader with an appropriate type"
+        },
+        {
+          "text": "Conditionally renders skeleton vs content with v-if/v-else"
+        },
+        {
+          "text": "Uses v-card for the content container"
+        }
       ]
     },
     {
       "id": 3,
       "name": "negative-app-bar-drawer",
+      "kind": "content",
       "prompt": "Build the app shell with a top app bar and a responsive navigation drawer.",
       "assertions": [
-        { "text": "Does NOT trigger vuetify-components; routes to vuetify-layout instead" }
+        {
+          "text": "Does NOT trigger vuetify-components; routes to vuetify-layout instead"
+        }
       ]
     }
   ]

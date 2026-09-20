@@ -1,4 +1,5 @@
 {
+  "outputStyle": "exode-dev",
   "skillListingBudgetFraction": 0.025,
   "permissions": {
     "allow": [
@@ -14,6 +15,16 @@
       "WebFetch",
       "WebSearch",
       "Write"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(**/*.pem)",
+      "Read(**/id_rsa*)",
+      "Bash(git push --force:*)",
+      "Bash(git push --force-with-lease:*)",
+      "Bash(git push -f:*)",
+      "Bash(git filter-branch:*)",
+      "Bash(npm publish:*)"
     ]
   }
 }

@@ -1,9 +1,11 @@
 {
   "skill_name": "vue3-templates",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "list-with-key-and-filter",
+      "kind": "content",
       "prompt": "Render a list of active products in a template, but only the ones where product.active is true",
       "assertions": [
         {
@@ -14,6 +16,7 @@
     {
       "id": 2,
       "name": "native-vmodel-modifiers",
+      "kind": "content",
       "prompt": "I have a plain HTML email input and an age number input. How do I two-way bind them and clean up the values?",
       "assertions": [
         {
@@ -24,6 +27,7 @@
     {
       "id": 3,
       "name": "event-and-class-binding",
+      "kind": "content",
       "prompt": "On a button I want to prevent the default form submit, toggle an 'is-open' class when a ref is true, and disable it while loading",
       "assertions": [
         {
@@ -34,6 +38,7 @@
     {
       "id": 4,
       "name": "negative-vuetify-form-validation",
+      "kind": "content",
       "prompt": "Build a Vuetify text field with required and email validation rules and show the error message",
       "assertions": [
         {

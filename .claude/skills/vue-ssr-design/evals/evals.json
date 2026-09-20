@@ -1,9 +1,11 @@
 {
   "skill_name": "vue-ssr-design",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "trigger-design-routing",
+      "kind": "content",
       "prompt": "Should the design agent or the vue agent restyle the login card?",
       "assertions": [
         {
@@ -14,6 +16,7 @@
     {
       "id": 2,
       "name": "trigger-mixed-task-split",
+      "kind": "content",
       "prompt": "Build a new analytics widget with a chart and live data fetching",
       "assertions": [
         {
@@ -24,6 +27,7 @@
     {
       "id": 3,
       "name": "negative-pure-logic",
+      "kind": "content",
       "prompt": "Write a Pinia store for cart state",
       "assertions": [
         {

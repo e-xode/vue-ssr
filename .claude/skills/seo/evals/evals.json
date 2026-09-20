@@ -1,9 +1,11 @@
 {
   "skill_name": "seo",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "trigger-meta-injection-site",
+      "kind": "content",
       "prompt": "Where does the meta title and description get injected for a new public page in this app? I need to add SEO tags for a new pricing page.",
       "assertions": [
         {
@@ -14,6 +16,7 @@
     {
       "id": 2,
       "name": "trigger-hreflang-set",
+      "kind": "content",
       "prompt": "I'm adding a new public route /pricing. What hreflang tags does it need, and does the 404 page need them too?",
       "assertions": [
         {
@@ -24,6 +27,7 @@
     {
       "id": 3,
       "name": "trigger-sitemap-generator",
+      "kind": "content",
       "prompt": "I just added a new public /pricing page, fully indexable. What do I need to touch so it shows up in the sitemap?",
       "assertions": [
         {

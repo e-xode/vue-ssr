@@ -1,9 +1,11 @@
 {
   "skill_name": "vue-ssr-deployment",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "trigger-docker-build",
+      "kind": "content",
       "prompt": "How do I build the Docker image?",
       "assertions": [
         {
@@ -14,6 +16,7 @@
     {
       "id": 2,
       "name": "trigger-github-actions",
+      "kind": "content",
       "prompt": "What GitHub Actions workflows exist?",
       "assertions": [
         {
@@ -24,6 +27,7 @@
     {
       "id": 3,
       "name": "trigger-db-switch",
+      "kind": "content",
       "prompt": "How do I make docker-compose connect to a remote MongoDB instead of the local container?",
       "assertions": [
         {
@@ -34,6 +38,7 @@
     {
       "id": 4,
       "name": "negative-vue-component",
+      "kind": "content",
       "prompt": "How do I create a new Vue component?",
       "assertions": [
         {

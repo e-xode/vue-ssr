@@ -1,9 +1,11 @@
 {
   "skill_name": "skill-creator",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "trigger-create-skill",
+      "kind": "content",
       "prompt": "Create a new skill that documents our Stripe payment integration patterns",
       "assertions": [
         {
@@ -14,6 +16,7 @@
     {
       "id": 2,
       "name": "trigger-improve-description",
+      "kind": "content",
       "prompt": "The vue-ssr-auth skill never seems to trigger — help me rewrite its description",
       "assertions": [
         {
@@ -24,6 +27,7 @@
     {
       "id": 3,
       "name": "negative-add-translation",
+      "kind": "content",
       "prompt": "Add a translation key for the new notifications page",
       "assertions": [
         {

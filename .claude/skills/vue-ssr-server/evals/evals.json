@@ -1,9 +1,11 @@
 {
   "skill_name": "vue-ssr-server",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "trigger-add-api-route",
+      "kind": "content",
       "prompt": "How do I add a new Express API route in this project?",
       "assertions": [
         {
@@ -14,6 +16,7 @@
     {
       "id": 2,
       "name": "trigger-mongo-access",
+      "kind": "content",
       "prompt": "How should a route query MongoDB and validate the id?",
       "assertions": [
         {
@@ -24,6 +27,7 @@
     {
       "id": 3,
       "name": "negative-auth-flow",
+      "kind": "content",
       "prompt": "How does the email security-code verification flow work?",
       "assertions": [
         {

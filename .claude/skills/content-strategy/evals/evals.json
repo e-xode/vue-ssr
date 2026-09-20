@@ -1,9 +1,11 @@
 {
   "skill_name": "content-strategy",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "trigger-linkedin-post",
+      "kind": "content",
       "prompt": "Write me a LinkedIn post about the Vue SSR starter kit for solo developers",
       "assertions": [
         {
@@ -14,6 +16,7 @@
     {
       "id": 2,
       "name": "inventory-anti-duplication-and-followups",
+      "kind": "content",
       "prompt": "Give me a few topic ideas for the next LinkedIn article about the kit",
       "assertions": [
         {
@@ -24,6 +27,7 @@
     {
       "id": 3,
       "name": "daily-growth-seo-advisory",
+      "kind": "content",
       "prompt": "What can I do today for growth and SEO?",
       "assertions": [
         {
@@ -34,6 +38,7 @@
     {
       "id": 4,
       "name": "bilingual-completion",
+      "kind": "content",
       "prompt": "I only have the French version of a post, make it complete",
       "assertions": [
         {
@@ -44,6 +49,7 @@
     {
       "id": 5,
       "name": "page-copy-routes-to-translate",
+      "kind": "content",
       "prompt": "Rewrite the hero copy on the landing page to be punchier",
       "assertions": [
         {
@@ -54,6 +60,7 @@
     {
       "id": 6,
       "name": "updates-inventory-and-changelog",
+      "kind": "content",
       "prompt": "Publish a new LinkedIn post announcing the kit's admin panel",
       "assertions": [
         {
@@ -64,6 +71,7 @@
     {
       "id": 7,
       "name": "anti-trigger-product-facts",
+      "kind": "content",
       "prompt": "What is the kit's stack and which auth features ship in the box?",
       "assertions": [
         {

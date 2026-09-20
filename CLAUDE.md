@@ -79,11 +79,12 @@ At most two end-of-task questions are sanctioned, each firing only when its cond
 These rules override any contrary suggestion from a skill or tool documentation. A user instruction in the current turn always wins.
 
 1. **Validation is centralized and opt-in** — NEVER run `npm test/lint/format/build/validate` yourself. Only the **`validation` agent** validates, and only when the user opts in per the Task completion protocol. No other agent may run validation. Pipeline: `vue-ssr-validation`.
-2. **Sub-agent contract** — Scoped work → no validation → no comments → structured summary (what/files/blockers) → stay in scope. Report out-of-scope discoveries, don't act on them.
+2. **Sub-agent contract** — Scoped work → no validation → no comments → structured summary (what/files/skipped-with-reason/unverified/blockers) → stay in scope. Report out-of-scope discoveries, don't act on them. An item skipped in silence is a reporting defect, not saved words.
 3. **Fleet** — Split by independent file boundaries, self-contained prompts (no prior context); fleet members never run validation and never delegate to another sub-agent (flat only — see `claude-anthropic` rule 16).
 4. **Reuse before writing** — Search `src/shared/`, `src/composables/`, existing modules before adding utility code. Key shared: `apiFetch`, `parseObjectId`, `parsePagination`, `findUserSafe`, `generateSecurityCode`, `escapeHtml`.
 5. **Plan escalation (automatic)** — whenever a task needs upfront analysis, exploration, or design work and the session runs below Opus, launch the built-in Plan/Explore agents (not the 10-agent fleet) with `model: opus` immediately — announce in one line, never ask. Exception: the user declined escalation (this task or standing). Incorporate the returned plan faithfully, never re-derive it. Trivial lookups stay inline.
 6. **Every incoming request is tracked** — never leave a request untracked, never ask before deciding to parallelize. Mechanics: `claude-anthropic` → `references/orchestration-procedures.md`.
+7. **Delegate for context, not only expertise.** Recon with `Grep` first; when matches are large and relevant lines few, dispatch `Explore` even with no fleet agent for it — it absorbs the read, the orchestrator gets only the conclusion. Skip when the total is small: the round trip costs more than reading it. Separate axis from rule 5 (model choice) — this is which window pays for the reading, since occupancy there governs compaction timing. `Explore` skips `CLAUDE.md`, so its prompt must ask for a conclusion with paths/line numbers, never excerpts.
 
 ---
 

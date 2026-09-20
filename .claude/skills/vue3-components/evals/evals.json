@@ -1,9 +1,11 @@
 {
   "skill_name": "vue3-components",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "props-emits-design",
+      "kind": "content",
       "prompt": "I'm building a reusable StatusBadge component. It takes a status and should tell the parent when it's clicked. How should I define its props and events?",
       "assertions": [
         {
@@ -17,6 +19,7 @@
     {
       "id": 2,
       "name": "component-v-model",
+      "kind": "content",
       "prompt": "I have a custom SearchField component wrapping a v-text-field. How do I make it work with v-model from the parent?",
       "assertions": [
         {
@@ -30,6 +33,7 @@
     {
       "id": 3,
       "name": "scoped-slot-list",
+      "kind": "content",
       "prompt": "I want a DataList component where the parent controls how each row is rendered but the child owns the data fetching. What slot pattern do I use?",
       "assertions": [
         {
@@ -43,6 +47,7 @@
     {
       "id": 4,
       "name": "negative-reactivity-routing",
+      "kind": "content",
       "prompt": "Should I use ref() or reactive() for a form state object, and when does a computed re-evaluate?",
       "assertions": [
         {

@@ -1,9 +1,11 @@
 {
   "skill_name": "vue-ssr-validation",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "trigger-tests-not-running",
+      "kind": "content",
       "prompt": "Why didn't the tests run after my change?",
       "assertions": [
         {
@@ -14,6 +16,7 @@
     {
       "id": 2,
       "name": "trigger-validation-pipeline",
+      "kind": "content",
       "prompt": "How does the validation pipeline work?",
       "assertions": [
         {
@@ -24,6 +27,7 @@
     {
       "id": 3,
       "name": "negative-api-route",
+      "kind": "content",
       "prompt": "How do I add a new API route?",
       "assertions": [
         {

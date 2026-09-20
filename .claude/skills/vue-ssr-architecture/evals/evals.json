@@ -1,9 +1,11 @@
 {
   "skill_name": "vue-ssr-architecture",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "trigger-endpoint-placement",
+      "kind": "content",
       "prompt": "Where should I put a new API endpoint?",
       "assertions": [
         {
@@ -14,6 +16,7 @@
     {
       "id": 2,
       "name": "trigger-ssr-lifecycle",
+      "kind": "content",
       "prompt": "How does SSR work in this project?",
       "assertions": [
         {
@@ -24,6 +27,7 @@
     {
       "id": 3,
       "name": "negative-docker-deploy",
+      "kind": "content",
       "prompt": "How do I deploy to Docker?",
       "assertions": [
         {

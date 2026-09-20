@@ -1,9 +1,11 @@
 {
   "skill_name": "vue-ssr-release",
+  "schema": "evals/1",
   "evals": [
     {
       "id": 1,
       "name": "trigger-release",
+      "kind": "content",
       "prompt": "release",
       "assertions": [
         {
@@ -14,6 +16,7 @@
     {
       "id": 2,
       "name": "trigger-minor-bump",
+      "kind": "content",
       "prompt": "Let's cut a minor version",
       "assertions": [
         {
@@ -24,6 +27,7 @@
     {
       "id": 3,
       "name": "negative-deployment",
+      "kind": "content",
       "prompt": "Deploy the app to production",
       "assertions": [
         {
