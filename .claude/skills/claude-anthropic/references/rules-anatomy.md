@@ -1,5 +1,7 @@
 # Rules anatomy (`.claude/rules/`)
 
+Contents: [What rules are](#what-rules-are) · [Loading behaviour (official Anthropic, verified 2026-08-09)](#loading-behaviour-official-anthropic-verified-2026-08-09) · [File format](#file-format) · [When to use rules vs skills vs CLAUDE.md](#when-to-use-rules-vs-skills-vs-claudemd) · [Project conventions (Vue SSR Starter Kit)](#project-conventions-vue-ssr-starter-kit) · [Current project inventory (12 rules)](#current-project-inventory-12-rules) · [Anti-patterns (rules-specific)](#anti-patterns-rules-specific)
+
 ## What rules are
 
 Rules are lightweight, path-scoped instruction files that load **automatically** when Claude works on files matching their glob pattern. They live in `.claude/rules/` and complement skills and `CLAUDE.md`.

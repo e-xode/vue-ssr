@@ -1,5 +1,7 @@
 # Provide / Inject
 
+Contents: [When to use vs alternatives](#when-to-use-vs-alternatives) · [Basic provide / inject](#basic-provide--inject) · [Default value](#default-value) · [Reactive injection](#reactive-injection) · [App-level provide](#app-level-provide) · [Symbol injection keys](#symbol-injection-keys) · [SSR safety](#ssr-safety) · [Pitfalls](#pitfalls)
+
 Provide/inject passes data from an ancestor to any descendant without threading props through every intermediate component (avoids "prop drilling"). Use it for cross-cutting context shared down a subtree, not as a general state replacement.
 
 ## When to use vs alternatives

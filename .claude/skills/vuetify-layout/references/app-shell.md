@@ -1,5 +1,7 @@
 # Application shell: grid, app bar, navigation drawer
 
+Contents: [Grid layout](#grid-layout) · [v-app-bar](#v-app-bar) · [v-navigation-drawer](#v-navigation-drawer)
+
 ## Grid layout
 
 The 12-column grid uses `v-container` + `v-row` + `v-col`. `v-container` centers and pads content, `v-row` creates a flex row, and each `v-col` spans columns out of 12 (with responsive breakpoint props like `cols`, `sm`, `md`, `lg`):

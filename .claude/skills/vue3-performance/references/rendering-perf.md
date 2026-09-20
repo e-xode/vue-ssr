@@ -1,5 +1,7 @@
 # Rendering & SSR Performance
 
+Contents: [v-once — render once, never again](#v-once--render-once-never-again) · [v-memo — conditional re-render of a sub-tree](#v-memo--conditional-re-render-of-a-sub-tree) · [Stable keys](#stable-keys) · [Props stability — avoid waking every child](#props-stability--avoid-waking-every-child) · [Avoid unnecessary component abstraction in hot lists](#avoid-unnecessary-component-abstraction-in-hot-lists) · [Async components & code splitting](#async-components--code-splitting) · [Large lists — paginate or virtualize](#large-lists--paginate-or-virtualize) · [SSR performance](#ssr-performance) · [Avoiding hydration mismatches](#avoiding-hydration-mismatches)
+
 How to skip unnecessary re-renders, defer heavy components, render long lists cheaply, and keep SSR fast and hydration-safe.
 
 ## v-once — render once, never again

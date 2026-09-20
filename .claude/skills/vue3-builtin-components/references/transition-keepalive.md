@@ -1,5 +1,7 @@
 # Transition, TransitionGroup & KeepAlive
 
+Contents: [Transition](#transition) · [TransitionGroup](#transitiongroup) · [KeepAlive](#keepalive)
+
 > Mechanics only. All CSS class bodies (durations, easings, transforms) live in the component `.scss` using design tokens and must respect `prefers-reduced-motion`. ➜ See skill: design-scss — transitions, animations, reduced-motion.
 >
 > Vuetify components animate themselves (dialog/menu/overlay/expansion). Use raw `Transition` only for custom elements not driven by Vuetify. ➜ See skill: vuetify-components.

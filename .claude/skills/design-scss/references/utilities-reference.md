@@ -1,5 +1,7 @@
 # Utilities Reference
 
+Contents: [Text gradients](#text-gradients) · [Hover effects](#hover-effects) · [Glass effects (frosted)](#glass-effects-frosted) · [Badge variants](#badge-variants) · [Screen-reader only](#screen-reader-only) · [Skeleton loading](#skeleton-loading)
+
 > All utility classes from `src/styles/_utilities.scss`.
 
 > **STATUS — inert as shipped.** `_utilities.scss` is NOT forwarded by `_inject.scss` and is imported nowhere, so every class below (`.text-gradient-*`, `.hover-lift`, `.hover-scale`, `.glass`, `.glass-dark`, `.badge-*`, `.sr-only`, `.skeleton`) emits **no CSS** in the current build. Using them in a template does nothing. Reproduce the effect in a component SCSS from the live tokens/mixins instead — notably the `hover-lift` **mixin** (not the `.hover-lift` class) and the `visually-hidden` **mixin** (not `.sr-only`). To make these classes live project-wide, import `_utilities.scss` once in `main.js`. See `➜ design-scss` SKILL → Utility classes.

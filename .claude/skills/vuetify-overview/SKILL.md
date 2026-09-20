@@ -25,6 +25,13 @@ This skill is the entry point. Specific component APIs and patterns live in sibl
 | `vuetify-theming`     | Every hex value, single source of truth (its `references/color-palette.md`) |
 | **vuetify-overview**  | Which semantic token name fits a given intent (this page's table below) |
 
+| Vuetify dialogs/overlays + their built-in transitions | vuetify-components |
+| Data tables, iterators, headers, server pagination    | vuetify-data       |
+| Vuetify form components + validation rules            | vuetify-forms      |
+| Icon sets, v-icon, mdi aliases                        | vuetify-icons      |
+| Vuetify menus                                         | vuetify-layout     |
+| Vuetify component props/API                           | vuetify-overview   |
+| Vuetify theme tokens, component defaults, role colors | vuetify-theming    |
 ## Component selection decision tree
 
 | UI need            | Component                                   | Notes                                     |

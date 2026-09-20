@@ -1,5 +1,7 @@
 # Responsive UX
 
+Contents: [Breakpoint semantics](#breakpoint-semantics) · [Mobile-first design](#mobile-first-design) · [Navigation patterns](#navigation-patterns) · [Touch vs pointer](#touch-vs-pointer) · [Content priority](#content-priority) · [Forms on mobile](#forms-on-mobile) · [Data tables](#data-tables) · [Typography responsiveness](#typography-responsiveness) · [Images and media](#images-and-media) · [Testing methodology](#testing-methodology)
+
 Mobile-first responsive design methodology for the Vue SSR Starter Kit.
 
 ## Breakpoint semantics

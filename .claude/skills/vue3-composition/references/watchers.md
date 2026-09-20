@@ -1,5 +1,7 @@
 # Watchers
 
+Contents: [watch() — project standard](#watch--project-standard) · [Common patterns in this project](#common-patterns-in-this-project) · [watchEffect() — NOT used](#watcheffect--not-used) · [Cleanup function](#cleanup-function) · [Stopping watchers](#stopping-watchers) · [flush option](#flush-option) · [Watcher pitfalls](#watcher-pitfalls)
+
 ## watch() — project standard
 
 This project uses explicit `watch()` exclusively. No `watchEffect()`.

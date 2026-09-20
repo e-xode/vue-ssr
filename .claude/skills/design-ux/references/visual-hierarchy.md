@@ -1,5 +1,7 @@
 # Visual Hierarchy
 
+Contents: [Typography scale](#typography-scale) · [Spacing rhythm](#spacing-rhythm) · [Color weight](#color-weight) · [Focal points](#focal-points) · [Card composition](#card-composition) · [Whitespace](#whitespace) · [Alignment](#alignment)
+
 Detailed guidance on establishing clear visual hierarchy in Vue SSR Starter Kit interfaces.
 
 ## Typography scale

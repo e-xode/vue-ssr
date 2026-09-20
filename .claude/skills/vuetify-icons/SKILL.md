@@ -5,6 +5,14 @@ description: "Vuetify 4 iconography for the Vue SSR Starter Kit using @mdi/js tr
 
 # Icons
 
+## Division of responsibilities
+
+| Concern | Skill |
+| --- | --- |
+| Icon sets, v-icon, mdi aliases | vuetify-icons |
+| Vuetify component props/API | vuetify-overview |
+| Vuetify theme tokens, component defaults, role colors | vuetify-theming |
+
 ## Icon usage
 
 The project uses `@mdi/js` for tree-shakeable SVG icons: import the named path, bind it via a prop.

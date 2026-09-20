@@ -1,5 +1,7 @@
 # Dynamic & Async Components
 
+Contents: [Registration: local vs global](#registration-local-vs-global) · [Dynamic components — `<component :is>`](#dynamic-components--component-is) · [Async components — `defineAsyncComponent`](#async-components--defineasynccomponent) · [Pitfalls](#pitfalls)
+
 ## Registration: local vs global
 
 Prefer **local registration** — import the component in `<script setup>` and use it. This enables tree-shaking and makes dependencies explicit.

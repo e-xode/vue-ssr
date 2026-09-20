@@ -1,6 +1,6 @@
 ---
 name: frontend-design
-description: Create distinctive, production-grade frontend interfaces with high design quality — web components, pages, dashboards, artifacts, or a standalone/greenfield UI outside this repository's `src/`. Generates creative, polished code avoiding generic AI aesthetics. Don't use for: anything under this repo's `src/` — the kit's own UI must follow its Material Design 3 / Vuetify 4 system (→ design agent with brand-art-direction, design-ux, design-scss, vuetify-overview, vue-ssr-design).
+description: "Create distinctive, production-grade frontend interfaces with high design quality — web components, pages, dashboards, artifacts, or a standalone/greenfield UI outside this repository's `src/`. Generates creative, polished code avoiding generic AI aesthetics. Don't use for: anything under this repo's `src/` — the kit's own UI must follow its Material Design 3 / Vuetify 4 system (→ design agent with brand-art-direction, design-ux, design-scss, vuetify-overview, vue-ssr-design)."
 license: Complete terms in LICENSE.txt
 disable-model-invocation: true
 ---

@@ -1,5 +1,7 @@
 # Signature devices catalog
 
+Contents: [Tokens this direction relies on](#tokens-this-direction-relies-on) · [Devices](#devices) · [Adding a device](#adding-a-device)
+
 The concrete vocabulary of the clean-minimal direction. Each device names the exact **live** token or mixin to use and shows a minimal snippet. Tokens live in `src/styles/variables.scss`; mixins in `src/styles/mixins.scss`; both are auto-injected into every component SCSS via `_inject.scss` (Vite `additionalData: @use ".../styles/inject" as *`).
 
 ➜ See skill: design-scss — for the full token/mixin map and the injection chain.

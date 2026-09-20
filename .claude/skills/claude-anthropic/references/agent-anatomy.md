@@ -1,5 +1,7 @@
 # Sub-agent anatomy (Vue SSR Starter Kit conventions)
 
+Contents: [Folder and file](#folder-and-file) · [Frontmatter](#frontmatter) · [Sub-agent contract (non-negotiable)](#sub-agent-contract-non-negotiable) · [Current agent fleet (10 agents)](#current-agent-fleet-10-agents) · [Coherence with `CLAUDE.md`](#coherence-with-claudemd) · [When to create a new sub-agent (vs. extending one)](#when-to-create-a-new-sub-agent-vs-extending-one) · [Anti-patterns specific to agents](#anti-patterns-specific-to-agents)
+
 ## Folder and file
 
 ```

@@ -14,6 +14,7 @@ description: "Server/backend reference for the Vue SSR Starter Kit (e-xode/vue-s
 | File structure, SSR lifecycle, locale routing, new view/feature scaffolding | `vue-ssr-architecture` |
 | Express route mechanics, middleware guards, rate limiters, MongoDB queries/indexes | `vue-ssr-server` |
 
+| Which endpoints need auth protection, and the auth-domain logic itself | vue-ssr-auth |
 ## Server entry (`server.js`)
 
 Boot order: `mongoConnect()` → `ensureIndexes(db)` → `express()` → `helmet` → (prod) rate limits → `session` → `cors` → `express.json()` → API router → SSR catch-all. The API is mounted via `createApiRouter(db)`: in dev through `vite.ssrLoadModule('/src/api/router.js')`, in prod via static import.

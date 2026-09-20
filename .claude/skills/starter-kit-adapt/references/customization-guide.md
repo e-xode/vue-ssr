@@ -1,5 +1,7 @@
 # Customization Guide — Post-Fork Adaptation
 
+Contents: [Step 1: Rename project references](#step-1-rename-project-references) · [Step 2: Update dependency versions](#step-2-update-dependency-versions) · [Step 3: Remove inapplicable skills](#step-3-remove-inapplicable-skills) · [Step 4: Add project-specific skills](#step-4-add-project-specific-skills) · [Step 5: Update the agent fleet](#step-5-update-the-agent-fleet) · [Step 6: Update path-scoped rules](#step-6-update-path-scoped-rules) · [Common post-fork scenarios](#common-post-fork-scenarios) · [Validation](#validation)
+
 > Detailed walkthrough for adapting the Vue SSR Starter Kit Claude configuration to a new project.
 
 ## Step 1: Rename project references

@@ -1,5 +1,7 @@
 # Text and select inputs
 
+Contents: [v-text-field](#v-text-field) · [v-select](#v-select)
+
 ## v-text-field
 
 The primary input component. Project defaults: `variant="outlined"`, `density="comfortable"`, `rounded="lg"`.

@@ -126,11 +126,8 @@ Governance → `claude-anthropic` skill. Skill authoring → `skill-creator` ski
 
 ## Skills index
 
-Skills load on demand by description matching. Families:
+The harness lists every skill's name and description each turn — that listing is the index,
+so it is not duplicated here. This section carries only what the listing cannot: the skills
+withheld from it.
 
-- **Project:** `vue-ssr-architecture`, `vue-ssr-auth`, `vue-ssr-server`, `vue-ssr-deployment`, `vue-ssr-validation`, `vue-ssr-design`, `vue-ssr-release`
-- **Vue 3:** `vue3-composition`, `vue3-components`, `vue3-templates`, `vue3-builtin-components`, `vue3-reusability`, `vue3-performance`
-- **Vuetify 4:** `vuetify-overview`, `vuetify-theming`, `vuetify-layout`, `vuetify-components`, `vuetify-forms`, `vuetify-data`, `vuetify-icons`
-- **Design:** `brand-art-direction`, `design-ux`, `design-scss`, `frontend-design`
-- **Marketing:** `marketing-strategy`, `marketing-content`, `content-strategy`, `seo`
-- **Workflow:** `translate`, `review`, `skill-creator`, `claude-anthropic`, `starter-kit-adapt`
+- **Withheld from the listing** (`disable-model-invocation: true`, invoked by name only) — `frontend-design`, `skill-creator`, `starter-kit-adapt`

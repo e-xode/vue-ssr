@@ -1,5 +1,7 @@
 # Class & Style Bindings, Event Handling
 
+Contents: [Class bindings](#class-bindings) · [Style bindings](#style-bindings) · [Event handling](#event-handling)
+
 ## Class bindings
 
 ### Object syntax — toggle by truthiness

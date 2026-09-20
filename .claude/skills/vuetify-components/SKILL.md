@@ -5,6 +5,18 @@ description: "Vuetify 4 general display and feedback components for the Vue SSR 
 
 # Display and Feedback Components
 
+## Division of responsibilities
+
+| Concern | Skill |
+| --- | --- |
+| Vue-level Teleport/Suspense/KeepAlive/Transition mechanics | vue3-builtin-components |
+| Vuetify dialogs/overlays + their built-in transitions | vuetify-components |
+| Data tables, iterators, headers, server pagination | vuetify-data |
+| Vuetify form components + validation rules | vuetify-forms |
+| Vuetify menus | vuetify-layout |
+| Vuetify component props/API | vuetify-overview |
+| Vuetify theme tokens, component defaults, role colors | vuetify-theming |
+
 ## Component selection
 
 | Need                              | Component                                  | Project default                          |

@@ -11,6 +11,10 @@ description: "Vuetify 4 theming for the Vue SSR Starter Kit: theme configuration
 | -------------------- | --------------------------------------------------------------------- |
 | **vuetify-theming**  | The hex value behind every color token — the single source of truth  |
 | `vuetify-overview`   | Which semantic token name to use in a given component (points here for the actual hex) |
+| Vuetify dialogs/overlays + their built-in transitions | vuetify-components |
+| Icon sets, v-icon, mdi aliases                        | vuetify-icons      |
+| Vuetify component props/API                           | vuetify-overview   |
+| Vuetify theme tokens, component defaults, role colors | vuetify-theming    |
 
 `src/plugins/vuetify.js` (and, for SCSS-level tokens, `src/styles/variables.scss`) are the only places
 a hex value is **defined**. This skill's `references/color-palette.md` is the canonical **documentation

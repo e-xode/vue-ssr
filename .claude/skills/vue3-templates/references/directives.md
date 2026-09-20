@@ -1,5 +1,7 @@
 # Directives
 
+Contents: [Text interpolation](#text-interpolation) · [v-bind / `:`](#v-bind--) · [v-on / `@`](#v-on--) · [v-if / v-else-if / v-else](#v-if--v-else-if--v-else) · [v-show](#v-show) · [v-for](#v-for) · [v-html](#v-html)
+
 Core directives for binding, conditional rendering, and lists. Shorthands (`:`, `@`) are the project standard.
 
 ## Text interpolation

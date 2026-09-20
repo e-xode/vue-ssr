@@ -17,6 +17,7 @@ This skill owns the **facts**. The editorial **method** (how to research, write,
 | Editorial method: tone/voice, channel playbooks, inventory, backlog            | `content-strategy`                |
 | Strategy: monetization stance, campaigns, channel mix, positioning, competitive | `marketing-strategy`              |
 | Producing the posts/articles/README/page copy                                  | ➜ delegate to the content agent   |
+| page meta/structured data | seo |
 
 ➜ See skill: content-strategy — the writing method that consumes these facts.
 ➜ See skill: marketing-strategy — the strategy layer that decides what content to produce and why.

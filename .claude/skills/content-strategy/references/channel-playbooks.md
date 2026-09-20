@@ -1,5 +1,7 @@
 # Channel playbooks
 
+Contents: [Where content lives](#where-content-lives) · [File naming convention](#file-naming-convention) · [LinkedIn post](#linkedin-post) · [LinkedIn article (long-form)](#linkedin-article-long-form) · [Page marketing copy (the landing/contact pages)](#page-marketing-copy-the-landingcontact-pages) · [README / npm storefront copy](#readme--npm-storefront-copy) · [CTA library](#cta-library) · [Per-channel checklist](#per-channel-checklist)
+
 Per-channel templates and conventions. Apply the voice from `tone-and-voice.md` and the facts from
 the `marketing-content` skill to every template below.
 

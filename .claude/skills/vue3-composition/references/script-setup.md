@@ -1,5 +1,7 @@
 # `<script setup>` Syntax
 
+Contents: [Basics](#basics) · [defineProps()](#defineprops) · [defineEmits()](#defineemits) · [defineModel() — Vue 3.4+](#definemodel--vue-34) · [defineExpose()](#defineexpose) · [useSlots() and useAttrs()](#useslots-and-useattrs) · [Top-level await (with Suspense)](#top-level-await-with-suspense) · [Component imports](#component-imports) · [Dynamic components](#dynamic-components)
+
 ## Basics
 
 `<script setup>` is the compile-time syntactic sugar for Composition API. All top-level bindings (variables, functions, imports) are automatically available in the template.

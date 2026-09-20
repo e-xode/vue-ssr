@@ -1,5 +1,7 @@
 # Animations Reference
 
+Contents: [Keyframes inventory](#keyframes-inventory) · [Utility classes](#utility-classes) · [Stagger delays](#stagger-delays) · [Glow customization](#glow-customization) · [Reduced motion (accessibility)](#reduced-motion-accessibility) · [Choosing the right animation](#choosing-the-right-animation)
+
 > All keyframes, utility classes, stagger delays, and reduced-motion handling from `src/styles/_animations.scss`.
 
 > **STATUS — inert as shipped.** `_animations.scss` is NOT forwarded by `_inject.scss` and is imported nowhere, so every class and keyframe below emits **no CSS** in the current build. The `.animate-*` / `.delay-*` examples will do nothing if pasted into a template. Treat this file as a **catalog of patterns** to reproduce inside a component SCSS (copy the keyframe locally and self-guard reduced motion). To make it live project-wide, add a single global import of `_animations.scss` in `main.js`. See `➜ design-scss` SKILL → Animations.

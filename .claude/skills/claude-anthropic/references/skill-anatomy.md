@@ -1,5 +1,7 @@
 # Skill anatomy (Vue SSR Starter Kit conventions)
 
+Contents: [Folder layout](#folder-layout) · [Frontmatter](#frontmatter) · [`SKILL.md` body](#skillmd-body) · [`references/` rules](#references-rules) · [Scripts placement](#scripts-placement) · [When to split a skill](#when-to-split-a-skill) · [Anti-triggers, in practice](#anti-triggers-in-practice)
+
 ## Folder layout
 
 ```

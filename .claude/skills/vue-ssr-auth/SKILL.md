@@ -13,6 +13,9 @@ description: "Authentication and security reference for the Vue SSR Starter Kit:
 | ------------------------------------------------------------------------ | ------------------ |
 | Rate limiter definitions, values, and which middleware mounts them       | `vue-ssr-server`   |
 | Which endpoints need auth protection, and the auth-domain logic itself   | `vue-ssr-auth`     |
+| File structure, SSR lifecycle, locale routing, new view/feature scaffolding | vue-ssr-architecture |
+| Build/bundle/production deployment config                                   | vue-ssr-deployment   |
+| post-task validation                                                        | vue-ssr-validation   |
 
 The two facts drifted apart once before (a stale limiter table here disagreed with the router) —
 see `vue-ssr-server`'s "Rate limiting" section for the current names and values; don't duplicate them

@@ -7,6 +7,17 @@ description: "Post-task validation pipeline for the Vue SSR Starter Kit: the val
 
 > Owns the post-task validation pipeline: format → lint → build → test, executed by the `validation` agent through `npm run validate`.
 
+## Division of responsibilities
+
+| Concern | Skill |
+| --- | --- |
+| Project description conventions (discriminating, pushy, anti-triggers) | claude-anthropic |
+| File structure, SSR lifecycle, locale routing, new view/feature scaffolding | vue-ssr-architecture |
+| Which endpoints need auth protection, and the auth-domain logic itself | vue-ssr-auth |
+| Build/bundle/production deployment config | vue-ssr-deployment |
+| post-task validation | vue-ssr-validation |
+| ref/computed/watch/lifecycle, composables, defineProps/defineEmits/defineModel syntax | vue3-composition |
+
 ## When validation runs — opt-in only
 
 Validation is **never automatic**. Per the Task completion protocol in CLAUDE.md, it runs in exactly two cases:

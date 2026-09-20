@@ -1,5 +1,7 @@
 # Case studies — Vue SSR Starter Kit Claude config
 
+Contents: [CS-1 — Why `validation` is the sole exception to "no sub-agent validation"](#cs-1--why-validation-is-the-sole-exception-to-no-sub-agent-validation) · [CS-2 — Why `skill-creator` stays separate from `claude-anthropic`](#cs-2--why-skill-creator-stays-separate-from-claude-anthropic) · [CS-3 — Adding `build` to the validation battery](#cs-3--adding-build-to-the-validation-battery) · [CS-4 — No Socket.IO guard rules (adapted from the sibling `rom` project)](#cs-4--no-socketio-guard-rules-adapted-from-the-sibling-rom-project) · [CS-5 — Splitting `vuetify-components` into a `vuetify-*` family](#cs-5--splitting-vuetify-components-into-a-vuetify--family) · [CS-6 — Native hooks: dormant, then removed (2026-07-26)](#cs-6--native-hooks-dormant-then-removed-2026-07-26) · [CS-7 — The always-loaded budget is real: harness listing truncation](#cs-7--the-always-loaded-budget-is-real-harness-listing-truncation) · [CS-8 — Re-syncing with upstream doctrine (2026-08-09)](#cs-8--re-syncing-with-upstream-doctrine-2026-08-09) · [CS-9 — Raising the CLAUDE.md cap by 512 bytes (2026-08-09)](#cs-9--raising-the-claudemd-cap-by-512-bytes-2026-08-09)
+
 Decisions that shaped this project's `.claude/` configuration, with the reasoning behind each. Read these when a similar trade-off resurfaces, or when adapting the config for a fork (see skill `starter-kit-adapt`).
 
 ## CS-1 — Why `validation` is the sole exception to "no sub-agent validation"

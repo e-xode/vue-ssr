@@ -1,5 +1,7 @@
 # v-form and validation patterns
 
+Contents: [v-form](#v-form)
+
 ## v-form
 
 The form wrapper that manages validation state.

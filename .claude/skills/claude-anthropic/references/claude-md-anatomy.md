@@ -1,5 +1,7 @@
 # `CLAUDE.md` anatomy
 
+Contents: [Token budget](#token-budget) · [Loading hierarchy](#loading-hierarchy) · [Path-scoped rules (`.claude/rules/`)](#path-scoped-rules-clauderules) · [What belongs in `CLAUDE.md`](#what-belongs-in-claudemd) · [Required sections (current project)](#required-sections-current-project) · [Writing rules](#writing-rules) · [Anti-patterns specific to `CLAUDE.md`](#anti-patterns-specific-to-claudemd) · [When in doubt](#when-in-doubt)
+
 `CLAUDE.md` is loaded **every turn** into the agent's system context. Every byte costs tokens on every request. This is the single hardest constraint on the file.
 
 ## Token budget

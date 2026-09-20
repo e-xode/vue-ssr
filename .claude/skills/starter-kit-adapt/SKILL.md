@@ -8,6 +8,13 @@ disable-model-invocation: true
 
 > Helps new project owners customize the Claude configuration efficiently after forking or cloning the Vue SSR Starter Kit.
 
+## Division of responsibilities
+
+| Concern | Skill |
+| --- | --- |
+| Project description conventions (discriminating, pushy, anti-triggers) | claude-anthropic |
+| Post-fork/clone adaptation of the config for a NEW project | starter-kit-adapt |
+
 ## Purpose
 
 When you fork/clone the Vue SSR Starter Kit for a new project, the `.claude/` configuration needs adaptation. This skill provides a structured process to:

@@ -1,5 +1,7 @@
 # Accessibility
 
+Contents: [Color contrast](#color-contrast) · [Focus management](#focus-management) · [Aria attributes](#aria-attributes) · [Screen readers](#screen-readers) · [Motion and animation](#motion-and-animation) · [Touch targets](#touch-targets) · [Semantic HTML](#semantic-html) · [Forms](#forms) · [i18n accessibility](#i18n-accessibility) · [Testing checklist](#testing-checklist)
+
 WCAG 2.1 AA compliance guidelines for the Vue SSR Starter Kit.
 
 ## Color contrast

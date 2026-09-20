@@ -5,6 +5,16 @@ description: "Vuetify 4 data presentation for the Vue SSR Starter Kit: server-si
 
 # Data Display Components
 
+## Division of responsibilities
+
+| Concern | Skill |
+| --- | --- |
+| Vuetify dialogs/overlays + their built-in transitions | vuetify-components |
+| Data tables, iterators, headers, server pagination | vuetify-data |
+| Vuetify form components + validation rules | vuetify-forms |
+| Vuetify menus | vuetify-layout |
+| Vuetify component props/API | vuetify-overview |
+
 ## v-data-table
 
 Data grid with sorting, pagination, and custom rendering.

@@ -1,5 +1,7 @@
 # Props, Events & v-model
 
+Contents: [Props — declaration](#props--declaration) · [One-way data flow — props are read-only](#one-way-data-flow--props-are-read-only) · [Reactive props destructure (Vue 3.5+)](#reactive-props-destructure-vue-35) · [Passing props from the parent](#passing-props-from-the-parent) · [Emits — declaration](#emits--declaration) · [Emits — validation](#emits--validation) · [defineModel — component v-model](#definemodel--component-v-model) · [Pitfalls](#pitfalls)
+
 How a component declares its public contract: data in via props, data out via emits, two-way via `defineModel`.
 
 ➜ See skill: vue3-composition — for the macro mechanics of `defineProps`/`defineEmits`/`defineModel`; this file covers the **design** of that contract.

@@ -1,5 +1,7 @@
 # Lifecycle Hooks
 
+Contents: [Execution order](#execution-order) · [SSR execution model](#ssr-execution-model) · [Common patterns](#common-patterns) · [nextTick() — DOM updates](#nexttick--dom-updates) · [Hooks NOT used in this project](#hooks-not-used-in-this-project) · [SSR-safe checklist](#ssr-safe-checklist)
+
 ## Execution order
 
 ```

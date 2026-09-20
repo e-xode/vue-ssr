@@ -1,5 +1,7 @@
 # Containers and content
 
+Contents: [v-card](#v-card) · [v-list + v-list-item](#v-list--v-list-item) · [v-chip](#v-chip) · [v-avatar](#v-avatar)
+
 ## v-card
 
 Container component for grouped content. Project defaults: `rounded="lg"`, `elevation="0"`, `border: true`.

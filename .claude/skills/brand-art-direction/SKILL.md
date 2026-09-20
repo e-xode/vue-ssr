@@ -9,6 +9,14 @@ description: "Material Design 3 / Vuetify 4 art-direction charter for the Vue SS
 
 **Golden rule of this charter: if you cannot confirm it on a rendered screenshot, it is not done.** Every guardrail below is written to be answered from a PNG, not from intent. The `visual-qa` agent is the authoritative gate; this charter is the rubric it grades against.
 
+## Division of responsibilities
+
+| Concern | Skill |
+| --- | --- |
+| Visual identity / charter (palette roles, canonical hovers, signature devices) — load FIRST on public-page visual work | brand-art-direction |
+| SCSS animations, transition tokens, prefers-reduced-motion | design-scss |
+| UX methodology and decisions (hierarchy, a11y, responsive, micro-interactions) — no SCSS, no brand decisions | design-ux |
+
 ## Positioning
 
 The starter kit is a **clean, minimal, production-grade Material Design 3 foundation**. It must read as trustworthy, modern, and developer-grade. The signature is **restraint**: bordered flat surfaces, a single indigo brand accent, generous whitespace on an 8px rhythm, and elevation that appears only on interaction. Never decorative, never noisy. A forker should inherit a coherent, quiet, professional base they can extend — not a themed showcase.

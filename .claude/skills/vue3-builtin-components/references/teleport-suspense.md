@@ -1,5 +1,7 @@
 # Teleport & Suspense
 
+Contents: [Teleport](#teleport) · [Suspense](#suspense)
+
 ## Teleport
 
 `<Teleport>` renders its slot content at a different place in the DOM while keeping it in the same logical component tree. Props, emits, and provide/inject all behave as if it never moved — only the rendered DOM position changes.

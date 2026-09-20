@@ -7,6 +7,13 @@ description: "SEO reference for the Vue SSR Starter Kit (e-xode/vue-ssr): how th
 
 > Every public page is fully server-rendered with meta, structured data, and hreflang so it ranks and earns rich results. SEO copy lives in i18n; the wiring lives in `entry-server.js` and `server.js`. There is **no `seo.config.js`** — meta is driven by route `meta` keys, not a central config file.
 
+## Division of responsibilities
+
+| Concern | Skill |
+| --- | --- |
+| Product facts: stack, features, differentiator, license, assets | marketing-content |
+| page meta/structured data | seo |
+
 ## How SEO is wired
 
 | Layer            | Where                          | Responsibility                                                              |

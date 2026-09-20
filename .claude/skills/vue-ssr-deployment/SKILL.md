@@ -7,6 +7,15 @@ description: "Deployment and CI/CD reference for the Vue SSR Starter Kit: Docker
 
 > Owns Docker, CI/CD pipelines, production configuration, and infrastructure.
 
+## Division of responsibilities
+
+| Concern | Skill |
+| --- | --- |
+| File structure, SSR lifecycle, locale routing, new view/feature scaffolding | vue-ssr-architecture |
+| Which endpoints need auth protection, and the auth-domain logic itself | vue-ssr-auth |
+| Build/bundle/production deployment config | vue-ssr-deployment |
+| post-task validation | vue-ssr-validation |
+
 ## Docker
 
 - **Dockerfile**: `docker/build/Dockerfile` — multi-stage build (build → production). There is no

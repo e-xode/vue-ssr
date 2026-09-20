@@ -1,5 +1,7 @@
 # SCSS Patterns
 
+Contents: [Component-scoped SCSS files](#component-scoped-scss-files) · [Auto-injection system](#auto-injection-system) · [What NOT to import](#what-not-to-import) · [Global styles vs scoped styles](#global-styles-vs-scoped-styles) · [Nesting rules](#nesting-rules) · [BEM-like naming](#bem-like-naming) · [File structure template](#file-structure-template) · [Prohibited patterns](#prohibited-patterns) · [Creating a new component SCSS file](#creating-a-new-component-scss-file)
+
 > Component-scoped file conventions, @use/@forward patterns, nesting rules, and file naming.
 
 ## Component-scoped SCSS files

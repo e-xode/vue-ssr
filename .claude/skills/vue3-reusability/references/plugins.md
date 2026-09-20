@@ -1,5 +1,7 @@
 # Plugins
 
+Contents: [The install contract](#the-install-contract) · [Registering it](#registering-it) · [What a plugin typically does](#what-a-plugin-typically-does) · [SSR considerations](#ssr-considerations)
+
 A plugin is self-contained code that adds **app-level functionality** once, at app creation. Use it to register globals (components, directives), provide app-level resources, or wire a library — not to share per-component logic.
 
 ➜ See skill: vue3-composition — for reusable stateful logic, write a composable, not a plugin.

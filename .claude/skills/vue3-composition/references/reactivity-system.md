@@ -1,5 +1,7 @@
 # Reactivity System
 
+Contents: [ref() — the project standard](#ref--the-project-standard) · [reactive() — NOT used](#reactive--not-used) · [shallowRef() — for large objects](#shallowref--for-large-objects) · [toRef() and toRefs() — prop decomposition](#toref-and-torefs--prop-decomposition) · [computed() — derived state](#computed--derived-state) · [Reactivity gotchas](#reactivity-gotchas)
+
 ## ref() — the project standard
 
 This project uses `ref()` exclusively for all reactive state. No `reactive()`.

@@ -8,6 +8,13 @@ disable-model-invocation: true
 
 > **Contents:** [Project layer](#project-layer) · [Creating a skill](#creating-a-skill) · [Running and evaluating test cases](#running-and-evaluating-test-cases) · [Improving the skill](#improving-the-skill) · [Blind comparison](#advanced-blind-comparison) · [Description optimization](#description-optimization)
 
+## Division of responsibilities
+
+| Concern | Skill |
+| --- | --- |
+| Project description conventions (discriminating, pushy, anti-triggers) | claude-anthropic |
+| Generic create/evaluate/iterate workflow | skill-creator |
+
 ## Project layer
 
 Everything below the horizontal rule is Anthropic's official `skill-creator`, vendored verbatim from the
@@ -28,7 +35,7 @@ for this project. Neither is sufficient alone.
 | Skill naming, placement under `.claude/skills/`, folder layout         | `claude-anthropic` |
 | `SKILL.md` anatomy and token budget for this project                   | `claude-anthropic` |
 | Project anti-patterns and case studies                                 | `claude-anthropic` |
-| Post-creation audit (`scripts/audit.py`) + `CLAUDE.md` index update    | `claude-anthropic` |
+| Post-creation audit (`.claude/skills/claude-anthropic/scripts/audit.py`) + `CLAUDE.md` index update    | `claude-anthropic` |
 
 Handoff convention: `➜ See skill: claude-anthropic — <reason>`.
 

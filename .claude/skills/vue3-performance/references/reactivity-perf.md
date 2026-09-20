@@ -1,5 +1,7 @@
 # Reactivity Performance
 
+Contents: [Why deep reactivity has a cost](#why-deep-reactivity-has-a-cost) · [shallowRef() — large structures replaced wholesale](#shallowref--large-structures-replaced-wholesale) · [triggerRef() — force an update after a deep mutation](#triggerref--force-an-update-after-a-deep-mutation) · [shallowReactive() — root-level-only reactive object](#shallowreactive--root-level-only-reactive-object) · [markRaw() — keep heavy objects out of reactivity](#markraw--keep-heavy-objects-out-of-reactivity) · [toRaw() — temporary unproxied read](#toraw--temporary-unproxied-read) · [computed() vs methods — caching](#computed-vs-methods--caching) · [Watcher cost](#watcher-cost) · [Decision summary](#decision-summary)
+
 How to make reactive state cheap. Default stays `ref()` (➜ See skill: vue3-composition — primitives). Reach here only when a structure is large or a value should never be tracked.
 
 ## Why deep reactivity has a cost

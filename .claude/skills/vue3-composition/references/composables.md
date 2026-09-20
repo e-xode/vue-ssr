@@ -1,5 +1,7 @@
 # Composables
 
+Contents: [Pattern](#pattern) · [Project composables](#project-composables) · [Authoring best practices](#authoring-best-practices) · [File organization](#file-organization)
+
 ## Pattern
 
 A composable is a function prefixed with `use` that encapsulates reusable stateful logic using the Composition API.

@@ -1,5 +1,7 @@
 # Mixins reference — interaction, state and responsive
 
+Contents: [transition](#transition) · [hover-lift](#hover-lift) · [button-reset](#button-reset) · [visually-hidden](#visually-hidden) · [respond-to](#respond-to) · [Composition patterns](#composition-patterns)
+
 > Interaction, state and responsive mixins from `src/styles/mixins.scss`, plus composition patterns. Auto-injected — no `@use` needed. Layout and content mixins: [mixins-layout.md](./mixins-layout.md).
 
 ## transition

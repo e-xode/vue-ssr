@@ -1,5 +1,7 @@
 # Micro-interactions
 
+Contents: [Hover states](#hover-states) · [Transitions](#transitions) · [Loading states](#loading-states) · [Success and error feedback](#success-and-error-feedback) · [Button feedback](#button-feedback) · [Page transitions](#page-transitions) · [Motion accessibility](#motion-accessibility) · [Interaction patterns](#interaction-patterns)
+
 Detailed guidance on designing meaningful, restrained, and accessible micro-interactions.
 
 > **Note on class-based effects.** The `.hover-lift`, `.hover-scale`, `.glow`, `.skeleton`, `.animate-*`, `.reveal`, and `.delay-*` classes referenced below live in `_utilities.scss` / `_animations.scss`, which are **not bundled** in this project — they render nothing as classes. Treat them as named patterns: reproduce the effect in a component SCSS using the live tokens/mixins (the `hover-lift` mixin, `transition` mixin, component-local keyframes). ➜ design-scss.

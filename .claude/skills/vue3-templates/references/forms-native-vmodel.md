@@ -1,5 +1,7 @@
 # Native-element v-model
 
+Contents: [What v-model expands to](#what-v-model-expands-to) · [Text input and textarea](#text-input-and-textarea) · [Checkbox](#checkbox) · [Radio](#radio) · [Select](#select) · [Modifiers](#modifiers) · [SSR and IME notes](#ssr-and-ime-notes)
+
 `v-model` two-way binds a native form element to a `ref`. This file covers native HTML elements only.
 
 ➜ See skill: vuetify-components — for `v-text-field`, `v-select`, `v-checkbox`, and validation rules. In practice most forms in this project use Vuetify inputs; reach for native `v-model` only for plain HTML elements.

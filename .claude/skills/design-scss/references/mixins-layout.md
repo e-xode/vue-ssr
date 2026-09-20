@@ -1,5 +1,7 @@
 # Mixins reference — layout and content
 
+Contents: [flex-center](#flex-center) · [flex-between](#flex-between) · [flex-col](#flex-col) · [truncate](#truncate) · [multiline-truncate](#multiline-truncate) · [absolute-center](#absolute-center)
+
 > Layout and content mixins from `src/styles/mixins.scss`. Auto-injected — no `@use` needed. Interaction, state and responsive mixins: [mixins-interaction.md](./mixins-interaction.md).
 
 ## flex-center

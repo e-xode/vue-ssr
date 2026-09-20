@@ -1,5 +1,7 @@
 # Locale file format
 
+Contents: [File locations](#file-locations) · [JSON structure rules](#json-structure-rules) · [Alphabetical ordering](#alphabetical-ordering) · [Interpolation syntax](#interpolation-syntax) · [Pluralization](#pluralization) · [Edge cases](#edge-cases) · [Parity enforcement](#parity-enforcement) · [Adding a translation (checklist)](#adding-a-translation-checklist)
+
 ## File locations
 
 ```

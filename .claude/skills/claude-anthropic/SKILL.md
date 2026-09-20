@@ -35,6 +35,8 @@ The two skills are complementary. Load both when working on a skill.
 | Project anti-patterns and case studies                                 | `claude-anthropic` |
 | Post-creation audit and `CLAUDE.md` skills-index update                | `claude-anthropic` |
 | Anthropic doctrine (model spec, progressive disclosure, agent design)  | `claude-anthropic` |
+| Post-fork/clone adaptation of the config for a NEW project | starter-kit-adapt  |
+| post-task validation                                       | vue-ssr-validation |
 
 When this skill hands off, use the convention: `➜ See skill: skill-creator — <reason>`.
 

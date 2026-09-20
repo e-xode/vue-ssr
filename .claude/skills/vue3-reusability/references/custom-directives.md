@@ -1,5 +1,7 @@
 # Custom Directives
 
+Contents: [Hooks](#hooks) · [The binding object](#the-binding-object) · [Function shorthand](#function-shorthand) · [Registration](#registration) · [SSR caveat](#ssr-caveat) · [Directive vs component vs composable](#directive-vs-component-vs-composable)
+
 A custom directive reuses **low-level DOM behavior** on plain elements. It is a plain object of optional lifecycle hooks (or a function shorthand). Reach for it only when a composable + template ref cannot express the DOM access cleanly.
 
 ➜ See skill: vue3-composition — for sharing stateful logic, use a composable, not a directive.

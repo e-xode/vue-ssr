@@ -1,5 +1,7 @@
 # Release procedure — step by step
 
+Contents: [Step 1 — Verify branch](#step-1--verify-branch) · [Step 2 — Ensure clean working tree](#step-2--ensure-clean-working-tree) · [Step 3 — Ask bump type](#step-3--ask-bump-type) · [Step 4 — Create release branch](#step-4--create-release-branch) · [Step 5 — Bump version in package.json](#step-5--bump-version-in-packagejson) · [Step 6 — Sync lockfile](#step-6--sync-lockfile) · [Step 7 — Gather unreleased changes](#step-7--gather-unreleased-changes) · [Step 8 — Present CHANGELOG draft](#step-8--present-changelog-draft) · [Step 9 — Write CHANGELOG](#step-9--write-changelog) · [Step 10 — Propose commit](#step-10--propose-commit) · [Step 11 — Propose push + PR + merge](#step-11--propose-push--pr--merge) · [Step 12 — Verify the merge, then tag](#step-12--verify-the-merge-then-tag) · [CHANGELOG format reference](#changelog-format-reference) · [Edge cases](#edge-cases)
+
 Full step-by-step release procedure for the Vue SSR Starter Kit. Hard constraints, the commit-category table, and the in/out-of-scope routing table live in the parent `vue-ssr-release/SKILL.md` — read that first.
 
 ## Step 1 — Verify branch

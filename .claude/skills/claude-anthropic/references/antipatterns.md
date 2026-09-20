@@ -1,5 +1,7 @@
 # Anti-patterns (observed in this project or seen elsewhere)
 
+Contents: [A. `CLAUDE.md`](#a-claudemd) · [B. Skills](#b-skills) · [C. Sub-agents](#c-sub-agents) · [D. Native hooks](#d-native-hooks) · [E. Workflow / process](#e-workflow--process) · [F. Rules (`.claude/rules/`)](#f-rules-clauderules)
+
 Each anti-pattern includes a **symptom**, a **why it is bad**, and a **correction**.
 
 ## A. `CLAUDE.md`

@@ -7,6 +7,14 @@ description: "Design delegation and coordination reference for the Vue SSR Start
 
 > Owns the **routing logic** for design work: when to delegate, how to split tasks, and the design philosophy of the starter kit.
 
+## Division of responsibilities
+
+| Concern | Skill |
+| --- | --- |
+| SCSS animations, transition tokens, prefers-reduced-motion | design-scss |
+| UX methodology and decisions (hierarchy, a11y, responsive, micro-interactions) — no SCSS, no brand decisions | design-ux |
+| deciding when to delegate design work | vue-ssr-design |
+
 ## When to delegate to the `design` agent
 
 Delegate to the `design` agent when a task is **primarily** about visual output:

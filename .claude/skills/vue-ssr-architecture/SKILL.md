@@ -70,6 +70,9 @@ See [references/ssr-lifecycle.md](./references/ssr-lifecycle.md).
 | File structure, SSR lifecycle, locale routing, new view/feature scaffolding | `vue-ssr-architecture` |
 | Express route mechanics, middleware guards, rate limiters, MongoDB queries/indexes | `vue-ssr-server` |
 
+| Which endpoints need auth protection, and the auth-domain logic itself | vue-ssr-auth       |
+| Build/bundle/production deployment config                              | vue-ssr-deployment |
+| post-task validation                                                   | vue-ssr-validation |
 ## Key patterns
 
 ### Adding an API endpoint

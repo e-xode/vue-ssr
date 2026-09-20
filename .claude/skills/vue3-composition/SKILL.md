@@ -138,3 +138,4 @@ This skill owns reactivity primitives, lifecycle hooks, `<script setup>` syntax,
 | Teleport, Suspense, KeepAlive, Transition/TransitionGroup                                         | vue3-builtin-components       |
 | Custom directives & plugins                                                                       | vue3-reusability              |
 | Performance optimization (shallowRef, markRaw, v-memo)                                            | vue3-performance              |
+| post-task validation | vue-ssr-validation |

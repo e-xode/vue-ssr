@@ -1,5 +1,7 @@
 # Slots
 
+Contents: [Default slot + fallback](#default-slot--fallback) · [Named slots](#named-slots) · [Conditional slots](#conditional-slots) · [Scoped slots — child → parent data](#scoped-slots--child--parent-data) · [Dynamic slot names](#dynamic-slot-names) · [Renderless components](#renderless-components) · [SSR note](#ssr-note) · [Pitfalls](#pitfalls)
+
 Slots let a parent inject template content into a child — the template equivalent of passing a render callback. Slot content compiles in the **parent's** scope; it can read parent state but not the child's internals (except via scoped slot props).
 
 ## Default slot + fallback
