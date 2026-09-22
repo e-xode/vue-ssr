@@ -104,7 +104,7 @@ description: "Domain knowledge for MyProject (myorg/myrepo): [brief tech/domain 
 
 ## References
 
-➜ See [references/topic.md](./references/topic.md) — for detailed reference material.
+➜ See `references/<topic>.md` — for detailed reference material. (Placeholder: the angle brackets mark a name you choose. It is deliberately not a link — a link to a file that does not exist is a dead anchor, and a model follows it.)
 ```
 
 ### Naming conventions
