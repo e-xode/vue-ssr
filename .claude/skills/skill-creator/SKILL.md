@@ -1,6 +1,6 @@
 ---
 name: skill-creator
-description: "Create new skills, improve existing ones, and measure skill performance for the Vue SSR Starter Kit. Use when creating a skill from scratch, editing or optimizing one, writing or running evals, benchmarking a skill against a no-skill baseline, or tuning a description for better triggering. Ships Anthropic's official skill-creator toolchain (eval runner, grader, benchmark, description optimizer) under scripts/ and agents/. ALWAYS load with claude-anthropic: this skill owns the create/eval/iterate loop, claude-anthropic owns project rules (naming, placement, frontmatter, anti-triggers, audit checklist). Don't use for: project skill conventions, auditing existing skills, or CLAUDE.md/agents/rules governance (→ claude-anthropic)."
+description: "Create new skills, improve existing ones, and measure skill performance for the Vue SSR Starter Kit. Use when creating a skill from scratch, editing or optimizing one, writing or running evals, benchmarking a skill against a no-skill baseline, or tuning a description for better triggering. Ships Anthropic's official skill-creator toolchain (eval runner, grader, benchmark, description optimizer) under scripts/ and agents/. ALWAYS load with governance: this skill owns the create/eval/iterate loop, governance owns project rules (naming, placement, frontmatter, anti-triggers, audit checklist). Don't use for: project skill conventions, auditing existing skills, or CLAUDE.md/agents/rules governance (→ governance)."
 disable-model-invocation: true
 ---
 
@@ -12,7 +12,7 @@ disable-model-invocation: true
 
 | Concern | Skill |
 | --- | --- |
-| Project description conventions (discriminating, pushy, anti-triggers) | claude-anthropic |
+| Project description conventions (discriminating, pushy, anti-triggers) | governance |
 | Generic create/evaluate/iterate workflow | skill-creator |
 
 ## Project layer
@@ -21,9 +21,9 @@ Everything below the horizontal rule is Anthropic's official `skill-creator`, ve
 `claude-plugins-official` marketplace so it stays diff-able against upstream. Read this section first — it
 carries the four things the upstream text cannot know about this repository.
 
-### 1. Load `claude-anthropic` alongside this skill
+### 1. Load `governance` alongside this skill
 
-`skill-creator` owns the generic create / evaluate / iterate loop. `claude-anthropic` owns the _what / where / why_
+`skill-creator` owns the generic create / evaluate / iterate loop. `governance` owns the _what / where / why_
 for this project. Neither is sufficient alone.
 
 | Concern                                                                | Owner              |
@@ -31,19 +31,19 @@ for this project. Neither is sufficient alone.
 | Generic create/evaluate/iterate workflow                               | `skill-creator`    |
 | Eval harness, test prompts, assertions, benchmarking                   | `skill-creator`    |
 | Description-optimisation tooling (`scripts/run_loop.py`)               | `skill-creator`    |
-| Project description conventions (discriminating, pushy, anti-triggers) | `claude-anthropic` |
-| Skill naming, placement under `.claude/skills/`, folder layout         | `claude-anthropic` |
-| `SKILL.md` anatomy and token budget for this project                   | `claude-anthropic` |
-| Project anti-patterns and case studies                                 | `claude-anthropic` |
-| Post-creation audit (`deadweight`) + `CLAUDE.md` index update    | `claude-anthropic` |
+| Project description conventions (discriminating, pushy, anti-triggers) | `governance` |
+| Skill naming, placement under `.claude/skills/`, folder layout         | `governance` |
+| `SKILL.md` anatomy and token budget for this project                   | `governance` |
+| Project anti-patterns and case studies                                 | `governance` |
+| Post-creation audit (`deadweight`) + `CLAUDE.md` index update    | `governance` |
 
-Handoff convention: `➜ See skill: claude-anthropic — <reason>`.
+Handoff convention: `➜ See skill: governance — <reason>`.
 
 ### 2. Project conventions the upstream text does not encode
 
 - **Naming.** kebab-case, prefixed by domain — `vue-ssr-*` (project-specific), `vue3-*`, `vuetify-*`, `design-*`,
-  `marketing-*`. Cross-cutting skills (`translate`, `review`, `seo`, `skill-creator`, `claude-anthropic`,
-  `starter-kit-adapt`) stay unprefixed. `➜ See skill: claude-anthropic` rule 14 for the authoritative list.
+  `marketing-*`. Cross-cutting skills (`translate`, `review`, `seo`, `skill-creator`, `governance`,
+  `starter-kit-adapt`) stay unprefixed. `➜ See skill: governance` rule 14 for the authoritative list.
 - **Description budget.** The binding constraint here is not the per-skill listing cap but a **23,000-char
   aggregate** across every skill description in the repo — the whole listing loads on every turn. Check the
   current total (`audit.py` prints it as INFO) before spending characters. A description carries triggers and

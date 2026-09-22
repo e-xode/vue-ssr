@@ -1,6 +1,6 @@
 ---
 name: validation
-description: "Validation-only agent for the Vue SSR Starter Kit. Runs the post-task validation battery (lint first, then format/build/test in parallel) via the single `npm run validate` orchestrator per vue-ssr-validation skill rules. Delegate to this agent only when the user opts into validation (see the Task completion protocol in CLAUDE.md). This is the SOLE exception to the 'sub-agents never run validation' rule. Triggers on: user-approved task-completion validation, format/lint/build/test execution, dirty-list short-circuit evaluation. Don't use for: writing or fixing code (→ vue/server/design agents), code-convention review of a diff (→ review agent), i18n parity (→ translate agent), Claude config audit (→ claude-anthropic skill)."
+description: "Validation-only agent for the Vue SSR Starter Kit. Runs the post-task validation battery (lint first, then format/build/test in parallel) via the single `npm run validate` orchestrator per vue-ssr-validation skill rules. Delegate to this agent only when the user opts into validation (see the Task completion protocol in CLAUDE.md). This is the SOLE exception to the 'sub-agents never run validation' rule. Triggers on: user-approved task-completion validation, format/lint/build/test execution, dirty-list short-circuit evaluation. Don't use for: writing or fixing code (→ vue/server/design agents), code-convention review of a diff (→ review agent), i18n parity (→ translate agent), Claude config audit (→ governance skill)."
 tools: Bash
 model: haiku
 color: yellow

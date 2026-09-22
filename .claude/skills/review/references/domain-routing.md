@@ -10,7 +10,7 @@ Assign each changed file to a review domain, then cite that domain's skills when
 | `tests`  | `*.test.js`, `tests/**`, test fixtures and utilities                                                | `vue3-composition`, plus the domain skill of the code under test                                       |
 | `i18n`   | `src/translate/**`, vue-i18n message format changes                                                 | `translate`                                                                                            |
 | `seo`    | `src/entry-server.js` meta/JSON-LD, `robots`/`sitemap` handlers in `server.js`, route meta           | `seo`, `vue-ssr-architecture`                                                                          |
-| `docs`   | `*.md`, `.claude/skills/**`, `.claude/agents/**`, `.claude/rules/**`, `CLAUDE.md`                   | `claude-anthropic`, `skill-creator`, plus the domain skill the doc describes                           |
+| `docs`   | `*.md`, `.claude/skills/**`, `.claude/agents/**`, `.claude/rules/**`, `CLAUDE.md`                   | `governance`, `skill-creator`, plus the domain skill the doc describes                           |
 | `config` | `vite.config.js`, `vitest.config.js`, `eslint.config.js`, `package.json`, `.github/**`, Docker files | `vue-ssr-deployment`, `vue-ssr-validation`                                                             |
 
 ## Applicable path-scoped rules

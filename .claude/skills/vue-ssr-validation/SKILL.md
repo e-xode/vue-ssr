@@ -1,6 +1,6 @@
 ---
 name: vue-ssr-validation
-description: "Post-task validation pipeline for the Vue SSR Starter Kit: the validation agent's format/lint/build/test battery behind the single `npm run validate` orchestrator, on user opt-in only (never automatic). Trigger on: validation failures, why a stage ran or was skipped, changing the pipeline, or phrasings like 'run the checks', 'npm run validate', 'lint is failing', 'the build broke', 'format check', 'did the tests pass'. Don't use for: Claude config governance and audit.py (→ claude-anthropic), native Claude Code hooks — none exist in this project (→ claude-anthropic), Vue's lifecycle hooks — a framework concept (→ vue3-composition), app architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), deployment (→ vue-ssr-deployment)."
+description: "Post-task validation pipeline for the Vue SSR Starter Kit: the validation agent's format/lint/build/test battery behind the single `npm run validate` orchestrator, on user opt-in only (never automatic). Trigger on: validation failures, why a stage ran or was skipped, changing the pipeline, or phrasings like 'run the checks', 'npm run validate', 'lint is failing', 'the build broke', 'format check', 'did the tests pass'. Don't use for: Claude config governance and audit.py (→ governance), native Claude Code hooks — none exist in this project (→ governance), Vue's lifecycle hooks — a framework concept (→ vue3-composition), app architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), deployment (→ vue-ssr-deployment)."
 ---
 
 # Vue SSR Validation (post-task battery)
@@ -11,7 +11,7 @@ description: "Post-task validation pipeline for the Vue SSR Starter Kit: the val
 
 | Concern | Skill |
 | --- | --- |
-| Project description conventions (discriminating, pushy, anti-triggers) | claude-anthropic |
+| Project description conventions (discriminating, pushy, anti-triggers) | governance |
 | File structure, SSR lifecycle, locale routing, new view/feature scaffolding | vue-ssr-architecture |
 | Which endpoints need auth protection, and the auth-domain logic itself | vue-ssr-auth |
 | Build/bundle/production deployment config | vue-ssr-deployment |
@@ -59,9 +59,9 @@ The `validation` agent (model `haiku`, tools `Bash`) is the sole validation exec
 
 ## History
 
-The former native-hook wiring (`.claude/hooks/` shell scripts, the dormant `settings._json` kill switch, `hooks-reference.md`) was removed on 2026-07-26 — validation has a single path, the `validation` agent. Decision history: `claude-anthropic` case-studies CS-6.
+The former native-hook wiring (`.claude/hooks/` shell scripts, the dormant `settings._json` kill switch, `hooks-reference.md`) was removed on 2026-07-26 — validation has a single path, the `validation` agent. Decision history: `governance` case-studies CS-6.
 
 ## See also
 
 - `validation` agent — the validation executor (`.claude/agents/validation.md`).
-- `claude-anthropic` — Claude config governance and `audit.py`.
+- `governance` — Claude config governance and `audit.py`.

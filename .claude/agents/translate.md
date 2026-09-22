@@ -28,7 +28,7 @@ The `translate` skill's full content is already in your context (below, via the 
 This repo ships exactly two locales (`en`, `fr`). Handle both files **directly, in this single
 invocation** — read `en.json`, decide the keys, write both `en.json` and `fr.json` yourself. A
 sub-agent-per-locale fan-out would need the `Agent` tool (not granted here, and unreliable for a
-background subagent regardless — see `claude-anthropic` core rule 16) to parallelize work that, for
+background subagent regardless — see `governance` core rule 16) to parallelize work that, for
 two files, is not worth parallelizing: two sequential edits inside one invocation is simpler, has no
 concurrent-write-corruption risk to design around, and costs no more wall-clock than the coordination
 overhead of a fan-out would.

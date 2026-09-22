@@ -1,6 +1,6 @@
 # Case studies — Vue SSR Starter Kit Claude config
 
-Contents: [CS-1 — Why `validation` is the sole exception to "no sub-agent validation"](#cs-1--why-validation-is-the-sole-exception-to-no-sub-agent-validation) · [CS-2 — Why `skill-creator` stays separate from `claude-anthropic`](#cs-2--why-skill-creator-stays-separate-from-claude-anthropic) · [CS-3 — Adding `build` to the validation battery](#cs-3--adding-build-to-the-validation-battery) · [CS-4 — No Socket.IO guard rules (adapted from the sibling `rom` project)](#cs-4--no-socketio-guard-rules-adapted-from-the-sibling-rom-project) · [CS-5 — Splitting `vuetify-components` into a `vuetify-*` family](#cs-5--splitting-vuetify-components-into-a-vuetify--family) · [CS-6 — Native hooks: dormant, then removed (2026-07-26)](#cs-6--native-hooks-dormant-then-removed-2026-07-26) · [CS-7 — The always-loaded budget is real: harness listing truncation](#cs-7--the-always-loaded-budget-is-real-harness-listing-truncation) · [CS-8 — Re-syncing with upstream doctrine (2026-08-09)](#cs-8--re-syncing-with-upstream-doctrine-2026-08-09) · [CS-9 — Raising the CLAUDE.md cap by 512 bytes (2026-08-09)](#cs-9--raising-the-claudemd-cap-by-512-bytes-2026-08-09)
+Contents: [CS-1 — Why `validation` is the sole exception to "no sub-agent validation"](#cs-1--why-validation-is-the-sole-exception-to-no-sub-agent-validation) · [CS-2 — Why `skill-creator` stays separate from `governance`](#cs-2--why-skill-creator-stays-separate-from-governance) · [CS-3 — Adding `build` to the validation battery](#cs-3--adding-build-to-the-validation-battery) · [CS-4 — No Socket.IO guard rules (adapted from the sibling `rom` project)](#cs-4--no-socketio-guard-rules-adapted-from-the-sibling-rom-project) · [CS-5 — Splitting `vuetify-components` into a `vuetify-*` family](#cs-5--splitting-vuetify-components-into-a-vuetify--family) · [CS-6 — Native hooks: dormant, then removed (2026-07-26)](#cs-6--native-hooks-dormant-then-removed-2026-07-26) · [CS-7 — The always-loaded budget is real: harness listing truncation](#cs-7--the-always-loaded-budget-is-real-harness-listing-truncation) · [CS-8 — Re-syncing with upstream doctrine (2026-08-09)](#cs-8--re-syncing-with-upstream-doctrine-2026-08-09) · [CS-9 — Raising the CLAUDE.md cap by 512 bytes (2026-08-09)](#cs-9--raising-the-claudemd-cap-by-512-bytes-2026-08-09)
 
 Decisions that shaped this project's `.claude/` configuration, with the reasoning behind each. Read these when a similar trade-off resurfaces, or when adapting the config for a fork (see skill `starter-kit-adapt`).
 
@@ -12,13 +12,13 @@ Decisions that shaped this project's `.claude/` configuration, with the reasonin
 
 **Why.** Validation is deterministic, read-mostly, and cheap to run in one place. Letting every task agent validate would run the battery N times for one logical task and blur each agent's scope. One exception, clearly named, beats a fuzzy rule. See `references/agent-anatomy.md` and skill `vue-ssr-validation`.
 
-## CS-2 — Why `skill-creator` stays separate from `claude-anthropic`
+## CS-2 — Why `skill-creator` stays separate from `governance`
 
 **Context.** Both skills concern authoring skills. Merging them is tempting.
 
-**Decision.** Keep them separate with an explicit "Division of responsibilities" table in `claude-anthropic`.
+**Decision.** Keep them separate with an explicit "Division of responsibilities" table in `governance`.
 
-**Why.** `skill-creator` is a *portable* workflow (draft → eval → iterate) that survives a fork unchanged. `claude-anthropic` is *project doctrine* (naming, placement, anti-triggers, audit, CLAUDE.md budget) that a fork rewrites for its own domain. Splitting along the portable/project seam keeps the generic loop reusable and the project rules swappable. Co-load both when authoring.
+**Why.** `skill-creator` is a *portable* workflow (draft → eval → iterate) that survives a fork unchanged. `governance` is *project doctrine* (naming, placement, anti-triggers, audit, CLAUDE.md budget) that a fork rewrites for its own domain. Splitting along the portable/project seam keeps the generic loop reusable and the project rules swappable. Co-load both when authoring.
 
 ## CS-3 — Adding `build` to the validation battery
 
@@ -74,7 +74,7 @@ Decisions that shaped this project's `.claude/` configuration, with the reasonin
 
 **Context.** The configuration was authored against the "SKILL.md = name + description + body" model and had not absorbed what Claude Code shipped since. Two independent audits surfaced the same shape of problem: the *structure* of the config was upstream-correct — progressive disclosure real, anti-triggers everywhere, a mechanical audit script Anthropic's own corpus has no counterpart for — while the *runtime surface* had drifted.
 
-**Decision.** Vendor Anthropic's official `skill-creator` verbatim from the `claude-plugins-official` marketplace rather than installing the plugin, and re-ground `claude-anthropic`'s references in the current docs.
+**Decision.** Vendor Anthropic's official `skill-creator` verbatim from the `claude-plugins-official` marketplace rather than installing the plugin, and re-ground `governance`'s references in the current docs.
 
 **Why vendor instead of install.** A plugin's skills load into the *installer's* always-loaded listing and are namespaced `plugin:skill`; vendoring keeps the skill under this repo's own budget accounting, lets the project layer sit alongside the upstream text, and — because the upstream block is kept byte-identical and the deviations are enumerated — a future re-sync stays a straight replacement. The same reasoning already applied to `frontend-design`.
 

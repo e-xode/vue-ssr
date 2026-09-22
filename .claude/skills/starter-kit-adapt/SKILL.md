@@ -1,6 +1,6 @@
 ---
 name: starter-kit-adapt
-description: "Post-fork/clone adaptation guide for the Vue SSR Starter Kit Claude configuration. Trigger when: setting up a new project from this starter, customizing Claude config after fork, updating skill descriptions after dependency changes, removing starter-kit-specific skills, adding project-specific skills/rules/agents, or adapting the agent fleet for a new domain. Don't use for: day-to-day feature work (→ domain skills), Claude config governance rules (→ claude-anthropic), skill authoring workflow (→ skill-creator)."
+description: "Post-fork/clone adaptation guide for the Vue SSR Starter Kit Claude configuration. Trigger when: setting up a new project from this starter, customizing Claude config after fork, updating skill descriptions after dependency changes, removing starter-kit-specific skills, adding project-specific skills/rules/agents, or adapting the agent fleet for a new domain. Don't use for: day-to-day feature work (→ domain skills), Claude config governance rules (→ governance), skill authoring workflow (→ skill-creator)."
 disable-model-invocation: true
 ---
 
@@ -12,7 +12,7 @@ disable-model-invocation: true
 
 | Concern | Skill |
 | --- | --- |
-| Project description conventions (discriminating, pushy, anti-triggers) | claude-anthropic |
+| Project description conventions (discriminating, pushy, anti-triggers) | governance |
 | Post-fork/clone adaptation of the config for a NEW project | starter-kit-adapt |
 
 ## Purpose
@@ -24,7 +24,7 @@ When you fork/clone the Vue SSR Starter Kit for a new project, the `.claude/` co
 - Add domain-specific knowledge for your new project
 - Keep version references accurate
 
-➜ See skill: `claude-anthropic` — for governance rules on skill anatomy and naming.
+➜ See skill: `governance` — for governance rules on skill anatomy and naming.
 ➜ See skill: `skill-creator` — for the create/eval/iterate workflow when adding new skills.
 
 ## Post-fork adaptation checklist
@@ -49,7 +49,7 @@ When you fork/clone the Vue SSR Starter Kit for a new project, the `.claude/` co
 
 | Keep as-is                                     | Customize                                    | Remove if N/A                                                  |
 | ---------------------------------------------- | -------------------------------------------- | --------------------------------------------------------------- |
-| `claude-anthropic` skill                       | `vue-ssr-architecture` (your stack)          | `vue-ssr-auth` (if no auth)                                     |
+| `governance` skill                       | `vue-ssr-architecture` (your stack)          | `vue-ssr-auth` (if no auth)                                     |
 | `skill-creator` skill                          | `CLAUDE.md` hard rules                       | Specific rules (`objectid` if no MongoDB)                       |
 | `vue-ssr-validation` skill + `validation` agent | Agent fleet for your domain                  | The `vuetify-*` family (7 skills) (if not using Vuetify)        |
 | `review` skill + agent                         | `translate` skill (your locales)             | `design-scss` (if different styling approach)                  |
@@ -113,7 +113,7 @@ These locations contain hardcoded dependency versions — update after forking:
 - Adding a prompt section is sufficient (no new tools needed)
 - The trigger conditions overlap heavily with an existing agent
 
-➜ See reference: `claude-anthropic/references/agent-anatomy.md` — for agent file structure and conventions.
+➜ See reference: `governance/references/agent-anatomy.md` — for agent file structure and conventions.
 
 ## Detailed reference
 
