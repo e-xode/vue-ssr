@@ -35,7 +35,7 @@ for this project. Neither is sufficient alone.
 | Skill naming, placement under `.claude/skills/`, folder layout         | `claude-anthropic` |
 | `SKILL.md` anatomy and token budget for this project                   | `claude-anthropic` |
 | Project anti-patterns and case studies                                 | `claude-anthropic` |
-| Post-creation audit (`.claude/skills/claude-anthropic/scripts/audit.py`) + `CLAUDE.md` index update    | `claude-anthropic` |
+| Post-creation audit (`deadweight`) + `CLAUDE.md` index update    | `claude-anthropic` |
 
 Handoff convention: `➜ See skill: claude-anthropic — <reason>`.
 
@@ -54,7 +54,7 @@ Handoff convention: `➜ See skill: claude-anthropic — <reason>`.
   [references/size-budget-table.md](references/size-budget-table.md). When a file outgrows its budget, move
   content down the disclosure chain (`CLAUDE.md` → skill body → reference → script), never trim the trigger surface.
 - **Close the loop.** A new skill is not done until it is added to the Skills index in `CLAUDE.md` and
-  `python3 .claude/skills/claude-anthropic/scripts/audit.py` exits clean.
+  `deadweight --fresh` exits clean.
 
 ### 3. Running the bundled toolchain here
 
@@ -69,7 +69,7 @@ python3 eval-viewer/generate_review.py <workspace>/iteration-1 --skill-name <nam
 ```
 
 `scripts/quick_validate.py` is a fast structural sanity check on a single skill folder; it does **not** replace
-`claude-anthropic/scripts/audit.py`, which is what governs this repository.
+`deadweight`, which is what governs this repository.
 
 ### 4. Local deviations from upstream
 

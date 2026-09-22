@@ -79,7 +79,7 @@ security, bug, regression, perf, a11y, i18n, convention, test-gap, docs-gap, typ
 When the diff touches `.claude/` files or `CLAUDE.md`, additionally run the config audit and report its findings alongside the code review:
 
 ```bash
-python3 .claude/skills/claude-anthropic/scripts/audit.py
+deadweight --fresh
 ```
 
 ➜ See skill: claude-anthropic — owns the audit method, checklist, and anti-pattern catalog for `.claude/` configuration.

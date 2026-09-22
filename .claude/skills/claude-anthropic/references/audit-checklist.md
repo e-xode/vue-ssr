@@ -5,7 +5,7 @@ Each item is tagged `[AUTO]` (covered by `scripts/audit.py` — run it first) or
 Run the script before manual review:
 
 ```bash
-python3 .claude/skills/claude-anthropic/scripts/audit.py
+deadweight --fresh
 ```
 
 ## `CLAUDE.md`
@@ -92,6 +92,6 @@ Tracked in git, so it ships to everyone who clones the kit. `audit.py` does not 
 
 ## After making changes — required exit
 
-1. Run `python3 .claude/skills/claude-anthropic/scripts/audit.py`. Exit code must be `0` (no errors).
+1. Run `deadweight --fresh`. Exit code must be `0` (no errors).
 2. Resolve any new `WARN` introduced by the change, or document why it is intentional in `case-studies.md`.
 3. Propose any corrections to the user. **Never auto-apply.**

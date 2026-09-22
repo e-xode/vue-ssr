@@ -1,7 +1,7 @@
 ---
 name: claude-anthropic
 description: "Govern Claude/Anthropic configuration of the Vue SSR Starter Kit (e-xode/vue-ssr): rules and audit method for CLAUDE.md and everything under .claude/. Trigger when creating, modifying, reviewing or auditing a skill / rule / sub-agent / CLAUDE.md, deciding rule vs skill, or asking about Anthropic doctrine (progressive disclosure, agent design). Co-load with skill-creator when authoring a skill. Don't use for: the create/eval/iterate loop (→ skill-creator), post-task code validation (→ vue-ssr-validation + validation agent), app architecture (→ vue-ssr-architecture), framework lifecycle hooks (Vue concept), or post-fork adaptation of the whole config (→ starter-kit-adapt)."
-allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/audit.py *)
+allowed-tools: Bash(deadweight --fresh *)
 ---
 
 # Claude / Anthropic configuration — Vue SSR Starter Kit
@@ -16,7 +16,7 @@ allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/audit.py *)
 | Anatomy of a project skill (frontmatter, references, budget) | The workflow of drafting and evaluating a new skill (→ `skill-creator`)       |
 | Anatomy of a project sub-agent                               | App architecture knowledge (→ `vue-ssr-architecture`)                         |
 | Anatomy of path-scoped rules (`.claude/rules/`)              | Auth flow and security (→ `vue-ssr-auth`)                                     |
-| Validation-path doctrine (agent-only, no native hooks)       | Deployment and CI/CD (→ `vue-ssr-deployment`)                                 |
+| Validation-path doctrine (agent-driven; observation hooks allowed)       | Deployment and CI/CD (→ `vue-ssr-deployment`)                                 |
 | Audit checklist + automated `scripts/audit.py`               | Skill description optimisation tooling (→ `skill-creator`)                    |
 | Anthropic doctrine: progressive disclosure, agent design     |                                                                               |
 
@@ -51,7 +51,7 @@ When this skill hands off, use the convention: `➜ See skill: skill-creator —
 7. **No code comments in `CLAUDE.md` or `SKILL.md`** outside fenced code blocks. Prose is the medium.
 8. **Cross-references use a stable convention:** `➜ See skill: <name> — <reason>` (greppable, visible in diffs).
 9. **`name` in frontmatter == folder name.** Mechanical, enforced by `scripts/audit.py`. This is a project convention, not a harness requirement — for a project skill the invocation name comes from the directory and `name` is only the display label. Keeping them equal removes an entire class of confusion.
-10. **Validation is agent-only — the project has no native hooks.** The former `.claude/hooks/` wiring and its `settings._json` kill switch were removed on 2026-07-26; validation runs solely through the `validation` agent, delegated by the orchestrator per the Task completion protocol. `➜ See skill: vue-ssr-validation` — the validation pipeline. History: [references/case-studies.md](./references/case-studies.md) CS-6.
+10. **Observation hooks are allowed; hooks that lengthen the work loop are not.** A hook that measures and reports blocks nothing and lengthens no loop: the `SessionStart` hook that injects this repository's audit state into the context is the case in point, and 15 fleet repositories carry one as of 2026-09-20. What stays refused is a hook that adds time to every task — running the unit-test suite on `Stop` or `PostToolUse`: a test suite takes time, and attaching it to the end of each task adds that time to each task, whether or not the task needed it. **Validation stays delegated to the agent, at the moment chosen** — here the `validation` agent, delegated by the orchestrator per the Task completion protocol. **Never a hook on an agent's initiative**: placing one remains Christophe's decision. The blanket ban this rule carried until 2026-09-20 was inherited from the client repositories' constraints and applied here by extension, where it had no cause. Amended 2026-09-20 — a rule carries the current state; the record of the decision it replaces is in [references/case-studies.md](./references/case-studies.md) CS-6. `➜ See skill: vue-ssr-validation` — the validation pipeline.
 11. **Scripts belong to a skill.** Executable tooling lives in `.claude/skills/<owner>/scripts/`, never in a top-level `.claude/scripts/` pool. Enforced by `scripts/audit.py`.
 12. **Description = trigger surface.** A description carries triggers + anti-triggers only; enumerated knowledge belongs in the body. Skill descriptions: 80–1,536 chars (hard listing cap), with a ≤ 600-char target for secondary domains — only primary routing skills earn more. Agent descriptions: 80–900 chars (audit-warned). Put the most important trigger information first.
 13. **Rules are lightweight guardrails.** `.claude/rules/` files are path-scoped constraints (< 2 KB, imperative, no references). They complement skills (which carry knowledge). Use rules for hard DON'Ts tied to specific file paths; use skills for how-to procedures. See [references/rules-anatomy.md](./references/rules-anatomy.md).
@@ -66,8 +66,8 @@ Run before any non-trivial change to `.claude/` and after creating/modifying a s
 ### Step 1 — Automated checks
 
 ```bash
-python3 .claude/skills/claude-anthropic/scripts/audit.py
-python3 .claude/skills/claude-anthropic/scripts/audit.py --json
+deadweight --fresh
+deadweight --fresh --json
 ```
 
 Covers 18 mechanical check groups (file sizes, frontmatter validity, naming, description budgets, cross-refs, English-only, no-comments, and more) — run it to see the full list of checks. Most checks emit a finding only on failure; the always-loaded budget always prints its total as INFO. A clean run prints `Executed N check groups … All checks passed.`. Exit code 1 on any error.
@@ -117,9 +117,9 @@ If issues are found, propose corrections to the user. **Never silently rewrite**
 5. If a skill already covers the same domain, add a pointer from the rule to the skill: "Full patterns: see skill `<name>`."
 6. Run `scripts/audit.py` — the rules-structure check validates it.
 
-### Introduce a native hook (none exist today)
+### Introduce a native hook
 
-The project runs zero native hooks — the previous wiring was removed on 2026-07-26 ([references/case-studies.md](./references/case-studies.md) CS-6). Introducing one is an architecture decision: get explicit user approval, wire it in `.claude/settings.json`, and record the decision in case-studies.
+**Measured 2026-09-20: one native hook runs here** — `SessionStart`, wired in `.claude/settings.json`, running `.claude/hooks/audit-session.sh`; it measures this repository's Claude configuration and puts the counts in context. _Amended 2026-09-20 — this paragraph read "The project runs zero native hooks", which was true from 2026-07-26 until the audit hook was wired._ The doctrine that stands is core rule 10: observation hooks are allowed, hooks that lengthen the work loop are not. Introducing another is still an architecture decision: explicit user approval, wiring in `.claude/settings.json`, and an entry in [references/case-studies.md](./references/case-studies.md) — CS-6 records the 2026-07-26 removal of the previous wiring.
 
 ## Where to look (routing table)
 

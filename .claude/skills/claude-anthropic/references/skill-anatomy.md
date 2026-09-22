@@ -1,6 +1,6 @@
 # Skill anatomy (Vue SSR Starter Kit conventions)
 
-Contents: [Folder layout](#folder-layout) · [Frontmatter](#frontmatter) · [`SKILL.md` body](#skillmd-body) · [`references/` rules](#references-rules) · [Scripts placement](#scripts-placement) · [When to split a skill](#when-to-split-a-skill) · [Anti-triggers, in practice](#anti-triggers-in-practice)
+Contents: [Folder layout](#folder-layout) · [Frontmatter](#frontmatter) · [`SKILL.md` body](#skillmd-body) · [`references/` rules](#references-rules) · [Scripts placement](#scripts-placement) · [When to split a skill](#when-to-split-a-skill) · [Retiring a skill](#retiring-a-skill) · [Anti-triggers, in practice](#anti-triggers-in-practice)
 
 ## Folder layout
 
@@ -30,6 +30,15 @@ description: '<single string, no line breaks>'
 
 ### Supported fields (harness reality, verified 2026-08-09)
 
+| Number | What it caps | Source |
+| --- | --- | --- |
+| **1,024** | `description` **alone** — hard cap of the Agent Skills spec. Past it, upload and packaging fail. | [platform.claude.com — agent-skills/best-practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) |
+| **1,536** | `description` **+** `when_to_use` **combined** — truncation in the skill listing, nothing else. | [code.claude.com — skills](https://code.claude.com/docs/en/skills) |
+
+Two mechanisms, two documents, two pages. **Author against 1,024.** A 1,200-character description
+passes the listing and still hard-fails on upload. Table added 2026-09-20: two readers had confused
+the two figures that day, one of them the author of this doctrine.
+
 Source: [Skills — frontmatter reference](https://code.claude.com/docs/en/skills#frontmatter-reference). None of these fields is strictly required; a skill with no frontmatter at all still loads.
 
 | Field                      | Harness behaviour                                                                                          | Used here          |
@@ -55,7 +64,7 @@ Source: [Skills — frontmatter reference](https://code.claude.com/docs/en/skill
 A skill that tells the agent to run its own script should grant it, so the instruction still works once `bypassPermissions` is gone:
 
 ```yaml
-allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/audit.py *)
+allowed-tools: Bash(deadweight --fresh *)
 ```
 
 `${CLAUDE_SKILL_DIR}` and `${CLAUDE_PROJECT_DIR}` are substituted in both the body and the `allowed-tools` rules, so the grant and the documented command match literally — which is what the permission matcher requires. `${CLAUDE_SKILL_DIR}` also survives a fork that renames the repository directory.
@@ -166,6 +175,46 @@ Do NOT split when:
 
 - The two parts are always loaded together (split is cosmetic and costs context).
 - The "split" is just chapters of the same procedure (use `references/` instead).
+
+## Retiring a skill
+
+Everything above is about birth: when to write a skill, when to split one. Nothing said when to
+remove one. Measured 2026-09-20 across the 16 personal repositories
+(`git log --diff-filter=A|D --name-only -- '.claude/skills/*/SKILL.md'`): **352 `SKILL.md` created,
+8 deleted, 348 live.** A configuration with no retirement procedure does not degrade — it
+accumulates. A budget that only ever goes up is not a budget.
+
+### The four signals
+
+A skill is a candidate for retirement when **all four** are true. Each is measurable today, from
+this repository, with no new tooling.
+
+| Signal | How it is measured |
+| --- | --- |
+| Nobody names it | no `➜ See skill: <name>` anywhere in the tree, and absent from the `CLAUDE.md` skills index |
+| It has no eval | no `evals/evals.json`, or fewer than 3 cases |
+| Its anchors are dead | the paths its body names no longer exist (`ancrage.py`, in `cbragard.llm`'s `fleet-audit` skill) |
+| It has not moved | no commit on its folder for 3 months (`git log -1 --format=%ar -- .claude/skills/<name>`) |
+
+Three signals out of four is not a candidate. A skill nobody names by pointer, whose eval passes and
+whose anchors are live, is a skill reached by its description — which is how a skill is meant to be
+reached.
+
+### The procedure — two steps, never one
+
+1. **Withhold it.** Set its `skillOverrides` entry to `"off"` in `.claude/settings.json`. It leaves
+   the listing *and* the `/` menu without being deleted: the description stops costing context on
+   every turn, and any pointer still aimed at it starts failing visibly instead of silently.
+2. **Wait two weeks.** If nobody asked for it back, delete the folder and remove every
+   `➜ See skill:` pointer and index line that named it. `audit.py` catches what is left: check
+   `18-see-skill-target` errors on a dangling pointer, `24-settings-skill-overrides` on a
+   `skillOverrides` entry naming a folder that no longer exists, and `15-skill-index` warns on an
+   index line for a skill that is no longer withheld.
+
+Step 1 is reversible; step 2 is not. Doing both in one move turns a measurement into a bet.
+
+> **This section states the procedure; it authorises no deletion.** Added 2026-09-20 with none
+> pending anywhere in the fleet.
 
 ## Anti-triggers, in practice
 

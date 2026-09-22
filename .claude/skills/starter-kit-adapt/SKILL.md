@@ -41,7 +41,7 @@ When you fork/clone the Vue SSR Starter Kit for a new project, the `.claude/` co
 
 6. **Update `.claude/rules/`** — Remove path-scoped rules that don't apply (e.g., `objectid-validation` if no MongoDB). Add rules for your project constraints.
 
-7. **Run `.claude/skills/claude-anthropic/scripts/audit.py`** — Validates that `CLAUDE.md` index, skill descriptions, agent references, and cross-links are consistent.
+7. **Run `deadweight`** — Validates that `CLAUDE.md` index, skill descriptions, agent references, and cross-links are consistent.
 
 8. **Update the translate skill** — If your locale set differs (add/remove languages), update the translate skill description and locale file paths.
 
@@ -53,7 +53,7 @@ When you fork/clone the Vue SSR Starter Kit for a new project, the `.claude/` co
 | `skill-creator` skill                          | `CLAUDE.md` hard rules                       | Specific rules (`objectid` if no MongoDB)                       |
 | `vue-ssr-validation` skill + `validation` agent | Agent fleet for your domain                  | The `vuetify-*` family (7 skills) (if not using Vuetify)        |
 | `review` skill + agent                         | `translate` skill (your locales)             | `design-scss` (if different styling approach)                  |
-| Audit script (`.claude/skills/claude-anthropic/scripts/audit.py`) | `vue-ssr-deployment` (your CI/CD)            | `vue-ssr-design` (if different UI framework)                   |
+| Audit script (`deadweight`) | `vue-ssr-deployment` (your CI/CD)            | `vue-ssr-design` (if different UI framework)                   |
 | `vue-ssr-design` skill (coordination patterns) | `design` agent (adapt for your UI framework) | `design-ux` (if using a different design system)                |
 | —                                               | `brand-art-direction` (your brand's charter) | —                                                                |
 | —                                               | —                                             | `frontend-design` (vendored Anthropic skill)                    |

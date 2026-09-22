@@ -1,5 +1,4 @@
 {
-  "outputStyle": "exode-dev",
   "skillListingBudgetFraction": 0.025,
   "permissions": {
     "allow": [
@@ -26,5 +25,17 @@
       "Bash(git filter-branch:*)",
       "Bash(npm publish:*)"
     ]
-  }
+  },
+  "enabledPlugins": {
+    "deadweight@deadweight": true
+  },
+  "extraKnownMarketplaces": {
+    "deadweight": {
+      "source": {
+        "source": "github",
+        "repo": "e-xode/deadweight"
+      }
+    }
+  },
+  "outputStyle": "exode-dev"
 }

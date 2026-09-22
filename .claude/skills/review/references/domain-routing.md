@@ -28,4 +28,4 @@ Every finding on a file matching a rule's `paths:` glob must cite that rule: `ap
 - A docs change describing server behavior is `docs` plus `server` when it changes operational claims.
 - A change under `.github/**` is `config`; note branch/CI behavior changes explicitly.
 - Any diff touching `.claude/**` or `CLAUDE.md` additionally requires the config audit
-  (`python3 .claude/skills/claude-anthropic/scripts/audit.py`).
+  (`deadweight --fresh`).

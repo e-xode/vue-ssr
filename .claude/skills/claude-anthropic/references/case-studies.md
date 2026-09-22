@@ -46,6 +46,10 @@ Decisions that shaped this project's `.claude/` configuration, with the reasonin
 
 ## CS-6 — Native hooks: dormant, then removed (2026-07-26)
 
+> **Amended 2026-09-20.** The ban this case study established is lifted for observation hooks: a `SessionStart` hook that measures the repository's configuration and reports it now runs here, as in 15 fleet repositories. What the case study got right and what still stands is the cost argument — a hook that lengthens the work loop, a test suite on `Stop` or `PostToolUse`, stays refused. The finding below is kept as written; it is the record of the decision this amendment replaces.
+
+**Moved here from the hooks core rule on 2026-09-20**, verbatim: _"The former `.claude/hooks/` wiring and its `settings._json` kill switch were removed on 2026-07-26; validation runs solely through the `validation` agent, delegated by the orchestrator per the Task completion protocol."_ A rule carries the current state; its history lives here.
+
 **Context.** The project shipped two validation wirings: native `Stop`/`PreToolUse` hooks (ten shell scripts under `.claude/hooks/`, wired through `.claude/settings._json`) AND the `CLAUDE.md` protocol making the orchestrator delegate to the `hooks` agent. The native path was kept **dormant** behind the `._json` kill switch because a known GitHub Copilot bug made shell-hook execution unreliable — silent failures, out-of-order runs, hung sessions. The scripts were kept maintained and cross-platform for a re-enable that never came.
 
 **Decision.** Remove the native path outright: the ten scripts, the `README.md` describing them, `settings._json`, and `references/hooks-reference.md`. Rename the skill `vue-ssr-hooks` → `vue-ssr-validation`, scoped to the `npm run validate` battery. Scrub every functional reference from `CLAUDE.md`, the skills and the `claude-config` rule. Delete the stale `references/validation-battery.md`, which still described a `format → lint → test` stop-at-first-failure pipeline that `scripts/validate.mjs` had not implemented for months.
@@ -102,5 +106,5 @@ reader benefit. The cap is a project ratchet (CS-7), not a harness limit, and th
 recording why, not by treating 10,240 as immutable. Still well inside Anthropic's own guidance
 (target under 200 lines; this file is under 130).
 
-**Outcome.** `scripts/claude-anthropic/scripts/audit.py`'s `CLAUDE_MD_MAX_BYTES` and
+**Outcome.** `deadweight`'s `CLAUDE_MD_MAX_BYTES` and
 `claude-md-anatomy.md`'s stated target both moved to 10.5 KB. Future growth still needs a reason.
