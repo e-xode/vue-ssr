@@ -1,15 +1,16 @@
 {
-  "date": "2026-09-22",
+  "date": "2026-09-23",
   "layout": "project",
-  "audit_sha": "8b815d4a",
+  "audit_sha": "add1ed48",
   "errors": 0,
-  "warnings": 20,
+  "warnings": 16,
   "error_ids": [],
   "warning_ids": [
     "21-skill-md-compaction",
     "26-evals-anti-trigger",
     "27-twin-division-row",
     "27-twin-division-text",
-    "33-description-overlap"
+    "33-description-overlap",
+    "42-permissions-rule"
   ]
 }
