@@ -1,16 +1,17 @@
 {
-  "date": "2026-09-24",
+  "date": "2026-09-28",
   "layout": "project",
-  "audit_sha": "0eb02d5d",
-  "errors": 0,
-  "warnings": 16,
-  "error_ids": [],
+  "audit_sha": "1e9ac048",
+  "errors": 1,
+  "warnings": 11,
+  "error_ids": [
+    "50-security-broad-allow"
+  ],
   "warning_ids": [
     "21-skill-md-compaction",
     "26-evals-anti-trigger",
-    "27-twin-division-row",
-    "27-twin-division-text",
     "33-description-overlap",
-    "42-permissions-rule"
+    "42-permissions-rule",
+    "50-security-broad-allow"
   ]
 }
