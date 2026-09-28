@@ -27,10 +27,10 @@
     ]
   },
   "enabledPlugins": {
-    "deadweight@deadweight": true
+    "deadweight@e-xode": true
   },
   "extraKnownMarketplaces": {
-    "deadweight": {
+    "e-xode": {
       "source": {
         "source": "github",
         "repo": "e-xode/deadweight"
