@@ -1,12 +1,10 @@
 {
-  "date": "2026-09-28",
+  "date": "2026-09-30",
   "layout": "project",
-  "audit_sha": "1e9ac048",
-  "errors": 1,
+  "audit_sha": "e4679c65",
+  "errors": 0,
   "warnings": 11,
-  "error_ids": [
-    "50-security-broad-allow"
-  ],
+  "error_ids": [],
   "warning_ids": [
     "21-skill-md-compaction",
     "26-evals-anti-trigger",
