@@ -1,6 +1,6 @@
 ---
 name: vue3-components
-description: "Vue 3 component design and communication for the Vue SSR Starter Kit: props and one-way data flow, emits/events, component v-model via defineModel, slots (default, named, scoped), provide/inject, fallthrough attributes, dynamic components and async components. JavaScript only, <script setup>, SSR-safe. Trigger on: designing component props/events, parent-child communication, slot patterns, provide/inject, dynamic or async components, building reusable custom components. Don't use for: ref/computed/watch/lifecycle reactivity (→ vue3-composition), Vuetify component API/props (→ vuetify-overview), template directives/v-for/native v-model (→ vue3-templates), SCSS styling (→ design-scss), app architecture/routing (→ vue-ssr-architecture)."
+description: "Vue 3 component design and communication for the Vue SSR Starter Kit: props and one-way data flow, emits/events, component v-model via defineModel, slots (default, named, scoped), provide/inject, fallthrough attributes, dynamic components and async components. JavaScript only, script setup, SSR-safe. Trigger on: designing component props/events, parent-child communication, slot patterns, provide/inject, dynamic or async components, building reusable custom components. Don't use for: ref/computed/watch/lifecycle reactivity (→ vue3-composition), Vuetify component API/props (→ vuetify-overview), template directives/v-for/native v-model (→ vue3-templates), SCSS styling (→ design-scss), app architecture/routing (→ vue-ssr-architecture)."
 ---
 
 # Vue 3 Components
@@ -114,9 +114,9 @@ In `<script>`, read fallthrough attrs with `useAttrs()`. Components with multipl
 | Concern                                                | Owner                        |
 | ------------------------------------------------------ | ---------------------------- |
 | `defineProps`/`defineEmits`/`defineModel` macro syntax | vue3-composition             |
-| Prop/slot/inject design & communication patterns       | vue3-components (this skill) |
+| Component `v-model` (`defineModel`), prop/slot/inject design & communication | vue3-components (this skill) |
 | Vuetify component props/API                            | vuetify-overview             |
-| Template directives, native-element `v-model`          | vue3-templates               |
+| Native HTML `v-model` + modifiers, directives | vue3-templates               |
 
 ## Common pitfalls
 

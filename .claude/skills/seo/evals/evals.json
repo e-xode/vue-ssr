@@ -34,6 +34,17 @@
           "text": "Points to server.js's generateSitemap and the publicPaths array as the place to add the new path, notes robots.txt/sitemap.xml are dynamically generated (never static files under public/), and correctly delegates the actual server.js edit to the server agent rather than doing it itself"
         }
       ]
+    },
+    {
+      "id": 4,
+      "name": "negative-linkedin-post",
+      "kind": "content",
+      "prompt": "Write a LinkedIn post announcing the new SEO features of the kit",
+      "assertions": [
+        {
+          "text": "Does NOT trigger the seo skill; off-site LinkedIn copy defers to content-strategy and marketing-content, since seo covers on-site meta, structured data, sitemap and hreflang only"
+        }
+      ]
     }
   ]
 }

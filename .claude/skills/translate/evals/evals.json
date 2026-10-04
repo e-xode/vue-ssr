@@ -67,6 +67,17 @@
           "text": "Adds contact.deleteConfirm.message (or similar) with {name} interpolation to both en.json and fr.json, ensures the {name} parameter appears in both translations, places key alphabetically"
         }
       ]
+    },
+    {
+      "id": 7,
+      "name": "negative-component-styling",
+      "kind": "content",
+      "prompt": "Make the login page submit button full-width on mobile and change its color to the accent token",
+      "assertions": [
+        {
+          "text": "Does NOT trigger the translate skill; this is component styling with no locale key change, so it defers to design-scss"
+        }
+      ]
     }
   ]
 }

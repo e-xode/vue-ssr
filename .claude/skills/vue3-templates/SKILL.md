@@ -1,6 +1,6 @@
 ---
 name: vue3-templates
-description: "Vue 3 template syntax for the Vue SSR Starter Kit: text interpolation, directives (v-bind, v-on, v-if/v-else/v-show, v-for with mandatory key), class and style bindings, event handling with modifiers, native-element v-model, and rendering best practices (v-if vs v-show, never v-if together with v-for). JavaScript only, <script setup>. Trigger on: writing template markup, directives, list/conditional rendering, event handling and modifiers, class/style bindings, v-model on native HTML inputs. Don't use for: component props/slots/emits/component v-model (→ vue3-components), Vuetify form components and validation (→ vuetify-forms), choosing color/spacing tokens (→ design-scss), reactivity primitives (→ vue3-composition)."
+description: "Vue 3 template syntax for the Vue SSR Starter Kit: text interpolation, directives (v-bind, v-on, v-if/v-else/v-show, v-for with mandatory key), class and style bindings, event handling with modifiers, native-element v-model, and rendering best practices (v-if vs v-show, never v-if together with v-for). JavaScript only, script setup. Trigger on: writing template markup, directives, list/conditional rendering, event handling and modifiers, class/style bindings, v-model on native HTML inputs. Don't use for: component props/slots/emits/component v-model (→ vue3-components), Vuetify form components and validation (→ vuetify-forms), choosing color/spacing tokens (→ design-scss), reactivity primitives (→ vue3-composition)."
 ---
 
 # Vue 3 Template Syntax
@@ -131,7 +131,7 @@ Templates render to a string on the server, then hydrate on the client. Binding 
 | ------------------------------------------------ | --------------------------- |
 | Native HTML `v-model` + modifiers, directives    | vue3-templates (this skill) |
 | Vuetify form components + validation rules       | vuetify-forms               |
-| Component `v-model` (`defineModel`), props/slots | vue3-components             |
+| Component `v-model` (`defineModel`), prop/slot/inject design & communication | vue3-components             |
 | Color/spacing/token choices for class/style      | design-scss                 |
 
 ## References

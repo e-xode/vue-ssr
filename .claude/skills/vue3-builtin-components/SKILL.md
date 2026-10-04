@@ -1,6 +1,6 @@
 ---
 name: vue3-builtin-components
-description: "Vue 3 built-in components for the Vue SSR Starter Kit: Teleport, Suspense, KeepAlive, Transition and TransitionGroup, with their SSR caveats and the key requirement on lists. JavaScript only, <script setup>, SSR-safe. Trigger on: Teleport, Suspense, KeepAlive, Transition or TransitionGroup usage, custom overlays/modals at Vue level, async-component loading states, animating element or list enter/leave. Don't use for: Vuetify dialogs/overlays and their built-in transitions (→ vuetify-components), Vuetify menus (→ vuetify-layout), SCSS animations and prefers-reduced-motion (→ design-scss), reactivity (→ vue3-composition), SSR lifecycle/architecture (→ vue-ssr-architecture)."
+description: "Vue 3 built-in components for the Vue SSR Starter Kit: Teleport, Suspense, KeepAlive, Transition and TransitionGroup, with their SSR caveats and the key requirement on lists. JavaScript only, script setup, SSR-safe. Trigger on: Teleport, Suspense, KeepAlive, Transition or TransitionGroup usage, custom overlays/modals at Vue level, async-component loading states, animating element or list enter/leave. Don't use for: Vuetify dialogs/overlays and their built-in transitions (→ vuetify-components), Vuetify menus (→ vuetify-layout), SCSS animations and prefers-reduced-motion (→ design-scss), reactivity (→ vue3-composition), SSR lifecycle/architecture (→ vue-ssr-architecture)."
 ---
 
 # Vue 3 Built-in Components

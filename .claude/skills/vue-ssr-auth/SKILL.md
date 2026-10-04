@@ -11,7 +11,7 @@ description: "Authentication and security reference for the Vue SSR Starter Kit:
 
 | Concern                                                                | Owner            |
 | ------------------------------------------------------------------------ | ------------------ |
-| Rate limiter definitions, values, and which middleware mounts them       | `vue-ssr-server`   |
+| Express route mechanics, middleware guards, rate limiters, MongoDB queries/indexes | `vue-ssr-server`   |
 | Which endpoints need auth protection, and the auth-domain logic itself   | `vue-ssr-auth`     |
 | File structure, SSR lifecycle, locale routing, new view/feature scaffolding | vue-ssr-architecture |
 | Build/bundle/production deployment config                                   | vue-ssr-deployment   |

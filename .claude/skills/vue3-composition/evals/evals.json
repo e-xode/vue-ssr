@@ -167,6 +167,17 @@
           "text": "Shows ref() for the source items array"
         }
       ]
+    },
+    {
+      "id": 9,
+      "name": "negative-docker-deployment",
+      "kind": "content",
+      "prompt": "How do I switch docker-compose from the local MongoDB to the remote database for production?",
+      "assertions": [
+        {
+          "text": "Does NOT trigger vue3-composition; Docker and docker-compose configuration defers to the vue-ssr-deployment skill"
+        }
+      ]
     }
   ]
 }

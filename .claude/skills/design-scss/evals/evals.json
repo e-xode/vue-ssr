@@ -150,19 +150,27 @@
       "prompt": "I need to show a loading placeholder while my API data loads. The placeholder should look like a card with a title and two lines of text.",
       "assertions": [
         {
-          "text": "Uses the .skeleton utility class"
+          "text": "Does not rely on the .skeleton utility class, stating it is inert because _utilities.scss is neither forwarded by _inject.scss nor imported anywhere"
         },
         {
-          "text": "Shows multiple skeleton divs with varying widths for realistic appearance"
+          "text": "Builds the placeholder in the component's own SCSS file from live tokens and mixins, with several blocks of varying widths for a title and two text lines"
         },
         {
-          "text": "Mentions the shimmer animation is automatic"
-        },
-        {
-          "text": "Uses appropriate height/width styling for the placeholders"
+          "text": "Guards any shimmer animation with @media (prefers-reduced-motion: reduce), since the project has no global handler"
         },
         {
           "text": "Does not suggest installing a third-party skeleton library"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "anti-trigger-ux-methodology",
+      "kind": "content",
+      "prompt": "Our signup page feels cluttered. How should I rethink its visual hierarchy and check it meets WCAG 2.1 AA before we touch any styles?",
+      "assertions": [
+        {
+          "text": "Defers to the design-ux skill: this is UX methodology (visual hierarchy, accessibility audit), not SCSS token or mixin mechanics, so design-scss should not handle it"
         }
       ]
     }

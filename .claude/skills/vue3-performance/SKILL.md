@@ -1,6 +1,6 @@
 ---
 name: vue3-performance
-description: "Vue 3 performance optimization for the Vue SSR Starter Kit: reactivity perf (shallowRef, markRaw, computed caching), rendering perf (v-memo, v-once, stable keys), async/lazy components and code splitting, large lists (virtual scrolling, pagination), and SSR perf. JavaScript only, <script setup>, SSR-safe. Trigger on: optimizing render/update performance, slow large lists or tables, shallowRef/markRaw decisions, v-memo/v-once, lazy-loading components, hydration-mismatch or SSR performance issues. Don't use for: build/bundle/production deployment config (→ vue-ssr-deployment), reactivity basics (→ vue3-composition), Vuetify component API (→ vuetify-components), app architecture (→ vue-ssr-architecture)."
+description: "Vue 3 performance optimization for the Vue SSR Starter Kit: reactivity perf (shallowRef, markRaw, computed caching), rendering perf (v-memo, v-once, stable keys), async/lazy components and code splitting, large lists (virtual scrolling, pagination), and SSR perf. JavaScript only, script setup, SSR-safe. Trigger on: optimizing render/update performance, slow large lists or tables, shallowRef/markRaw decisions, v-memo/v-once, lazy-loading components, hydration-mismatch or SSR performance issues. Don't use for: build/bundle/production deployment config (→ vue-ssr-deployment), reactivity basics (→ vue3-composition), Vuetify component API (→ vuetify-components), app architecture (→ vue-ssr-architecture)."
 ---
 
 # Vue 3 Performance

@@ -157,6 +157,20 @@
           "text": "May recommend tonal variant for badges (Vuetify's default)"
         }
       ]
+    },
+    {
+      "id": 7,
+      "name": "anti-trigger-scss-token-defers-to-design-scss",
+      "kind": "content",
+      "prompt": "Which SCSS variable from variables.scss should I use for the card padding, and which mixin gives me the hover lift?",
+      "assertions": [
+        {
+          "text": "design-ux should not trigger: the request is SCSS token and mixin implementation, so it defers to design-scss"
+        },
+        {
+          "text": "Does not answer with UX methodology (hierarchy, accessibility, responsive principles) in place of naming the concrete token and mixin"
+        }
+      ]
     }
   ]
 }
