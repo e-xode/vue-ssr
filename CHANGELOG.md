@@ -1,5 +1,17 @@
 # Changelog
 
+## 5.4.1
+
+### Security
+
+- **Dependency advisories cleared by a lockfile refresh** - `proxy-addr` (critical, IP spoofing via
+  IPv4-mapped IPv6 trust subnet), `compression`, `brace-expansion`, `source-map-js` and `vue` /
+  `@vue/server-renderer` (high), `dompurify` (3.4.16) and `ip-address` (10.7.3). No runtime range
+  changed in `package.json`.
+- `vitest` and `@vitest/ui` raised to 4.1.11 (dev tooling only, removed from the image by
+  `npm prune --production`).
+- Still open: `nodemailer` needs a major bump (9.x to 10.x), left for a separate decision.
+
 ## 5.4.0
 
 ### Fixed
