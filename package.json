@@ -1,6 +1,6 @@
 {
   "name": "@e-xode/vue-ssr",
-  "version": "5.4.0",
+  "version": "5.4.1",
   "description": "Vue 3 SSR Starter Kit with Authentication",
   "repository": {
     "type": "git",
@@ -57,7 +57,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@testing-library/vue": "^8.1.0",
-    "@vitest/ui": "^4.1.8",
+    "@vitest/ui": "^4.1.11",
     "@vue/test-utils": "^2.4.10",
     "eslint": "^10.4.0",
     "eslint-config-prettier": "^10.1.8",
@@ -67,7 +67,7 @@
     "playwright": "^1.60.0",
     "prettier": "^3.8.3",
     "sass-embedded": "^1.100.0",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.11"
   },
   "overrides": {
     "bn.js": "^5.2.3",
