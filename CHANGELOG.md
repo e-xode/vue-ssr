@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.4.2
+
+### Package Updates
+
+- **`nodemailer` raised from 9.x to 10.0.15.** Clears the five remaining Dependabot advisories
+  (2 high, 3 medium). The only breaking change in 10.0.0 is the Node.js 20+ requirement, already
+  met (the kit requires Node 24). The mail transport options and `sendMail` usage are unchanged.
+
 ## 5.4.1
 
 ### Security
