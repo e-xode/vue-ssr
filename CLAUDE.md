@@ -84,7 +84,7 @@ These rules override any contrary suggestion from a skill or tool documentation.
 4. **Reuse before writing** — Search `src/shared/`, `src/composables/`, existing modules before adding utility code. Key shared: `apiFetch`, `parseObjectId`, `parsePagination`, `findUserSafe`, `generateSecurityCode`, `escapeHtml`.
 5. **Every incoming request is tracked** — never leave a request untracked, never ask before deciding to parallelize. Mechanics: `governance` → `references/orchestration-procedures.md`.
 
-Model routing and context delegation: user scope (~/.claude/CLAUDE.md).
+Model routing and context delegation: `.claude/rules/model-routing.md`.
 
 ---
 

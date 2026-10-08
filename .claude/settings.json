@@ -1,4 +1,5 @@
 {
+  "model": "sonnet",
   "skillListingBudgetFraction": 0.025,
   "permissions": {
     "allow": [
