@@ -49,7 +49,7 @@ four surfaces:
   that decides what to produce and why; read it to align a piece with the current strategy.
 - **seo** — when content touches meta, hreflang, sitemap, or structured data.
 - **translate** — when copy must become i18n keys.
-- **brand-art-direction** — when content lands on a page, so copy respects the clean-minimal MD3
+- **DESIGN.md** (repo root) — when content lands on a page, so copy respects the clean-minimal MD3
   identity; flag visual follow-ups to the design agent.
 
 ## Workflow
@@ -83,7 +83,7 @@ Load `content-strategy/references/content-seo-bridge.md` (daily playbook) + the 
 Diagnose: inventory/backlog gaps, FR/EN parity, README/storefront freshness, and under-served
 keywords in the `meta.*` i18n keys + npm `keywords`. Produce a prioritized list of today's actions
 (quick editorial wins first, then SEO actions to delegate). Offer to execute the first item. When a
-change touches a page, surface a clean-minimal identity follow-up (per `brand-art-direction`) for the
+change touches a page, surface a clean-minimal identity follow-up (per `DESIGN.md`) for the
 design agent. This advisory is execution-level (what to write/ship next); funnel, channel mix, and
 campaign strategy are the `marketing` agent's remit — hand off strategic questions there.
 

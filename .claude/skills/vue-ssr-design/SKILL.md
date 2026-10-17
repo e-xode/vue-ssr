@@ -1,6 +1,6 @@
 ---
 name: vue-ssr-design
-description: "Design delegation and coordination reference for the Vue SSR Starter Kit: when to delegate to the design agent vs handle styling inline, the division of concerns between the design agent and the design/vuetify skills, the design workflow for new features, and the starter-kit design principles. Trigger on: deciding whether a task needs the design agent, planning UI work that mixes logic and design, new feature design direction, design-system extension decisions, visual debt triage. Don't use for: actual SCSS implementation (→ design-scss), UX methodology (→ design-ux), Vuetify component API (→ vuetify-components), Vue logic (→ vue3-composition), app architecture (→ vue-ssr-architecture)."
+description: "Design delegation and coordination reference for the Vue SSR Starter Kit: when to delegate to the design agent vs handle styling inline, the division of concerns between the design agent and the design/vuetify skills, the design workflow for new features, and the starter-kit design principles. Trigger on: deciding whether a task needs the design agent, planning UI work that mixes logic and design, new feature design direction, design-system extension decisions, visual debt triage. Don't use for: design direction, critique or polish (→ impeccable), actual SCSS implementation (→ design-scss), Vuetify component API (→ vuetify-components), Vue logic (→ vue3-composition), app architecture (→ vue-ssr-architecture)."
 ---
 
 # Vue SSR Design (Coordination)
@@ -9,11 +9,14 @@ description: "Design delegation and coordination reference for the Vue SSR Start
 
 ## Division of responsibilities
 
-| Concern | Skill |
+| Concern | Owner |
 | --- | --- |
-| SCSS animations, transition tokens, prefers-reduced-motion | design-scss |
-| UX methodology and decisions (hierarchy, a11y, responsive, micro-interactions) — no SCSS, no brand decisions | design-ux |
-| deciding when to delegate design work | vue-ssr-design |
+| Design direction, critique, polish, audit, accessibility and responsive review, live iteration | `impeccable` skill, run in the main conversation; reads `PRODUCT.md` and `DESIGN.md` |
+| SCSS tokens, mixins, component-scoped files, reduced-motion guards | design-scss |
+| Screenshot checklist graded by `visual-qa` | brand-art-direction |
+| Deciding when to delegate design work | vue-ssr-design |
+
+`impeccable` needs `Bash` (its launcher), the browser and its own review agents, so it runs in the orchestrator, never inside the `design` agent. The `design` agent stays the executor of token-bound SCSS and Vuetify edits once the direction is decided.
 
 ## When to delegate to the `design` agent
 
@@ -29,7 +32,7 @@ Delegate to the `design` agent when a task is **primarily** about visual output:
 | Complex animations or transitions                | A one-line `@include transition(...)` in the component's own SCSS file |
 | Visual polish pass (spacing, alignment, shadows) | —                                               |
 
-**Rule of thumb:** If you need to read `design-ux` or `design-scss` skills to do the work, delegate to the `design` agent instead.
+**Rule of thumb:** Direction and review of a visual change start with `impeccable` in the main conversation; if the remaining work is token-bound SCSS or Vuetify edits, delegate it to the `design` agent.
 
 ## Division of concerns
 
@@ -49,27 +52,28 @@ Delegate to the `design` agent when a task is **primarily** about visual output:
 │  • SCSS files (create/edit)                                │
 │  • Vuetify component selection and configuration           │
 │  • Template markup for visual structure                    │
-│  • Loads skills: design-ux, design-scss, vuetify-* family  │
+│  • Loads skills: design-scss, vuetify-* family             │
 └───────────────────────────────────────────────────────────┘
 ```
 
 ### Skill vs Agent distinction
 
-| Layer                      | Role                                                                               |
-| -------------------------- | ---------------------------------------------------------------------------------- |
-| `brand-art-direction` skill | **Opinionated brand-identity charter** — loads first; the screenshot-verifiable rubric `visual-qa` grades against |
-| `design-ux` skill          | **Methodology** — principles, hierarchy, spacing rules, accessibility requirements |
-| `design-scss` skill        | **Implementation reference** — tokens, mixins, component-scoped file patterns (animation/utility classes are inert — see `design-scss`) |
-| `vuetify-*` skill family   | **Component API** — which component for which need, props, patterns; enter via `vuetify-overview`, then vuetify-layout/forms/data/components/theming/icons |
-| `design` agent             | **Executor** — applies skills to produce actual code changes                       |
+| Layer                       | Role                                                                                 |
+| --------------------------- | ------------------------------------------------------------------------------------ |
+| `impeccable` skill          | **Design method and review** — shape, craft, critique, audit, polish; reads `PRODUCT.md` and `DESIGN.md` |
+| `DESIGN.md` / `PRODUCT.md`  | **The charter** — visual identity and product truth, at the repo root                |
+| `brand-art-direction` skill | **Screenshot rubric** — the checklist `visual-qa` grades rendered PNGs against       |
+| `design-scss` skill         | **Implementation reference** — tokens, mixins, component-scoped file patterns        |
+| `vuetify-*` skill family    | **Component API** — enter via `vuetify-overview`, then layout/forms/data/components/theming/icons |
+| `design` agent              | **Executor** — applies the skills to produce actual code changes                     |
 
 Skills are **knowledge**. The agent is the **worker** that uses that knowledge.
 
 ## Design workflow for new features
 
-1. **Design direction** (orchestrator) — define the goal, user story, expected outcome
+1. **Design direction** (orchestrator) — define the goal, user story, expected outcome; for a new or reworked surface, run `/impeccable shape` or `/impeccable craft` here
 2. **Delegate to `design` agent** — provide context: what view/component, what the user wants, existing patterns to follow
-3. **Design agent produces** — SCSS file + template updates, following design-ux/design-scss and the vuetify-* skill family (enter via vuetify-overview)
+3. **Design agent produces** — SCSS file + template updates, following `DESIGN.md`, design-scss and the vuetify-* skill family (enter via vuetify-overview)
 4. **Parallel: `vue` agent** — handles `<script setup>` logic, composables, store integration
 5. **Parallel: `translate` agent** — adds i18n keys for any new user-visible text
 6. **Integration** (orchestrator) — merge outputs if needed
@@ -116,7 +120,7 @@ When the design agent reports follow-ups or debt, categorize:
 ## See also
 
 - `design` agent — the design agent's full contract and principles (`.claude/agents/design.md`).
-➜ See skill: brand-art-direction — the opinionated brand-identity charter; loads before design-ux/design-scss for any visual work on rendered views.
-➜ See skill: design-ux — UX methodology and decision frameworks.
+➜ See skill: impeccable — design method, critique and polish; loads `PRODUCT.md` and `DESIGN.md`.
+➜ See skill: brand-art-direction — the screenshot checklist `visual-qa` grades against.
 ➜ See skill: design-scss — SCSS token and mixin reference.
 ➜ See skill: vuetify-overview — entry point for the vuetify-* skill family (vuetify-overview, vuetify-layout, vuetify-forms, vuetify-data, vuetify-components, vuetify-theming, vuetify-icons) covering Vuetify 4 component patterns.

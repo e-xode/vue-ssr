@@ -178,7 +178,7 @@ Do not use breakpoint variables directly in `@media` queries. Use the `respond-t
 
 | Token                | Value  | Use case                                    |
 | ---------------------- | ------ | ---------------------------------------------- |
-| `$border-width-hairline` | 1px    | The hairline border that separates surfaces (System 1 of `brand-art-direction`) |
+| `$border-width-hairline` | 1px    | The hairline border that separates surfaces (The Two Surfaces Rule in `DESIGN.md`) |
 | `$header-height`         | —      | Fixed app-bar height, used to offset sticky/absolute content |
 | `$container-sm`..`$container-xl` | —      | Max-width caps for `v-container`-equivalent layout wrappers |
 | `$section-py-sm`         | 48px   | Compact section vertical padding               |

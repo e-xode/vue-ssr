@@ -54,9 +54,9 @@ When you fork/clone the Vue SSR Starter Kit for a new project, the `.claude/` co
 | `vue-ssr-validation` skill + `validation` agent | Agent fleet for your domain                  | The `vuetify-*` family (7 skills) (if not using Vuetify)        |
 | `review` skill + agent                         | `translate` skill (your locales)             | `design-scss` (if different styling approach)                  |
 | Audit script (`deadweight`) | `vue-ssr-deployment` (your CI/CD)            | `vue-ssr-design` (if different UI framework)                   |
-| `vue-ssr-design` skill (coordination patterns) | `design` agent (adapt for your UI framework) | `design-ux` (if using a different design system)                |
-| —                                               | `brand-art-direction` (your brand's charter) | —                                                                |
-| —                                               | —                                             | `frontend-design` (vendored Anthropic skill)                    |
+| `vue-ssr-design` skill (coordination patterns) | `design` agent (adapt for your UI framework) | —                                                               |
+| —                                               | `DESIGN.md` + `PRODUCT.md` (your brand's charter) | —                                                          |
+| —                                               | —                                             | `impeccable` skill + `impeccable-*` agents (if not using it)    |
 
 ## Adapting the design agent post-fork
 

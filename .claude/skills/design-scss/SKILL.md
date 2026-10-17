@@ -1,22 +1,24 @@
 ---
 name: design-scss
-description: "SCSS design-system reference for the Vue SSR Starter Kit: design tokens in variables.scss, the 11 mixins, and component-scoped SCSS conventions. Trigger on ANY styling work: writing SCSS, choosing tokens, animations, component .scss files, Vuetify style overrides, layout utilities, or design-system questions. This is the token/mixin reference — the design agent loads it to produce SCSS. Don't use for: brand identity decisions and the screenshot checklist (→ brand-art-direction, load it first), app architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), Docker/CI (→ vue-ssr-deployment), validation (→ vue-ssr-validation), Vuetify component API (→ vuetify-components), design method (→ design-ux), design delegation routing (→ vue-ssr-design)."
+description: "SCSS design-system reference for the Vue SSR Starter Kit: design tokens in variables.scss, the 11 mixins, and component-scoped SCSS conventions. Trigger on ANY styling work: writing SCSS, choosing tokens, animations, component .scss files, Vuetify style overrides, layout utilities, or design-system questions. This is the token/mixin reference — the design agent loads it to produce SCSS. Don't use for: visual design decisions, palette, typography or layout direction (→ impeccable, with DESIGN.md), the screenshot checklist (→ brand-art-direction), app architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), Docker/CI (→ vue-ssr-deployment), validation (→ vue-ssr-validation), Vuetify component API (→ vuetify-components), design delegation routing (→ vue-ssr-design)."
 ---
 
 # Design SCSS
 
-> Owns the SCSS design system: tokens, mixins, animations, utilities, component-scoped patterns, and responsive strategy.
+> Owns the SCSS design system: tokens, mixins, motion guards, component-scoped patterns, and responsive strategy.
 
 ## Division of responsibilities
 
-`brand-art-direction` owns the opinionated brand-identity charter and loads **before** this skill for any visual work on rendered views. This skill owns the token/mixin mechanics the charter is built on.
+Design decisions (direction, palette, typography, layout, polish, audits) go through the `impeccable` skill, which loads `PRODUCT.md` and `DESIGN.md`. This skill owns the token and mixin mechanics those decisions are written with.
 
-| Concern | Skill |
+| Concern | Owner |
 | --- | --- |
-| Visual identity / charter (palette roles, canonical hovers, signature devices) — load FIRST on public-page visual work | brand-art-direction |
-| SCSS animations, transition tokens, prefers-reduced-motion | design-scss |
-| UX methodology and decisions (hierarchy, a11y, responsive, micro-interactions) — no SCSS, no brand decisions | design-ux |
-| deciding when to delegate design work | vue-ssr-design |
+| Visual direction, critique, polish, accessibility and responsive review | impeccable (reads `DESIGN.md`) |
+| SCSS tokens, mixins, component-scoped files, transition tokens, reduced-motion guards | design-scss |
+| Screenshot checklist graded by `visual-qa` | brand-art-direction |
+| Deciding when to delegate design work | vue-ssr-design |
+
+Project constraints that hold for every motion: animate `transform` and `opacity` only, and add the `prefers-reduced-motion: reduce` guard yourself, because no global handler exists. Touch targets are at least 44x44px on mobile.
 
 ## Architecture overview
 
@@ -25,14 +27,12 @@ src/styles/
 ├── variables.scss        # Design tokens (spacing, radius, shadow, transition, breakpoint)
 ├── _typography.scss      # Base typography (injected)
 ├── mixins.scss           # 11 reusable mixins
-├── _inject.scss          # Barrel: @forward 'variables'; @forward 'typography'; @forward 'mixins'
-├── _animations.scss      # Keyframes + classes + stagger delays — NOT in the chain (inert; see note)
-└── _utilities.scss       # Glass, badges, gradients, hover, skeleton, sr-only — NOT in the chain (inert; see note)
+└── _inject.scss          # Barrel: @forward 'variables'; @forward 'typography'; @forward 'mixins'
 ```
 
 **Auto-injection:** `_inject.scss` is injected into every component SCSS via Vite's `css.preprocessorOptions.scss.additionalData` (`@use ".../styles/inject" as *`). It forwards **only** `variables`, `typography`, and `mixins` — these are available everywhere without explicit `@use`.
 
-> **Reachability — `_animations.scss` and `_utilities.scss` are NOT live.** They are neither forwarded by `_inject.scss` nor imported anywhere (no `global.scss`, no `main.js` import). Their classes (`.animate-*`, `.delay-*`, `.glass`, `.text-gradient-*`, `.hover-lift`, `.hover-scale`, `.badge-*`, `.skeleton`, `.sr-only`) therefore emit **no CSS** and cannot be used from templates as shipped. There is also **no global `prefers-reduced-motion` handler**. To use these effects: build them from the live tokens/mixins in a component SCSS (and self-guard motion with `@media (prefers-reduced-motion: reduce)`), or wire the partials in once via a global import in `main.js` if you want them project-wide.
+There are no global animation or utility classes (`.animate-*`, `.delay-*`, `.glass`, `.text-gradient-*`, `.badge-*`, `.skeleton`, `.sr-only`); never reference them. Build the effect from tokens and mixins in the component's own `.scss`.
 
 **Component-scoped files:** Every Vue component that needs styles has a dedicated `.scss` file:
 
@@ -114,13 +114,32 @@ Mobile-first approach using `respond-to()` mixin:
 
 Breakpoint progression: base (mobile) → sm (640) → md (768) → lg (1024) → xl (1280) → 2xl (1536).
 
-## Animations
+## Motion
 
-`_animations.scss` defines keyframes (fadeIn, fadeUp, fadeDown, scaleIn, reveal, slideLeft, slideRight, float, pulse, shimmer, glow, rotate), `.animate-*` classes, `.delay-1`..`.delay-8` stagger, and a `prefers-reduced-motion` block — inert, see the blockquote above. Treat the catalog in [references/animations-reference.md](references/animations-reference.md) as patterns to reproduce in a component SCSS, each with its own `@media (prefers-reduced-motion: reduce)` guard.
+No global `prefers-reduced-motion` handler exists, so every animation guards itself and animates `transform` and `opacity` only. Define keyframes locally in the component SCSS.
 
-## Utility classes
+```scss
+.reveal {
+  opacity: 0;
+  transform: translateY($spacing-sm);
+  animation: reveal $transition-base ease forwards;
 
-`_utilities.scss` defines `.text-gradient-*`, `.hover-lift` / `.hover-scale`, `.glass` / `.glass-dark`, `.badge-*`, `.sr-only`, and `.skeleton` — inert, see the blockquote above. Use the live equivalents instead: the `hover-lift` **mixin** (not the `.hover-lift` class), the `visually-hidden` **mixin** (not the `.sr-only` class), and tokens for everything else. See [references/utilities-reference.md](references/utilities-reference.md) for what the file contains and how to reproduce each helper.
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes reveal {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+```
+
+Use the live mixins, not the dead classes: `hover-lift` for a card hover, `visually-hidden` for screen-reader-only text. A loading placeholder is `v-skeleton-loader` (➜ vuetify-components).
 
 ## Hard rules
 
@@ -137,6 +156,4 @@ Breakpoint progression: base (mobile) → sm (640) → md (768) → lg (1024) �
 | [variables-reference.md](references/variables-reference.md)   | Complete token inventory            |
 | [mixins-layout.md](references/mixins-layout.md)               | Flex, truncate, absolute-center mixins |
 | [mixins-interaction.md](references/mixins-interaction.md)     | Transition, hover-lift, button-reset, visually-hidden, respond-to |
-| [animations-reference.md](references/animations-reference.md) | Keyframes, classes, stagger, a11y — inert |
-| [utilities-reference.md](references/utilities-reference.md)   | Glass, badges, gradients, skeleton — inert |
 | [scss-patterns.md](references/scss-patterns.md)               | File naming, @use/@forward, nesting |

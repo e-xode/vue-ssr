@@ -57,7 +57,7 @@ See "Playbooks" below for the exact procedure per scenario.
 
 - **content-strategy** — to understand how a decision will be executed editorially before you hand off.
 - **seo** — when a strategy decision implies meta, keywords, npm keywords, or structured-data work.
-- **brand-art-direction** — when a campaign lands on a marketing page; flag the visual follow-up.
+- **DESIGN.md** (repo root) — when a campaign lands on a marketing page; flag the visual follow-up.
 
 ## Workflow
 

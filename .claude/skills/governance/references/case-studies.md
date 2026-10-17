@@ -76,7 +76,7 @@ Decisions that shaped this project's `.claude/` configuration, with the reasonin
 
 **Decision.** Vendor Anthropic's official `skill-creator` verbatim from the `claude-plugins-official` marketplace rather than installing the plugin, and re-ground `governance`'s references in the current docs.
 
-**Why vendor instead of install.** A plugin's skills load into the *installer's* always-loaded listing and are namespaced `plugin:skill`; vendoring keeps the skill under this repo's own budget accounting, lets the project layer sit alongside the upstream text, and — because the upstream block is kept byte-identical and the deviations are enumerated — a future re-sync stays a straight replacement. The same reasoning already applied to `frontend-design`.
+**Why vendor instead of install.** A plugin's skills load into the *installer's* always-loaded listing and are namespaced `plugin:skill`; vendoring keeps the skill under this repo's own budget accounting, lets the project layer sit alongside the upstream text, and — because the upstream block is kept byte-identical and the deviations are enumerated — a future re-sync stays a straight replacement.
 
 **The finding that justified the whole exercise.** All ten agents pin an explicit `tools:` allowlist and none includes `Skill`. The docs name that exact configuration as the supported way to *prevent* a subagent from invoking skills. The project's entire premise — `CLAUDE.md` carries hard rules, knowledge lives in skills, agents load them by name — was therefore inert inside the fleet, with no error and no warning. The observable symptom is an agent producing plausible-but-unconventional output while every reviewer assumes the skill was consulted. Recorded as core rule 16.
 
@@ -108,3 +108,13 @@ recording why, not by treating 10,240 as immutable. Still well inside Anthropic'
 
 **Outcome.** `deadweight`'s `CLAUDE_MD_MAX_BYTES` and
 `claude-md-anatomy.md`'s stated target both moved to 10.5 KB. Future growth still needs a reason.
+
+## CS-10 — Impeccable becomes the design skill (2026-10-17)
+
+**Context.** Design guidance was spread over six skills (`brand-art-direction`, `design-ux`, `design-scss`, `vue-ssr-design`, `vuetify-theming`, and the vendored `frontend-design` from CS-8), while the charter lived inside a skill that only the `design` and `visual-qa` agents preloaded.
+
+**Decision.** Install Impeccable at project scope and make it the single entry point for design method, critique and polish. The charter moves out of skills into `DESIGN.md` and `PRODUCT.md` at the repo root, which Impeccable loads itself; `frontend-design` and `design-ux` are removed; `brand-art-direction` shrinks to the screenshot checklist and capture script; the dead `_animations.scss` and `_utilities.scss` partials are deleted, with their documentation in `design-scss`.
+
+**Why.** Impeccable's own README names `frontend-design` as its origin, so keeping both is two competing design authorities. A charter in `DESIGN.md` is read by the tool that does the design work, not only by two agents.
+
+**Constraints kept.** The Impeccable design hook is not installed (`--no-hooks`): `claude-config.md` requires explicit approval for a new native hook, and this decision declines it. Telemetry is off. The 20 MB engine binary is gitignored and re-downloaded by the launcher. The four `impeccable-*` agents are registered in `CLAUDE.md` and `settings.json`; the skill spawns them from the main conversation, so the flat-fleet rule holds. The `design` agent has no `Bash`, so Impeccable runs in the orchestrator, not inside it.
