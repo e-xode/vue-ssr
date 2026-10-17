@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-17T00:00:00.000Z",
+  "title": "Design System: Vue SSR Starter Kit",
+  "extensions": {
+    "colorMeta": {
+      "signal-indigo": {
+        "role": "primary",
+        "displayName": "Signal Indigo",
+        "canonical": "#4f46e5",
+        "tonalRamp": [
+          "#312e81",
+          "#3730a3",
+          "#4338ca",
+          "#4f46e5",
+          "#6366f1",
+          "#818cf8",
+          "#a5b4fc",
+          "#c7d2fe"
+        ]
+      },
+      "paper-mist": {
+        "role": "neutral",
+        "displayName": "Paper Mist",
+        "canonical": "#fafafa",
+        "tonalRamp": [
+          "#171717",
+          "#262626",
+          "#404040",
+          "#525252",
+          "#737373",
+          "#a3a3a3",
+          "#d4d4d4",
+          "#fafafa"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#e5e5e5",
+        "tonalRamp": [
+          "#404040",
+          "#525252",
+          "#737373",
+          "#a3a3a3",
+          "#d4d4d4",
+          "#e5e5e5",
+          "#f0f0f0",
+          "#f5f5f5"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headlines only." },
+      "headline": { "displayName": "Headline", "purpose": "Page and section headings." },
+      "title": { "displayName": "Title", "purpose": "Card titles and sub-sections." },
+      "body": { "displayName": "Body", "purpose": "Running text." },
+      "label": { "displayName": "Label", "purpose": "Buttons, form labels, chips." },
+      "code": { "displayName": "Code", "purpose": "Code snippets and technical labels only." }
+    },
+    "shadows": [
+      {
+        "name": "shadow-sm",
+        "value": "0 1px 2px rgba(0, 0, 0, 0.04)",
+        "purpose": "Subtle separation between sections."
+      },
+      {
+        "name": "shadow-md",
+        "value": "0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04)",
+        "purpose": "Soft section separation."
+      },
+      {
+        "name": "shadow-lg",
+        "value": "0 4px 12px rgba(0, 0, 0, 0.08)",
+        "purpose": "Hover elevation on interactive surfaces."
+      },
+      {
+        "name": "shadow-xl",
+        "value": "0 8px 24px rgba(0, 0, 0, 0.1)",
+        "purpose": "Overlays and dialogs."
+      }
+    ],
+    "motion": [
+      {
+        "name": "transition-fast",
+        "value": "150ms",
+        "purpose": "Buttons, toggles, small controls."
+      },
+      { "name": "transition-base", "value": "300ms", "purpose": "Cards, dialogs, layout shifts." },
+      { "name": "transition-slow", "value": "500ms", "purpose": "Page-level emphasis." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" },
+      { "name": "2xl", "value": "1536px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single primary action of a view.",
+      "html": "<button class=\"ds-btn-primary\">Save changes</button>",
+      "css": ".ds-btn-primary { background: #4f46e5; color: #ffffff; padding: 8px 16px; border: none; border-radius: 12px; font-family: Inter, system-ui, sans-serif; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: background 150ms; } .ds-btn-primary:hover { background: #4338ca; } .ds-btn-primary:active { background: #3730a3; } .ds-btn-primary:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; }"
+    },
+    {
+      "name": "Content Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Flat bordered surface that lifts on hover.",
+      "html": "<div class=\"ds-card\"><h3 class=\"ds-card-title\">Authentication</h3><p class=\"ds-card-text\">Email security codes and sessions.</p></div>",
+      "css": ".ds-card { background: #ffffff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 24px; font-family: Inter, system-ui, sans-serif; transition: transform 300ms, box-shadow 300ms; } .ds-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); } .ds-card-title { margin: 0 0 8px; color: #171717; font-size: 1.25rem; font-weight: 600; } .ds-card-text { margin: 0; color: #525252; font-size: 1rem; line-height: 1.55; } @media (prefers-reduced-motion: reduce) { .ds-card { transition: none; } .ds-card:hover { transform: none; } }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "text-field",
+      "description": "Outlined input with an indigo focus stroke.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Email\" />",
+      "css": ".ds-input { box-sizing: border-box; width: 100%; background: #ffffff; color: #171717; border: 1px solid #d4d4d4; border-radius: 12px; padding: 12px 16px; font-family: Inter, system-ui, sans-serif; font-size: 1rem; transition: border-color 150ms; } .ds-input:hover { border-color: #737373; } .ds-input:focus-visible { outline: none; border-color: #4f46e5; box-shadow: 0 0 0 1px #4f46e5; }"
+    },
+    {
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Neutral label tag.",
+      "html": "<span class=\"ds-chip\">MIT</span>",
+      "css": ".ds-chip { display: inline-block; background: #f5f5f5; color: #404040; border: 1px solid #e5e5e5; border-radius: 12px; padding: 4px 12px; font-family: Inter, system-ui, sans-serif; font-size: 0.875rem; font-weight: 500; }"
+    },
+    {
+      "name": "Tonal Alert",
+      "kind": "custom",
+      "refersTo": "alert",
+      "description": "Status message; feedback colors only.",
+      "html": "<div class=\"ds-alert\">Your changes were saved.</div>",
+      "css": ".ds-alert { background: rgba(22, 163, 74, 0.12); color: #14532d; border-radius: 12px; padding: 16px; font-family: Inter, system-ui, sans-serif; font-size: 1rem; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Quiet Foundation",
+    "overview": "A clean, production-grade Material Design 3 system built on Vuetify 4: flat bordered surfaces, one indigo accent, generous whitespace on an 8px rhythm, and elevation that appears only on interaction. The win condition is calm consistency, not visual spectacle; when in doubt, do less.",
+    "keyCharacteristics": [
+      "Two quiet surfaces only: white and light gray.",
+      "One brand color, indigo, used as a function.",
+      "Borders over shadows: cards are flat at rest.",
+      "Whitespace is the device.",
+      "Motion is transform and opacity only, self-guarded for reduced motion."
+    ],
+    "rules": [
+      {
+        "name": "The One Accent Rule",
+        "body": "Indigo is rare on purpose. One primary call to action per view, plus links, focus and active states.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Surfaces Rule",
+        "body": "A page is built from white and light gray. No third tinted surface, no gradient surface, no saturated section band.",
+        "section": "colors"
+      },
+      {
+        "name": "The Feedback Stays Feedback Rule",
+        "body": "Green, amber and red appear only on status.",
+        "section": "colors"
+      },
+      {
+        "name": "The Borders Over Shadows Rule",
+        "body": "At rest, separation is a border. A shadow at rest is a defect; a shadow on hover is the intended signal.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Decorations Stay Inside Their Shape Rule",
+        "body": "Accent bars on rounded cards use overflow hidden and a pseudo-element, never a raw one-sided border.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use tokens from src/styles/variables.scss and semantic Vuetify names.",
+      "Do keep cards flat and bordered at rest, and let elevation appear on hover.",
+      "Do apply the same hover to every peer in a grid.",
+      "Do guard every animation with prefers-reduced-motion."
+    ],
+    "donts": [
+      "Don't add a second accent color, a gradient surface, a gradient text, or a glow.",
+      "Don't use feedback colors as decoration.",
+      "Don't hardcode colors, spacings or font sizes."
+    ]
+  }
+}

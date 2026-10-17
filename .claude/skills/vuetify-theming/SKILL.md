@@ -18,7 +18,7 @@ description: "Vuetify 4 theming for the Vue SSR Starter Kit: theme configuration
 
 `src/plugins/vuetify.js` (and, for SCSS-level tokens, `src/styles/variables.scss`) are the only places
 a hex value is **defined**. This skill's `references/color-palette.md` is the canonical **documentation
-mirror** of that code. Other skills (`design-ux`, `brand-art-direction`) may legitimately quote a hex
+mirror** of that code. Other documents (`DESIGN.md`, `PRODUCT.md`) may legitimately quote a hex
 value inline for readability — that is a mirror, not a competing source — but if a value there ever
 disagrees with the code, the code wins and the doc is stale. Components always use semantic names
 (`color="primary"`), never raw hex.

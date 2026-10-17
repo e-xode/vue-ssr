@@ -79,13 +79,7 @@ Since `_inject.scss` provides variables and mixins automatically:
 
 ## Global styles vs scoped styles
 
-| File               | Scope                   | Loaded by                      |
-| ------------------ | ----------------------- | ------------------------------ |
-| `_animations.scss` | Global                  | App entry (main.js or App.vue) |
-| `_utilities.scss`  | Global                  | App entry (main.js or App.vue) |
-| `Component.scss`   | Scoped (data attribute) | Vue SFC `<style>` tag          |
-
-Global utility classes (`.animate-fade-up`, `.glass`, `.badge-success`) work anywhere in templates because they are loaded globally. Component-scoped styles use Vue's scoped attribute isolation.
+Component styles are scoped through the `Component.scss` file referenced by the SFC `<style>` tag (Vue's scoped attribute isolation). There are no global utility or animation classes.
 
 ## Nesting rules
 

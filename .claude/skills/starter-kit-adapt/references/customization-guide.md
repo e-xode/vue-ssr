@@ -77,7 +77,7 @@ Common version references to update:
 
 - Remove `.claude/skills/vuetify-components/`
 - Remove `.claude/skills/design-scss/` (if not using SCSS)
-- Remove `.claude/skills/design-ux/` or adapt for your framework
+- Rewrite `DESIGN.md` and `PRODUCT.md` for your brand (`/impeccable document`, `/impeccable init`)
 - Update `vue-ssr-architecture` to reference your UI framework
 
 ## Step 4: Add project-specific skills
@@ -188,7 +188,7 @@ paths: ['src/api/**', 'server/**']
 
 ### Scenario: Different UI framework (e.g., replacing Vuetify with PrimeVue)
 
-1. Remove skills: `vuetify-components`, `design-scss`, `design-ux`
+1. Remove skills: `vuetify-components`, `design-scss`
 2. Create replacement skills:
    - `myproject-primevue` — component patterns, theming, form building
    - `myproject-styles` — your CSS/styling approach

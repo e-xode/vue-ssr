@@ -6,7 +6,7 @@
 
 ## 🎨 Visual gate (rendered output)
 
-**Verification is consent-gated.** After ANY task that changes rendered output (`.vue`/`.scss` under `src/views/` or `src/components/`), end the reply with a visual-QA offer alongside the validation offer — never uninvited, never omitted. It captures the touched routes and grades them against `brand-art-direction`; route findings to `design`, then re-run until clean. Quality never depends on the offer being accepted.
+**Verification is consent-gated.** After ANY task that changes rendered output (`.vue`/`.scss` under `src/views/` or `src/components/`), end the reply with a visual-QA offer alongside the validation offer — never uninvited, never omitted. It captures the touched routes and grades them against `DESIGN.md` and the `brand-art-direction` checklist; route findings to `design`, then re-run until clean. Quality never depends on the offer being accepted.
 
 ---
 
@@ -55,7 +55,7 @@ At most two end-of-task questions are sanctioned, each firing only when its cond
 
 ## Agents directory
 
-10-agent fleet. Validation: `validation` only, orchestrator-delegated (see Sub-agent orchestration).
+10-agent fleet plus 4 `impeccable-*` agents spawned by the `impeccable` skill, never called directly. Validation: `validation` only, orchestrator-delegated (see Sub-agent orchestration).
 
 | Agent       | Trigger (delegate when…)                                                                    |
 | ----------- | --------------------------------------------------------------------------------------------- |
@@ -69,6 +69,10 @@ At most two end-of-task questions are sanctioned, each firing only when its cond
 | `review`    | Review a branch / PR / diff — read-only, structured report                                   |
 | `release`   | User says "release" — version bump, CHANGELOG, branch, commit/push/tag proposal              |
 | `validation`| Post-task validation only — orchestrator-called, never by sub-agents                         |
+| `impeccable-asset-producer` | Spawned by the `impeccable` skill only — raster assets from approved mocks |
+| `impeccable-documenter` | Spawned by the `impeccable` skill only — records DESIGN.md from a finished build |
+| `impeccable-finish-reviewer` | Spawned by the `impeccable` skill only — reviews a finished build against its direction |
+| `impeccable-manual-edit-applier` | Spawned by the `impeccable` skill only — applies live-mode copy edits to source |
 
 **Quick delegation card** — route by file path first, then intent. Multiple agents can work in parallel on independent scopes.
 
@@ -130,4 +134,4 @@ The harness lists every skill's name and description each turn — that listing 
 so it is not duplicated here. This section carries only what the listing cannot: the skills
 withheld from it.
 
-- **Withheld from the listing** (`disable-model-invocation: true`, invoked by name only) — `frontend-design`, `skill-creator`, `starter-kit-adapt`
+- **Withheld from the listing** (`disable-model-invocation: true`, invoked by name only) — `skill-creator`, `starter-kit-adapt`

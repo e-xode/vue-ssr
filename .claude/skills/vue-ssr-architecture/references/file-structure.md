@@ -51,8 +51,6 @@ src/
   plugins/vuetify.js             # Vuetify config (light/dark themes, icons)
   styles/                        # variables.scss + mixins.scss (auto-injected)
     _typography.scss             # Base typography (injected)
-    _animations.scss             # Keyframe animations library — NOT in the injection chain (inert)
-    _utilities.scss              # Gradient, glass, badge, skeleton utilities — inert (same reason)
     _inject.scss                 # SCSS auto-inject entry (variables + typography + mixins)
   translate/                     # en.json, fr.json, emails/en.js, emails/fr.js
   json/                          # Static JSON fixtures (e.g. users.json)

@@ -81,42 +81,39 @@
       "prompt": "I want the feature cards on my landing page to fade in one by one when the page loads. How should I do this?",
       "assertions": [
         {
-          "text": "Recommends .animate-fade-up or .animate-reveal class"
+          "text": "Writes the entrance animation in the component's own SCSS file with locally defined @keyframes, because the .animate-* and .delay-* classes are not loaded in this project"
         },
         {
-          "text": "Uses .delay-1, .delay-2, .delay-3 classes for staggering"
+          "text": "Animates only transform and opacity, using $transition-base or $transition-fast rather than a hardcoded duration"
         },
         {
-          "text": "Mentions that prefers-reduced-motion is handled automatically"
+          "text": "Adds an explicit @media (prefers-reduced-motion: reduce) guard, since no global handler exists"
         },
         {
-          "text": "Shows the class applied in the template HTML"
+          "text": "Staggers the cards with a per-item delay built from a token or a Sass loop, not .delay-1 classes"
         },
         {
-          "text": "Does not suggest writing custom @keyframes (use existing ones)"
+          "text": "Does not use hardcoded colors, spacings or font sizes"
         }
       ]
     },
     {
       "id": 5,
-      "name": "utility-class-selection",
+      "name": "frosted-panel-badge-gradient-request",
       "kind": "content",
       "prompt": "I need a frosted glass panel with a status badge that says 'Active' and a heading with gradient text. What classes should I use?",
       "assertions": [
         {
-          "text": "Uses .glass or .glass-dark for the frosted panel"
+          "text": "Does not use .glass, .badge-success or .text-gradient-primary, stating that no global utility classes exist in this project"
         },
         {
-          "text": "Uses .badge .badge-success for the Active status badge"
+          "text": "Uses a Vuetify component (v-chip with a feedback color) for the Active status badge"
         },
         {
-          "text": "Uses .text-gradient-primary (or secondary/accent) for the heading"
+          "text": "Builds the panel from live tokens ($white or $gray-100, a hairline border, $shadow-sm) in the component's own SCSS file, and notes that the project charter in DESIGN.md forbids gradient text and glow"
         },
         {
-          "text": "References _utilities.scss as the source"
-        },
-        {
-          "text": "Shows correct HTML class application"
+          "text": "Does not use hardcoded colors, spacings or font sizes"
         }
       ]
     },
@@ -130,7 +127,7 @@
           "text": "Uses $shadow-md or $shadow-sm for the base shadow"
         },
         {
-          "text": "Recommends @include hover-lift mixin OR .hover-lift utility class"
+          "text": "Recommends the @include hover-lift mixin, not a .hover-lift class"
         },
         {
           "text": "Does not use hardcoded box-shadow values"
@@ -150,7 +147,7 @@
       "prompt": "I need to show a loading placeholder while my API data loads. The placeholder should look like a card with a title and two lines of text.",
       "assertions": [
         {
-          "text": "Does not rely on the .skeleton utility class, stating it is inert because _utilities.scss is neither forwarded by _inject.scss nor imported anywhere"
+          "text": "Does not rely on the .skeleton utility class, stating that no global utility classes exist in this project"
         },
         {
           "text": "Builds the placeholder in the component's own SCSS file from live tokens and mixins, with several blocks of varying widths for a title and two text lines"
@@ -170,7 +167,7 @@
       "prompt": "Our signup page feels cluttered. How should I rethink its visual hierarchy and check it meets WCAG 2.1 AA before we touch any styles?",
       "assertions": [
         {
-          "text": "Defers to the design-ux skill: this is UX methodology (visual hierarchy, accessibility audit), not SCSS token or mixin mechanics, so design-scss should not handle it"
+          "text": "Defers to the impeccable skill: this is UX methodology (visual hierarchy, accessibility audit), not SCSS token or mixin mechanics, so design-scss should not handle it"
         }
       ]
     }
