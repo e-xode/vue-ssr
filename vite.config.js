@@ -5,6 +5,10 @@ import vue from '@vitejs/plugin-vue';
 
 const srcPath = resolve(__dirname, 'src');
 const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8'));
+const allowedHosts = (process.env.VITE_ALLOWED_HOSTS ?? '')
+  .split(',')
+  .map((host) => host.trim())
+  .filter(Boolean);
 
 export default defineConfig({
   plugins: [vue()],
@@ -45,6 +49,7 @@ export default defineConfig({
     },
   },
   server: {
+    allowedHosts,
     watch: {
       usePolling: true,
     },

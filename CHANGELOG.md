@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.4.3
+
+### Improvements
+
+- **styles** — Removed the unused `_animations.scss` and `_utilities.scss` partials. Rendered output is unchanged.
+
 ## 5.4.2
 
 ### Package Updates
