@@ -1,12 +1,24 @@
 import bcrypt from 'bcryptjs';
 import { verifyCode } from '#src/shared/email.js';
 import { BCRYPT_ROUNDS, SECURITY_CODE_MAX_ATTEMPTS } from '#src/shared/const.js';
-import { getClientIp } from '#src/shared/security.js';
+import { assertNotBanned, destroyUserSessions, getClientIp } from '#src/shared/security.js';
 import { logEvent } from '#src/shared/logger.js';
+import { readEmail, readString } from '#src/shared/utils.js';
+
+function getResetCodeError(user) {
+  if (!user.securityCode || !user.securityCodeExpires) return 'error.auth.codeExpired';
+  if (new Date() > new Date(user.securityCodeExpires)) return 'error.auth.codeExpired';
+  if ((user.securityCodeAttempts || 0) >= SECURITY_CODE_MAX_ATTEMPTS) {
+    return 'error.auth.tooManyAttempts';
+  }
+  return null;
+}
 
 export function setupResetPasswordRoute(app, db) {
   app.post('/api/auth/reset-password', async (req, res) => {
-    const { email, code, password } = req.body;
+    const email = readEmail(req.body.email);
+    const code = readString(req.body.code);
+    const password = readString(req.body.password);
 
     if (!email || !code || !password) {
       return res.status(400).json({ error: 'error.auth.allFieldsRequired' });
@@ -18,22 +30,19 @@ export function setupResetPasswordRoute(app, db) {
 
     try {
       const ip = getClientIp(req);
+      if (!(await assertNotBanned(db, res, { ip }))) return;
+
       const user = await db.collection('users').findOne({ email });
 
       if (!user || !user.resetPasswordPending) {
         return res.status(400).json({ error: 'error.auth.invalidResetRequest' });
       }
 
-      if (!user.securityCode || !user.securityCodeExpires) {
-        return res.status(400).json({ error: 'error.auth.codeExpired' });
-      }
+      if (!(await assertNotBanned(db, res, { ip, user }))) return;
 
-      if (new Date() > new Date(user.securityCodeExpires)) {
-        return res.status(400).json({ error: 'error.auth.codeExpired' });
-      }
-
-      if ((user.securityCodeAttempts || 0) >= SECURITY_CODE_MAX_ATTEMPTS) {
-        return res.status(400).json({ error: 'error.auth.tooManyAttempts' });
+      const codeError = getResetCodeError(user);
+      if (codeError) {
+        return res.status(400).json({ error: codeError });
       }
 
       if (!verifyCode(user.securityCode, code)) {
@@ -63,6 +72,8 @@ export function setupResetPasswordRoute(app, db) {
           },
         }
       );
+
+      await destroyUserSessions(user._id);
 
       logEvent(db, { event: 'user-reset-password', userId: user._id, ip });
 

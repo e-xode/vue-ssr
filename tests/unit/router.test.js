@@ -1,9 +1,11 @@
-// tests/unit/router.test.js
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { createPinia, setActivePinia } from 'pinia';
 import { createAppRouter } from '#src/router';
 
-// Le routeur est desormais cree PAR REQUETE (e-xode/scripts#17) : on en instancie un pour la suite.
-// Ces tests n'inspectent que la table des routes, qui est statique — une instance suffit.
+vi.mock('#src/shared/api', () => ({
+  apiFetch: vi.fn().mockResolvedValue({ user: null }),
+}));
+
 const router = createAppRouter();
 
 describe('router.js', () => {
@@ -95,5 +97,68 @@ describe('router.js', () => {
 
     const dashboardRoute = routes.find((r) => r.name === 'Dashboard');
     expect(dashboardRoute?.meta?.layout).toBe('app');
+  });
+
+  it('should resolve the localized page routes', () => {
+    expect(router.resolve('/fr/contact').name).toBe('Contact');
+    expect(router.resolve('/en').name).toBe('Index');
+  });
+});
+
+describe('router.js prefetch contract', () => {
+  const component = { template: '<div />' };
+  let pinia;
+  let prefetch;
+
+  function createRouterWithPrefetch(options) {
+    const prefetchRouter = createAppRouter({ pinia, ...options });
+    prefetchRouter.addRoute({ path: '/data', component, meta: { prefetch } });
+    prefetchRouter.addRoute({ path: '/other', component });
+    return prefetchRouter;
+  }
+
+  beforeEach(() => {
+    pinia = createPinia();
+    setActivePinia(pinia);
+    prefetch = vi.fn().mockResolvedValue(undefined);
+  });
+
+  it('runs the route prefetch with the route and pinia on client navigation', async () => {
+    const prefetchRouter = createRouterWithPrefetch();
+
+    await prefetchRouter.push('/data');
+
+    expect(prefetch).toHaveBeenCalledTimes(1);
+    expect(prefetch.mock.calls[0][0].route.path).toBe('/data');
+    expect(prefetch.mock.calls[0][0].pinia).toBe(pinia);
+  });
+
+  it('skips the prefetch of the first navigation when the state is hydrated', async () => {
+    const prefetchRouter = createRouterWithPrefetch({ hydrated: true });
+
+    await prefetchRouter.push('/data');
+    expect(prefetch).not.toHaveBeenCalled();
+
+    await prefetchRouter.push('/other');
+    await prefetchRouter.push('/data');
+    expect(prefetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('logs a failing prefetch and still completes the navigation', async () => {
+    prefetch.mockRejectedValue(new Error('boom'));
+    const prefetchRouter = createRouterWithPrefetch();
+
+    await prefetchRouter.push('/data');
+
+    expect(prefetchRouter.currentRoute.value.path).toBe('/data');
+    expect(console.error).toHaveBeenCalled();
+  });
+
+  it('ignores routes without a prefetch', async () => {
+    const prefetchRouter = createRouterWithPrefetch();
+
+    await prefetchRouter.push('/other');
+
+    expect(prefetch).not.toHaveBeenCalled();
   });
 });

@@ -76,10 +76,9 @@ export function hashCode(code) {
 }
 
 export function verifyCode(storedHash, providedCode) {
-  const hash = createHash('sha256').update(providedCode).digest('hex');
-  try {
-    return timingSafeEqual(Buffer.from(storedHash), Buffer.from(hash));
-  } catch {
-    return false;
-  }
+  if (typeof storedHash !== 'string' || typeof providedCode !== 'string') return false;
+  const stored = Buffer.from(storedHash);
+  const provided = Buffer.from(hashCode(providedCode));
+  if (stored.length !== provided.length) return false;
+  return timingSafeEqual(stored, provided);
 }

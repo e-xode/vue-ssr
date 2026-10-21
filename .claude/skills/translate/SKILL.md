@@ -88,7 +88,7 @@ The `useLocalePath` composable from `src/composables/useLocalePath.js` builds lo
 <script setup>
 import { useLocalePath } from '@/composables/useLocalePath';
 
-const localePath = useLocalePath();
+const { localePath } = useLocalePath();
 </script>
 
 <template>
@@ -98,7 +98,9 @@ const localePath = useLocalePath();
 </template>
 ```
 
-Route pattern: `/:locale(en|fr)/path` — the locale segment is always first.
+Route pattern: `/:locale(en|fr)/path` — the locale segment is always first. `localePath()` also localizes the slug of pages declared in `PAGES` (`src/shared/localizedRoutes.js`), so never hardcode `/en/...`.
+
+Keys read from code rather than templates: `meta.<page>.title|description|keywords` (resolved by `src/ssr/head.js` from the route `meta`), `error.*` (API `error` fields, resolved client-side), and `admin.logs.summary.*` / `admin.logs.reason.*` (mapped from log events in `src/composables/logSummaryConstants.js`; a new logged event needs its summary key in both locales).
 
 ## Alphabetical ordering
 

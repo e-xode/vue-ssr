@@ -1,0 +1,46 @@
+.admin-logs {
+  width: 100%;
+  max-width: none;
+  padding-left: $spacing-md;
+  padding-right: $spacing-md;
+
+  @include respond-to('lg') {
+    padding-left: $spacing-lg;
+    padding-right: $spacing-lg;
+  }
+}
+
+.log-summary {
+  display: block;
+  min-width: 0;
+  max-width: $container-sm * 0.75;
+  overflow-wrap: anywhere;
+  line-height: $line-height-normal;
+
+  @include respond-to('lg') {
+    max-width: $container-md;
+  }
+
+  &__action {
+    min-width: $spacing-unit * 5.5;
+    min-height: $spacing-unit * 5.5;
+  }
+}
+
+.log-meta-dialog {
+  &__content {
+    margin: 0;
+    padding: $spacing-md;
+    max-height: 60vh;
+    overflow: auto;
+    border: $border-width-hairline solid rgba(var(--v-border-color), var(--v-border-opacity));
+    border-radius: $border-radius-lg;
+    background: rgb(var(--v-theme-surface-variant));
+    color: rgb(var(--v-theme-on-surface-variant));
+    font-family: $font-family-mono;
+    font-size: $font-size-sm;
+    line-height: $line-height-normal;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}

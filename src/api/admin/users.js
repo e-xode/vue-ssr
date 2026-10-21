@@ -1,24 +1,17 @@
-import { ObjectId } from 'mongodb';
 import { requireAuth, requireAdmin } from '../middleware.js';
 import { USER_TYPES } from '#src/shared/const.js';
+import { parseObjectId, parsePagination } from '#src/shared/dbHelpers.js';
+import { escapeRegex, readString } from '#src/shared/utils.js';
 import { destroyUserSessions } from '#src/shared/security.js';
 import { logEvent } from '#src/shared/logger.js';
 
 async function handleListUsers(req, res, db) {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 25;
-    const skip = (page - 1) * limit;
-    const search = req.query.search || '';
+    const { page, limit, skip } = parsePagination(req.query, { defaultLimit: 25 });
+    const search = readString(req.query.search) || '';
 
-    const filter = search
-      ? {
-          $or: [
-            { name: { $regex: search, $options: 'i' } },
-            { email: { $regex: search, $options: 'i' } },
-          ],
-        }
-      : {};
+    const pattern = { $regex: escapeRegex(search), $options: 'i' };
+    const filter = search ? { $or: [{ name: pattern }, { email: pattern }] } : {};
 
     const [users, total] = await Promise.all([
       db
@@ -39,10 +32,9 @@ async function handleListUsers(req, res, db) {
 }
 
 async function handleGetUser(req, res, db) {
-  if (!ObjectId.isValid(req.params.userId))
-    return res.status(400).json({ error: 'error.invalidId' });
+  const userId = parseObjectId(req.params.userId);
+  if (!userId) return res.status(400).json({ error: 'error.invalidId' });
   try {
-    const userId = new ObjectId(req.params.userId);
     const [user, recentLogs] = await Promise.all([
       db
         .collection('users')
@@ -65,11 +57,11 @@ async function handleGetUser(req, res, db) {
 }
 
 async function handleUpdateUser(req, res, db) {
-  if (!ObjectId.isValid(req.params.userId))
-    return res.status(400).json({ error: 'error.invalidId' });
+  const userId = parseObjectId(req.params.userId);
+  if (!userId) return res.status(400).json({ error: 'error.invalidId' });
   try {
-    const userId = new ObjectId(req.params.userId);
-    const { name, type } = req.body;
+    const name = readString(req.body.name);
+    const type = readString(req.body.type);
 
     const allowedTypes = Object.values(USER_TYPES);
     if (type && !allowedTypes.includes(type)) {
@@ -77,7 +69,7 @@ async function handleUpdateUser(req, res, db) {
     }
 
     const update = {};
-    if (name !== undefined) update.name = name;
+    if (name !== null) update.name = name;
     if (type) update.type = type;
     update.updatedAt = new Date();
 
@@ -126,10 +118,9 @@ async function blockUserLoginIps(db, userId) {
 }
 
 async function handleBlockUser(req, res, db) {
-  if (!ObjectId.isValid(req.params.userId))
-    return res.status(400).json({ error: 'error.invalidId' });
+  const userId = parseObjectId(req.params.userId);
+  if (!userId) return res.status(400).json({ error: 'error.invalidId' });
   try {
-    const userId = new ObjectId(req.params.userId);
     const { blockIps } = req.body;
 
     await db
@@ -157,10 +148,9 @@ async function handleBlockUser(req, res, db) {
 }
 
 async function handleUnblockUser(req, res, db) {
-  if (!ObjectId.isValid(req.params.userId))
-    return res.status(400).json({ error: 'error.invalidId' });
+  const userId = parseObjectId(req.params.userId);
+  if (!userId) return res.status(400).json({ error: 'error.invalidId' });
   try {
-    const userId = new ObjectId(req.params.userId);
     const { unblockIps } = req.body;
 
     await db
@@ -186,15 +176,14 @@ async function handleUnblockUser(req, res, db) {
 }
 
 async function handleDeleteUser(req, res, db) {
-  if (!ObjectId.isValid(req.params.userId))
-    return res.status(400).json({ error: 'error.invalidId' });
+  const userId = parseObjectId(req.params.userId);
+  if (!userId) return res.status(400).json({ error: 'error.invalidId' });
   try {
-    const userId = new ObjectId(req.params.userId);
-
     if (userId.equals(req.userId)) {
       return res.status(400).json({ error: 'error.admin.cannotDeleteSelf' });
     }
 
+    await destroyUserSessions(userId);
     const result = await db.collection('users').deleteOne({ _id: userId });
 
     if (result.deletedCount === 0) {
@@ -227,7 +216,8 @@ async function handleListBlockedIps(req, res, db) {
 
 async function handleBlockIp(req, res, db) {
   try {
-    const { ip, reason } = req.body;
+    const ip = readString(req.body.ip);
+    const reason = readString(req.body.reason);
     if (!ip) return res.status(400).json({ error: 'error.validation' });
 
     await db

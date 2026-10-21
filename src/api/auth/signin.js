@@ -3,11 +3,14 @@ import { sendSecurityCodeEmail, generateSecurityCode, hashCode } from '#src/shar
 import { SECURITY_CODE_EXPIRY_MS, EMAIL_REGEX } from '#src/shared/const.js';
 import { getClientIp, isIpBlocked } from '#src/shared/security.js';
 import { logEvent } from '#src/shared/logger.js';
+import { readEmail, readString } from '#src/shared/utils.js';
+import { deliverEmail } from '#src/api/emailDelivery.js';
 
 export function setupSigninRoute(app, db) {
   app.post('/api/auth/signin', async (req, res) => {
-    const email = req.body.email?.trim().toLowerCase();
-    const { password } = req.body;
+    const email = readEmail(req.body.email);
+    const password = readString(req.body.password);
+    const locale = readString(req.body.locale);
 
     if (!email || !password) {
       return res.status(400).json({ error: 'error.auth.emailAndPasswordRequired' });
@@ -67,7 +70,8 @@ export function setupSigninRoute(app, db) {
         }
       );
 
-      await sendSecurityCodeEmail(email, code);
+      const sending = sendSecurityCodeEmail(email, code, locale || user.locale || 'en');
+      if (!(await deliverEmail(res, sending))) return;
 
       logEvent(db, { event: 'user-signin', userId: user._id, ip, meta: { email } });
 

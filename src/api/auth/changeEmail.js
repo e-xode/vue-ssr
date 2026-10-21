@@ -10,8 +10,10 @@ import {
   verifyCode,
   sendEmailChangeCodeEmail,
 } from '#src/shared/email.js';
-import { destroyUserSessions } from '#src/shared/security.js';
+import { destroyUserSessions, startUserSession } from '#src/shared/security.js';
 import { logEvent } from '#src/shared/logger.js';
+import { readEmail, readString } from '#src/shared/utils.js';
+import { deliverEmail } from '#src/api/emailDelivery.js';
 
 async function clearPendingEmail(db, userId) {
   await db.collection('users').updateOne(
@@ -42,9 +44,10 @@ async function finalizeEmailChange(req, db, newEmail) {
   );
 
   await destroyUserSessions(req.userId, req.sessionID);
+  await startUserSession(req, req.userId, { createdAt: req.session.createdAt });
 }
 
-async function verifyEmailChangeCode(req, res, db, user) {
+async function verifyEmailChangeCode(req, res, db, user, code) {
   if (new Date() > user.pendingEmailCodeExpires) {
     await clearPendingEmail(db, req.userId);
     res.status(400).json({ error: 'error.auth.codeExpired' });
@@ -58,7 +61,7 @@ async function verifyEmailChangeCode(req, res, db, user) {
     return false;
   }
 
-  if (!verifyCode(user.pendingEmailCode, req.body.code)) {
+  if (!verifyCode(user.pendingEmailCode, code)) {
     await db
       .collection('users')
       .updateOne({ _id: req.userId }, { $set: { pendingEmailCodeAttempts: attempts } });
@@ -74,13 +77,12 @@ async function verifyEmailChangeCode(req, res, db, user) {
 
 async function handleChangeEmail(req, res, db) {
   try {
-    const { newEmail, locale } = req.body;
+    const normalizedEmail = readEmail(req.body.newEmail);
+    const locale = readString(req.body.locale);
 
-    if (!newEmail || !EMAIL_REGEX.test(newEmail)) {
+    if (!normalizedEmail || !EMAIL_REGEX.test(normalizedEmail)) {
       return res.status(400).json({ error: 'error.invalidEmail' });
     }
-
-    const normalizedEmail = newEmail.trim().toLowerCase();
 
     const user = await db
       .collection('users')
@@ -112,7 +114,8 @@ async function handleChangeEmail(req, res, db) {
       }
     );
 
-    await sendEmailChangeCodeEmail(normalizedEmail, code, locale || 'en');
+    const sending = sendEmailChangeCodeEmail(normalizedEmail, code, locale || 'en');
+    if (!(await deliverEmail(res, sending))) return;
 
     logEvent(db, {
       event: 'user-change-email-request',
@@ -130,7 +133,7 @@ async function handleChangeEmail(req, res, db) {
 
 async function handleVerifyEmailChange(req, res, db) {
   try {
-    const { code } = req.body;
+    const code = readString(req.body.code);
 
     if (!code) {
       return res.status(400).json({ error: 'error.missingFields' });
@@ -152,7 +155,7 @@ async function handleVerifyEmailChange(req, res, db) {
       return res.status(400).json({ error: 'error.auth.noPendingEmail' });
     }
 
-    const codeValid = await verifyEmailChangeCode(req, res, db, user);
+    const codeValid = await verifyEmailChangeCode(req, res, db, user, code);
     if (!codeValid) return;
 
     const existing = await db

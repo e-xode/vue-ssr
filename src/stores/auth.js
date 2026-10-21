@@ -14,6 +14,7 @@ async function submitAuthCredentials(endpoint, payload, context, refs) {
     refs.pendingEmail.value = payload.email;
     return { status: 'success', data };
   } catch (e) {
+    console.error(e);
     refs.error.value = e.error || e.message;
     return { status: 'error', error: e.error || e.message };
   } finally {
@@ -75,70 +76,75 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const data = await apiFetch('/api/auth/me');
       user.value = data.user;
-    } catch {
+    } catch (err) {
+      console.error(err);
       user.value = null;
     } finally {
       loading.value = false;
     }
   }
 
-  async function signup({ email, password, name, captchaToken }) {
+  async function signup({ email, password, name, captchaToken, locale }) {
     return submitAuthCredentials(
       '/api/auth/signup',
-      { email, password, name, captchaToken },
+      { email, password, name, captchaToken, locale },
       'signup',
       { loading, error, pendingEmail, verificationContext }
     );
   }
 
-  async function signin({ email, password, captchaToken }) {
-    return submitAuthCredentials('/api/auth/signin', { email, password, captchaToken }, 'signin', {
-      loading,
-      error,
-      pendingEmail,
-      verificationContext,
-    });
+  async function signin({ email, password, captchaToken, locale }) {
+    return submitAuthCredentials(
+      '/api/auth/signin',
+      { email, password, captchaToken, locale },
+      'signin',
+      { loading, error, pendingEmail, verificationContext }
+    );
   }
 
   async function verifyCode(email, code) {
     loading.value = true;
     error.value = null;
     try {
-      const response = await fetch('/api/auth/verify-code', {
+      const data = await apiFetch('/api/auth/verify-code', {
         method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, code }),
       });
-      const data = await response.json();
-      if (response.ok) {
-        user.value = data.user;
-        pendingEmail.value = null;
-        verificationContext.value = null;
-        return { status: 'success', user: data.user };
-      } else {
-        error.value = data.error;
-        return { status: 'error', error: data.error, attempts: data.attempts };
-      }
+      user.value = data.user;
+      pendingEmail.value = null;
+      verificationContext.value = null;
+      return { status: 'success', user: data.user };
     } catch (e) {
-      error.value = e.message;
-      return { status: 'error', error: e.message };
+      console.error(e);
+      error.value = e.error || e.message;
+      return { status: 'error', error: error.value, attempts: e.data?.attempts };
     } finally {
       loading.value = false;
+    }
+  }
+
+  async function resendCode({ email, locale }) {
+    try {
+      await apiFetch('/api/auth/resend-code', {
+        method: 'POST',
+        body: JSON.stringify({ email, locale }),
+      });
+      return { status: 'success' };
+    } catch (e) {
+      console.error(e);
+      return { status: 'error', error: e.error || e.message, waitSeconds: e.data?.waitSeconds };
     }
   }
 
   async function signout() {
     loading.value = true;
     try {
-      await fetch('/api/auth/signout', {
-        method: 'POST',
-        credentials: 'include',
-      });
-      user.value = null;
-    } catch (e) {
-      error.value = e.message;
+      await apiFetch('/api/auth/signout', { method: 'POST' });
+    } catch (err) {
+      console.error(err);
+      error.value = err.error || err.message;
     } finally {
+      user.value = null;
       loading.value = false;
     }
   }
@@ -164,6 +170,7 @@ export const useAuthStore = defineStore('auth', () => {
     signup,
     signin,
     verifyCode,
+    resendCode,
     signout,
   };
 });

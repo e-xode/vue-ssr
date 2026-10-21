@@ -1,10 +1,11 @@
 import { requireAuth } from '../middleware.js';
 import { logEvent } from '#src/shared/logger.js';
+import { readString } from '#src/shared/utils.js';
 
 export function setupUpdateProfileRoute(app, db) {
   app.put('/api/auth/profile', requireAuth, async (req, res) => {
     try {
-      const { name } = req.body;
+      const name = readString(req.body.name);
 
       if (!name || !name.trim()) {
         return res.status(400).json({ error: 'error.missingFields' });

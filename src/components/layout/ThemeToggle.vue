@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { useTheme } from 'vuetify';
 import { useI18n } from 'vue-i18n';
 import { mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
-import { THEME_COOKIE, THEME_COOKIE_MAX_AGE } from '@/shared/theme';
+import { THEME_COOKIE, THEME_COOKIE_MAX_AGE, applyDocumentTheme } from '@/shared/theme';
 
 const theme = useTheme();
 const { t } = useI18n();
@@ -16,9 +16,8 @@ const toggle = () => {
   theme.change(next);
   if (typeof document !== 'undefined') {
     document.cookie = `${THEME_COOKIE}=${next}; path=/; max-age=${THEME_COOKIE_MAX_AGE}; samesite=lax`;
-    document.documentElement.classList.remove('v-theme--light', 'v-theme--dark');
-    document.documentElement.classList.add(`v-theme--${next}`);
   }
+  applyDocumentTheme(next);
 };
 </script>
 

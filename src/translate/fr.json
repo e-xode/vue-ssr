@@ -95,15 +95,22 @@
   "meta": {
     "index": {
       "title": "Vue SSR Starter Kit",
-      "description": "Boilerplate production-ready pour Vue 3, Express et MongoDB avec SSR, authentification, i18n et panneau admin."
+      "description": "Boilerplate production-ready pour Vue 3, Express et MongoDB avec SSR, authentification, i18n et panneau admin.",
+      "keywords": "vue, ssr, express, mongodb, starter kit, authentification, i18n, panneau d'administration"
     },
     "signup": {
       "title": "S'inscrire",
-      "description": "Créer un nouveau compte"
+      "description": "Créer un nouveau compte",
+      "keywords": "inscription, créer un compte, s'inscrire"
     },
     "signin": {
       "title": "Connexion",
-      "description": "Connectez-vous à votre compte"
+      "description": "Connectez-vous à votre compte",
+      "keywords": "connexion, se connecter, compte"
+    },
+    "verifyCode": {
+      "title": "Vérifiez votre email",
+      "description": "Saisissez le code de sécurité envoyé à votre adresse email"
     },
     "forgotPassword": {
       "title": "Mot de passe oublié"
@@ -113,14 +120,16 @@
     },
     "dashboard": {
       "title": "Tableau de bord",
-      "description": "Votre tableau de bord"
+      "description": "Votre tableau de bord",
+      "keywords": "tableau de bord, aperçu du compte"
     },
     "account": {
       "title": "Mon compte"
     },
     "contact": {
       "title": "Contact",
-      "description": "Contactez-nous"
+      "description": "Contactez-nous",
+      "keywords": "contact, support, retour"
     },
     "notFound": {
       "title": "Page non trouvée",
@@ -163,15 +172,32 @@
       "resendTooSoon": "Veuillez patienter avant de demander un nouveau code",
       "waitBeforeResend": "Veuillez patienter {seconds} secondes avant de demander un nouveau code",
       "noVerificationPending": "Aucune vérification en cours",
-      "resetNotPending": "Aucune réinitialisation de mot de passe en cours"
+      "resetNotPending": "Aucune réinitialisation de mot de passe en cours",
+      "allFieldsRequired": "Tous les champs sont obligatoires",
+      "captchaFailed": "La vérification du captcha a échoué",
+      "emailAndCodeRequired": "Email et code requis",
+      "emailNotFound": "Email introuvable",
+      "invalidResetRequest": "Demande de réinitialisation invalide ou expirée",
+      "nameTooShort": "Le nom doit contenir au moins 2 caractères",
+      "noPendingEmail": "Aucun changement d'email en cours",
+      "passwordTooShort": "Le mot de passe doit contenir au moins 8 caractères",
+      "wrongPassword": "Le mot de passe actuel est incorrect"
+    },
+    "avatar": {
+      "invalidType": "Type d'image non pris en charge (JPEG, PNG ou WebP uniquement)",
+      "tooLarge": "L'image est trop volumineuse (2 Mo maximum)"
     },
     "admin": {
       "invalidUserType": "Type d'utilisateur invalide",
       "cannotDeleteSelf": "Vous ne pouvez pas supprimer votre propre compte"
     },
+    "emailFailed": "L'email n'a pas pu être envoyé, veuillez réessayer plus tard",
     "invalidEmail": "Adresse email invalide",
+    "invalidId": "Identifiant invalide",
     "missingFields": "Veuillez remplir tous les champs obligatoires",
-    "messageTooLong": "Le message est trop long"
+    "messageTooLong": "Le message est trop long",
+    "rateLimit": "Trop de requêtes, veuillez réessayer plus tard",
+    "validation": "Requête invalide"
   },
   "form": {
     "email": "Email",
@@ -200,6 +226,8 @@
       "total": "utilisateurs",
       "search": "Rechercher par nom ou email",
       "type": "Type",
+      "typeUser": "Utilisateur",
+      "typeAdmin": "Administrateur",
       "registered": "Inscrit le",
       "lastUpdate": "Dernière mise à jour",
       "lastLogin": "Dernière connexion",
@@ -236,7 +264,46 @@
       "ip": "IP",
       "user": "Utilisateur",
       "meta": "Détails",
+      "viewDetails": "Voir les détails",
       "empty": "Aucun journal trouvé",
+      "metaDialog": {
+        "close": "Fermer",
+        "title": "Détails de l'événement"
+      },
+      "reason": {
+        "invalidCode": "code invalide",
+        "invalidPassword": "mot de passe invalide",
+        "ipBlocked": "IP bloquée",
+        "resetPassword": "réinitialisation du mot de passe",
+        "tooManyAttempts": "trop de tentatives",
+        "userBlocked": "utilisateur bloqué",
+        "userNotFound": "utilisateur introuvable"
+      },
+      "summary": {
+        "adminIpBlock": "Un administrateur a bloqué l'IP {ip}",
+        "adminIpUnblock": "Un administrateur a débloqué l'IP {ip}",
+        "adminUserBlock": "Un administrateur a bloqué l'utilisateur {targetUserId}",
+        "adminUserDelete": "Un administrateur a supprimé l'utilisateur {targetUserId}",
+        "adminUserUnblock": "Un administrateur a débloqué l'utilisateur {targetUserId}",
+        "adminUserUpdate": "Un administrateur a modifié un utilisateur ({fields})",
+        "authCodeFailed": "Échec du code de sécurité pour {email} ({reason})",
+        "authCodeVerified": "{email} a validé le code de sécurité",
+        "authFailed": "Échec de connexion pour {email} ({reason})",
+        "authResendCode": "{email} a demandé un nouveau code de sécurité",
+        "contactSent": "Message de contact de {name} ({email})",
+        "unknown": "Événement inconnu : {event}",
+        "userChangeEmailRequest": "Changement d'adresse email demandé vers {email}",
+        "userChangeEmailVerified": "Adresse email changée en {email}",
+        "userDeleteAvatar": "Avatar supprimé",
+        "userForgotPassword": "Réinitialisation du mot de passe demandée pour {email}",
+        "userResetPassword": "Mot de passe réinitialisé",
+        "userSignin": "{email} a demandé un code de connexion",
+        "userSignout": "Utilisateur déconnecté",
+        "userSignup": "{email} s'est inscrit",
+        "userUpdateAvatar": "Avatar mis à jour",
+        "userUpdatePassword": "Mot de passe modifié",
+        "userUpdateProfile": "Profil mis à jour ({fields})"
+      },
       "filter": {
         "event": "Filtrer par événement",
         "from": "Du",

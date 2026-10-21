@@ -3,12 +3,16 @@ import { sendContactEmail } from '#src/shared/email.js';
 import { logEvent } from '#src/shared/logger.js';
 import { getClientIp } from '#src/shared/security.js';
 import { verifyCaptcha } from '#src/shared/captcha.js';
-import { escapeHtml } from '#src/shared/utils.js';
+import { escapeHtml, readEmail, readString } from '#src/shared/utils.js';
+import { deliverEmail } from '#src/api/emailDelivery.js';
 
 export function setupContactRoute(app, db) {
   app.post('/api/contact', async (req, res) => {
     try {
-      const { name, email, message, locale } = req.body;
+      const name = readString(req.body.name);
+      const email = readEmail(req.body.email);
+      const message = readString(req.body.message);
+      const locale = readString(req.body.locale);
 
       if (!name || !email || !message) {
         return res.status(400).json({ error: 'error.missingFields' });
@@ -29,11 +33,12 @@ export function setupContactRoute(app, db) {
       const ip = getClientIp(req);
       const data = {
         name: escapeHtml(name.trim()),
-        email: escapeHtml(email.trim().toLowerCase()),
+        email: escapeHtml(email),
         message: escapeHtml(message.trim()),
       };
 
-      await sendContactEmail(data, locale || 'en');
+      const sending = sendContactEmail(data, locale || 'en');
+      if (!(await deliverEmail(res, sending))) return;
 
       logEvent(db, { event: 'contact-sent', ip, meta: { name: data.name, email: data.email } });
 

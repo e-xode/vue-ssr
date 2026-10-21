@@ -4,16 +4,19 @@ import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { useLocalePath } from '@/composables/useLocalePath';
+import { useApiError } from '@/composables/useApiError';
 import AuthShell from '@/components/AuthShell.vue';
 
 const { t } = useI18n();
+const { translateError } = useApiError();
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
-const { localePath } = useLocalePath();
+const { locale, localePath } = useLocalePath();
 
 const CODE_LENGTH = 6;
 const EXPIRY_SECONDS = 600;
+const RESEND_COOLDOWN_SECONDS = 30;
 
 const digits = ref(Array(CODE_LENGTH).fill(''));
 const isSubmitting = ref(false);
@@ -118,7 +121,7 @@ async function handleSubmit() {
     if (result.attempts !== undefined) {
       attemptsRemaining.value = result.attempts;
     }
-    errorMessage.value = result.error || t('error.auth.invalidCode');
+    errorMessage.value = translateError(result.error, 'error.auth.invalidCode');
     await nextTick();
     getInputs()[0]?.focus();
   }
@@ -129,33 +132,21 @@ async function handleResend() {
   isSubmitting.value = true;
   errorMessage.value = '';
 
-  try {
-    const response = await fetch('/api/auth/resend-code', {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email.value }),
-    });
+  const result = await authStore.resendCode({ email: email.value, locale: locale.value });
+  isSubmitting.value = false;
 
-    const data = await response.json();
-
-    if (response.ok) {
-      timeRemaining.value = EXPIRY_SECONDS;
-      startExpiryTimer();
-      digits.value = Array(CODE_LENGTH).fill('');
-      attemptsRemaining.value = null;
-      startResendTimer(30);
-      await nextTick();
-      getInputs()[0]?.focus();
-    } else if (data.waitSeconds) {
-      startResendTimer(data.waitSeconds);
-    } else {
-      errorMessage.value = data.error || t('error.server');
-    }
-  } catch (e) {
-    errorMessage.value = e.message;
-  } finally {
-    isSubmitting.value = false;
+  if (result.status === 'success') {
+    timeRemaining.value = EXPIRY_SECONDS;
+    startExpiryTimer();
+    digits.value = Array(CODE_LENGTH).fill('');
+    attemptsRemaining.value = null;
+    startResendTimer(RESEND_COOLDOWN_SECONDS);
+    await nextTick();
+    getInputs()[0]?.focus();
+  } else if (result.waitSeconds) {
+    startResendTimer(result.waitSeconds);
+  } else {
+    errorMessage.value = translateError(result.error);
   }
 }
 </script>

@@ -34,21 +34,30 @@ Dépendances de test incluses:
 
 ## Exécution des tests
 
-### Mode watch (développement)
+### Single run
 
 ```bash
 npm test
 ```
 
-Les tests se relancent automatiquement quand vous modifiez un fichier.
+`npm test` runs the whole suite once (`vitest run`). `npm run test:run` is the same command and is what CI and `npm run validate` call.
 
-### Mode run (une seule exécution)
+### Watch mode (development)
 
 ```bash
-npm run test:run
+npm run test:watch
 ```
 
-Idéal pour CI/CD ou avant de commiter.
+Tests re-run automatically when you modify a file.
+
+### Two Vitest projects
+
+`vitest.config.js` defines two projects, selected by file name:
+
+- `server` (node environment): `tests/unit/api.*.test.js` and `tests/unit/shared.*.test.js`, except `shared.analytics*`, `shared.theme*` and `shared.ssrState*`, which need a DOM.
+- `client` (happy-dom environment): every other test.
+
+Name a new test after its target (`api.<module>`, `shared.<module>`, `stores.<module>`, `composables.<module>`, ...) so it lands in the right project.
 
 ### Interface utilisateur
 
@@ -76,16 +85,18 @@ Les tests sont organisés par type:
 tests/
 ├── setup.js              # Configuration globale des tests
 ├── fixtures/
-│   └── mockData.js       # Données de test et mocks
+│   ├── mockData.js       # Données de test et mocks
+│   └── routeHarness.js   # createRouteApp / createReq / createRes for API route handlers
 └── unit/
+    ├── api.auth.test.js         # API route handlers (node project)
+    ├── api.http.csp.test.js     # HTTP-host modules (src/api/http)
     ├── shared.log.test.js       # Tests pour shared/log.js
     ├── shared.email.test.js     # Tests pour shared/email.js
     ├── stores.auth.test.js      # Tests pour Pinia auth store
     ├── router.test.js           # Tests pour le routeur
     ├── views.index.test.js      # Tests pour les vues
     ├── components.header.test.js # Tests pour les composants
-    ├── validation.test.js       # Tests de validation
-    └── api.utils.test.js        # Tests pour les utilitaires API
+    └── ssr.head.test.js         # Tests for the SSR <head> generation
 ```
 
 ---
@@ -427,7 +438,7 @@ describe('Debug test', () => {
 Exécutez avec:
 
 ```bash
-npm test -- --reporter=verbose
+npm run test:run -- --reporter=verbose
 ```
 
 ---

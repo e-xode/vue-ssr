@@ -1,0 +1,20 @@
+@use 'variables' as *;
+
+.reveal {
+  opacity: 0;
+  transform: translateY($spacing-md);
+  transition:
+    opacity $transition-base ease,
+    transform $transition-base ease;
+
+  &--visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

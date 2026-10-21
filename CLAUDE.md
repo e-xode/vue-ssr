@@ -102,10 +102,10 @@ Apply every `.claude/rules/` file whose `paths:` frontmatter glob matches the fi
 
 Read by fleet-wide campaigns driven from `e-xode/scripts` (dependency/security updates across all
 apps — see `e-xode/scripts#9`). Those campaigns are **not** run by this repo's agents and must not
-guess these values. Keep this block accurate; it is the interface, not documentation. Two traps:
-`npm test` without `:run` starts Vitest in watch mode and hangs forever outside CI — always call
-`npm run test:run`. `audit` is not a merge gate — it judges repo state, not a diff, and can go red
-with no new commit; never add it to `required_status_checks`. The PR gate is `deps-review`.
+guess these values. Keep this block accurate; it is the interface, not documentation. One trap:
+`audit` is not a merge gate — it judges repo state, not a diff, and can go red with no new commit;
+never add it to `required_status_checks`. The PR gate is `deps-review`. Call `npm run test:run`
+(`npm test` also runs once; `npm run test:watch` is the watch mode).
 
 | Key | Value |
 | --- | --- |

@@ -1,3 +1,54 @@
 {
-  "profile": "house"
+  "profile": "house",
+  "exemptions": [
+    {
+      "check": "02-skill-unknown-field",
+      "path": "impeccable",
+      "severity": "NOTICE",
+      "reason": "Vendored upstream skill (pbakaus/impeccable); the version field is its own release marker and harmless, and an in-place edit is overwritten by the next skill update",
+      "date": "2026-10-21"
+    },
+    {
+      "check": "04-skill-description-antitrigger",
+      "path": "impeccable",
+      "severity": "NOTICE",
+      "reason": "Vendored upstream description, closed by 'Not for backend-only or non-UI tasks'; twins design-scss and vue-ssr-design carry the anti-trigger to impeccable, and an in-place edit is overwritten by the next update",
+      "date": "2026-10-21"
+    },
+    {
+      "check": "25-orphan-reference",
+      "path": "impeccable",
+      "severity": "NOTICE",
+      "reason": "Vendored progressive disclosure: every flagged reference is cited by SKILL.md or by another reference (new-work, live, audit, generate), measured with grep on 2026-10-21; the upstream layout is not ours to flatten",
+      "date": "2026-10-21"
+    },
+    {
+      "check": "08b-agent-description",
+      "path": ".claude/agents/impeccable-asset-producer.md",
+      "severity": "NOTICE",
+      "reason": "Vendored agent spawned only by the impeccable skill and never delegated to directly (CLAUDE.md Agents directory); an anti-trigger would never be read for routing, and an edit is overwritten by the next skill update",
+      "date": "2026-10-21"
+    },
+    {
+      "check": "08b-agent-description",
+      "path": ".claude/agents/impeccable-documenter.md",
+      "severity": "NOTICE",
+      "reason": "Vendored agent spawned only by the impeccable skill and never delegated to directly (CLAUDE.md Agents directory); an anti-trigger would never be read for routing, and an edit is overwritten by the next skill update",
+      "date": "2026-10-21"
+    },
+    {
+      "check": "08b-agent-description",
+      "path": ".claude/agents/impeccable-finish-reviewer.md",
+      "severity": "NOTICE",
+      "reason": "Vendored agent spawned only by the impeccable skill and never delegated to directly (CLAUDE.md Agents directory); an anti-trigger would never be read for routing, and an edit is overwritten by the next skill update",
+      "date": "2026-10-21"
+    },
+    {
+      "check": "08b-agent-description",
+      "path": ".claude/agents/impeccable-manual-edit-applier.md",
+      "severity": "NOTICE",
+      "reason": "Vendored agent spawned only by the impeccable skill and never delegated to directly (CLAUDE.md Agents directory); an anti-trigger would never be read for routing, and an edit is overwritten by the next skill update",
+      "date": "2026-10-21"
+    }
+  ]
 }

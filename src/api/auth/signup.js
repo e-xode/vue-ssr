@@ -6,29 +6,34 @@ import {
   BCRYPT_ROUNDS,
   EMAIL_REGEX,
 } from '#src/shared/const.js';
-import { getClientIp } from '#src/shared/security.js';
+import { assertNotBanned, getClientIp } from '#src/shared/security.js';
 import { logEvent } from '#src/shared/logger.js';
 import { verifyCaptcha } from '#src/shared/captcha.js';
+import { readEmail, readString } from '#src/shared/utils.js';
+import { deliverEmail } from '#src/api/emailDelivery.js';
 
 export function setupSignupRoute(app, db) {
   app.post('/api/auth/signup', async (req, res) => {
-    const email = req.body.email?.trim().toLowerCase();
-    const { password, name, captchaToken } = req.body;
+    const email = readEmail(req.body.email);
+    const password = readString(req.body.password);
+    const name = readString(req.body.name);
+    const locale = readString(req.body.locale);
+    const { captchaToken } = req.body;
 
     if (!email || !password || !name) {
       return res.status(400).json({ error: 'error.auth.missingFields' });
     }
 
     if (!EMAIL_REGEX.test(email)) {
-      return res.status(400).json({ error: 'error.validation.invalidEmail' });
+      return res.status(400).json({ error: 'error.auth.invalidEmail' });
     }
 
-    if (!password || password.length < 8) {
+    if (password.length < 8) {
       return res.status(400).json({ error: 'error.auth.passwordTooShort' });
     }
 
-    if (!name || name.trim().length < 2) {
-      return res.status(400).json({ error: 'error.validation.nameTooShort' });
+    if (name.trim().length < 2) {
+      return res.status(400).json({ error: 'error.auth.nameTooShort' });
     }
 
     const captcha = await verifyCaptcha(captchaToken, 'signup');
@@ -36,6 +41,7 @@ export function setupSignupRoute(app, db) {
 
     try {
       const ip = getClientIp(req);
+      if (!(await assertNotBanned(db, res, { ip }))) return;
 
       const existingUser = await db.collection('users').findOne({ email });
       if (existingUser) {
@@ -61,7 +67,8 @@ export function setupSignupRoute(app, db) {
 
       await db.collection('users').insertOne(user);
 
-      await sendSecurityCodeEmail(email, code);
+      const sending = sendSecurityCodeEmail(email, code, locale || 'en');
+      if (!(await deliverEmail(res, sending))) return;
 
       logEvent(db, { event: 'user-signup', userId: user._id, ip, meta: { email } });
 

@@ -2,6 +2,8 @@ import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
+import { en, fr } from 'vuetify/locale';
+import { DEFAULT_LOCALE } from '@/shared/const';
 
 const colors = {
   primary: '#4f46e5',
@@ -63,11 +65,16 @@ const colorsDark = {
   'outline-variant': '#262626',
 };
 
-export function createApplicationVuetify(ssr = false, theme = 'light') {
+export function createApplicationVuetify(ssr = false, theme = 'light', locale = DEFAULT_LOCALE) {
   return createVuetify({
     components,
     directives,
     ssr,
+    locale: {
+      locale,
+      fallback: DEFAULT_LOCALE,
+      messages: { en, fr },
+    },
     icons: {
       defaultSet: 'mdi',
       aliases,

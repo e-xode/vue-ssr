@@ -61,10 +61,12 @@ Ce document décrit l'architecture complète du projet e-xode-vue-ssr, ses compo
 ```
 src/
 ├── App.vue                    # Composant racine
-├── main.js                    # Initialisation app
-├── entry-client.js            # Hydratation client
-├── entry-server.js            # Rendu SSR
+├── main.js                    # createApp({ theme, locale, initialState }) -> app, router, pinia, i18n, vuetify, setLocale
+├── entry-client.js            # Client hydration (restores Pinia state from #__SSR_STATE__)
+├── entry-server.js            # SSR render(url, db, theme): route prefetch, renderToString
+├── ssr/head.js                # <head> generation (meta, canonical, hreflang, OG, JSON-LD)
 ├── router.js                  # Configuration des routes
+├── directives/reveal.js       # v-reveal scroll animation
 ├── views/                     # Pages
 │   ├── Index/
 │   ├── Auth/
@@ -85,7 +87,9 @@ Client Browser
     ↓
 entry-client.js
     ↓
-createApp()
+createApp({ initialState: readSsrState() })
+    ↓
+Pinia state restored from <script type="application/json" id="__SSR_STATE__">
     ↓
 Hydrate DOM du serveur
     ↓
@@ -142,17 +146,21 @@ createRouter({
 ```
 1. Requête serveur pour /ma-page
     ↓
-2. entry-server.js lance le router vers /ma-page
+2. redirectMiddleware: "/" -> 302 to /{locale}; non-canonical paths -> 301
     ↓
-3. Les guards et hooks s'exécutent
+3. entry-server.js lance le router vers /ma-page
     ↓
-4. Vue renderToString() génère l'HTML
+4. Les guards et hooks s'exécutent
     ↓
-5. Meta tags SEO générés
+5. route.meta.prefetch (optional) fills the Pinia stores
     ↓
-6. HTML complet retourné au navigateur
+6. Vue renderToString() génère l'HTML
     ↓
-7. Client hydrate le DOM avec entry-client.js
+7. Meta tags SEO générés (src/ssr/head.js)
+    ↓
+8. HTML complet + <script type="application/json" id="__SSR_STATE__"> retournés au navigateur
+    ↓
+9. Client hydrate le DOM avec entry-client.js
 ```
 
 ## 3. Couche Métier (API)
@@ -160,26 +168,29 @@ createRouter({
 ### Express Server
 
 ```
-server.js
+server.js (thin wiring, one module per concern in src/api/http/)
     ↓
-├── 1. Initialisation MongoDB
-├── 2. Configuration middleware
-│   ├── Session middleware
-│   ├── CORS
-│   ├── JSON parser
-│   └── Express compression
-├── 3. Enregistrement routes API
-│   └── registerApiRoutes()
-├── 4. Set up Vite (dev) ou sirv (prod)
-└── 5. SSR rendering middleware
+├── 1. Boot checks: COOKIE_SECRET and a public https NODE_HOST (production)
+├── 2. MongoDB connection + ensureIndexes()
+├── 3. helmet (CSP without inline scripts), GET /healthz, rate limits (production)
+├── 4. /sitemap.xml + /robots.txt
+├── 5. Session middleware, CORS, JSON parser
+├── 6. API router (createApiRouter), via Vite in dev
+├── 7. Production: /uploads, compression + sirv (dist/client)
+├── 8. redirectMiddleware (302 for "/", 301 for canonical paths)
+└── 9. SSR rendering middleware (src/api/http/ssr.js)
 ```
+
+On SIGTERM/SIGINT the server flips `/healthz` to 503, closes the HTTP server, closes MongoDB, then exits (forced exit after 10 s).
 
 ### Architecture API Routes
 
 ```
 src/api/
-├── router.js                  # Registre central
-├── middleware.js              # Auth middleware
+├── router.js                  # Registre central (createApiRouter)
+├── middleware.js              # requireAuth / requireAdmin
+├── emailDelivery.js           # deliverEmail(): 502 error.emailFailed on failure
+├── http/                      # HTTP-host modules wired by server.js
 └── auth/
     ├── me.js                  # GET  /api/auth/me
     ├── signup.js              # POST /api/auth/signup
@@ -214,17 +225,20 @@ Client Pinia store reçoit
 ```
 1. Utilisateur se connecte + vérifie code
     ↓
-2. req.session.userId = user._id
+2. startUserSession(): new session id, req.session.userId = user._id, req.session.createdAt = now
     ↓
 3. Session stockée: logs/sessions/{sessionId}.json
     ↓
-4. Cookie "ssr.sid" envoyé au client
+4. Cookie "app.sid" envoyé au client
     ↓
 5. Client inclut cookie dans les requêtes futures
     ↓
 6. Middleware session restaure req.session
     ↓
-7. req.session.userId accessible partout
+7. requireAuth rejects the session once it is older than SESSION_ABSOLUTE_MAX_AGE_MS (30 days)
+    ↓
+8. Password/email change: other sessions destroyed, session id regenerated.
+   Password reset and admin block/delete: all sessions of the user destroyed
 ```
 
 ## 4. Couche Authentification
@@ -245,7 +259,7 @@ Server:
   2. Vérifier si email existe déjà (signup)
   3. Hash password (bcryptjs, salt: 10)
   4. Générer code 6 chiffres
-  5. Hash code en Base64
+  5. Hash code en SHA-256 (hex)
   6. DB.users.insertOne() ou updateOne()
   7. sendSecurityCodeEmail(email, code)
     ↓
@@ -264,10 +278,10 @@ Client: POST /api/auth/verify-code { email, code }
 Server:
   1. Trouver user par email
   2. Valider code n'a pas expiré
-  3. Valider tentatives < 5
+  3. Valider tentatives < 3
   4. Comparer hashCode(input) avec DB hash
   5. Si valide:
-     - Créer session: req.session.userId = user._id
+     - Créer session (id régénéré): req.session.userId = user._id
      - Nettoyer codes de sécurité
      - Retourner profil user
     ↓
@@ -276,7 +290,7 @@ Response: { user: { _id, email, name, createdAt } }
 Client:
   1. Store user dans Pinia
   2. Naviguer vers /dashboard
-  3. Cookie ssr.sid automatiquement envoyé
+  3. Cookie app.sid automatiquement envoyé
 ```
 
 ### Sécurité des Passwords
@@ -298,17 +312,15 @@ S toréd en DB
 ### Sécurité des Codes
 
 ```
-Code généré: "123456"
+Code généré: "123456" (crypto.randomInt)
     ↓
-Base64.encode("123456")
+SHA-256 hex digest
     ↓
-Résultat: "MTIzNDU2"
-    ↓
-Stocké: { _id, securityCode: "MTIzNDU2", securityCodeExpires: Date }
+Stocké: { _id, securityCode: "<sha256 hex>", securityCodeExpires: Date }
     ↓
 Validation:
   1. Récupérer hash de DB
-  2. Base64.encode(userInput) === hashFromDB
+  2. timingSafeEqual(sha256(userInput), hashFromDB)
 ```
 
 ## 5. Couche Données MongoDB
@@ -318,8 +330,7 @@ Validation:
 ```javascript
 db.users
 ├── Indexes:
-│   ├── { email: 1 } → unique
-│   └── { createdAt: 1 } → pour requêtes tempo
+│   └── { email: 1 } → unique
 ├── Schéma:
 │   {
 │     _id: ObjectId('...'),
@@ -328,7 +339,7 @@ db.users
 │     name: 'John Doe',
 │     createdAt: ISODate('2024-02-08'),
 │     updatedAt: ISODate('2024-02-08'),
-│     securityCode: 'MTIzNDU2',           // Hashed
+│     securityCode: '<sha256 hex>',       // Hashed
 │     securityCodeExpires: ISODate('...'),
 │     securityCodeAttempts: 2
 │   }
@@ -338,6 +349,8 @@ db.users
 │   ├── updateOne()         → update code, profile
 │   └── deleteOne()         → delete account
 ```
+
+Other indexes (`src/api/http/indexes.js`): `blockedIps` `{ ip: 1 }` unique; `logs` `{ createdAt: -1 }`, `{ event: 1 }`, `{ userId: 1 }`.
 
 ### Connexion MongoDB
 
@@ -477,13 +490,13 @@ createVuetify({
   theme: {
     defaultTheme: 'light',
     themes: {
-      light: { colors: { primary: '#2563eb', ... } },
+      light: { colors: { primary: '#4f46e5', ... } },
       dark: { colors: { primary: '#...' } }
     }
   },
   defaults: {
     VBtn: { variant: 'flat', rounded: 'lg' },
-    VCard: { rounded: 'xl', elevation: 0, border: true }
+    VCard: { rounded: 'lg', elevation: 0, border: true }
   }
 })
 ```
@@ -500,7 +513,7 @@ defineConfig({
   },
   build: {
     cssCodeSplit: false,       // CSS en un fichier
-    rollupOptions: {
+    rolldownOptions: {
       output: {
         assetFileNames: 'assets/[name]-[hash]'
       }
@@ -530,8 +543,8 @@ defineConfig({
       - Lancer npm run build
     Stage 2 (runner):
       - Image slim
-      - Copier dist/ + server.js
-      - Installer dépendances prod
+      - Copier dist/ + server.js + package-lock.json
+      - npm ci --omit=dev (dépendances prod)
 ```
 
 ## 10. Docker Architecture
@@ -539,14 +552,14 @@ defineConfig({
 ### Multi-stage Dockerfile Production
 
 ```dockerfile
-FROM node:22-alpine AS builder
-  # npm install
+FROM node:24-alpine AS builder
+  # npm ci --include=dev
   # npm run build
   → génère dist/
 
-FROM node:22-slim AS runner
+FROM node:24-slim AS runner
   # Copier dist/
-  # npm install --production
+  # npm ci --omit=dev
   # Supervisor gère le processus
   → npm run prod
 ```
@@ -561,13 +574,14 @@ services:
     build: docker/dev/node/
     depends_on: [mongo (healthy)]
     volumes: ['.:/app'] → hot reload
-    ports: ['3002:3002']
+    ports: ['${BIND_ADDRESS:-127.0.0.1}:${NODE_PORT}:${NODE_PORT}']
     env_file: [.env]
 
   mongo:
     build: docker/dev/mongo/
     volumes: ['./docker/dev/mongo/init-scripts:/docker-entrypoint-initdb.d']
-    ports: ['${MONGO_PORT:-27017}:27017']
+    ports: ['${BIND_ADDRESS:-127.0.0.1}:${MONGO_PORT:-27017}:27017']
+    volumes: also mongo-data:/data/db
     healthcheck: → Ping MongoDB
 ```
 
@@ -589,7 +603,9 @@ Client reçoit HTML complet + hydrate avec entry-client.js
   ↓
 Hot Reload sur changement fichier:
   - Client: rechargement module Vite
-  - Serveur: rechargement entry-server.js
+  - Serveur: rechargement entry-server.js and src/api/** (via vite.ssrLoadModule)
+  - server.js and src/api/http/**: restart needed
+  - File watching uses native events; set VITE_USE_POLLING=true when bind mounts miss them
 ```
 
 ## Flux de Production
@@ -632,10 +648,12 @@ Application performante + pré-rendue
 
 ```javascript
 // src/shared/log.js
-logInfo('[APP] Database connection successful');
-logError('[APP] Error...');
-logWarn('[APP] Warning...');
+logInfo('Database connection successful');
+logError('Error...');
+logWarn('Warning...');
 ```
+
+Verbosity is controlled by `LOG_LEVEL` (`error`, `warn`, `info`, `debug`; default `info`). `logError` always prints.
 
 ### Environment & Watch
 

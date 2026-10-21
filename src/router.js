@@ -1,11 +1,16 @@
 import { createRouter, createMemoryHistory, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { LOCALE_CODES, LOCALE_ROUTE_REGEX, DEFAULT_LOCALE } from '@/shared/const';
+import { pageSlugs } from '@/shared/localizedRoutes';
+
+function pageRoute(name) {
+  const [path, ...alias] = pageSlugs(name);
+  return alias.length ? { name, path, alias } : { name, path };
+}
 
 const localeRoutes = [
   {
-    path: '',
-    name: 'Index',
+    ...pageRoute('Index'),
     component: () => import('@/views/Index/IndexView.vue'),
     meta: {
       layout: 'public',
@@ -139,8 +144,7 @@ const localeRoutes = [
     },
   },
   {
-    path: 'contact',
-    name: 'Contact',
+    ...pageRoute('Contact'),
     component: () => import('@/views/Contact/ContactView.vue'),
     meta: {
       layout: 'public',
@@ -181,14 +185,17 @@ const routes = [
   },
 ];
 
-// Un routeur PAR REQUETE. Le partager entre les requetes SSR est un anti-pattern documente par Vue :
-// `createMemoryHistory()` empile a chaque `router.push()` et n'est jamais reinitialise, donc la pile
-// grossit sans borne et retient les arbres applicatifs des requetes precedentes. Mesure le
-// 2026-09-19 (e-xode/scripts#17) : 5 applications de la flotte mouraient en boucle sur
-// `JavaScript heap out of memory` — jusqu'a 113 fois en 6 semaines — la seule epargnee etant la
-// seule a creer son routeur par requete. Second effet, moins visible : deux requetes concurrentes
-// partageaient `router.currentRoute`, donc l'une pouvait lire la route poussee par l'autre.
-export const createAppRouter = () => {
+async function runRoutePrefetch(to, pinia) {
+  if (typeof to.meta?.prefetch !== 'function') return;
+  try {
+    await to.meta.prefetch({ route: to, pinia });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export const createAppRouter = ({ pinia, hydrated = false } = {}) => {
+  let hydratedNavigationPending = hydrated;
   const router = createRouter({
     history: typeof window === 'undefined' ? createMemoryHistory() : createWebHistory(),
     routes,
@@ -233,6 +240,18 @@ export const createAppRouter = () => {
       return { name: 'Dashboard', params: { locale: locale || DEFAULT_LOCALE } };
     }
 
+    return true;
+  });
+
+  router.beforeResolve(async (to) => {
+    if (typeof window === 'undefined') return true;
+
+    if (hydratedNavigationPending) {
+      hydratedNavigationPending = false;
+      return true;
+    }
+
+    await runRoutePrefetch(to, pinia);
     return true;
   });
 

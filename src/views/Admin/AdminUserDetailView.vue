@@ -1,11 +1,13 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { useLocalePath } from '@/composables/useLocalePath';
+import { useApiError } from '@/composables/useApiError';
 import { mdiArrowLeft, mdiLock, mdiLockOpen } from '@mdi/js';
 
 const { t } = useI18n();
+const { translateError } = useApiError();
 const route = useRoute();
 const router = useRouter();
 const { localePath } = useLocalePath();
@@ -26,10 +28,10 @@ const form = ref({
 const blockDialog = ref(false);
 const blockIps = ref(false);
 
-const typeOptions = [
-  { value: 'user', title: 'User' },
-  { value: 'admin', title: 'Admin' },
-];
+const typeOptions = computed(() => [
+  { value: 'user', title: t('admin.users.typeUser') },
+  { value: 'admin', title: t('admin.users.typeAdmin') },
+]);
 
 async function fetchUser() {
   loading.value = true;
@@ -45,7 +47,8 @@ async function fetchUser() {
     form.value.name = data.user.name;
     form.value.type = data.user.type || 'user';
   } catch (e) {
-    error.value = e.message;
+    console.error(e);
+    error.value = translateError(e);
   } finally {
     loading.value = false;
   }
@@ -70,7 +73,8 @@ async function handleSave() {
     user.value = data.user;
     successMessage.value = t('admin.users.saveSuccess');
   } catch (e) {
-    error.value = e.message;
+    console.error(e);
+    error.value = translateError(e);
   } finally {
     saving.value = false;
   }
@@ -90,8 +94,8 @@ async function blockUser() {
       blockDialog.value = false;
       successMessage.value = t('admin.users.blockSuccess');
     }
-  } catch {
-    /* empty */
+  } catch (err) {
+    console.error(err);
   } finally {
     blocking.value = false;
   }
@@ -110,8 +114,8 @@ async function unblockUser() {
       user.value = { ...user.value, isBlocked: false };
       successMessage.value = t('admin.users.unblockSuccess');
     }
-  } catch {
-    /* empty */
+  } catch (err) {
+    console.error(err);
   } finally {
     blocking.value = false;
   }

@@ -1,26 +1,52 @@
 import { ObjectId } from 'mongodb';
 import { requireAuth, requireAdmin } from '../middleware.js';
+import { parseObjectId, parsePagination } from '#src/shared/dbHelpers.js';
+import { LIST_LOGS_DEFAULT_LIMIT } from '#src/shared/const.js';
+import { escapeRegex, readString } from '#src/shared/utils.js';
+
+const parseDate = (value) => {
+  const text = readString(value);
+  if (!text) return null;
+  const date = new Date(text);
+  return Number.isNaN(date.getTime()) ? null : date;
+};
+
+function buildEventFilter(eventParam) {
+  const events = (readString(eventParam) || '').split(',').filter(Boolean);
+  if (!events.length) return null;
+  return events.length > 1 ? { $in: events } : events[0];
+}
+
+function buildDateFilter(from, to) {
+  const range = {};
+  const start = parseDate(from);
+  const end = parseDate(to);
+  if (start) range.$gte = start;
+  if (end) range.$lte = end;
+  return Object.keys(range).length ? range : null;
+}
+
+function buildSearchFilter(searchParam) {
+  const search = readString(searchParam);
+  if (!search) return null;
+  const pattern = { $regex: escapeRegex(search), $options: 'i' };
+  return [{ event: pattern }, { ip: pattern }, { 'meta.email': pattern }];
+}
 
 function buildLogsFilter(query) {
-  const { search, event, userId, from, to } = query;
   const filter = {};
 
+  const event = buildEventFilter(query.event);
   if (event) filter.event = event;
-  if (userId && ObjectId.isValid(userId)) filter.userId = new ObjectId(userId);
 
-  if (from || to) {
-    filter.createdAt = {};
-    if (from) filter.createdAt.$gte = new Date(from);
-    if (to) filter.createdAt.$lte = new Date(to);
-  }
+  const userId = parseObjectId(readString(query.userId));
+  if (userId) filter.userId = userId;
 
-  if (search) {
-    filter.$or = [
-      { event: { $regex: search, $options: 'i' } },
-      { ip: { $regex: search, $options: 'i' } },
-      { 'meta.email': { $regex: search, $options: 'i' } },
-    ];
-  }
+  const createdAt = buildDateFilter(query.from, query.to);
+  if (createdAt) filter.createdAt = createdAt;
+
+  const search = buildSearchFilter(query.search);
+  if (search) filter.$or = search;
 
   return filter;
 }
@@ -49,11 +75,11 @@ async function enrichLogsWithUsers(db, logs) {
 
 async function handleListLogs(req, res, db) {
   try {
-    const { page = 1, perPage = 50 } = req.query;
+    const { page, limit, skip } = parsePagination(
+      { page: req.query.page, limit: req.query.perPage },
+      { defaultLimit: LIST_LOGS_DEFAULT_LIMIT }
+    );
     const filter = buildLogsFilter(req.query);
-
-    const skip = (parseInt(page) - 1) * parseInt(perPage);
-    const limit = parseInt(perPage);
 
     const [logs, total] = await Promise.all([
       db.collection('logs').find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).toArray(),
@@ -62,7 +88,7 @@ async function handleListLogs(req, res, db) {
 
     const enriched = await enrichLogsWithUsers(db, logs);
 
-    res.json({ logs: enriched, total, page: parseInt(page), perPage: limit });
+    res.json({ logs: enriched, total, page, perPage: limit });
   } catch (err) {
     console.error('Admin logs list error:', err);
     res.status(500).json({ error: 'error.server' });
@@ -80,9 +106,10 @@ async function handleListLogEvents(req, res, db) {
 }
 
 async function handleDeleteLog(req, res, db) {
-  if (!ObjectId.isValid(req.params.id)) return res.status(400).json({ error: 'error.invalidId' });
+  const logId = parseObjectId(req.params.id);
+  if (!logId) return res.status(400).json({ error: 'error.invalidId' });
   try {
-    await db.collection('logs').deleteOne({ _id: new ObjectId(req.params.id) });
+    await db.collection('logs').deleteOne({ _id: logId });
     res.json({ success: true });
   } catch (err) {
     console.error('Admin log delete error:', err);
@@ -93,8 +120,10 @@ async function handleDeleteLog(req, res, db) {
 async function handleBulkDeleteLogs(req, res, db) {
   try {
     const { ids } = req.body;
-    if (!ids?.length) return res.status(400).json({ error: 'error.validation' });
-    const objectIds = ids.filter((id) => ObjectId.isValid(id)).map((id) => new ObjectId(id));
+    if (!Array.isArray(ids) || !ids.length) {
+      return res.status(400).json({ error: 'error.validation' });
+    }
+    const objectIds = ids.map((id) => parseObjectId(readString(id))).filter(Boolean);
     await db.collection('logs').deleteMany({ _id: { $in: objectIds } });
     res.json({ success: true });
   } catch (err) {

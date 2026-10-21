@@ -25,7 +25,7 @@ here.
 
 1. POST /api/auth/signup → creates user, generates 6-digit code (`crypto.randomInt`), hashes SHA-256
 2. Email sent with code → user enters in VerifyCodeView
-3. POST /api/auth/verify-code → `verifyCode()` uses `timingSafeEqual`, creates session
+3. POST /api/auth/verify-code → `verifyCode()` uses `timingSafeEqual`, then `startUserSession()` (new session id, `createdAt` stamped)
 4. Redirect to `/:locale/dashboard`
 
 ## Security constants
@@ -42,27 +42,29 @@ here.
 - Code generation: `crypto.randomInt` (not Math.random)
 - Code hashing: SHA-256 hex (not base64)
 - Code verification: `timingSafeEqual` (not string compare)
-- Session destruction after password/email change
+- Session id regenerated at login (`startUserSession`) and on password/email change; the other sessions of the user are destroyed (`destroyUserSessions(userId, req.sessionID)`); a password reset destroys all of them
+- Absolute session lifetime: `SESSION_ABSOLUTE_MAX_AGE_MS` (30 days from `createdAt`), checked by `requireAuth`; a session without `createdAt` is rejected, so logins from before this check must sign in again once
+- Email send failures surface as 502 `error.emailFailed` (`deliverEmail`)
 - Rate limiting per endpoint type
-- COOKIE_SECRET validated in production
+- COOKIE_SECRET required in production; `NODE_HOST` must be a public https origin or boot fails
 - IP blocking for brute-force prevention
 
 ## Session management
 
-- `express-session` with `session-file-store`
-- Sessions stored in `./sessions/` directory (persist across dev restarts)
-- `req.session.userId` is a string — convert with `new ObjectId(str)`
-- `destroyUserSessions(userId, excludeSessionId)` — deletes all except current
+- `express-session` with `session-file-store` (`src/api/http/session.js`), directory `logs/sessions/` (`SESSION_DIR`); the files are cleared at every production boot
+- Cookie `app.sid`: `sameSite: 'lax'`, `httpOnly`, `secure` in production; cookie `maxAge` 7 days (`SESSION_IDLE_MAX_AGE_MS`) plus the absolute 30-day cap
+- `req.session.userId` is a string - validate with `parseObjectId()`
+- `destroyUserSessions(userId, excludeSessionId)` - deletes every session file of the user except the optional excluded one
+- Client IP is `req.ip` (`getClientIp`), resolved through `trust proxy` = 1
 
 ## Captcha integration
 
-- **Server** (`shared/captcha.js`): Verifies reCAPTCHA v3 token via Google API
-- **Client** (`composables/useCaptcha.js`): Loads script, exposes `execute(action)`
-- Gracefully skipped if RECAPTCHA_SITE_KEY is not configured
+- **Server** (`shared/captcha.js`): `verifyCaptcha(token, expectedAction)` verifies the reCAPTCHA v3 token with Google. Outside production it always passes; in production it fails closed (missing secret, missing token, invalid, wrong action, low score or Google unreachable all reject). Signup and contact answer 400 `error.auth.captchaFailed`
+- **Client** (`composables/useCaptcha.js`): reads the site key from `<meta name="recaptcha-site-key">`, loads the script on demand, exposes `executeRecaptcha(action)`; returns `null` when no key is exposed
 
 ## Middleware
 
-- `requireAuth` — checks `req.session.userId` exists
+- `requireAuth` — valid `req.session.userId`, session inside its absolute lifetime, user exists and is not blocked
 - `requireAdmin` — checks user type via `isAdmin()`
 
 ## Where to look

@@ -51,7 +51,7 @@ npm install
 cp .env.example .env
 
 # 6. Démarrer MongoDB
-docker run -d -p 27017:27017 \
+docker run -d -p 127.0.0.1:27017:27017 \
   -e MONGO_INITDB_ROOT_USERNAME=root \
   -e MONGO_INITDB_ROOT_PASSWORD=password \
   mongo:latest
@@ -475,10 +475,13 @@ Cela vérifie:
 Tous les changements doivent passer les tests:
 
 ```bash
-# Run tests in watch mode (interactive)
+# Run once (npm test runs the suite once)
 npm test
 
-# Run once (for CI/CD)
+# Run in watch mode (interactive)
+npm run test:watch
+
+# Run once (for CI/CD, same as npm test)
 npm run test:run
 
 # Check coverage

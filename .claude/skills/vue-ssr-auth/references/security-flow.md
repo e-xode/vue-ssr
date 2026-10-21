@@ -4,7 +4,7 @@
 
 ```
 generateSecurityCode() → { code, hash }
-  - code: crypto.randomInt(100000, 999999).toString()
+  - code: crypto.randomInt(100000, 1000000).toString()
   - hash: SHA-256 hex of code
 
 verifyCode(input, hash) → boolean
@@ -16,7 +16,7 @@ verifyCode(input, hash) → boolean
 
 - Hashing: `bcryptjs` with BCRYPT_ROUNDS (10)
 - Comparison: `bcrypt.compare(input, hash)` — constant-time internally
-- On password change: all sessions destroyed except current
+- On password change: the other sessions are destroyed and the current session id is regenerated; on password reset all sessions are destroyed
 
 ## Rate limiting (disabled in dev)
 
@@ -26,9 +26,10 @@ signup, signin/verify/resend/reset, and account changes.
 
 ## IP security
 
-- `getClientIp(req)` — extracts real IP from proxy headers
+- `getClientIp(req)` — `req.ip` (Express resolves proxy headers via `trust proxy`), falling back to the socket address
 - `isIpBlocked(db, ip)` — checks blocklist collection
-- `recordLoginIp(db, userId, ip)` — audit trail
+- `recordLoginIp(db, userId, ip)` — audit trail (last 50 entries)
+- `assertNotBanned(db, res, { ip, user })` — 403 `error.auth.blocked` for a blocked IP or user
 
 ## Auth endpoints
 

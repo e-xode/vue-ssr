@@ -1,12 +1,13 @@
 services:
   node:
     container_name: e-xode-vue-ssr
+    restart: unless-stopped
     build:
       context: 'docker/dev/node'
     volumes:
       - '.:/app'
     ports:
-      - ${NODE_PORT}:${NODE_PORT}
+      - ${BIND_ADDRESS:-127.0.0.1}:${NODE_PORT}:${NODE_PORT}
     env_file:
       - ./.env
     environment:

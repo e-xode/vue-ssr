@@ -1,30 +1,53 @@
 name: 'npm-test'
 
-# 🚨 Trois jobs SÉPARÉS, volontairement. Ils tenaient auparavant dans un seul job où
-# `lint:check` précédait `test:run` : un bump d'eslint ou d'eslint-plugin-vue rendait le job
-# rouge sans jamais dire si les tests passaient. Pendant une campagne de mise à jour de
-# dépendances, c'est exactement le signal qu'il faut pouvoir lire séparément.
+# Four SEPARATE jobs, on purpose. They used to live in a single job where `lint:check` ran
+# before `test:run`: an eslint or eslint-plugin-vue bump turned the job red without ever saying
+# whether the tests passed. During a dependency update campaign, that is exactly the signal that
+# must be readable separately.
 #
-# `build` est nouveau ici. Il ne tournait qu'au tag (npm-publish.yml), donc APRÈS le merge :
-# la casse typique d'un bump vite / vue / vuetify / sass-embedded restait invisible jusqu'à la
-# release. C'est le job le plus utile des trois pour valider une mise à jour de dépendances.
+# `build` runs here and not only at the tag (npm-publish.yml), which is AFTER the merge: the
+# typical breakage of a vite / vue / vuetify / sass-embedded bump would stay invisible until the
+# release. It is the most useful job for validating a dependency update.
+#
+# `format` mirrors `npm run validate`, which checks formatting locally.
 
 on:
   push:
     branches: ['master', 'development']
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - '.claude/**'
+      - 'LICENSE'
   pull_request:
     branches: ['master', 'development']
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - '.claude/**'
+      - 'LICENSE'
 
 concurrency:
   group: '${{ github.workflow }}-${{ github.ref }}'
   cancel-in-progress: true
 
 jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 24
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run format:check
+
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 24
           cache: 'npm'
@@ -34,8 +57,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 24
           cache: 'npm'
@@ -45,8 +68,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 24
           cache: 'npm'

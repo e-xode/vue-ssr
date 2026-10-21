@@ -31,17 +31,20 @@ describe('shared/captcha.js verifyCaptcha', () => {
   });
 
   describe('in production', () => {
-    it('short-circuits to success when no secret is configured', async () => {
+    it('fails closed and logs when no secret is configured', async () => {
       vi.stubEnv('NODE_ENV', 'production');
       vi.stubEnv('RECAPTCHA_SECRET_KEY', '');
       const fetchMock = vi.fn();
       vi.stubGlobal('fetch', fetchMock);
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
       const verifyCaptcha = await loadVerifyCaptcha();
       const result = await verifyCaptcha('token', 'signup');
 
-      expect(result).toEqual({ success: true, score: 1.0 });
+      expect(result).toEqual({ success: false, reason: 'not_configured' });
       expect(fetchMock).not.toHaveBeenCalled();
+      expect(errorSpy).toHaveBeenCalled();
+      errorSpy.mockRestore();
     });
 
     it('rejects a missing token', async () => {
@@ -128,15 +131,18 @@ describe('shared/captcha.js verifyCaptcha', () => {
       expect(options.body).toContain('response=to%20ken');
     });
 
-    it('fails open when the verify request throws', async () => {
+    it('fails closed when the verify request throws', async () => {
       vi.stubEnv('NODE_ENV', 'production');
       vi.stubEnv('RECAPTCHA_SECRET_KEY', 'secret');
       vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('network down')));
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
       const verifyCaptcha = await loadVerifyCaptcha();
       const result = await verifyCaptcha('token', 'signup');
 
-      expect(result.success).toBe(true);
+      expect(result).toEqual({ success: false, reason: 'unavailable' });
+      expect(errorSpy).toHaveBeenCalled();
+      errorSpy.mockRestore();
     });
   });
 });

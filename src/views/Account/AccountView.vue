@@ -3,8 +3,10 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { mdiCamera, mdiDelete } from '@mdi/js';
 import { useAuthStore } from '@/stores/auth';
+import { useApiError } from '@/composables/useApiError';
 
 const { t } = useI18n();
+const { translateError } = useApiError();
 const authStore = useAuthStore();
 
 const tab = ref('profile');
@@ -47,9 +49,10 @@ async function uploadAvatar(event) {
     if (response.ok) {
       authStore.updateUser({ avatar: data.avatar });
     } else {
-      avatarError.value = t(data.error) || t('error.server');
+      avatarError.value = translateError(data.error);
     }
-  } catch {
+  } catch (err) {
+    console.error(err);
     avatarError.value = t('error.server');
   } finally {
     avatarLoading.value = false;
@@ -69,9 +72,10 @@ async function deleteAvatar() {
       authStore.updateUser({ avatar: null });
     } else {
       const data = await response.json();
-      avatarError.value = t(data.error) || t('error.server');
+      avatarError.value = translateError(data.error);
     }
-  } catch {
+  } catch (err) {
+    console.error(err);
     avatarError.value = t('error.server');
   } finally {
     avatarLoading.value = false;
@@ -94,9 +98,10 @@ async function saveProfile() {
       authStore.updateUser({ name: profileForm.value.name });
       profileSuccess.value = t('account.profile.saveSuccess');
     } else {
-      profileError.value = t(data.error) || t('error.server');
+      profileError.value = translateError(data.error);
     }
-  } catch {
+  } catch (err) {
+    console.error(err);
     profileError.value = t('error.server');
   } finally {
     profileSaving.value = false;
@@ -117,9 +122,10 @@ async function requestEmailChange() {
     if (response.ok) {
       emailStep.value = 2;
     } else {
-      emailError.value = t(data.error) || t('error.server');
+      emailError.value = translateError(data.error);
     }
-  } catch {
+  } catch (err) {
+    console.error(err);
     emailError.value = t('error.server');
   } finally {
     emailSaving.value = false;
@@ -143,9 +149,10 @@ async function verifyEmailChange() {
       emailStep.value = 1;
       emailForm.value = { newEmail: '', code: '' };
     } else {
-      emailError.value = t(data.error) || t('error.server');
+      emailError.value = translateError(data.error);
     }
-  } catch {
+  } catch (err) {
+    console.error(err);
     emailError.value = t('error.server');
   } finally {
     emailSaving.value = false;
@@ -175,9 +182,10 @@ async function changePassword() {
       passwordSuccess.value = t('account.password.changeSuccess');
       passwordForm.value = { currentPassword: '', newPassword: '', confirmPassword: '' };
     } else {
-      passwordError.value = t(data.error) || t('error.server');
+      passwordError.value = translateError(data.error);
     }
-  } catch {
+  } catch (err) {
+    console.error(err);
     passwordError.value = t('error.server');
   } finally {
     passwordSaving.value = false;

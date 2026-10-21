@@ -95,15 +95,22 @@
   "meta": {
     "index": {
       "title": "Vue SSR Starter Kit",
-      "description": "Production-ready boilerplate for Vue 3, Express and MongoDB with SSR, authentication, i18n, and admin panel."
+      "description": "Production-ready boilerplate for Vue 3, Express and MongoDB with SSR, authentication, i18n, and admin panel.",
+      "keywords": "vue, ssr, express, mongodb, starter kit, authentication, i18n, admin panel"
     },
     "signup": {
       "title": "Sign Up",
-      "description": "Create a new account"
+      "description": "Create a new account",
+      "keywords": "sign up, create account, register"
     },
     "signin": {
       "title": "Sign In",
-      "description": "Sign in to your account"
+      "description": "Sign in to your account",
+      "keywords": "sign in, login, account"
+    },
+    "verifyCode": {
+      "title": "Verify your email",
+      "description": "Enter the security code sent to your email address"
     },
     "forgotPassword": {
       "title": "Forgot Password"
@@ -113,14 +120,16 @@
     },
     "dashboard": {
       "title": "Dashboard",
-      "description": "Your dashboard"
+      "description": "Your dashboard",
+      "keywords": "dashboard, account overview"
     },
     "account": {
       "title": "My Account"
     },
     "contact": {
       "title": "Contact Us",
-      "description": "Get in touch with us"
+      "description": "Get in touch with us",
+      "keywords": "contact, support, feedback"
     },
     "notFound": {
       "title": "Page Not Found",
@@ -163,15 +172,32 @@
       "resendTooSoon": "Please wait before requesting a new code",
       "waitBeforeResend": "Please wait {seconds} seconds before requesting a new code",
       "noVerificationPending": "No verification in progress",
-      "resetNotPending": "No password reset in progress"
+      "resetNotPending": "No password reset in progress",
+      "allFieldsRequired": "All fields are required",
+      "captchaFailed": "Captcha verification failed",
+      "emailAndCodeRequired": "Email and code required",
+      "emailNotFound": "Email not found",
+      "invalidResetRequest": "Invalid or expired reset request",
+      "nameTooShort": "Name must be at least 2 characters",
+      "noPendingEmail": "No email change in progress",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "wrongPassword": "Current password is incorrect"
+    },
+    "avatar": {
+      "invalidType": "Unsupported image type (JPEG, PNG or WebP only)",
+      "tooLarge": "Image is too large (2 MB maximum)"
     },
     "admin": {
       "invalidUserType": "Invalid user type",
       "cannotDeleteSelf": "You cannot delete your own account"
     },
+    "emailFailed": "The email could not be sent, please try again later",
     "invalidEmail": "Invalid email address",
+    "invalidId": "Invalid identifier",
     "missingFields": "Please fill in all required fields",
-    "messageTooLong": "Message is too long"
+    "messageTooLong": "Message is too long",
+    "rateLimit": "Too many requests, please try again later",
+    "validation": "Invalid request"
   },
   "form": {
     "email": "Email",
@@ -200,6 +226,8 @@
       "total": "users",
       "search": "Search by name or email",
       "type": "Type",
+      "typeUser": "User",
+      "typeAdmin": "Administrator",
       "registered": "Registered",
       "lastUpdate": "Last update",
       "lastLogin": "Last login",
@@ -236,7 +264,46 @@
       "ip": "IP",
       "user": "User",
       "meta": "Details",
+      "viewDetails": "View details",
       "empty": "No logs found",
+      "metaDialog": {
+        "close": "Close",
+        "title": "Event details"
+      },
+      "reason": {
+        "invalidCode": "invalid code",
+        "invalidPassword": "invalid password",
+        "ipBlocked": "IP blocked",
+        "resetPassword": "password reset",
+        "tooManyAttempts": "too many attempts",
+        "userBlocked": "user blocked",
+        "userNotFound": "user not found"
+      },
+      "summary": {
+        "adminIpBlock": "Admin blocked IP {ip}",
+        "adminIpUnblock": "Admin unblocked IP {ip}",
+        "adminUserBlock": "Admin blocked user {targetUserId}",
+        "adminUserDelete": "Admin deleted user {targetUserId}",
+        "adminUserUnblock": "Admin unblocked user {targetUserId}",
+        "adminUserUpdate": "Admin updated a user ({fields})",
+        "authCodeFailed": "Security code failed for {email} ({reason})",
+        "authCodeVerified": "{email} verified the security code",
+        "authFailed": "Sign-in failed for {email} ({reason})",
+        "authResendCode": "{email} requested a new security code",
+        "contactSent": "Contact message from {name} ({email})",
+        "unknown": "Unknown event: {event}",
+        "userChangeEmailRequest": "Email change requested to {email}",
+        "userChangeEmailVerified": "Email changed to {email}",
+        "userDeleteAvatar": "Avatar removed",
+        "userForgotPassword": "Password reset requested for {email}",
+        "userResetPassword": "Password reset completed",
+        "userSignin": "{email} requested a sign-in code",
+        "userSignout": "User signed out",
+        "userSignup": "{email} signed up",
+        "userUpdateAvatar": "Avatar updated",
+        "userUpdatePassword": "Password changed",
+        "userUpdateProfile": "Profile updated ({fields})"
+      },
       "filter": {
         "event": "Filter by event",
         "from": "From",

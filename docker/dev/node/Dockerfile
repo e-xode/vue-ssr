@@ -7,6 +7,7 @@ ENV NODE_PORT=3002
 ENV PATH=/home/node/.npm-global/bin:$PATH
 
 ADD ./run.sh /scripts/run.sh
+ADD ./entrypoint.sh /scripts/entrypoint.sh
 RUN chmod +x /scripts/*
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -51,6 +52,9 @@ WORKDIR /app
 RUN mkdir /home/node/.npm-global
 RUN npm install -g npm@latest
 
+USER root
+
 EXPOSE $NODE_PORT
 
+ENTRYPOINT ["/scripts/entrypoint.sh"]
 CMD ["/bin/sh", "/scripts/run.sh"]

@@ -4,27 +4,45 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import { requireAuth } from '#src/api/middleware.js';
 import { logEvent } from '#src/shared/logger.js';
+import {
+  AVATAR_MAX_BYTES,
+  AVATAR_MIME_EXTENSIONS,
+  AVATAR_UPLOAD_ERRORS,
+} from '#src/shared/const.js';
 
 const AVATAR_DIR = 'public/uploads/avatars';
 
 fs.mkdirSync(AVATAR_DIR, { recursive: true });
 
+const isAllowedMimeType = (mimetype) => Object.hasOwn(AVATAR_MIME_EXTENSIONS, mimetype);
+
 const storage = multer.diskStorage({
   destination: AVATAR_DIR,
   filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, `${crypto.randomUUID()}${ext}`);
+    cb(null, `${crypto.randomUUID()}${AVATAR_MIME_EXTENSIONS[file.mimetype]}`);
   },
 });
 
 const upload = multer({
   storage,
-  limits: { fileSize: 2 * 1024 * 1024 },
+  limits: { fileSize: AVATAR_MAX_BYTES, files: 1 },
   fileFilter: (req, file, cb) => {
-    const allowed = ['image/jpeg', 'image/png', 'image/webp'];
-    cb(null, allowed.includes(file.mimetype));
+    if (isAllowedMimeType(file.mimetype)) return cb(null, true);
+    const err = new Error(`Unsupported avatar mimetype: ${file.mimetype}`);
+    err.code = 'LIMIT_UNEXPECTED_TYPE';
+    cb(err);
   },
 });
+
+export function uploadAvatar(req, res, next) {
+  upload.single('avatar')(req, res, (err) => {
+    if (!err) return next();
+    console.error('Upload avatar error:', err);
+    const known = AVATAR_UPLOAD_ERRORS[err.code];
+    if (known) return res.status(known.status).json({ error: known.error });
+    res.status(500).json({ error: 'error.server' });
+  });
+}
 
 function deleteFile(filePath) {
   const fullPath = path.join('public', filePath);
@@ -32,7 +50,7 @@ function deleteFile(filePath) {
 }
 
 export function setupAvatarRoute(app, db) {
-  app.post('/api/auth/avatar', requireAuth, upload.single('avatar'), async (req, res) => {
+  app.post('/api/auth/avatar', requireAuth, uploadAvatar, async (req, res) => {
     try {
       if (!req.file) return res.status(400).json({ error: 'error.validation' });
 

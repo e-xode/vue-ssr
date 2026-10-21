@@ -2,29 +2,40 @@ import './style.css';
 
 import { createApp } from './main';
 import { LOCALE_CODES } from '@/shared/const';
-import { trackPageView } from '@/shared/analytics';
+import { initAnalytics, trackPageView } from '@/shared/analytics';
+import { buildTitle } from '@/shared/title';
+import { readSsrState } from '@/shared/ssrState';
+import { APP_NAME_META_SELECTOR } from '@/shared/clientConstants';
 
-const { app, router, i18n } = createApp();
+const { app, router, i18n, setLocale } = createApp({ initialState: readSsrState() });
 
-router.afterEach((to) => {
-  const locale = to.params.locale;
+function readAppName() {
+  return document.querySelector(APP_NAME_META_SELECTOR)?.content ?? '';
+}
+
+function syncLocale(route) {
+  const locale = route.params.locale;
   if (locale && LOCALE_CODES.includes(locale)) {
-    i18n.global.locale.value = locale;
+    setLocale(locale);
     localStorage.setItem('locale', locale);
   }
+}
 
-  const title = to.meta?.title ? i18n.global.t(to.meta.title) : document.title;
-  if (to.meta?.title) {
-    document.title = title;
-  }
-  trackPageView(to.fullPath, title);
+function syncTitle(route) {
+  if (!route.meta?.title) return document.title;
+  const title = buildTitle(i18n.global.t(route.meta.title), readAppName());
+  document.title = title;
+  return title;
+}
+
+initAnalytics();
+
+router.afterEach((to) => {
+  syncLocale(to);
+  trackPageView(to.fullPath, syncTitle(to));
 });
 
 router.isReady().then(() => {
-  const locale = router.currentRoute.value.params.locale;
-  if (locale && LOCALE_CODES.includes(locale)) {
-    i18n.global.locale.value = locale;
-    localStorage.setItem('locale', locale);
-  }
+  syncLocale(router.currentRoute.value);
   app.mount('#app');
 });

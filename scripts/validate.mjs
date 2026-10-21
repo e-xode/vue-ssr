@@ -1,7 +1,7 @@
 import { execFile, spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, statSync, unlinkSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { promisify } from 'node:util';
 
 const sentinelNamespace = 'vue-ssr-validate-state';
@@ -13,63 +13,70 @@ const parallelStages = [
   { name: 'test', script: 'test:run' },
 ];
 
-const selectStages = (extensions) => {
-  const has = (...candidates) => candidates.some((value) => extensions.has(value));
-  if (has('.vue', '.js', '.mjs', '.cjs', '.ts'))
-    return new Set(['format', 'lint', 'build', 'test']);
-  if (has('.scss', '.css')) return new Set(['format', 'lint']);
-  return new Set();
+const stagesByExtension = {
+  '.vue': ['format', 'lint', 'build', 'test'],
+  '.js': ['format', 'lint', 'build', 'test'],
+  '.mjs': ['format', 'lint', 'build', 'test'],
+  '.cjs': ['format', 'lint', 'build', 'test'],
+  '.ts': ['format', 'lint', 'build', 'test'],
+  '.scss': ['format', 'lint', 'build'],
+  '.css': ['format', 'lint', 'build'],
+  '.json': ['format', 'test'],
 };
+
+const selectStages = (extensions) =>
+  new Set([...extensions].flatMap((extension) => stagesByExtension[extension] ?? []));
 
 const execFileAsync = promisify(execFile);
 const npmBin = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 const bigBuffer = { maxBuffer: 1024 * 1024 * 256 };
 
-const gitOutput = async (args) => {
+const gitOutput = async (args, cwd) => {
   try {
-    const { stdout } = await execFileAsync('git', args, bigBuffer);
+    const { stdout } = await execFileAsync('git', args, { ...bigBuffer, cwd });
     return stdout;
-  } catch {
-    return '';
+  } catch (err) {
+    throw new Error(`git ${args.join(' ')} failed: ${err.message}`, { cause: err });
   }
 };
 
-const gitLines = async (args) =>
-  (await gitOutput(args))
+const gitLines = async (args, cwd) =>
+  (await gitOutput(args, cwd))
     .split('\n')
     .map((line) => line.trim())
     .filter(Boolean);
 
 const resolveRoot = async () =>
-  (await gitOutput(['rev-parse', '--show-toplevel'])).trim() || process.cwd();
+  (await gitOutput(['rev-parse', '--show-toplevel'], process.cwd())).trim();
 
-const resolveGitDir = async () => (await gitOutput(['rev-parse', '--git-dir'])).trim() || '.git';
+const resolveGitDir = async (root) => (await gitOutput(['rev-parse', '--git-dir'], root)).trim();
 
 const extensionOf = (file) => {
   const dot = file.lastIndexOf('.');
   return dot >= 0 ? file.slice(dot).toLowerCase() : '';
 };
 
-const dirtyFiles = async () => {
+const dirtyFiles = async (root) => {
   const groups = await Promise.all([
-    gitLines(['diff', '--name-only', 'HEAD']),
-    gitLines(['diff', '--name-only', '--cached']),
-    gitLines(['ls-files', '--others', '--exclude-standard']),
+    gitLines(['diff', '--name-only', 'HEAD'], root),
+    gitLines(['diff', '--name-only', '--cached'], root),
+    gitLines(['ls-files', '--others', '--exclude-standard'], root),
   ]);
   return [...new Set(groups.flat())];
 };
 
 const computeDigest = async (root) => {
   const parts = [
-    await gitOutput(['status', '--porcelain=v2', '-uall', '--no-renames']),
-    await gitOutput(['diff', 'HEAD']),
+    await gitOutput(['status', '--porcelain=v2', '-uall', '--no-renames'], root),
+    await gitOutput(['diff', 'HEAD'], root),
   ];
-  const untracked = (await gitLines(['ls-files', '--others', '--exclude-standard'])).sort();
+  const untracked = (await gitLines(['ls-files', '--others', '--exclude-standard'], root)).sort();
   for (const file of untracked) {
     try {
       const info = statSync(join(root, file));
       parts.push(`${Math.floor(info.mtimeMs)} ${info.size} ${file}`);
-    } catch {
+    } catch (err) {
+      console.error(err);
       parts.push(`missing ${file}`);
     }
   }
@@ -86,11 +93,13 @@ const runStage = ({ name, script }, root) =>
     child.stderr.on('data', (chunk) => {
       output += chunk;
     });
-    child.on('error', (err) => done({ name, code: 1, output: `${output}\n${err}` }));
-    child.on('close', (code) => done({ name, code: code ?? 1, output }));
+    child.on('error', (err) => done({ name, script, code: 1, output: `${output}\n${err}` }));
+    child.on('close', (code) => done({ name, script, code: code ?? 1, output }));
   });
 
 const tail = (text, lines) => text.split('\n').slice(-lines).join('\n');
+
+const reproduceCommand = (script) => `npm run ${script}`;
 
 const printReport = (mode, order, results) => {
   console.log('## Validation (npm run validate)');
@@ -102,6 +111,7 @@ const printReport = (mode, order, results) => {
     } else {
       console.log(`- ${result.name}: FAIL (exit ${result.code})`);
       console.log(tail(result.output, 40));
+      if (result.script) console.log(`reproduce: ${reproduceCommand(result.script)}`);
     }
   }
 };
@@ -109,7 +119,8 @@ const printReport = (mode, order, results) => {
 const readSentinel = (sentinel) => {
   try {
     return JSON.parse(readFileSync(sentinel, 'utf8'));
-  } catch {
+  } catch (err) {
+    if (err.code !== 'ENOENT') console.error(err);
     return null;
   }
 };
@@ -122,18 +133,18 @@ const writeSentinel = (sentinel, stateDir, payload) => {
 const clearSentinel = (sentinel) => {
   try {
     if (existsSync(sentinel)) unlinkSync(sentinel);
-  } catch {
-    void 0;
+  } catch (err) {
+    console.error(err);
   }
 };
 
 const main = async () => {
   const root = await resolveRoot();
-  const gitDir = await resolveGitDir();
-  const stateDir = join(root, gitDir, sentinelNamespace);
+  const gitDir = await resolveGitDir(root);
+  const stateDir = resolve(root, gitDir, sentinelNamespace);
   const sentinel = join(stateDir, 'state.json');
 
-  const active = selectStages(new Set((await dirtyFiles()).map(extensionOf)));
+  const active = selectStages(new Set((await dirtyFiles(root)).map(extensionOf)));
   const serial = serialStages.filter((stage) => active.has(stage.name));
   const parallel = parallelStages.filter((stage) => active.has(stage.name));
   const order = [...serial, ...parallel].map((stage) => stage.name);

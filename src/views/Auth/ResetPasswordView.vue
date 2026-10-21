@@ -3,9 +3,11 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useLocalePath } from '@/composables/useLocalePath';
+import { useApiError } from '@/composables/useApiError';
 import AuthShell from '@/components/AuthShell.vue';
 
 const { t } = useI18n();
+const { translateError } = useApiError();
 const router = useRouter();
 const { localePath } = useLocalePath();
 
@@ -46,9 +48,10 @@ async function handleSubmit() {
     if (response.ok) {
       await router.push(localePath('/signin'));
     } else {
-      errorMessage.value = data.error || t('error.server');
+      errorMessage.value = translateError(data.error);
     }
-  } catch {
+  } catch (err) {
+    console.error(err);
     errorMessage.value = t('error.server');
   } finally {
     isSubmitting.value = false;

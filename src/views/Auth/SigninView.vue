@@ -5,14 +5,16 @@ import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { useLocalePath } from '@/composables/useLocalePath';
 import { useCaptcha } from '@/composables/useCaptcha';
+import { useApiError } from '@/composables/useApiError';
 import AuthShell from '@/components/AuthShell.vue';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
 
 const { t } = useI18n();
+const { translateError } = useApiError();
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
-const { localePath } = useLocalePath();
+const { locale, localePath } = useLocalePath();
 const { executeRecaptcha } = useCaptcha();
 
 const form = ref({
@@ -34,6 +36,7 @@ async function handleSubmit() {
     email: form.value.email,
     password: form.value.password,
     captchaToken,
+    locale: locale.value,
   });
 
   isSubmitting.value = false;
@@ -45,7 +48,7 @@ async function handleSubmit() {
       query: redirect ? { redirect } : {},
     });
   } else {
-    errorMessage.value = result.error || t('error.auth.signinFailed');
+    errorMessage.value = translateError(result.error, 'error.auth.signinFailed');
   }
 }
 </script>

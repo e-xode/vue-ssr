@@ -17,9 +17,9 @@ description: "Architecture reference for the Vue SSR Starter Kit (e-xode/vue-ssr
 | i18n         | Vue i18n v11 (EN/FR, Composition API legacy: false)          |
 | Backend      | Express 5 + express-session + session-file-store             |
 | Database     | MongoDB 7 (native driver, connection pooling)                |
-| Email        | Nodemailer 9                                                 |
+| Email        | Nodemailer 10                                                |
 | Sanitization | DOMPurify 3                                                  |
-| Security     | Helmet 8 + CSP (production only) + express-rate-limit + CORS |
+| Security     | Helmet 8 + CSP (script-src without inline, dev relaxes) + express-rate-limit (prod) + CORS |
 | Build        | Vite 8 (client + server bundles)                             |
 | Tests        | Vitest 4 + @vue/test-utils + happy-dom                       |
 | Lint         | ESLint 10 + eslint-plugin-vue + Prettier                     |
@@ -49,19 +49,27 @@ See [references/ssr-lifecycle.md](./references/ssr-lifecycle.md).
 
 | Module         | Exports                                                                                       |
 | -------------- | --------------------------------------------------------------------------------------------- |
-| `const.js`     | BCRYPT_ROUNDS, SECURITY_CODE_EXPIRY_MS, SECURITY_CODE_MAX_ATTEMPTS, RESEND_COOLDOWN_MS, USER_SAFE_PROJECTION, USER_TYPES, EMAIL_REGEX, SUPPORTED_LOCALES, DEFAULT_LOCALE, LOCALE_CODES, LOCALE_ROUTE_REGEX, isAdmin(), getIntlLocale(), getOgLocale() |
+| `const.js`     | BCRYPT_ROUNDS, SECURITY_CODE_*, RESEND_COOLDOWN_MS, SESSION_* (cookie name/options, SESSION_ABSOLUTE_MAX_AGE_MS, SESSION_DIR), AVATAR_*, LOG_LEVELS/DEFAULT_LOG_LEVEL, USER_SAFE_PROJECTION, USER_TYPES, EMAIL_REGEX, SUPPORTED_LOCALES, DEFAULT_LOCALE, LOCALE_CODES, LOCALE_ROUTE_REGEX, isAdmin(), getIntlLocale(), getOgLocale() |
+| `clientConstants.js` | Browser-facing constants: meta names (`ga-id`, `recaptcha-site-key`), script URLs, `SSR_STATE_ELEMENT_ID`, reveal/reduced-motion settings |
+| `seoConstants.js` | Sitemap/robots TTLs and disallowed paths, site image/logo/favicon paths, theme colors, DEFAULT_APP_NAME |
 | `dbHelpers.js` | parseObjectId(), parsePagination(), findUserSafe(), getUserWithCounts()                       |
 | `email.js`     | generateSecurityCode(), hashCode(), verifyCode(), sendSecurityCodeEmail(), sendContactEmail() |
-| `security.js`  | getClientIp(), isIpBlocked(), recordLoginIp(), destroyUserSessions()                          |
+| `security.js`  | getClientIp() (`req.ip`), isIpBlocked(), assertNotBanned(), startUserSession(), isSessionExpired(), recordLoginIp(), destroyUserSessions() |
 | `api.js`       | apiFetch() — client fetch wrapper (AbortController, configurable `timeout` default 15s, rate-limit detection) |
 | `mongo.js`     | mongoConnect(), mongoClose() — MongoClient singleton with connection pooling; returns `{ client, db, error }` |
-| `analytics.js` | Google Analytics gtag injection (SSR head, GA_MEASUREMENT_ID)                                 |
-| `captcha.js`   | Server-side reCAPTCHA v3 verify (expectedAction check, RECAPTCHA_MIN_SCORE, `{success,score,reason}`) |
+| `analytics.js` | Client-only GA4: `initAnalytics()` reads `<meta name="ga-id">`, loads gtag with consent defaults; trackPageView/trackEvent/... |
+| `captcha.js`   | Server-side reCAPTCHA v3 verify (expectedAction check, RECAPTCHA_MIN_SCORE, `{success,score,reason}`); passes in dev, fails closed in production |
 | `sanitize.js`  | sanitize(), isEmptyHtml() — curated sanitize-html allowlist for XSS-safe rich HTML            |
-| `utils.js`     | escapeHtml()                                                                                  |
-| `log.js`       | logInfo(), logWarn(), logError(), logDebug()                                                  |
-| `logger.js`    | logEvent(db, event, meta) — MongoDB events collection                                         |
-| `theme.js`     | THEME_COOKIE, THEMES, DEFAULT_THEME, THEME_COOKIE_MAX_AGE, isValidTheme(), parseThemeCookie() — SSR-safe light/dark theme cookie parsing |
+| `utils.js`     | escapeHtml(), readString(), readEmail(), escapeRegex()                                        |
+| `serialize.js` | serializeForScript() — JSON safe to embed in `<script>` (escapes `<`, `>`, `&`, U+2028/2029)  |
+| `title.js`     | buildTitle(pageTitle, appName) — `Page — App` titles, shared by SSR head and client          |
+| `localizedRoutes.js` | PAGES (localized slugs), pageSlugs(), findPageBySlug(), localizedPath(), localizeSubPath(), pathLocaleMismatch() |
+| `siteUrl.js`   | resolveSiteUrl(env), assertProductionSiteUrl(env) — `NODE_HOST` must be a public https origin in production |
+| `sitemap.js`   | createSitemapCache(), buildSitemapXml() — built from `PAGES`                                  |
+| `ssrState.js`  | readSsrState() — client reads the Pinia state serialized by the server                        |
+| `log.js`       | logInfo(), logWarn(), logError(), logDebug() — filtered by `LOG_LEVEL`                        |
+| `logger.js`    | logEvent(db, { event, userId, ip, meta }) — MongoDB logs collection                          |
+| `theme.js`     | THEME_COOKIE, THEMES, DEFAULT_THEME, isValidTheme(), parseThemeCookie(), hasThemeChoice(), applyDocumentTheme() — SSR-safe light/dark theme |
 
 ## Division of responsibilities (vue-ssr-architecture ↔ vue-ssr-server)
 
@@ -82,7 +90,7 @@ Route-module mechanics (the `setupXRoute(app, db)` pattern, middleware guards, M
 ### Adding a view
 
 1. Create `src/views/MyPage/MyPageView.vue` + `MyPageView.scss`
-2. Add route to `localeRoutes` in `src/router.js`
+2. Add route to `localeRoutes` in `src/router.js` (a page with a localized slug and a sitemap entry goes in `PAGES` in `src/shared/localizedRoutes.js` and uses `pageRoute(name)`)
 3. Add i18n keys in `en.json` + `fr.json`
 4. Use `useLocalePath()` for navigation links
 

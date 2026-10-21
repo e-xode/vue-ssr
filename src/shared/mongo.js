@@ -4,13 +4,15 @@ import { logError, logInfo } from './log.js';
 let _client = null;
 
 const mongoConnect = async () => {
-  const { MONGO_DB, MONGO_HOST, MONGO_PWD, MONGO_TYPE, MONGO_USER } = process.env;
+  const { MONGO_DB, MONGO_HOST, MONGO_PWD, MONGO_USER } = process.env;
+  const MONGO_TYPE = process.env.MONGO_TYPE || 'mongodb';
 
   const url = MONGO_USER
     ? `${MONGO_TYPE}://${encodeURIComponent(MONGO_USER)}:${encodeURIComponent(MONGO_PWD)}@${MONGO_HOST}/${MONGO_DB}`
     : `${MONGO_TYPE}://${MONGO_HOST}/${MONGO_DB}`;
 
   _client = new MongoClient(url, {
+    ignoreUndefined: true,
     maxPoolSize: 50,
     minPoolSize: 5,
     maxIdleTimeMS: 30000,
