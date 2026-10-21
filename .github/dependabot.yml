@@ -5,6 +5,10 @@ updates:
     schedule:
       interval: 'weekly'
     versioning-strategy: increase
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
   - package-ecosystem: 'docker'
     directory: '/docker/build'
     schedule:

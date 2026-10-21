@@ -10,14 +10,30 @@ export function isValidTheme(value) {
   return THEMES.includes(value);
 }
 
-export function parseThemeCookie(cookieHeader) {
+export const DARK_SCHEME_QUERY = '(prefers-color-scheme: dark)';
+
+function readThemeCookie(cookieHeader) {
   if (!cookieHeader) {
-    return DEFAULT_THEME;
+    return '';
   }
   const entry = cookieHeader
     .split(';')
     .map((part) => part.trim())
     .find((part) => part.startsWith(`${THEME_COOKIE}=`));
-  const value = entry ? entry.slice(THEME_COOKIE.length + 1) : '';
+  return entry ? entry.slice(THEME_COOKIE.length + 1) : '';
+}
+
+export function parseThemeCookie(cookieHeader) {
+  const value = readThemeCookie(cookieHeader);
   return isValidTheme(value) ? value : DEFAULT_THEME;
+}
+
+export function hasThemeChoice(cookieHeader) {
+  return isValidTheme(readThemeCookie(cookieHeader));
+}
+
+export function applyDocumentTheme(name) {
+  if (typeof document === 'undefined') return;
+  document.documentElement.classList.remove(...THEMES.map((theme) => `v-theme--${theme}`));
+  document.documentElement.classList.add(`v-theme--${name}`);
 }

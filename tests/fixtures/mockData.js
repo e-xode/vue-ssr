@@ -1,5 +1,3 @@
-// tests/fixtures/mockData.js
-
 export const mockUser = {
   _id: 'user-123',
   email: 'test@example.com',

@@ -51,7 +51,10 @@ export default defineConfig({
   server: {
     allowedHosts,
     watch: {
-      usePolling: true,
+      usePolling: process.env.VITE_USE_POLLING === 'true',
+    },
+    warmup: {
+      ssrFiles: ['./src/entry-server.js'],
     },
   },
   ssr: {

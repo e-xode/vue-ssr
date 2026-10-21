@@ -16,7 +16,9 @@ paths:
 - Validate every ObjectId with `parseObjectId()` from `src/shared/dbHelpers.js` before a query — return early on failure with the `error.invalidId` i18n key (see rule `api-error-handling`). An unvalidated string passed straight to the MongoDB driver throws on malformed input, surfacing as an unhandled 500 instead of the intended 400.
 - Use `src/shared/log.js` (`logInfo` / `logWarn`) for structured server logging.
 - Route handlers are `async`/`await` wrapped in try/catch — see rule `api-error-handling` (do not duplicate that pattern here).
-- Shutdown lifecycle: handle SIGTERM/SIGINT → `await mongoClose()` → `process.exit(0)`.
+- Shutdown lifecycle (`src/api/http/shutdown.js`): SIGTERM/SIGINT → readiness off (`/healthz` 503) → close the HTTP server → `await mongoClose()` → exit.
+- `server.js` stays thin wiring: HTTP-host logic goes in a module under `src/api/http/`.
+- Client IP: `getClientIp(req)` (`req.ip`), never `x-forwarded-for` parsed by hand.
 
 **Delegation:** the orchestrator delegates changes here to the `server` agent.
 

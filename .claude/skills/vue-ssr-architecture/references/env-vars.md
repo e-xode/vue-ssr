@@ -4,8 +4,12 @@
 COMPOSE_FILE=docker-compose.yml:docker-compose.local.yml   # unset/commented = remote MongoDB
 NODE_ENV=development
 NODE_PORT=3002
-NODE_HOST=http://localhost:3002
-APP_NAME=vue-ssr
+NODE_HOST=http://localhost:3002        # public https origin in production
+APP_NAME=vue-ssr                       # titles and structured data (default App)
+BASE=/                                 # public base path when served below the root
+LOG_LEVEL=info                         # error | warn | info | debug
+BIND_ADDRESS=127.0.0.1                 # host interface for published dev ports
+VITE_USE_POLLING=false                 # true when bind mounts miss inotify events
 COOKIE_SECRET=your-secret              # MUST be set in production
 
 MONGO_TYPE=mongodb                     # mongodb (local) | mongodb+srv (Atlas)
@@ -38,13 +42,23 @@ See the `vue-ssr-deployment` skill for the full local-vs-remote mechanics.
 
 ## Production requirements
 
-- `COOKIE_SECRET`: server refuses to start if missing/default in production
-- CORS allowlist: `http://localhost:${NODE_PORT}` plus `NODE_HOST`, computed in `server.js` — there
-  is no separate `CORS_ORIGIN` variable
-- `NODE_HOST`: used for email links, canonical URLs, and absolute SEO metadata
+- `COOKIE_SECRET`: the server refuses to start if it is missing in production
+- `NODE_HOST`: must be a public `https` origin (not localhost/127.0.0.1/::1, not `http`), or the
+  server refuses to boot (`assertProductionSiteUrl`). Used for the CORS allowlist, email links,
+  canonical URLs, sitemap and absolute SEO metadata
+- CORS allowlist: `http://localhost:${NODE_PORT}` plus `NODE_HOST`, built in
+  `src/api/http/hardening.js` - there is no separate `CORS_ORIGIN` variable
+- `RECAPTCHA_SECRET_KEY`: required in production, signup and contact are refused without it
+- Session lifetime: `SESSION_ABSOLUTE_MAX_AGE_MS` (30 days) is a constant in `src/shared/const.js`,
+  not an env var
 
 ## Gotchas
 
-- CSP: Helmet CSP is production-conditional (disabled in dev for HMR/devtools)
-- Captcha: gracefully degraded when `RECAPTCHA_SITE_KEY` is not set
+- CSP: Helmet CSP is active in every mode; dev only adds `'unsafe-inline'`/`'unsafe-eval'` scripts and
+  `ws:`/`wss:` for Vite HMR. Production `script-src` has no `'unsafe-inline'`
+- `GA_MEASUREMENT_ID` and `RECAPTCHA_SITE_KEY` are exposed as `<meta name="ga-id">` and
+  `<meta name="recaptcha-site-key">` (only when they match the expected format); client code loads
+  the scripts. Without them analytics and captcha tokens are skipped client-side
+- reCAPTCHA verification passes outside production and fails closed in production (missing secret,
+  missing token or low score is a rejection)
 - Error stack traces: hidden in production responses (shown only in dev)

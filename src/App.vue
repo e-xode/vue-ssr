@@ -5,10 +5,12 @@ import { useI18n } from 'vue-i18n';
 import { TheHeader, TheFooter } from '@/components/layout';
 import CookieConsentBanner from '@/components/CookieConsent/CookieConsentBanner.vue';
 import { useConsent } from '@/composables/useConsent';
+import { useSystemTheme } from '@/composables/useSystemTheme';
 
 const route = useRoute();
 const { t } = useI18n();
 const { getConsent, applyConsent } = useConsent();
+const { applySystemPreference } = useSystemTheme();
 
 const layout = computed(() => route.meta?.layout || 'public');
 const showHeader = computed(() => layout.value !== 'minimal');
@@ -17,6 +19,7 @@ const showFooter = computed(() => layout.value === 'public');
 onMounted(() => {
   const stored = getConsent();
   if (stored) applyConsent(stored);
+  applySystemPreference();
 });
 </script>
 

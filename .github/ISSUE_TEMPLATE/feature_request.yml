@@ -1,5 +1,5 @@
 name: Feature Request
-description: Proposer une nouvelle feature ou amélioration
+description: Suggest a new feature or improvement
 title: '[FEATURE] '
 labels: ['enhancement', 'needs-triage']
 assignees: []
@@ -8,81 +8,81 @@ body:
   - type: markdown
     attributes:
       value: |
-        Merci pour la suggestion! Nous aimons les idées pour améliorer e-xode-vue-ssr. Veuillez donner autant de contexte que possible.
+        Thanks for the suggestion! We love ideas to improve e-xode-vue-ssr. Please give as much context as possible.
 
   - type: checkboxes
     attributes:
-      label: Avez-vous vérifié?
+      label: Have you checked?
       options:
-        - label: Cette feature n'existe pas déjà
+        - label: This feature does not already exist
           required: true
-        - label: Pas de feature request similaire dans les issues existantes
+        - label: There is no similar feature request in the existing issues
           required: true
 
   - type: textarea
     attributes:
-      label: Description de la Feature
-      description: Description claire de la feature proposée
-      placeholder: "Je voudrais que le système d'authentification supporte l'authentification par SMS en plus de l'email..."
+      label: Feature Description
+      description: A clear description of the proposed feature
+      placeholder: 'I would like the authentication system to support SMS authentication in addition to email...'
     validations:
       required: true
 
   - type: textarea
     attributes:
-      label: Cas d'Usage / Motivation
-      description: Pourquoi cette feature serait-elle utile? Quel problème résout-elle?
+      label: Use Case / Motivation
+      description: Why would this feature be useful? What problem does it solve?
       placeholder: |
-        - Cela permettrait aux utilisateurs sans email valide de...
-        - Améliore l'expérience utilisateur pour...
-        - Rendent le starter kit compatible avec...
+        - It would allow users without a valid email to...
+        - It improves the user experience for...
+        - It makes the starter kit compatible with...
     validations:
       required: true
 
   - type: textarea
     attributes:
-      label: Solution Proposée
-      description: Comment devrait-on implémenter cette feature?
+      label: Proposed Solution
+      description: How should this feature be implemented?
       placeholder: |
-        Option 1: Ajouter un SMS provider (Twilio)
-        Option 2: Utiliser une API existante
-        Option 3: Autre approche...
+        Option 1: Add an SMS provider (Twilio)
+        Option 2: Use an existing API
+        Option 3: Another approach...
     validations:
       required: true
 
   - type: textarea
     attributes:
-      label: Solutions Alternatives Considérées
-      description: Y a-t-il d'autres façons de résoudre ce problème?
+      label: Alternative Solutions Considered
+      description: Are there other ways to solve this problem?
       placeholder: |
-        Alternative 1: Utiliser une 2FA existante
-        Alternative 2: Ignorer ce cas et faire autrement
-        Pourquoi je préfère ma solution proposée...
+        Alternative 1: Use an existing 2FA
+        Alternative 2: Ignore this case and do it differently
+        Why I prefer my proposed solution...
 
   - type: textarea
     attributes:
-      label: Contexte Additionnel
-      description: Autre información que pourrait aider?
+      label: Additional Context
+      description: Any other information that could help?
       placeholder: |
-        - Links vers projets similaires
-        - POC code ou prototypes
-        - Références de docs
-        - Nombre d'utilisateurs affectés
+        - Links to similar projects
+        - Proof-of-concept code or prototypes
+        - Documentation references
+        - Number of affected users
 
   - type: dropdown
     attributes:
-      label: Priorité
-      description: Quelle importance pour votre use case?
+      label: Priority
+      description: How important is it for your use case?
       options:
-        - 'Nice to have (pas urgent)'
-        - 'Important (aimerait voir bientôt)'
-        - 'Critical (bloque ma production)'
+        - 'Nice to have (not urgent)'
+        - 'Important (would like to see it soon)'
+        - 'Critical (blocks my production)'
     validations:
       required: true
 
   - type: dropdown
     attributes:
-      label: Domaine Affecté
-      description: Quel partie du projet est affectée?
+      label: Affected Area
+      description: Which part of the project is affected?
       options:
         - 'Frontend / UI / Components'
         - 'Backend / API / Routes'
@@ -92,35 +92,35 @@ body:
         - 'Documentation'
         - 'Testing'
         - 'Performance'
-        - 'Accessibilité'
+        - 'Accessibility'
         - 'i18n / Localization'
-        - 'Autre'
+        - 'Other'
     validations:
       required: false
 
   - type: checkboxes
     attributes:
-      label: Je peux aider
+      label: I can help
       options:
-        - label: Je serais heureux de collaborer ou de développer cette feature
+        - label: I would be happy to collaborate on or develop this feature
           required: false
-        - label: Je peux fournir un financement/ressources si nécessaire
+        - label: I can provide funding/resources if needed
           required: false
 
-  - type: textarea
+  - type: dropdown
     attributes:
-      label: Taille d'Effort Estimée
-      description: Avez-vous une idée de la taille d'effort?
+      label: Estimated Effort
+      description: Do you have an idea of the size of the effort?
       options:
-        - 'Petit (< 4 heures) - simple fix'
-        - 'Moyen (4-16 heures) - peut être divisé en 2-3 PRs'
-        - 'Grand (16-40 heures) - plusieurs jours de travail'
-        - 'Très Grand (> 40 heures) - projet majeur'
+        - 'Small (< 4 hours) - simple fix'
+        - 'Medium (4-16 hours) - can be split into 2-3 PRs'
+        - 'Large (16-40 hours) - several days of work'
+        - 'Very Large (> 40 hours) - major project'
 
   - type: markdown
     attributes:
       value: |
         ---
-        **Merci!** Nous examinerons cette suggestion et fournirons des retours dès que possible.
+        **Thank you!** We will review this suggestion and give feedback as soon as possible.
 
-        Pour plus d'informations, voir [CONTRIBUTING.md](../../CONTRIBUTING.md#proposer-une-feature).
+        For more information, see [CONTRIBUTING.md](../../CONTRIBUTING.md#proposer-une-feature).

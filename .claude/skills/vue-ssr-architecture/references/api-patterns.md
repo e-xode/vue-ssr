@@ -9,7 +9,7 @@ export function setupMyFeatureRoute(app, db) {
       res.json({ status: 'success', data });
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: 'Server error' });
+      res.status(500).json({ error: 'error.server' });
     }
   });
 }
@@ -19,7 +19,7 @@ Register it inside `createApiRouter(db)` in `src/api/router.js` — that factory
 returns an `express.Router()` (rate limiters + every `setupXRoute(router, db)`). The
 handler shape above is unchanged: it receives the router in place of `app`.
 
-In dev the whole API layer hot-reloads through Vite's module graph: `server.js` mounts it
+In dev the whole API layer hot-reloads through Vite's module graph: `src/api/http/dev.js` mounts it
 via `vite.ssrLoadModule('/src/api/router.js')` per `/api` request, so editing any route
 takes effect on the next request with no process restart and the HMR socket intact. In
 prod the router is built once at startup.
@@ -41,9 +41,12 @@ POST /api/contact (no auth)
 GET/PUT/DELETE /api/admin/users[/:id], POST /block
 GET/DELETE /api/admin/logs[/:id], POST /bulk-delete
 
-### Sitemap
+### Host routes (outside `/api`, wired in `server.js`)
 
-GET /sitemap.xml — Dynamic generation from routes, cached 1h TTL
+GET /healthz — readiness probe (200 `{status:'ok'}`, 503 while booting or shutting down)
+GET /sitemap.xml — generated from `PAGES` in `localizedRoutes.js`, cached 1h TTL
+GET /robots.txt — generated, disallows the private paths in `seoConstants.js`
+GET /uploads/* — production only, static (avatars)
 
 ## Rate limiting strategy
 
@@ -56,7 +59,7 @@ Admin endpoints are protected by the `requireAdmin` middleware guard, not a rate
 
 Client fetch wrapper in `shared/api.js`:
 
-- AbortController with 15s timeout
+- AbortController with configurable `timeout` (default 15s)
 - Content-type detection: auto-parses JSON, returns text for non-JSON
 - FormData support (no Content-Type header for multipart)
 - Rate-limit detection: sets `error.isRateLimit = true` on 429

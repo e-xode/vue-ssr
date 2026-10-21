@@ -24,15 +24,18 @@ description: "Deployment and CI/CD reference for the Vue SSR Starter Kit: Docker
 - **docker-compose.local.yml** (override): adds a local `mongo` container and redirects the app to it (`MONGO_HOST=mongo`, `MONGO_TYPE=mongodb`, overriding `.env`)
 - **Switch local ↔ remote**: via the `COMPOSE_FILE` variable in `.env` (set in `.env.example`). Uncommented = local (node + mongo); commented = remote. See `references/docker-ci.md`
 
-## GitHub Actions (5 workflows)
+## GitHub Actions (6 workflows)
 
 | Workflow           | Trigger                              | Purpose                                                       |
 | ------------------- | -------------------------------------- | ---------------------------------------------------------------- |
-| `npm-test.yml`      | Push/PR to `master`/`development`     | 3 **parallel, separate** jobs: `lint`, `test`, `build` — kept apart so a lint bump doesn't hide a test result |
-| `docker-build.yml`  | Tags `v*`                             | Builds and pushes to GHCR, tagged semver + `latest` (no SHA tag) |
+| `npm-test.yml`      | Push/PR to `master`/`development`     | 4 **parallel, separate** jobs: `format`, `lint`, `test`, `build` — kept apart so a lint bump doesn't hide a test result; markdown, `docs/` and `.claude/` changes skip it |
+| `docker-build.yml`  | Tags `v*`                             | Builds and pushes to GHCR, tagged semver + short SHA + `latest` |
 | `npm-publish.yml`   | Tags `v*`                             | `npm ci` → `lint:check` → `test:run` → `build` → `npm publish`  |
 | `security.yml`      | Push/PR to `master`/`development`     | `secrets` job (gitleaks, always); `deps-review` job (PR-only, fails on new high-severity advisories) — this is the PR gate |
 | `audit.yml`         | Weekly cron + manual dispatch          | `npm audit --omit=dev --audit-level=high` against repo state — a debt signal, **never** a merge gate (can go red with zero new commits) |
+| `quality.yml`       | Weekly cron + manual dispatch          | Report-only scans (osv-scanner, `npm audit signatures`, semgrep, trivy, hadolint, actionlint, zizmor) written to the job summary — never a merge gate |
+
+Actions are pinned to commit SHAs (Dependabot's `github-actions` ecosystem keeps them current). `docker-build` and `npm-publish` share a `release-<ref>` concurrency group that never cancels a running release.
 
 A tag push (`v1.2.3`) fires `docker-build` and `npm-publish` simultaneously — releasing a version
 publishes to both GHCR and npm in the same action.
@@ -40,26 +43,32 @@ publishes to both GHCR and npm in the same action.
 ## Production requirements
 
 - `COOKIE_SECRET`: Must be set (server refuses to start if missing)
-- Helmet CSP: Production-conditional (disabled in dev for HMR)
+- `NODE_HOST`: Must be the public https origin (server refuses to start on a missing, `http` or localhost value; the Dockerfile default is a placeholder to override)
+- `RECAPTCHA_SECRET_KEY`: Must be set, reCAPTCHA verification fails closed in production
+- Helmet CSP: active everywhere; production `script-src` has no `'unsafe-inline'`, dev relaxes it for HMR
+- Sessions: stored under `logs/sessions/` (a bind-mounted directory), cleared at every boot; absolute lifetime 30 days
+- Uploads (avatars): `public/uploads/` is served by Express at `/uploads` in production (bind-mounted directory)
+- `LOG_LEVEL` (`error|warn|info|debug`, default `info`) controls log verbosity
 - Error stack traces: Hidden in production responses
 
-## Graceful shutdown
+## Health and graceful shutdown
 
-Server listens to SIGTERM and SIGINT:
+`GET /healthz` returns 200 `{"status":"ok"}` once the server listens and 503 `{"status":"unavailable"}` while booting or shutting down (`Cache-Control: no-store`). Use it as the readiness probe.
 
-1. Stops accepting new connections
-2. Closes MongoDB connection (`mongoClose`)
-3. Exits process cleanly
+On SIGTERM and SIGINT (`src/api/http/shutdown.js`):
 
-Ensures zero data loss during Docker stop / rolling updates.
+1. `/healthz` flips to 503
+2. Stops accepting new connections
+3. Closes MongoDB connection (`mongoClose`)
+4. Exits 0 (exits 1 on error or after a 10 s timeout)
 
 ## Dependabot
 
-Weekly npm updates (`dependabot.yml`): increasing version strategy.
+Weekly updates (`dependabot.yml`): npm (increasing version strategy), GitHub Actions and the Docker base image.
 
 ## SEO artifacts
 
-The dynamic `robots.txt`/`sitemap.xml` served by `server.js` are owned by the `seo` skill — see there, not here.
+The dynamic `robots.txt`/`sitemap.xml` served by `src/api/http/seo.js` are owned by the `seo` skill — see there, not here.
 
 ## Production rollout (external)
 

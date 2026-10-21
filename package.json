@@ -1,6 +1,6 @@
 {
   "name": "@e-xode/vue-ssr",
-  "version": "5.4.3",
+  "version": "5.5.0",
   "description": "Vue 3 SSR Starter Kit with Authentication",
   "repository": {
     "type": "git",
@@ -16,20 +16,21 @@
     "build:client": "vite build --outDir dist/client --ssrManifest",
     "build:server": "vite build --ssr src/entry-server.js --outDir dist/server",
     "prod": "cross-env NODE_ENV=production node server.js",
-    "test": "vitest",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint --cache . --fix",
     "lint:check": "eslint --cache .",
-    "format": "prettier --cache --write .",
-    "format:check": "prettier --cache --check .",
+    "format": "prettier --cache --cache-strategy content --write .",
+    "format:check": "prettier --cache --cache-strategy content --check .",
     "validate": "node scripts/validate.mjs",
     "screenshots": "node .claude/skills/brand-art-direction/scripts/screenshots.mjs"
   },
   "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
     "@fontsource/ibm-plex-mono": "^5.3.0",
-    "@fontsource/inter": "^5.2.8",
     "@mdi/js": "^7.4.47",
     "@vitejs/plugin-vue": "^6.0.7",
     "bcryptjs": "^3.0.3",

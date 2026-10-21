@@ -4,7 +4,10 @@ export async function verifyCaptcha(token, expectedAction) {
   if (!isProduction) return { success: true, score: 1.0 };
 
   const secretKey = process.env.RECAPTCHA_SECRET_KEY;
-  if (!secretKey) return { success: true, score: 1.0 };
+  if (!secretKey) {
+    console.error('reCAPTCHA secret key is not configured');
+    return { success: false, reason: 'not_configured' };
+  }
 
   if (!token) return { success: false, reason: 'missing' };
 
@@ -27,6 +30,6 @@ export async function verifyCaptcha(token, expectedAction) {
     return { success: true, score: data.score };
   } catch (err) {
     console.error('reCAPTCHA verification error:', err);
-    return { success: true, score: 0 };
+    return { success: false, reason: 'unavailable' };
   }
 }

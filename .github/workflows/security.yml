@@ -1,16 +1,15 @@
 name: security
 
-# 🚨 Ce workflow ne juge QUE le diff. L'audit de l'état du dépôt vit désormais dans audit.yml,
-# sur planification — et surtout plus sur les pull requests.
+# This workflow ONLY judges the diff. The audit of the repository state lives in audit.yml, on a
+# schedule, and no longer on pull requests.
 #
-# Pourquoi : `npm audit --audit-level=high` auditait l'arbre entier, donc il était rouge tant
-# qu'une vulnérabilité restait ouverte — y compris sur une PR qui en corrigeait une. Constaté
-# deux fois en trois semaines (runs 29870358431 et 30256414555). Conséquence : la couleur de la
-# CI ne disait rien de la qualité du changement, et plus personne ne pouvait s'en servir comme
-# garde-fou. Voir e-xode/scripts#9.
+# Why: `npm audit --audit-level=high` audited the whole tree, so it stayed red while any
+# vulnerability was open, including on a PR that fixed one. Seen twice in three weeks (runs
+# 29870358431 and 30256414555). As a result the CI colour said nothing about the quality of the
+# change, and nobody could use it as a guard rail any more. See e-xode/scripts#9.
 #
-# Le garde-fou vulnérabilités reste présent sur la PR, mais borné au diff : dependency-review
-# ne signale que les advisories INTRODUITES par le changement. Dépôt public, donc gratuit.
+# The vulnerability guard remains on the PR but is bounded to the diff: dependency-review only
+# reports advisories INTRODUCED by the change. Public repository, so it is free.
 
 on:
   push:
@@ -25,22 +24,22 @@ jobs:
   secrets:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 0
       - name: gitleaks (free OSS image, blocking)
-        run: docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:latest detect --source=/repo --redact --exit-code=1 --no-banner
+        run: docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.30.1 detect --source=/repo --redact --exit-code=1 --no-banner
 
   deps-review:
-    # Uniquement sur PR : l'action compare deux réfs, elle n'a pas de sens sur un push.
+    # Pull requests only: the action compares two refs, it makes no sense on a push.
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/dependency-review-action@v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4.9.0
         with:
           fail-on-severity: high
           comment-summary-in-pr: on-failure

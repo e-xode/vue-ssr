@@ -1,13 +1,15 @@
 import bcrypt from 'bcryptjs';
 import { requireAuth } from '../middleware.js';
 import { BCRYPT_ROUNDS } from '#src/shared/const.js';
-import { destroyUserSessions } from '#src/shared/security.js';
+import { destroyUserSessions, startUserSession } from '#src/shared/security.js';
 import { logEvent } from '#src/shared/logger.js';
+import { readString } from '#src/shared/utils.js';
 
 export function setupChangePasswordRoute(app, db) {
   app.post('/api/auth/change-password', requireAuth, async (req, res) => {
     try {
-      const { currentPassword, newPassword } = req.body;
+      const currentPassword = readString(req.body.currentPassword);
+      const newPassword = readString(req.body.newPassword);
 
       if (!currentPassword || !newPassword) {
         return res.status(400).json({ error: 'error.missingFields' });
@@ -32,6 +34,7 @@ export function setupChangePasswordRoute(app, db) {
         .updateOne({ _id: req.userId }, { $set: { password: hashedPassword } });
 
       await destroyUserSessions(req.userId, req.sessionID);
+      await startUserSession(req, req.userId, { createdAt: req.session.createdAt });
 
       logEvent(db, { event: 'user-update-password', userId: req.userId, ip: req.ip });
 

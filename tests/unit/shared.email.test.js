@@ -1,6 +1,5 @@
-// tests/unit/shared.email.test.js
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { generateSecurityCode, hashCode } from '#src/shared/email';
+import { generateSecurityCode, hashCode, verifyCode } from '#src/shared/email';
 
 describe('shared/email.js', () => {
   beforeEach(() => {
@@ -28,6 +27,19 @@ describe('shared/email.js', () => {
         const code = await generateSecurityCode();
         expect(/^\d{6}$/.test(code)).toBe(true);
       }
+    });
+  });
+
+  describe('verifyCode', () => {
+    it('accepts the matching code', () => {
+      expect(verifyCode(hashCode('123456'), '123456')).toBe(true);
+    });
+
+    it('rejects a wrong code, a malformed hash and non-strings without throwing', () => {
+      expect(verifyCode(hashCode('123456'), '654321')).toBe(false);
+      expect(verifyCode('short', '123456')).toBe(false);
+      expect(verifyCode(undefined, '123456')).toBe(false);
+      expect(verifyCode(hashCode('123456'), { $ne: null })).toBe(false);
     });
   });
 

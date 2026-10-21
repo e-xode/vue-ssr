@@ -1,30 +1,32 @@
 import { sendSecurityCodeEmail, generateSecurityCode, hashCode } from '#src/shared/email.js';
-import { SECURITY_CODE_EXPIRY_MS, RESEND_COOLDOWN_MS } from '#src/shared/const.js';
+import { SECURITY_CODE_EXPIRY_MS } from '#src/shared/const.js';
+import { assertNotBanned, getClientIp, resendWaitSeconds } from '#src/shared/security.js';
 import { logEvent } from '#src/shared/logger.js';
+import { readEmail, readString } from '#src/shared/utils.js';
+import { deliverEmail } from '#src/api/emailDelivery.js';
 
 export function setupResendCodeRoute(app, db) {
   app.post('/api/auth/resend-code', async (req, res) => {
-    const { email } = req.body;
+    const email = readEmail(req.body.email);
+    const locale = readString(req.body.locale);
 
     if (!email) {
       return res.status(400).json({ error: 'error.auth.emailRequired' });
     }
 
     try {
+      const ip = getClientIp(req);
+      if (!(await assertNotBanned(db, res, { ip }))) return;
+
       const user = await db.collection('users').findOne({ email });
-      if (!user) {
-        return res.status(400).json({ error: 'error.auth.userNotFound' });
+      if (!user || !user.securityCode || !user.securityCodeExpires) {
+        return res.json({ status: 'code_sent', email });
       }
 
-      if (!user.securityCode || !user.securityCodeExpires) {
-        return res.status(400).json({ error: 'error.auth.noVerificationPending' });
-      }
+      if (!(await assertNotBanned(db, res, { ip, user }))) return;
 
-      const lastCodeTime = user.securityCodeExpires.getTime() - SECURITY_CODE_EXPIRY_MS;
-      const timeSinceLastCode = Date.now() - lastCodeTime;
-
-      if (timeSinceLastCode < RESEND_COOLDOWN_MS) {
-        const waitSeconds = Math.ceil((RESEND_COOLDOWN_MS - timeSinceLastCode) / 1000);
+      const waitSeconds = resendWaitSeconds(user);
+      if (waitSeconds > 0) {
         return res.status(429).json({ error: 'error.auth.waitBeforeResend', waitSeconds });
       }
 
@@ -43,9 +45,10 @@ export function setupResendCodeRoute(app, db) {
         }
       );
 
-      await sendSecurityCodeEmail(email, code);
+      const sending = sendSecurityCodeEmail(email, code, locale || user.locale || 'en');
+      if (!(await deliverEmail(res, sending))) return;
 
-      logEvent(db, { event: 'auth-resend-code', userId: user._id, ip: req.ip, meta: { email } });
+      logEvent(db, { event: 'auth-resend-code', userId: user._id, ip, meta: { email } });
 
       res.json({ status: 'code_sent', email });
     } catch (err) {

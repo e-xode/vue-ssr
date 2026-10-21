@@ -2,8 +2,8 @@
 
 When editorial work touches ranking and discoverability, and the daily growth/SEO advisory playbook.
 
-➜ See skill: seo — how SEO is wired in this kit (`entry-server.js` meta injection from route `meta`
-i18n keys, JSON-LD, hreflang, dynamic `robots.txt` + `sitemap.xml` in `server.js`). This reference is
+➜ See skill: seo — how SEO is wired in this kit (`src/ssr/head.js` meta injection from route `meta`
+i18n keys, JSON-LD, hreflang, dynamic `robots.txt` + `sitemap.xml` from `src/api/http/seo.js`). This reference is
 the editorial side; `seo` owns the implementation.
 
 ## When content meets SEO

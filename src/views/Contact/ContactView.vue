@@ -1,3 +1,42 @@
+<script setup>
+import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { apiFetch } from '@/shared/api';
+import { useCaptcha } from '@/composables/useCaptcha';
+
+const { t, locale } = useI18n();
+const { executeRecaptcha } = useCaptcha();
+
+const form = ref({ name: '', email: '', message: '' });
+const loading = ref(false);
+const success = ref(false);
+const error = ref('');
+
+const isFormValid = computed(
+  () => form.value.name.trim() && form.value.email.trim() && form.value.message.trim()
+);
+
+async function handleSubmit() {
+  loading.value = true;
+  error.value = '';
+
+  try {
+    const captchaToken = await executeRecaptcha('contact');
+
+    await apiFetch('/api/contact', {
+      method: 'POST',
+      body: JSON.stringify({ ...form.value, locale: locale.value, captchaToken }),
+    });
+    success.value = true;
+  } catch (err) {
+    console.error(err);
+    error.value = err.isRateLimit ? t('error.tooManyRequests') : t('contact.error');
+  } finally {
+    loading.value = false;
+  }
+}
+</script>
+
 <template>
   <v-container class="contact-page">
     <v-row justify="center">
@@ -55,43 +94,5 @@
     </v-row>
   </v-container>
 </template>
-
-<script setup>
-import { ref, computed } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { apiFetch } from '@/shared/api';
-import { useCaptcha } from '@/composables/useCaptcha';
-
-const { t, locale } = useI18n();
-const { executeRecaptcha } = useCaptcha();
-
-const form = ref({ name: '', email: '', message: '' });
-const loading = ref(false);
-const success = ref(false);
-const error = ref('');
-
-const isFormValid = computed(
-  () => form.value.name.trim() && form.value.email.trim() && form.value.message.trim()
-);
-
-async function handleSubmit() {
-  loading.value = true;
-  error.value = '';
-
-  try {
-    const captchaToken = await executeRecaptcha('contact');
-
-    await apiFetch('/api/contact', {
-      method: 'POST',
-      body: JSON.stringify({ ...form.value, locale: locale.value, captchaToken }),
-    });
-    success.value = true;
-  } catch (err) {
-    error.value = err.isRateLimit ? t('error.tooManyRequests') : t('contact.error');
-  } finally {
-    loading.value = false;
-  }
-}
-</script>
 
 <style lang="scss" scoped src="./ContactView.scss"></style>

@@ -3,9 +3,11 @@ import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useLocalePath } from '@/composables/useLocalePath';
+import { useApiError } from '@/composables/useApiError';
 import { mdiMagnify, mdiPencil, mdiDelete, mdiChevronLeft, mdiChevronRight } from '@mdi/js';
 
 const { t } = useI18n();
+const { translateError } = useApiError();
 const router = useRouter();
 const { localePath } = useLocalePath();
 
@@ -38,7 +40,8 @@ async function fetchUsers() {
     total.value = data.total;
     totalPages.value = Math.ceil(data.total / limit.value);
   } catch (e) {
-    error.value = e.message;
+    console.error(e);
+    error.value = translateError(e);
   } finally {
     loading.value = false;
   }
@@ -75,7 +78,8 @@ async function executeDelete() {
     userToDelete.value = null;
     await fetchUsers();
   } catch (e) {
-    error.value = e.message;
+    console.error(e);
+    error.value = translateError(e);
   } finally {
     deleteLoading.value = false;
   }

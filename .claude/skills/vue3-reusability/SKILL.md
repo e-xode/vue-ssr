@@ -23,7 +23,7 @@ description: "Vue 3 reusability via custom directives and plugins for the Vue SS
 1. **JavaScript only** — no TypeScript anywhere
 2. **`<script setup>` only** — local directives use the `vXxx` naming convention (auto-registered)
 3. **SSR-safe** — directive DOM hooks (`mounted`, `updated`, …) run **client-side only**; never assume they fire during `renderToString`. Plugin `install()` runs on **both** server and client, so guard browser APIs with `typeof window !== 'undefined'`
-4. **Plugins live in `src/plugins/`** — exported as a factory (see `src/plugins/vuetify.js`) and wired in `src/main.js` via `.use()`
+4. **Plugins live in `src/plugins/`** — exported as a factory (see `src/plugins/vuetify.js`) and wired in `createApp()` in `src/main.js` via `.use()`; app-wide directives live in `src/directives/` (existing: `v-reveal`)
 5. **`app.config.globalProperties` is a last resort** — prefer `provide`/`inject` or a composable
 6. **No code comments** in `.js`/`.vue` files
 

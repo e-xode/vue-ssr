@@ -5,13 +5,15 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { useLocalePath } from '@/composables/useLocalePath';
 import { useCaptcha } from '@/composables/useCaptcha';
+import { useApiError } from '@/composables/useApiError';
 import AuthShell from '@/components/AuthShell.vue';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
 
 const { t } = useI18n();
+const { translateError } = useApiError();
 const router = useRouter();
 const authStore = useAuthStore();
-const { localePath } = useLocalePath();
+const { locale, localePath } = useLocalePath();
 const { executeRecaptcha } = useCaptcha();
 
 const form = ref({
@@ -35,6 +37,7 @@ async function handleSubmit() {
     password: form.value.password,
     name: form.value.name,
     captchaToken,
+    locale: locale.value,
   });
 
   isSubmitting.value = false;
@@ -42,7 +45,7 @@ async function handleSubmit() {
   if (result.status === 'success') {
     await router.push(localePath('/auth/verify-code'));
   } else {
-    errorMessage.value = result.error || t('error.auth.signupFailed');
+    errorMessage.value = translateError(result.error, 'error.auth.signupFailed');
   }
 }
 </script>

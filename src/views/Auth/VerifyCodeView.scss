@@ -1,12 +1,24 @@
 .code-boxes {
-  display: flex;
-  justify-content: center;
-  gap: $spacing-sm;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: $spacing-xs;
+  width: 100%;
+  max-width: $container-sm * 0.5;
+  margin-left: auto;
+  margin-right: auto;
+
+  @include respond-to('sm') {
+    gap: $spacing-sm;
+  }
 }
 
 .code-digit {
-  width: $spacing-unit * 5.5;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
   height: $spacing-unit * 6.5;
+  min-height: $spacing-unit * 5.5;
+  padding: 0;
   text-align: center;
   font-size: $font-size-2xl;
   font-weight: $font-weight-semibold;

@@ -1,5 +1,5 @@
 name: Question / Help
-description: Posez une question ou demandez de l'aide
+description: Ask a question or request help
 title: '[QUESTION] '
 labels: ['question', 'documentation']
 assignees: []
@@ -8,49 +8,49 @@ body:
   - type: markdown
     attributes:
       value: |
-        Avez-vous une question sur comment utiliser e-xode-vue-ssr?
+        Do you have a question about how to use e-xode-vue-ssr?
 
-        Avant de poser une question, vérifiez:
-        - ReadME.en.md ou README.fr.md
+        Before asking a question, check:
+        - README.en.md or README.fr.md
         - [Troubleshooting Guide](../../docs/TROUBLESHOOTING.md)
         - [FAQ](../../docs/TROUBLESHOOTING.md#faq)
-        - Discussions existantes
+        - Existing discussions
 
   - type: textarea
     attributes:
-      label: Votre Question
-      description: Quelle est votre question? Soyez aussi spécifique que possible
-      placeholder: "Je voudrais savoir comment... J'essaie de... Comment puis-je...?"
+      label: Your Question
+      description: What is your question? Be as specific as possible
+      placeholder: 'I would like to know how to... I am trying to... How can I...?'
     validations:
       required: true
 
   - type: textarea
     attributes:
-      label: Contexte / Ce que vous avez essayé
-      description: Quelle est votre situation? Que vous avez déjà essayé?
+      label: Context / What You Tried
+      description: What is your situation? What have you already tried?
       placeholder: |
-        J'ai essayé de...
-        J'ai cherché dans la documentation...
-        Voici ce que j'ai trouvé...
-        Mais je ne comprends toujours pas comment...
+        I tried to...
+        I looked in the documentation...
+        Here is what I found...
+        But I still do not understand how...
     validations:
       required: false
 
   - type: textarea
     attributes:
       label: Environment
-      description: Détails pertinents de votre setup
+      description: Relevant details about your setup
       value: |
-        - Node: (ex: 18.0.0)
-        - npm: (ex: 9.0.0)
-        - OS: (ex: macOS, Windows, Linux)
-        - MongoDB: (local ou Atlas)
-        - Framework/Extensions: (ex: TypeScript, Docker)
+        - Node: (e.g. 18.0.0)
+        - npm: (e.g. 9.0.0)
+        - OS: (e.g. macOS, Windows, Linux)
+        - MongoDB: (local or Atlas)
+        - Framework/Extensions: (e.g. TypeScript, Docker)
 
   - type: dropdown
     attributes:
-      label: Catégorie
-      description: Quelle catégorie correspond le mieux?
+      label: Category
+      description: Which category fits best?
       options:
         - 'Setup / Installation'
         - 'Development'
@@ -61,32 +61,32 @@ body:
         - 'Performance'
         - 'Error / Bug (should create bug report)'
         - 'Documentation'
-        - 'Autre'
+        - 'Other'
     validations:
       required: false
 
   - type: textarea
     attributes:
-      label: Documentation Référencée
-      description: Avez-vous consulté une documentation spécifique? Laquelle?
+      label: Referenced Documentation
+      description: Did you consult specific documentation? Which one?
       placeholder: |
         - [QUICK_START.md](../../docs/QUICK_START.en.md)
         - [DEVELOPER_GUIDE.md](../../docs/DEVELOPER_GUIDE.md)
         - [API.md](../../docs/API.md)
-        Mais je n'ai pas trouvé...
+        But I did not find...
 
   - type: markdown
     attributes:
       value: |
         ---
 
-        **Tips pour une meilleure réponse:**
-        - Soyez spécifique plutôt que vague
-        - Incluez des liens vers doc/issues pertinentes
-        - Partagez les erreurs ou output réel
-        - Décrivez ce que vous essayez d'accomplir (votre but final)
+        **Tips for a better answer:**
+        - Be specific rather than vague
+        - Include links to relevant docs/issues
+        - Share the actual errors or output
+        - Describe what you are trying to accomplish (your end goal)
 
-        **Liens utiles:**
+        **Useful links:**
         - [Documentation](../../docs/INDEX.md)
-        - [Discussions Existantes](https://github.com/e-xode/e-xode-vue-ssr/discussions)
+        - [Existing Discussions](https://github.com/e-xode/e-xode-vue-ssr/discussions)
         - [Stack Overflow tag: vue-ssr](https://stackoverflow.com/questions/tagged/vue-ssr)

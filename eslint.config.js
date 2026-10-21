@@ -34,6 +34,9 @@ export default [
     },
     rules: {
       'vue/multi-word-component-names': 'off',
+      'vue/component-api-style': ['error', ['script-setup']],
+      'vue/no-v-html': 'error',
+      'vue/block-order': ['error', { order: ['script', 'template', 'style'] }],
       'vue/require-v-for-key': 'warn',
       'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
       'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

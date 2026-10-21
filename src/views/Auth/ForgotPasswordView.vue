@@ -2,9 +2,11 @@
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useLocalePath } from '@/composables/useLocalePath';
+import { useApiError } from '@/composables/useApiError';
 import AuthShell from '@/components/AuthShell.vue';
 
 const { t } = useI18n();
+const { translateError } = useApiError();
 const { localePath } = useLocalePath();
 
 const email = ref('');
@@ -28,9 +30,10 @@ async function handleSubmit() {
       sent.value = true;
     } else {
       const data = await response.json();
-      errorMessage.value = data.error || t('error.server');
+      errorMessage.value = translateError(data.error);
     }
-  } catch {
+  } catch (err) {
+    console.error(err);
     errorMessage.value = t('error.server');
   } finally {
     isSubmitting.value = false;

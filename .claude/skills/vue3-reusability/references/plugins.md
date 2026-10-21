@@ -29,13 +29,13 @@ export default function (app, options) {
 
 ## Registering it
 
-This project wires plugins in `src/main.js`. Existing plugins (`router`, `vuetify`, `pinia`, `i18n`) are already chained — add new ones the same way:
+This project wires plugins in `src/main.js`. Existing plugins (`router`, `vuetify`, `pinia`, `i18n`) are already chained — add new ones the same way (the `v-reveal` directive from `src/directives/reveal.js` is registered right after, with `app.directive('reveal', reveal)`):
 
 ```js
 app.use(router).use(vuetify).use(pinia).use(i18n).use(myPlugin, { theme: 'light' });
 ```
 
-Keep the plugin file in `src/plugins/`. The project's convention is a **factory export** that builds the plugin (see `src/plugins/vuetify.js` → `createApplicationVuetify(ssr)`), which keeps SSR/client config explicit.
+Keep the plugin file in `src/plugins/`. The project's convention is a **factory export** that builds the plugin (see `src/plugins/vuetify.js` → `createApplicationVuetify(ssr, theme, locale)`), which keeps SSR/client config explicit.
 
 ```js
 export function createMyPlugin(options = {}) {

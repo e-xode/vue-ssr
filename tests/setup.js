@@ -1,7 +1,5 @@
-// tests/setup.js
 import { vi } from 'vitest';
 
-// Mock process.env for tests
 process.env.NODE_ENV = 'test';
 process.env.NODE_HOST = 'http://localhost:3002';
 process.env.MAILER_HOST = 'smtp.test.com';
@@ -18,7 +16,6 @@ process.env.MONGO_TYPE = 'mongodb';
 process.env.COOKIE_SECRET = 'test-secret-key';
 process.env.APP_NAME = 'App';
 
-// Global mocks
 global.console = {
   ...console,
   error: vi.fn(),

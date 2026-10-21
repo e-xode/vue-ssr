@@ -1,10 +1,77 @@
 # Changelog
 
-## 5.4.3
+## 5.5.0
 
-### Improvements
+### Security
 
-- **styles** — Removed the unused `_animations.scss` and `_utilities.scss` partials. Rendered output is unchanged.
+- **Session fixation closed.** The session id is regenerated when a login code is verified, and
+  rotated after a password or email change. ⚠️ Password reset now ends every session of the account.
+- **Absolute session lifetime of 30 days** on top of the 7-day idle window, so a stolen cookie used
+  weekly no longer lives forever. A session whose user no longer exists is rejected and destroyed,
+  and deleting a user from the admin ends their sessions. ⚠️ Existing logins are rejected once after
+  the upgrade; users sign in again.
+- **Client IP read from `req.ip`** (`trust proxy` 1) instead of the leftmost `X-Forwarded-For`
+  entry, which the client controls. IP blocking and `loginHistory` could be bypassed or poisoned.
+- **reCAPTCHA fails closed in production** when the secret is missing or Google is unreachable.
+- **Authentication inputs must be strings.** MongoDB operator objects such as `{"$regex": ...}` or
+  `{"$ne": null}` are rejected on every auth route (they allowed account enumeration), the email
+  pattern is bounded against ReDoS, and admin search terms are escaped.
+- **Avatar uploads:** the file extension comes from the validated MIME type, oversize and wrong-type
+  uploads answer 413 and 415 as JSON, and uploaded files are now served in production.
+- **Ban and availability checks:** forgot-password, reset-password and resend-code honour IP and
+  user blocks, resend-code no longer reveals whether an account exists, forgot-password has a
+  30 s cooldown, and an authentication or admin check that cannot reach MongoDB answers 503 instead
+  of letting the request through.
+- **Production CSP without `'unsafe-inline'` for scripts.** The Google Analytics id and the
+  reCAPTCHA site key are exposed as `<meta>` tags and loaded by client code; `img-src` no longer
+  allows any `https:` origin.
+- **Dev ports published on `127.0.0.1` only** by default (`BIND_ADDRESS` to override), including the
+  development MongoDB.
+
+### Fixed
+
+- **A failed email send is no longer reported as success** (contact form and authentication emails
+  answer 502 `error.emailFailed`). Security-code emails are sent in the user's locale.
+- **First page view counted once in Google Analytics**, with the consent default set before `config`.
+- **Missing translations:** twelve API error keys and seven page meta keys were absent from both
+  locales and showed as raw key paths.
+- **MongoDB `ignoreUndefined`** so a filter such as `{ email: undefined }` can never match every
+  document; `MONGO_TYPE` defaults to `mongodb`.
+- Rendered HTML containing `$&` or `$'` was altered by the template fill, graceful shutdown could run
+  twice and closed MongoDB before in-flight requests ended, and Vuetify built-in texts stayed English
+  on `/fr`.
+- Sign-out always clears the client user, even when the network fails. The six-digit code row no
+  longer overflows on narrow screens. Page titles no longer repeat the site name.
+- SEO: a structured-data `SearchAction` pointing to a missing page is removed, breadcrumbs use page
+  titles, favicon links are no longer duplicated, and the social image, logo and manifest icons now
+  exist.
+- Missing `logs.userId` index added.
+
+### Changed
+
+- **Server:** `/healthz` readiness endpoint, server-side 302 for `/` by `Accept-Language` and 301
+  for trailing slashes, bare page paths and wrong-locale slugs, long-lived immutable cache headers
+  for hashed assets, a sitemap module with real `lastmod`, and a production boot check that
+  requires `NODE_HOST` to be a public https origin. `server.js` is now thin wiring over
+  `src/api/http/`.
+- Leveled logger (`LOG_LEVEL`) with timestamps; Vite file polling is opt-in (`VITE_USE_POLLING`).
+- `npm test` now runs once; `npm run test:watch` is the watch mode.
+- Removed the unused `_animations.scss` and `_utilities.scss` partials. Rendered output is unchanged.
+- The dev container runs as root under rootless Docker through an entrypoint, and the Vite dev
+  server accepts extra hosts from `VITE_ALLOWED_HOSTS`.
+
+### Added
+
+- Readable admin activity log (one-line summaries, raw JSON in a dialog) and a fluid admin
+  container.
+- SSR plumbing: `route.meta.prefetch`, serialized state in `#__SSR_STATE__`, `useSsrStatus`, and
+  localized page slugs from one source (`src/shared/localizedRoutes.js`).
+- `v-reveal` directive, system colour-scheme preference on a first visit, and the variable Inter
+  font with a preload link.
+
+### Package Updates
+
+- **`@fontsource-variable/inter` 5.3.0 replaces `@fontsource/inter`.**
 
 ## 5.4.2
 

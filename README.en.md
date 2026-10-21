@@ -239,7 +239,7 @@ COOKIE_SECRET=your-secret-key
 brew services start mongodb-community
 
 # Or with Docker
-docker run -d -p 27017:27017 \
+docker run -d -p 127.0.0.1:27017:27017 \
   -e MONGO_INITDB_ROOT_USERNAME=user \
   -e MONGO_INITDB_ROOT_PASSWORD=password \
   mongo:latest
@@ -601,7 +601,7 @@ Error codes are localized. See `src/translate/en.json` for all available codes.
 ### Security
 
 - ✅ Passwords hashed with bcryptjs (cost: 10)
-- ✅ Security codes hashed in Base64
+- ✅ Security codes hashed with SHA-256 and compared in constant time
 - ✅ Sessions stored (file storage dev, Redis in production)
 - ✅ HTTP-only and Secure cookies in HTTPS
 - ✅ Server-side input validation
@@ -627,7 +627,7 @@ const sessionMiddleware = session({
     httpOnly: true,
     path: '/',
   },
-  name: 'ssr.sid',
+  name: 'app.sid',
   resave: false,
   saveUninitialized: true,
   secret: process.env.COOKIE_SECRET,
@@ -910,11 +910,13 @@ docker compose -f docker-compose.yml -f docker-compose.local.yml up
 docker compose -f docker-compose.yml up
 ```
 
+Dev ports (app and local Mongo) are published on `127.0.0.1` only. Set `BIND_ADDRESS=0.0.0.0` in `.env` to reach a remote dev box. Local Mongo data lives in the named volume `mongo-data`.
+
 ### Docker Images
 
 #### Node.js Dev (`docker/dev/node/Dockerfile`)
 
-- Base: `node:22-slim`
+- Base: `node:24-slim`
 - Includes: Playwright dependencies
 - Entry point: `npm run dev`
 
@@ -927,7 +929,7 @@ docker compose -f docker-compose.yml up
 #### Production Image (`docker/build/Dockerfile`)
 
 - Multi-stage build
-- Base: `node:22-alpine` + `node:22-slim`
+- Base: `node:24-alpine` + `node:24-slim`
 - Optimized for production
 - Uses Supervisor
 

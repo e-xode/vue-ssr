@@ -54,13 +54,13 @@ Le système d'authentification utilise une approche **email + code de sécurité
 │    - Validate email/password/name                   │
 │    - Hash password with bcrypt (salt: 10)           │
 │    - Generate 6-digit code (123456)                 │
-│    - Hash code with Base64                          │
+│    - Hash code with SHA-256                         │
 │    - Save to DB:                                    │
 │      {                                              │
 │        email: 'user@example.com',                   │
 │        passwordHash: '$2b$10$...',                  │
 │        name: 'John Doe',                            │
-│        securityCode: 'base64_hash',                 │
+│        securityCode: 'sha256_hash',                 │
 │        securityCodeExpires: Date + 5min,            │
 │        verified: false,                             │
 │        createdAt: now                               │
@@ -195,7 +195,7 @@ src/shared/
   passwordHash: "$2b$10$...",       // bcrypt hash
   name: "John Doe",
   verified: true,                   // Verified user
-  securityCode: "base64_hash",      // Temporary
+  securityCode: "sha256_hash",      // Temporary
   securityCodeExpires: Date,        // Temporary
   createdAt: Date,
   updatedAt: Date,
@@ -299,7 +299,7 @@ const code = Math.floor(100000 + Math.random() * 900000).toString();
 // Example: "548293"
 
 // Hash for storage
-const hashedCode = Buffer.from(code).toString('base64');
+const hashedCode = createHash('sha256').update(code).digest('hex');
 
 // Store in DB with expiry
 user.securityCode = hashedCode;

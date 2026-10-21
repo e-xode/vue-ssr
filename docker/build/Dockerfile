@@ -16,14 +16,12 @@ WORKDIR /app
 
 RUN mkdir /home/node/.npm-global
 RUN npm install -g npm@12.0.2
-# 🚨 `npm ci` et non `npm install` : l'image doit installer EXACTEMENT l'arbre décrit par
-# package-lock.json. Avec `npm install`, la résolution se refaisait dans les plages semver et se
-# figeait au gré du cache de couches Docker — donc le lockfile qu'auditent Dependabot et la CI
-# n'était pas ce qui partait en production. Constaté sur la flotte le 2026-08-09 : deux applis du
-# même socle, même lockfile, embarquaient des versions différentes (l'une déjà corrigée, l'autre
-# vulnérable) selon la date de build. `npm ci` échoue aussi si lockfile et package.json divergent,
-# au lieu de diverger en silence. `--include=dev` est requis : NODE_ENV=production ci-dessus ferait
-# sinon sauter les devDependencies dont `npm run build` a besoin. Voir e-xode/scripts#9.
+# `npm ci` and not `npm install`: the image must install EXACTLY the tree described by
+# package-lock.json. With `npm install`, resolution was redone inside the semver ranges and froze
+# according to the Docker layer cache, so the lockfile audited by Dependabot and CI was not what
+# shipped to production. `npm ci` also fails when the lockfile and package.json diverge instead of
+# diverging silently. `--include=dev` is required: NODE_ENV=production above would otherwise skip
+# the devDependencies that `npm run build` needs. See e-xode/scripts#9.
 RUN npm ci --include=dev
 RUN npm run build
 
@@ -47,18 +45,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Only copy what's needed for production
+# Only copy what is needed for production
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/server.js ./server.js
 COPY --from=builder /app/src/shared ./src/shared
 COPY --from=builder /app/src/api ./src/api
 COPY --from=builder /app/src/translate ./src/translate
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package-lock.json ./package-lock.json
 COPY --from=builder /app/public ./public
 COPY ./docker/build/config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-RUN npm prune --production
+RUN npm ci --omit=dev
 
 EXPOSE $NODE_PORT
 

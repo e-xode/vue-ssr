@@ -105,10 +105,13 @@ The app will be available at `http://localhost:3002`
 ### Running Tests
 
 ```bash
-# Run tests in watch mode
+# Run tests once
 npm test
 
-# Run tests once (CI/CD)
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests once (CI/CD, same as npm test)
 npm run test:run
 
 # View interactive test interface

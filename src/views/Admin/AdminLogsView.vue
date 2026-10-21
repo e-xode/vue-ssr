@@ -1,9 +1,13 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { mdiRefresh, mdiDelete } from '@mdi/js';
+import { mdiRefresh, mdiDelete, mdiCodeJson } from '@mdi/js';
+import { useLogSummary } from '@/composables/useLogSummary';
+import { useApiError } from '@/composables/useApiError';
 
 const { t } = useI18n();
+const { translateError } = useApiError();
+const { summarizeLog, hasDetails, formatDetails } = useLogSummary();
 
 const logs = ref([]);
 const total = ref(0);
@@ -20,6 +24,8 @@ const filters = ref({
 const pagination = ref({ page: 1, perPage: 50 });
 const eventTypes = ref([]);
 const selected = ref([]);
+const metaDialog = ref(false);
+const metaLog = ref(null);
 
 const pageCount = computed(() => Math.ceil(total.value / pagination.value.perPage));
 
@@ -28,14 +34,19 @@ function formatDate(date) {
   return new Date(date).toLocaleString();
 }
 
+function openMeta(log) {
+  metaLog.value = log;
+  metaDialog.value = true;
+}
+
 async function fetchEvents() {
   try {
     const response = await fetch('/api/admin/logs/events', { credentials: 'include' });
     if (response.ok) {
       eventTypes.value = await response.json();
     }
-  } catch {
-    /* empty */
+  } catch (err) {
+    console.error(err);
   }
 }
 
@@ -59,7 +70,8 @@ async function fetchLogs() {
     logs.value = data.logs;
     total.value = data.total;
   } catch (e) {
-    error.value = e.message;
+    console.error(e);
+    error.value = translateError(e);
   } finally {
     loading.value = false;
   }
@@ -79,8 +91,8 @@ async function deleteLog(id) {
   try {
     await fetch(`/api/admin/logs/${id}`, { method: 'DELETE', credentials: 'include' });
     fetchLogs();
-  } catch {
-    /* empty */
+  } catch (err) {
+    console.error(err);
   }
 }
 
@@ -94,8 +106,8 @@ async function deleteSelected() {
       body: JSON.stringify({ ids: selected.value }),
     });
     fetchLogs();
-  } catch {
-    /* empty */
+  } catch (err) {
+    console.error(err);
   }
 }
 
@@ -106,7 +118,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-container class="mt-6">
+  <v-container fluid class="admin-logs mt-6">
     <v-row class="mb-4">
       <v-col cols="12">
         <div class="d-flex align-center justify-space-between mb-4">
@@ -224,7 +236,15 @@ onMounted(() => {
                 {{ log.ip || '—' }}
               </td>
               <td class="text-body-2">
-                {{ log.meta && Object.keys(log.meta).length ? JSON.stringify(log.meta) : '—' }}
+                <span class="log-summary">{{ summarizeLog(log) }}</span>
+                <v-btn
+                  v-if="hasDetails(log)"
+                  :icon="mdiCodeJson"
+                  variant="text"
+                  size="small"
+                  :aria-label="t('admin.logs.viewDetails')"
+                  @click="openMeta(log)"
+                />
               </td>
               <td>
                 <v-btn
@@ -248,5 +268,22 @@ onMounted(() => {
         </div>
       </v-col>
     </v-row>
+
+    <v-dialog v-model="metaDialog" max-width="640">
+      <v-card class="log-meta-dialog">
+        <v-card-title>{{ t('admin.logs.metaDialog.title') }}</v-card-title>
+        <v-card-text>
+          <pre class="log-meta-dialog__content">{{ formatDetails(metaLog) }}</pre>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn variant="text" @click="metaDialog = false">
+            {{ t('admin.logs.metaDialog.close') }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
+
+<style lang="scss" scoped src="./AdminLogsView.scss"></style>

@@ -1,0 +1,98 @@
+name: quality
+
+# Weekly, report-only scans. Findings go to the job summary; nothing here is a merge gate.
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dependencies:
+    name: dependencies (osv-scanner, npm signatures)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: osv-scanner (report only)
+        run: |
+          set +e
+          docker run --rm -v "$PWD:/src" ghcr.io/google/osv-scanner:v2.6.0 scan source -r /src > out.txt 2>&1
+          code=$?
+          { echo "### osv-scanner — exit $code"; echo '```'; tail -n 150 out.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+      - name: npm audit signatures (report only)
+        run: |
+          set +e
+          npm audit signatures > out.txt 2>&1
+          code=$?
+          { echo "### npm audit signatures — exit $code"; echo '```'; tail -n 60 out.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+
+  code:
+    name: code (semgrep)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: semgrep (report only)
+        run: |
+          set +e
+          docker run --rm -v "$PWD:/src" -w /src semgrep/semgrep:1.178.0 semgrep scan --metrics=off \
+            --config p/javascript --config p/nodejs --config p/expressjs --config p/secrets \
+            --exclude node_modules --exclude dist --error > out.txt 2>&1
+          code=$?
+          { echo "### semgrep — exit $code"; echo '```'; tail -n 200 out.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+
+  infrastructure:
+    name: infrastructure (trivy, hadolint, actionlint, zizmor)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - name: trivy filesystem scan (report only)
+        run: |
+          set +e
+          docker run --rm -v "$PWD:/src" aquasec/trivy:0.74.0 fs --scanners vuln,misconfig \
+            --severity HIGH,CRITICAL --skip-dirs /src/node_modules --exit-code 1 /src > out.txt 2>&1
+          code=$?
+          { echo "### trivy — exit $code"; echo '```'; tail -n 200 out.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+      - name: hadolint (report only)
+        run: |
+          set +e
+          docker run --rm -i hadolint/hadolint:v2.15.1 < docker/build/Dockerfile > out.txt 2>&1
+          code=$?
+          { echo "### hadolint — exit $code"; echo '```'; cat out.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+      - name: actionlint (report only)
+        run: |
+          set +e
+          docker run --rm -v "$PWD:/repo" -w /repo rhysd/actionlint:1.7.12 -color=false > out.txt 2>&1
+          code=$?
+          { echo "### actionlint — exit $code"; echo '```'; cat out.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+      - name: zizmor (report only)
+        run: |
+          set +e
+          pipx run zizmor==1.30.1 --offline --no-progress .github/workflows > out.txt 2>&1
+          code=$?
+          { echo "### zizmor — exit $code"; echo '```'; tail -n 200 out.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"

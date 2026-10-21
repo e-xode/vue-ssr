@@ -35,9 +35,9 @@ Never otherwise. Normal turns stay fast and token-light; the battery fires only 
 2. Applies the short-circuit table below in code to select stages.
 3. Runs the mutating `lint` (`eslint --cache . --fix`) as a serial prefix, then `format:check`, `build` and `test:run` **in parallel**, aggregating every result.
 4. Stores a git-content SHA digest sentinel under the git dir; when the tree is unchanged since the last run it prints `mode: cached` and returns the previous verdict instantly, so a re-delegation after no edits is near-free.
-5. Exits non-zero on any stage failure, printing only the failing stage's output tail.
+5. Exits non-zero on any stage failure, printing only the failing stage's output tail (last 40 lines) and a `reproduce: npm run <script>` line to rerun that stage alone. A failing `git` call also fails the run (it never degrades to "nothing to validate").
 
-Prettier and ESLint run with `--cache` (`.eslintcache` is gitignored), so repeat runs only re-process changed files. The individual scripts stay runnable on their own: `format:check`, `lint`, `build`, `test:run`.
+Prettier and ESLint run with `--cache` (`.eslintcache` is gitignored), so repeat runs only re-process changed files. Prettier also uses `--cache-strategy content`. The individual scripts stay runnable on their own: `format:check`, `lint`, `build`, `test:run`. `npm test` now runs once (`vitest run`, same as `test:run`); `npm run test:watch` is the watch mode, and `test:run` is what the validator and CI call.
 
 ## Short-circuit table
 
@@ -46,12 +46,13 @@ Enforced in `scripts/validate.mjs` (the table is the reference spec, the script 
 | Files modified                       | format:check | lint | build | test |
 | ------------------------------------ | ------------ | ---- | ----- | ---- |
 | `.vue`, `.js`, `.ts`, `.mjs`, `.cjs` | yes          | yes  | yes   | yes  |
-| `.scss`, `.css` only                 | yes          | yes  | skip  | skip |
-| `.md`, `.json`, config only          | skip         | skip | skip  | skip |
+| `.scss`, `.css`                      | yes          | yes  | yes   | skip |
+| `.json`                              | yes          | skip | skip  | yes  |
+| `.md`, other config                  | skip         | skip | skip  | skip |
 
-Any mix that includes `.vue`/`.js`/`.ts`/`.mjs`/`.cjs` runs the full battery.
+The stage set is the union over all modified extensions, so any mix that includes `.vue`/`.js`/`.ts`/`.mjs`/`.cjs` runs the full battery. `.scss`/`.css` build because Vite compiles them into the bundle; `.json` runs format and tests.
 
-The `build` stage compiles both SSR bundles (`build:client` + `build:server`). It catches import errors, client/server boundary leaks and SSR-incompatible code that lint and unit tests miss — the highest-value guard for an SSR project, and the slow one, hence its short-circuit to code changes only.
+The `build` stage compiles both SSR bundles (`build:client` + `build:server`). It catches import errors, client/server boundary leaks and SSR-incompatible code that lint and unit tests miss — the highest-value guard for an SSR project, and the slow one, hence its short-circuit to code and style changes only.
 
 ## The `validation` agent
 
