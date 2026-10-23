@@ -58,7 +58,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@testing-library/vue": "^8.1.0",
-    "@vitest/ui": "^4.1.11",
+    "@vitest/ui": "^4.1.12",
     "@vue/test-utils": "^2.4.10",
     "eslint": "^10.4.0",
     "eslint-config-prettier": "^10.1.8",
@@ -68,7 +68,7 @@
     "playwright": "^1.60.0",
     "prettier": "^3.8.3",
     "sass-embedded": "^1.100.0",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.12"
   },
   "overrides": {
     "bn.js": "^5.2.3",

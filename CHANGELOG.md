@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Security
+
+- **Dependency security updates.** vite 8.0.16 to 8.3.5 (dev server and launch-editor advisories), dompurify 3.4.16 to 3.4.17, sanitize-html 2.17.7 to 2.18.1, ip-address 10.7.3 to 10.7.4, and the vitest 4.1.12 test tooling. Closes the open Dependabot alerts.
+
 ## 5.5.0
 
 ### Security
