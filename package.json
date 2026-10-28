@@ -64,7 +64,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-vue": "^10.9.2",
     "globals": "^17.7.0",
-    "happy-dom": "^20.9.0",
+    "happy-dom": "^21.0.4",
     "playwright": "^1.60.0",
     "prettier": "^3.8.3",
     "sass-embedded": "^1.100.0",

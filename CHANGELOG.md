@@ -5,6 +5,7 @@
 ### Security
 
 - **Dependency security updates.** vite 8.0.16 to 8.3.5 (dev server and launch-editor advisories), dompurify 3.4.16 to 3.4.17, sanitize-html 2.17.7 to 2.18.1, ip-address 10.7.3 to 10.7.4, and the vitest 4.1.12 test tooling. Closes the open Dependabot alerts.
+- **Runtime dependency security updates.** multer 2.5.0 (denial of service through a pending asynchronous file filter), body-parser 2.4.0 (denial of service on trailing bytes after a compressed body), qs 6.17.0 and nodemailer 10.2.1 (address parser fixes). The happy-dom test tooling moves to 21.0.4 (host code execution advisory).
 
 ## 5.5.0
 
