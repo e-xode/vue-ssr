@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.5.2
+
+### Security
+
+- **vue-i18n 11.4.17.** vue-i18n and its @intlify packages move from 11.4.4 to 11.4.17, closing the open advisories on the message compiler. The lockfile also refreshes transitive development dependencies.
+
 ## 5.5.1
 
 ### Security
