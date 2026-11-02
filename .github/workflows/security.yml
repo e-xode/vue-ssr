@@ -6,7 +6,7 @@ name: security
 # Why: `npm audit --audit-level=high` audited the whole tree, so it stayed red while any
 # vulnerability was open, including on a PR that fixed one. Seen twice in three weeks (runs
 # 29870358431 and 30256414555). As a result the CI colour said nothing about the quality of the
-# change, and nobody could use it as a guard rail any more. See e-xode/scripts#9.
+# change, and nobody could use it as a guard rail any more. See e-xode/ops#9.
 #
 # The vulnerability guard remains on the PR but is bounded to the diff: dependency-review only
 # reports advisories INTRODUCED by the change. Public repository, so it is free.

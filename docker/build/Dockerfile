@@ -21,7 +21,7 @@ RUN npm install -g npm@12.0.2
 # according to the Docker layer cache, so the lockfile audited by Dependabot and CI was not what
 # shipped to production. `npm ci` also fails when the lockfile and package.json diverge instead of
 # diverging silently. `--include=dev` is required: NODE_ENV=production above would otherwise skip
-# the devDependencies that `npm run build` needs. See e-xode/scripts#9.
+# the devDependencies that `npm run build` needs. See e-xode/ops#9.
 RUN npm ci --include=dev
 RUN npm run build
 

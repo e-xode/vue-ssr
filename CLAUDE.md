@@ -100,8 +100,8 @@ Apply every `.claude/rules/` file whose `paths:` frontmatter glob matches the fi
 
 ## Fleet verification contract
 
-Read by fleet-wide campaigns driven from `e-xode/scripts` (dependency/security updates across all
-apps — see `e-xode/scripts#9`). Those campaigns are **not** run by this repo's agents and must not
+Read by fleet-wide campaigns driven from `e-xode/ops` (dependency/security updates across all
+apps — see `e-xode/ops#9`). Those campaigns are **not** run by this repo's agents and must not
 guess these values. Keep this block accurate; it is the interface, not documentation. One trap:
 `audit` is not a merge gate — it judges repo state, not a diff, and can go red with no new commit;
 never add it to `required_status_checks`. The PR gate is `deps-review`. Call `npm run test:run`
@@ -116,9 +116,9 @@ never add it to `required_status_checks`. The PR gate is `deps-review`. Call `np
 | `full` | `npm run validate` (lint serially, then format:check + build + test:run in parallel) |
 | `server` | vps671607 |
 | `container` | `e-xode.vue-ssr` (port 3002, behind `e-xode.proxy`) |
-| `deploy` | `cd /home/e-xode.vue-ssr && ./deploy.sh` (symlink → `e-xode/scripts`) |
+| `deploy` | `cd /home/e-xode.vue-ssr && ./deploy.sh` (symlink → `e-xode/ops`) |
 | `smoke` | `curl -sf https://vue-ssr.e-xode.net/` → 200 |
-| `rollback` | ⚠️ no direct lever — `deploy.sh` runs `docker pull …:latest` unpinned. Rolling back means rebuilding an earlier commit via CI. See `e-xode/scripts#10`. |
+| `rollback` | ⚠️ no direct lever — `deploy.sh` runs `docker pull …:latest` unpinned. Rolling back means rebuilding an earlier commit via CI. See `e-xode/ops#10`. |
 
 ---
 
