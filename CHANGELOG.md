@@ -114,7 +114,7 @@
   singleton (`export const router`), réutilisé par toutes les requêtes SSR, avec un
   `createMemoryHistory()` créé une seule fois au niveau module. Chaque `router.push()` empilait donc
   dans un historique jamais réinitialisé, qui grossissait sans borne et retenait les arbres
-  applicatifs des requêtes précédentes. Mesuré sur la flotte (`e-xode/scripts#17`) : 5 applications
+  applicatifs des requêtes précédentes. Mesuré sur la flotte (`e-xode/ops#17`) : 5 applications
   bâties sur ce starter mouraient en boucle sur `JavaScript heap out of memory` — jusqu'à 113 fois
   en 6 semaines — la seule épargnée étant la seule à créer son routeur par requête. Remplacé par une
   fabrique `createAppRouter()`, appelée depuis `createApp()` comme le sont déjà Pinia, Vuetify et
@@ -125,7 +125,7 @@
 
 - **Vulnérabilités des dépendances de production ramenées à zéro** — `multer` 2.4.0 (DoS par noms de
   champs imbriqués) et `nodemailer` 9.1.1 (lecture de fichier arbitraire + SSRF via l'option `raw`,
-  injection CRLF d'en-têtes), les deux *high* que `e-xode/scripts#9` suivait depuis juillet, plus 6
+  injection CRLF d'en-têtes), les deux *high* que `e-xode/ops#9` suivait depuis juillet, plus 6
   correctifs *moderate*/*low* transitifs. `npm audit --omit=dev` : **0 vulnérabilité**. Aucun
   changement de `package.json` — lockfile uniquement, donc aucune montée de version majeure. Les 3
   vulnérabilités restantes visent l'outillage de test (`vitest`), retiré de l'image par
@@ -138,7 +138,7 @@
   Dependabot with green `lint`/`test`/`build`/`deps-review` CI.
 - **Docker image's global npm install is now pinned** — `npm install -g npm@latest` ->
   `npm install -g npm@12.0.2` in `docker/build/Dockerfile`. Was the last unpinned, non-deterministic
-  step in the image build (see `e-xode/scripts#9`).
+  step in the image build (see `e-xode/ops#9`).
 - **Dependabot now also tracks the base image** — added a `docker` ecosystem entry (weekly,
   `docker/build/`) to `.github/dependabot.yml`, alongside the existing `npm` entry.
 

@@ -6,7 +6,7 @@ name: audit
 # vulnerability is published for an already-installed dependency, with no commit involved. It is
 # a debt indicator, not a merge gate, and that is exactly why it must NOT run on pull requests.
 # While it did, a PR fixing a vulnerability was marked red by the vulnerabilities job.
-# See e-xode/scripts#9.
+# See e-xode/ops#9.
 #
 # Never add it to the `required_status_checks` of master.
 
