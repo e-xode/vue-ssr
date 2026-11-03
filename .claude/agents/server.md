@@ -16,7 +16,7 @@ Deliver Express 5 + MongoDB server code that is **correct, secure, consistent wi
 
 ## Stack
 
-Express 5 | MongoDB 7 (official `mongodb` driver) | express-session + session-file-store | helmet | cors | express-rate-limit | nodemailer | Node 24+. JavaScript only (ESM, no TypeScript).
+Express 5 | MongoDB 7 (official `mongodb` driver) | express-session + session-file-store | helmet | cors | express-rate-limit | nodemailer | Node 26 (engines >=24). JavaScript only (ESM, no TypeScript).
 
 ## Skills
 

@@ -2,7 +2,7 @@
 
 ## Dockerfile (multi-stage) — `docker/build/Dockerfile`
 
-Stage 1 (build): Node 24, `npm ci`, `npm run build`.
+Stage 1 (build): Node 26, `npm ci`, `npm run build`.
 Stage 2 (production): copies `dist/`, `server.js`, `src/shared`, `src/api`, `src/translate`, `public`,
 `package.json` and `package-lock.json` from the builder stage, then runs `npm ci --omit=dev` so
 production installs exactly the locked tree (no `node_modules` copied from the builder). Runs as a
@@ -35,7 +35,7 @@ Equivalent without editing `.env`: `docker compose -f docker-compose.yml -f dock
 
 - Triggers: push and PR to `master`/`development`
 - Skipped when only markdown, `docs/`, `.claude/` or `LICENSE` changed
-- Node 24, four **separate** jobs run in parallel: `format` (`npm ci` → `format:check`), `lint` (`npm ci` → `lint:check`), `test`
+- Node 26, four **separate** jobs run in parallel: `format` (`npm ci` → `format:check`), `lint` (`npm ci` → `lint:check`), `test`
   (`npm ci` → `test:run`), `build` (`npm ci` → `build`). Split deliberately — they used to share one
   job where `lint:check` ran first, so an ESLint/eslint-plugin-vue bump turned the job red without
   ever saying whether the tests passed. `build` is the newest of the three and the most useful for
@@ -54,7 +54,7 @@ Equivalent without editing `.env`: `docker compose -f docker-compose.yml -f dock
 ### npm-publish (`npm-publish.yml`)
 
 - Triggers: tags matching `v*` (same trigger as `docker-build.yml` — both fire on a version tag)
-- Node 24
+- Node 26
 - Steps: `npm ci` → `lint:check` → `test:run` → `build` → `npm publish --provenance --access public`
 - Secret: `NPM_TOKEN`
 

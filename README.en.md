@@ -916,7 +916,7 @@ Dev ports (app and local Mongo) are published on `127.0.0.1` only. Set `BIND_ADD
 
 #### Node.js Dev (`docker/dev/node/Dockerfile`)
 
-- Base: `node:24-slim`
+- Base: `node:26-slim`
 - Includes: Playwright dependencies
 - Entry point: `npm run dev`
 
@@ -929,7 +929,7 @@ Dev ports (app and local Mongo) are published on `127.0.0.1` only. Set `BIND_ADD
 #### Production Image (`docker/build/Dockerfile`)
 
 - Multi-stage build
-- Base: `node:24-alpine` + `node:24-slim`
+- Base: `node:26-alpine` + `node:26-slim`
 - Optimized for production
 - Uses Supervisor
 
