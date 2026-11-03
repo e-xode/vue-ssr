@@ -31,6 +31,7 @@ description: "Release workflow for the Vue SSR Starter Kit (e-xode/vue-ssr): ver
    release branch. Branch protection requires 1 approving review and forbids self-approval, so the
    merge step uses `gh pr merge --admin`; confirm the merge landed (re-fetch, check `master`'s HEAD)
    before tagging, since a squash-merge changes the SHA.
+7. **Clone alignment (2026-11-03)**: a release, tag, deployment or campaign runs in a throw-away `git worktree` (`git worktree add ~/worktrees/<project>-<op> origin/master`), never in the clone a session has open; no local-only commit survives the operation (pushed, or PR merged, before it is declared done); at the end, `git fetch` then `git pull --ff-only` in the session clone if it is clean and on `master`, otherwise leave it alone and say why. The report gives `git rev-list --left-right --count origin/master...HEAD` (expected `0 0`).
 
 ## Commit categories
 
