@@ -31,6 +31,7 @@ export default defineConfig({
   },
   test: {
     globals: true,
+    execArgv: ['--no-experimental-webstorage'],
     setupFiles: ['./tests/setup.js'],
     mockReset: true,
     restoreMocks: true,

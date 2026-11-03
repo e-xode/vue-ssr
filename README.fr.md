@@ -916,7 +916,7 @@ Les ports de dev (app et Mongo local) ne sont publiés que sur `127.0.0.1`. Déf
 
 #### Node.js Dev (`docker/dev/node/Dockerfile`)
 
-- Base: `node:24-slim`
+- Base: `node:26-slim`
 - Inclut: Dépendances pour Playwright
 - Point d'entrée: `npm run dev`
 
@@ -929,7 +929,7 @@ Les ports de dev (app et Mongo local) ne sont publiés que sur `127.0.0.1`. Déf
 #### Production Image (`docker/build/Dockerfile`)
 
 - Build multi-étape
-- Base: `node:24-alpine` + `node:24-slim`
+- Base: `node:26-alpine` + `node:26-slim`
 - Optimisée pour production
 - Utilise Supervisor
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Improvements
+
+- **Node.js 26 LTS.** The Docker images (build and dev), the CI workflows and the documentation move from Node 24 to Node 26. The package `engines` floor stays at `>=24.0.0`. Unit tests set `--no-experimental-webstorage` so Node 26's built-in `localStorage` no longer shadows the DOM test environment's.
+
 ## 5.5.2
 
 ### Security

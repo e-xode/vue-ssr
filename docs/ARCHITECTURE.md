@@ -552,12 +552,12 @@ defineConfig({
 ### Multi-stage Dockerfile Production
 
 ```dockerfile
-FROM node:24-alpine AS builder
+FROM node:26-alpine AS builder
   # npm ci --include=dev
   # npm run build
   → génère dist/
 
-FROM node:24-slim AS runner
+FROM node:26-slim AS runner
   # Copier dist/
   # npm ci --omit=dev
   # Supervisor gère le processus
