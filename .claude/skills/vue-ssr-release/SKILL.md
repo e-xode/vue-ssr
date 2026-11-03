@@ -22,7 +22,7 @@ description: "Release workflow for the Vue SSR Starter Kit (e-xode/vue-ssr): ver
 
 ## Hard constraints
 
-1. **Never auto-commit/push/tag.** Always propose and wait for explicit user confirmation before executing any git write operation.
+1. **Commit gate:** no commit, push, tag or history rewrite on your own initiative. They are allowed when the user asks for them in the current turn, or after you asked and they agreed.
 2. **Commit format:** `[release/vX.Y.Z] release vX.Y.Z`
 3. **No `Co-authored-by` trailer, ever** — no trailer and no mention of a non-human contributor on any commit. Commit author is always the user's own git account, full stop.
 4. **Tag format:** `vX.Y.Z` (prefixed with `v`)

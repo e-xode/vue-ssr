@@ -25,7 +25,7 @@ At most two end-of-task questions are sanctioned, each firing only when its cond
 
 ## Hard rules
 
-**No auto-commit** — Never `git commit`/`push`/`tag`/`rebase`/`reset --hard` unless the user explicitly requests it this turn ("ok"/"finalise" ≠ a request; read-only git is always allowed). Commit format: `[$branch] content`. **No `Co-authored-by` trailer or any mention of a non-human contributor on any commit, ever** — commit author is always the user's own git account, full stop. **Exception: "release"** — full release process (CHANGELOG, version bump, commit, push, tag).
+**Commit gate** — No commit, push, tag or history rewrite (`rebase`/`reset --hard`) on your own initiative. They are allowed when the user asks for them in the current turn, or after you asked and they agreed ("ok"/"finalise" ≠ a request; read-only git is always allowed). Commit format: `[$branch] content`. **No `Co-authored-by` trailer or any mention of a non-human contributor on any commit, ever** — commit author is always the user's own git account, full stop. **Exception: "release"** — full release process (CHANGELOG, version bump, commit, push, tag).
 
 **Clone alignment (2026-11-03)**: a release, tag, deployment or campaign runs in a throw-away `git worktree` (`git worktree add ~/worktrees/<project>-<op> origin/master`), never in the clone a session has open; no local-only commit survives the operation (pushed, or PR merged, before it is declared done); at the end, `git fetch` then `git pull --ff-only` in the session clone if it is clean and on `master`, otherwise leave it alone and say why. The report gives `git rev-list --left-right --count origin/master...HEAD` (expected `0 0`).
 

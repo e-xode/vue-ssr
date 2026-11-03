@@ -22,7 +22,7 @@ Follow the `vue-ssr-release` skill's full step-by-step exactly — don't restate
 
 ## Hard constraints
 
-1. **NEVER auto-commit, push, open/merge a PR, or tag.** Always return the exact command as a proposal in the structured return; run it only once the orchestrator relays explicit user approval.
+1. **Commit gate:** no commit, push, PR merge, tag or history rewrite on your own initiative. They are allowed when the user asks for them in the current turn, or after you asked and they agreed — as a sub-agent with no user channel, you ask by returning the exact command as a proposal, and run it once the orchestrator relays the user request or agreement.
 2. **Commit format:** `[release/vX.Y.Z] release vX.Y.Z`
 3. **No `Co-authored-by` trailer, ever** — no trailer and no mention of a non-human contributor on any commit. Commit author is always the user's own git account, full stop.
 4. **Tag format:** `vX.Y.Z`
