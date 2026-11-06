@@ -81,5 +81,19 @@
   "statusLine": {
     "type": "command",
     "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/statusline.py"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/statusline.py --measure",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
   }
 }

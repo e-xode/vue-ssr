@@ -28,6 +28,7 @@ import sys
 
 PLUGIN = "deadweight"
 TEMPLATE = os.path.join("skills", "config-auditor", "templates", "statusline.py")
+MEASURE = os.path.join("hooks", "session-audit.py")
 
 
 def from_claude():
@@ -69,15 +70,25 @@ def from_copilot():
     return best
 
 
-def template():
+def plugin_file(relative):
+    """`relative` inside the installed plugin, from the host named in argv, or None."""
     order = (from_copilot, from_claude) if sys.argv[1:2] == ["copilot"] else (from_claude, from_copilot)
     for lookup in order:
         base = lookup()
-        if base and os.path.isfile(os.path.join(base, TEMPLATE)):
-            return os.path.join(base, TEMPLATE)
+        if base and os.path.isfile(os.path.join(base, relative)):
+            return os.path.join(base, relative)
     return None
 
 
-found = template()
-if found:
-    runpy.run_path(found, run_name="__main__")
+# `--measure` is what the SessionStart hook that `deadweight --setup-statusline` writes into the
+# project's own settings runs. The plugin cannot declare that hook itself: the plugin directory
+# accepts hooks of type `command` only from verified organizations (0.33.0 was refused for it).
+# The launcher is the one place that already knows where the installed plugin is.
+if sys.argv[1:2] == ["--measure"]:
+    found = plugin_file(MEASURE)
+    if found:
+        runpy.run_path(found, run_name="__main__")
+else:
+    found = plugin_file(TEMPLATE)
+    if found:
+        runpy.run_path(found, run_name="__main__")
