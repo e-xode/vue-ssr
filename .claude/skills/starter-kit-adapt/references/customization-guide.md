@@ -127,7 +127,7 @@ description: "Domain knowledge for MyProject (myorg/myrepo): [brief tech/domain 
 ```markdown
 | Agent       | Trigger (delegate when…)                    |
 | ----------- | ------------------------------------------- |
-| `hooks`     | Post-task validation (format, lint, build, test) |
+| `validation`| Post-task validation (format, lint, build, test) |
 | `review`    | User asks to review a branch / PR / diff    |
 | `migration` | Database migration tasks or schema changes  |
 ```
