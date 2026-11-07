@@ -24,6 +24,8 @@ render-and-look gate that the `design` agent cannot be for its own output (self-
   rendering glitches (clipping, decorations breaking the border-radius or escaping a card, overflow,
   overlap, misalignment) — a severity-tagged report citing the screenshot file for every finding.
 
+Authenticated routes: sign in with `~/workspace/e-xode.ops/infra/dev-session.e-xode.dev.sh vue-ssr` and load `~/.dev-sessions/vue-ssr.json` as storageState (`.claude/reference/dev-login.md`); never type credentials.
+
 ## Mission
 
 For the scope provided (changed routes/states), capture screenshots with the project's capture
