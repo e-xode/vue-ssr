@@ -16,6 +16,7 @@ import { setupAvatarRoute } from './auth/avatar.js';
 import { setupAdminUsersRoutes } from './admin/users.js';
 import { setupAdminLogsRoute } from './admin/logs.js';
 import { setupContactRoute } from './contact/send.js';
+import { setupDevLoginRoute } from './dev/login.js';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -67,6 +68,7 @@ export function createApiRouter(db) {
   setupAdminUsersRoutes(router, db);
   setupAdminLogsRoute(router, db);
   setupContactRoute(router, db);
+  setupDevLoginRoute(router, db);
 
   return router;
 }
