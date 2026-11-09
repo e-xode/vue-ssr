@@ -120,9 +120,11 @@ never add it to `required_status_checks`. The PR gate is `deps-review`. Call `np
 | `full` | `npm run validate` (lint serially, then format:check + build + test:run in parallel) |
 | `server` | vps671607 |
 | `container` | `e-xode.vue-ssr` (port 3002, behind `e-xode.proxy`) |
-| `deploy` | `cd /home/e-xode.vue-ssr && ./deploy.sh` (symlink → `e-xode/ops`) |
+| `deploy` | `cd /home/e-xode.vue-ssr && ./deploy.sh` (symlink → `e-xode/ops`) — run by ops, never by the project agent |
 | `smoke` | `curl -sf https://vue-ssr.e-xode.net/` → 200 |
 | `rollback` | ⚠️ no direct lever — `deploy.sh` runs `docker pull …:latest` unpinned. Rolling back means rebuilding an earlier commit via CI. See `e-xode/ops#10`. |
+
+**Release chain:** merge → annotated tag → green pipeline → hand-off to the ops session. The project agent never deploys to production and never uses SSH to a host; ops confirms with the owner, deploys and verifies (`e-xode.ops` → `.claude/reference/release-handoff.md`). The publication gate of this repo is unchanged.
 
 ---
 
