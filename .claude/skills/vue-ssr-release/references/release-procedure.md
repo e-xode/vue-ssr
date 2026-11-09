@@ -1,6 +1,6 @@
 # Release procedure — step by step
 
-Contents: [Step 1 — Verify branch](#step-1--verify-branch) · [Step 2 — Ensure clean working tree](#step-2--ensure-clean-working-tree) · [Step 3 — Ask bump type](#step-3--ask-bump-type) · [Step 4 — Create release branch](#step-4--create-release-branch) · [Step 5 — Bump version in package.json](#step-5--bump-version-in-packagejson) · [Step 6 — Sync lockfile](#step-6--sync-lockfile) · [Step 7 — Gather unreleased changes](#step-7--gather-unreleased-changes) · [Step 8 — Present CHANGELOG draft](#step-8--present-changelog-draft) · [Step 9 — Write CHANGELOG](#step-9--write-changelog) · [Step 10 — Propose commit](#step-10--propose-commit) · [Step 11 — Propose push + PR + merge](#step-11--propose-push--pr--merge) · [Step 12 — Verify the merge, then tag](#step-12--verify-the-merge-then-tag) · [CHANGELOG format reference](#changelog-format-reference) · [Edge cases](#edge-cases)
+Contents: [Step 1 — Verify branch](#step-1--verify-branch) · [Step 2 — Ensure clean working tree](#step-2--ensure-clean-working-tree) · [Step 3 — Ask bump type](#step-3--ask-bump-type) · [Step 4 — Create release branch](#step-4--create-release-branch) · [Step 5 — Bump version in package.json](#step-5--bump-version-in-packagejson) · [Step 6 — Sync lockfile](#step-6--sync-lockfile) · [Step 7 — Gather unreleased changes](#step-7--gather-unreleased-changes) · [Step 8 — Present CHANGELOG draft](#step-8--present-changelog-draft) · [Step 9 — Write CHANGELOG](#step-9--write-changelog) · [Step 10 — Propose commit](#step-10--propose-commit) · [Step 11 — Propose push + PR + merge](#step-11--propose-push--pr--merge) · [Step 12 — Verify the merge, then tag](#step-12--verify-the-merge-then-tag) · [Step 13 — Pipeline check and hand-off to ops](#step-13--pipeline-check-and-hand-off-to-ops) · [CHANGELOG format reference](#changelog-format-reference) · [Edge cases](#edge-cases)
 
 Full step-by-step release procedure for the Vue SSR Starter Kit. Hard constraints, the commit-category table, and the in/out-of-scope routing table live in the parent `vue-ssr-release/SKILL.md` — read that first.
 
@@ -123,11 +123,15 @@ it before tagging:
 ```bash
 git checkout master
 git pull
-git tag vX.Y.Z
+git tag -a vX.Y.Z -m "vX.Y.Z"
 git push origin vX.Y.Z
 ```
 
 **Wait for user confirmation** before executing.
+
+## Step 13 — Pipeline check and hand-off to ops
+
+Wait for the pipeline of the tag. Red: fix and re-release, nothing is sent to ops. Green: hand off to the ops session (cross-session message to `e-xode.ops`, else tell the owner): project, tag, green run, what changed, migration/data step if any, and "nothing deployed". The release ends here: the project agent never deploys to production or uses SSH to a host. Canonical chain: `e-xode.ops/.claude/reference/release-handoff.md`.
 
 **Clone alignment (2026-11-03)**: a release, tag, deployment or campaign runs in a throw-away `git worktree` (`git worktree add ~/worktrees/<project>-<op> origin/master`), never in the clone a session has open; no local-only commit survives the operation (pushed, or PR merged, before it is declared done); at the end, `git fetch` then `git pull --ff-only` in the session clone if it is clean and on `master`, otherwise leave it alone and say why. The report gives `git rev-list --left-right --count origin/master...HEAD` (expected `0 0`). Run Steps 9-12 in that worktree rather than checking out `master` in the session clone.
 

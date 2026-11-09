@@ -11,7 +11,7 @@ description: "Release workflow for the Vue SSR Starter Kit (e-xode/vue-ssr): ver
 
 | In scope                                   | Out of scope                                     |
 | ------------------------------------------ | ------------------------------------------------ |
-| Detect current branch (main/master)        | Deploying to production (→ `vue-ssr-deployment`) |
+| Detect current branch (main/master)        | Deploying to production (→ the ops session, never the project agent) |
 | Create release branch `release/vX.Y.Z`     | Writing application code (→ `vue` agent)         |
 | Bump `version` in `package.json`           | CI/CD pipeline changes (→ `vue-ssr-deployment`)  |
 | Sync `package-lock.json` via `npm install` | Post-task code validation (→ `validation` agent) |
