@@ -160,7 +160,7 @@ onMounted(fetchUsers);
                     {{ t('admin.users.blocked') }}
                   </v-chip>
                 </td>
-                <td>{{ user.email }}</td>
+                <td :title="user.email">{{ user.email }}</td>
                 <td>
                   <v-chip size="small" variant="tonal">
                     {{ user.type }}
@@ -173,6 +173,7 @@ onMounted(fetchUsers);
                       :icon="mdiPencil"
                       size="small"
                       variant="text"
+                      :aria-label="t('admin.users.edit')"
                       @click="router.push(localePath(`/admin/users/${user._id}`))"
                     />
                     <v-btn
@@ -180,6 +181,7 @@ onMounted(fetchUsers);
                       size="small"
                       variant="text"
                       color="error"
+                      :aria-label="t('admin.users.deleteUser')"
                       @click="confirmDelete(user)"
                     />
                   </div>

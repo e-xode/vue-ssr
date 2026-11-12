@@ -67,11 +67,13 @@ a.link {
     outline-offset: $border-width-hairline * 2;
   }
 
-  .v-field-label {
-    font-size: $font-size-sm;
+  .v-field-label:not(.v-field-label--floating) {
+    font-size: $font-size-caption;
+    white-space: normal;
 
     @include respond-to('sm') {
       font-size: $font-size-base;
+      white-space: nowrap;
     }
   }
 }
@@ -80,6 +82,7 @@ a.link {
   white-space: normal;
   text-overflow: clip;
   overflow-wrap: break-word;
+  hyphens: none;
 }
 
 .v-dialog .v-card {

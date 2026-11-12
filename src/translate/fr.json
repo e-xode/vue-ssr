@@ -247,6 +247,7 @@
       "blockSuccess": "Utilisateur bloqué avec succès",
       "unblockSuccess": "Utilisateur débloqué avec succès",
       "recentActivity": "Activité récente",
+      "deleteUser": "Supprimer l'utilisateur",
       "deleteConfirm": {
         "title": "Supprimer l'utilisateur",
         "message": "Êtes-vous sûr de vouloir supprimer {name} ? Cette action est irréversible."
@@ -264,6 +265,8 @@
       "date": "Date",
       "deleteSelected": "Supprimer la sélection ({count})",
       "deleteLog": "Supprimer cette entrée du journal",
+      "selectAll": "Sélectionner toutes les entrées du journal",
+      "selectRow": "Sélectionner cette entrée du journal",
       "event": "Événement",
       "ip": "IP",
       "user": "Utilisateur",

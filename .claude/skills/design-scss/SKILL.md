@@ -1,6 +1,6 @@
 ---
 name: design-scss
-description: "SCSS design-system reference for the Vue SSR Starter Kit: design tokens in variables.scss, the 11 mixins, and component-scoped SCSS conventions. Trigger on ANY styling work: writing SCSS, choosing tokens, animations, component .scss files, Vuetify style overrides, layout utilities, or design-system questions. This is the token/mixin reference — the design agent loads it to produce SCSS. Don't use for: visual design decisions, palette, typography or layout direction (→ impeccable, with DESIGN.md), the screenshot checklist (→ brand-art-direction), app architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), Docker/CI (→ vue-ssr-deployment), validation (→ vue-ssr-validation), Vuetify component API (→ vuetify-components), design delegation routing (→ vue-ssr-design)."
+description: "SCSS design-system reference for the Vue SSR Starter Kit: design tokens in variables.scss, the 12 mixins, and component-scoped SCSS conventions. Trigger on ANY styling work: writing SCSS, choosing tokens, animations, component .scss files, Vuetify style overrides, layout utilities, or design-system questions. This is the token/mixin reference — the design agent loads it to produce SCSS. Don't use for: visual design decisions, palette, typography or layout direction (→ impeccable, with DESIGN.md), the screenshot checklist (→ brand-art-direction), app architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), Docker/CI (→ vue-ssr-deployment), validation (→ vue-ssr-validation), Vuetify component API (→ vuetify-components), design delegation routing (→ vue-ssr-design)."
 ---
 
 # Design SCSS
@@ -26,7 +26,7 @@ Project constraints that hold for every motion: animate `transform` and `opacity
 src/styles/
 ├── variables.scss        # Design tokens (spacing, radius, shadow, transition, breakpoint)
 ├── _typography.scss      # Base typography (injected)
-├── mixins.scss           # 11 reusable mixins
+├── mixins.scss           # 12 reusable mixins
 └── _inject.scss          # Barrel: @forward 'variables'; @forward 'typography'; @forward 'mixins'
 ```
 
@@ -154,6 +154,6 @@ Use the live mixins, not the dead classes: `hover-lift` for a card hover, `visua
 | File                                                          | Content                             |
 | ------------------------------------------------------------- | ----------------------------------- |
 | [variables-reference.md](references/variables-reference.md)   | Complete token inventory            |
-| [mixins-layout.md](references/mixins-layout.md)               | Flex, truncate, absolute-center mixins |
+| [mixins-layout.md](references/mixins-layout.md)               | Flex, truncate, absolute-center, scroll-edge-cue mixins |
 | [mixins-interaction.md](references/mixins-interaction.md)     | Transition, hover-lift, button-reset, visually-hidden, respond-to |
 | [scss-patterns.md](references/scss-patterns.md)               | File naming, @use/@forward, nesting |

@@ -1,6 +1,6 @@
 # Mixins reference — layout and content
 
-Contents: [flex-center](#flex-center) · [flex-between](#flex-between) · [flex-col](#flex-col) · [truncate](#truncate) · [multiline-truncate](#multiline-truncate) · [absolute-center](#absolute-center)
+Contents: [flex-center](#flex-center) · [flex-between](#flex-between) · [flex-col](#flex-col) · [truncate](#truncate) · [multiline-truncate](#multiline-truncate) · [absolute-center](#absolute-center) · [scroll-edge-cue](#scroll-edge-cue)
 
 > Layout and content mixins from `src/styles/mixins.scss`. Auto-injected — no `@use` needed. Interaction, state and responsive mixins: [mixins-interaction.md](./mixins-interaction.md).
 
@@ -133,3 +133,14 @@ left: 50%;
 transform: translate(-50%, -50%);
 ```
 
+## scroll-edge-cue
+
+Shows a soft shadow on the edge of a horizontally scrollable container that still has content beyond it, with CSS only.
+
+**Signature:** `@mixin scroll-edge-cue`
+
+```scss
+.v-table__wrapper {
+  @include scroll-edge-cue;
+}
+```

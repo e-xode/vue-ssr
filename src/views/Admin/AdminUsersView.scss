@@ -1,32 +1,17 @@
 .admin-users {
   &__table {
     :deep(.v-table__wrapper) {
-      background-image:
-        linear-gradient(to right, rgb(var(--v-theme-surface)) 30%, transparent),
-        linear-gradient(to left, rgb(var(--v-theme-surface)) 30%, transparent),
-        radial-gradient(farthest-side at 0 50%, rgba(var(--v-theme-on-surface), 0.16), transparent),
-        radial-gradient(
-          farthest-side at 100% 50%,
-          rgba(var(--v-theme-on-surface), 0.16),
-          transparent
-        );
-      background-repeat: no-repeat;
-      background-position:
-        left center,
-        right center,
-        left center,
-        right center;
-      background-size:
-        $spacing-xl 100%,
-        $spacing-xl 100%,
-        $spacing-md 100%,
-        $spacing-md 100%;
-      background-attachment: local, local, scroll, scroll;
+      @include scroll-edge-cue;
     }
 
     td,
     th {
       white-space: nowrap;
+    }
+
+    td:nth-child(2) {
+      max-width: $spacing-unit * 40;
+      @include truncate;
     }
   }
 

@@ -191,10 +191,13 @@ onMounted(() => {
         <v-table>
           <thead>
             <tr>
-              <th class="w-5">
+              <th>
                 <v-checkbox
                   :model-value="selected.length === logs.length && logs.length > 0"
                   :indeterminate="selected.length > 0 && selected.length < logs.length"
+                  :aria-label="t('admin.logs.selectAll')"
+                  density="compact"
+                  hide-details
                   @change="selected = selected.length === logs.length ? [] : logs.map((l) => l._id)"
                 />
               </th>
@@ -219,7 +222,13 @@ onMounted(() => {
             </tr>
             <tr v-for="log in logs" v-else :key="log._id">
               <td>
-                <v-checkbox v-model="selected" :value="log._id" />
+                <v-checkbox
+                  v-model="selected"
+                  :value="log._id"
+                  :aria-label="t('admin.logs.selectRow')"
+                  density="compact"
+                  hide-details
+                />
               </td>
               <td class="text-body-2">
                 {{ formatDate(log.createdAt) }}

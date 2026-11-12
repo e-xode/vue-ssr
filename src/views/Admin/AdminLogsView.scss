@@ -9,9 +9,39 @@
     padding-right: $spacing-lg;
   }
 
+  :deep(.v-table__wrapper) {
+    @include scroll-edge-cue;
+  }
+
   td,
   th {
     white-space: nowrap;
+
+    @include respond-to('lg') {
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  td {
+    vertical-align: middle;
+  }
+
+  td:first-child:not([colspan]),
+  th:first-child {
+    min-width: $spacing-unit * 9;
+  }
+
+  td:nth-child(3) {
+    white-space: nowrap;
+  }
+
+  td:last-child:not([colspan]),
+  th:last-child {
+    position: sticky;
+    right: 0;
+    z-index: $z-base;
+    background: rgb(var(--v-theme-surface));
   }
 }
 
@@ -22,11 +52,6 @@
   max-width: $spacing-unit * 30;
   line-height: $line-height-normal;
   @include truncate;
-
-  @include respond-to('lg') {
-    width: $spacing-unit * 45;
-    max-width: $spacing-unit * 45;
-  }
 
   &__action {
     min-width: $spacing-unit * 5.5;
