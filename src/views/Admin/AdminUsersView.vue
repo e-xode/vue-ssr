@@ -124,7 +124,7 @@ onMounted(fetchUsers);
             />
           </v-card-text>
 
-          <v-table>
+          <v-table class="admin-users__table">
             <thead>
               <tr>
                 <th>{{ t('form.name') }}</th>
@@ -167,20 +167,22 @@ onMounted(fetchUsers);
                   </v-chip>
                 </td>
                 <td>{{ formatDate(user.createdAt) }}</td>
-                <td class="text-right">
-                  <v-btn
-                    :icon="mdiPencil"
-                    size="small"
-                    variant="text"
-                    @click="router.push(localePath(`/admin/users/${user._id}`))"
-                  />
-                  <v-btn
-                    :icon="mdiDelete"
-                    size="small"
-                    variant="text"
-                    color="error"
-                    @click="confirmDelete(user)"
-                  />
+                <td>
+                  <div class="admin-users__actions">
+                    <v-btn
+                      :icon="mdiPencil"
+                      size="small"
+                      variant="text"
+                      @click="router.push(localePath(`/admin/users/${user._id}`))"
+                    />
+                    <v-btn
+                      :icon="mdiDelete"
+                      size="small"
+                      variant="text"
+                      color="error"
+                      @click="confirmDelete(user)"
+                    />
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -226,3 +228,5 @@ onMounted(fetchUsers);
     </v-dialog>
   </v-container>
 </template>
+
+<style lang="scss" scoped src="./AdminUsersView.scss"></style>

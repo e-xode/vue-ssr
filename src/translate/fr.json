@@ -263,12 +263,14 @@
       "search": "Rechercher par événement ou IP",
       "date": "Date",
       "deleteSelected": "Supprimer la sélection ({count})",
+      "deleteLog": "Supprimer cette entrée du journal",
       "event": "Événement",
       "ip": "IP",
       "user": "Utilisateur",
       "meta": "Détails",
       "viewDetails": "Voir les détails",
       "empty": "Aucun journal trouvé",
+      "refresh": "Actualiser",
       "metaDialog": {
         "close": "Fermer",
         "title": "Détails de l'événement"

@@ -85,13 +85,22 @@ async function handleSubmit() {
         v-model="form.password"
         :label="t('form.password')"
         :type="showPassword ? 'text' : 'password'"
-        :append-inner-icon="showPassword ? mdiEyeOff : mdiEye"
         autocomplete="new-password"
         class="mb-6"
         :disabled="isSubmitting"
         required
-        @click:append="showPassword = !showPassword"
-      />
+      >
+        <template #append-inner>
+          <v-btn
+            :icon="showPassword ? mdiEyeOff : mdiEye"
+            variant="text"
+            size="small"
+            :aria-label="t('form.showPassword')"
+            :aria-pressed="showPassword"
+            @click="showPassword = !showPassword"
+          />
+        </template>
+      </v-text-field>
 
       <v-btn type="submit" color="primary" block size="large" :loading="isSubmitting">
         {{ t('nav.signup') }}

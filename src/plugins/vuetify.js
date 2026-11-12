@@ -53,7 +53,7 @@ const colorsDark = {
   error: '#f87171',
   info: '#818cf8',
 
-  'on-primary': '#ffffff',
+  'on-primary': '#0a0a0a',
 
   background: '#0a0a0a',
   surface: '#171717',
@@ -110,11 +110,19 @@ export function createApplicationVuetify(ssr = false, theme = 'light', locale = 
         variant: 'outlined',
         density: 'comfortable',
         rounded: 'lg',
+        color: 'primary',
+      },
+      VTextarea: {
+        variant: 'outlined',
+        density: 'comfortable',
+        rounded: 'lg',
+        color: 'primary',
       },
       VSelect: {
         variant: 'outlined',
         density: 'comfortable',
         rounded: 'lg',
+        color: 'primary',
       },
       VSwitch: {
         color: 'primary',

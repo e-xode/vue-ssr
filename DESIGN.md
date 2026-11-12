@@ -181,7 +181,7 @@ A single rounded language. The default is `12px` (`lg`) on buttons, cards, input
 ## 7. Components
 
 ### Buttons
-- **Primary:** flat, indigo fill, white text, `12px` radius. Hover darkens toward `#4338ca`, pressed to `#3730a3`, using Vuetify's built-in state. No custom halo.
+- **Primary:** flat, indigo fill, white text in the light theme and near-black text in the dark theme (white on the lighter dark-theme indigo is only 3:1), `12px` radius. Hover darkens toward `#4338ca`, pressed to `#3730a3`, using Vuetify's built-in state. No custom halo.
 - **Secondary and supporting actions:** neutral gray, never indigo, so the single accent stays rare.
 - **Focus:** a visible focus ring in indigo; never removed.
 

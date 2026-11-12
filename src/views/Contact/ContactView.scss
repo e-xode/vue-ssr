@@ -1,4 +1,21 @@
 .contact-page {
   padding-top: $spacing-xl;
   min-height: calc(100vh - #{$header-height});
+
+  &__title {
+    font-family: $font-family-base;
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-semibold;
+    line-height: $line-height-snug;
+    letter-spacing: $letter-spacing-snug;
+    color: rgb(var(--v-theme-on-background));
+  }
+
+  &__lead {
+    font-family: $font-family-base;
+    font-size: $font-size-base;
+    font-weight: $font-weight-normal;
+    line-height: $line-height-normal;
+    color: rgba(var(--v-theme-on-background), 0.7);
+  }
 }

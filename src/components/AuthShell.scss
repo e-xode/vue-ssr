@@ -3,12 +3,3 @@
     width: 100%;
   }
 }
-
-:slotted(.link) {
-  color: rgb(var(--v-theme-primary));
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}

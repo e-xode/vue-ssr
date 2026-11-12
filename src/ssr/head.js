@@ -100,11 +100,14 @@ const MISSING_PAGE_ROBOTS = 'noindex, follow';
 const PROTECTED_PAGE_ROBOTS = 'noindex, nofollow';
 const DEFAULT_ROBOTS = 'index, follow';
 
+function isProtectedRoute(route) {
+  return Boolean(route.meta?.requiresAuth || route.meta?.requiresAdmin);
+}
+
 function resolveRobots(route, isMissing) {
   const declared = route.meta?.robots;
   if (isMissing) return declared?.includes('noindex') ? declared : MISSING_PAGE_ROBOTS;
-  const isProtected = Boolean(route.meta?.requiresAuth || route.meta?.requiresAdmin);
-  if (isProtected && !declared?.includes('noindex')) return PROTECTED_PAGE_ROBOTS;
+  if (isProtectedRoute(route) && !declared?.includes('noindex')) return PROTECTED_PAGE_ROBOTS;
   return declared || DEFAULT_ROBOTS;
 }
 
@@ -130,6 +133,7 @@ export function buildHeadContext({ route, router, locale, t, theme, statusCode, 
     siteUrl,
     appName,
     isMissing,
+    isProtected: isProtectedRoute(route),
     canonical,
     locale,
     robots: resolveRobots(route, isMissing),
@@ -152,13 +156,15 @@ function buildAlternateTags(ctx) {
   if (ctx.isMissing) return [];
   const hreflangLink = (hreflang, locale) =>
     `<link rel="alternate" hreflang="${hreflang}" href="${ctx.siteUrl}/${locale}${localizeSubPath(ctx.subPath, locale)}">`;
+  const ogAlternates = LOCALE_CODES.filter((locale) => locale !== ctx.locale).map(
+    (locale) => `<meta property="og:locale:alternate" content="${getOgLocale(locale)}">`
+  );
+  if (ctx.isProtected) return ogAlternates;
   return [
     `<link rel="canonical" href="${escapeHtml(ctx.canonical)}">`,
     ...LOCALE_CODES.map((locale) => hreflangLink(locale, locale)),
     hreflangLink('x-default', DEFAULT_LOCALE),
-    ...LOCALE_CODES.filter((locale) => locale !== ctx.locale).map(
-      (locale) => `<meta property="og:locale:alternate" content="${getOgLocale(locale)}">`
-    ),
+    ...ogAlternates,
   ];
 }
 
