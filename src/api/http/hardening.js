@@ -2,6 +2,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { buildCsp } from '#src/api/http/csp.js';
+import { createForbiddenOriginError } from '#src/api/http/errors.js';
 import {
   RATE_LIMIT_WINDOW_MS,
   API_RATE_LIMIT_MAX,
@@ -44,7 +45,7 @@ export function createCors({ siteUrl, port }) {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error('CORS not allowed'));
+        callback(createForbiddenOriginError());
       }
     },
     credentials: true,

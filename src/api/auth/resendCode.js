@@ -1,9 +1,24 @@
-import { sendSecurityCodeEmail, generateSecurityCode, hashCode } from '#src/shared/email.js';
-import { SECURITY_CODE_EXPIRY_MS } from '#src/shared/const.js';
-import { assertNotBanned, getClientIp, resendWaitSeconds } from '#src/shared/security.js';
+import { sendResetPasswordEmail, sendSecurityCodeEmail } from '#src/shared/email.js';
+import { SECURITY_CODE_PURPOSES } from '#src/shared/const.js';
+import {
+  assertNotBanned,
+  createSecurityCode,
+  getClientIp,
+  hasPendingCode,
+  resendWaitSeconds,
+} from '#src/shared/security.js';
 import { logEvent } from '#src/shared/logger.js';
 import { readEmail, readString } from '#src/shared/utils.js';
 import { deliverEmail } from '#src/api/emailDelivery.js';
+
+const SENDERS = {
+  [SECURITY_CODE_PURPOSES.LOGIN]: sendSecurityCodeEmail,
+  [SECURITY_CODE_PURPOSES.RESET_PASSWORD]: sendResetPasswordEmail,
+};
+
+function pendingPurpose(user) {
+  return Object.keys(SENDERS).find((purpose) => hasPendingCode(user, purpose)) ?? null;
+}
 
 export function setupResendCodeRoute(app, db) {
   app.post('/api/auth/resend-code', async (req, res) => {
@@ -19,36 +34,25 @@ export function setupResendCodeRoute(app, db) {
       if (!(await assertNotBanned(db, res, { ip }))) return;
 
       const user = await db.collection('users').findOne({ email });
-      if (!user || !user.securityCode || !user.securityCodeExpires) {
+      const purpose = pendingPurpose(user);
+      if (!purpose) {
         return res.json({ status: 'code_sent', email });
       }
 
-      if (!(await assertNotBanned(db, res, { ip, user }))) return;
+      if (!(await assertNotBanned(db, res, { user }))) return;
 
       const waitSeconds = resendWaitSeconds(user);
       if (waitSeconds > 0) {
         return res.status(429).json({ error: 'error.auth.waitBeforeResend', waitSeconds });
       }
 
-      const code = generateSecurityCode();
-      const codeHash = hashCode(code);
-      const codeExpires = new Date(Date.now() + SECURITY_CODE_EXPIRY_MS);
+      const { code, fields } = createSecurityCode(purpose);
+      await db.collection('users').updateOne({ _id: user._id }, { $set: fields });
 
-      await db.collection('users').updateOne(
-        { _id: user._id },
-        {
-          $set: {
-            securityCode: codeHash,
-            securityCodeExpires: codeExpires,
-            securityCodeAttempts: 0,
-          },
-        }
-      );
-
-      const sending = sendSecurityCodeEmail(email, code, locale || user.locale || 'en');
+      const sending = SENDERS[purpose](email, code, locale || 'en');
       if (!(await deliverEmail(res, sending))) return;
 
-      logEvent(db, { event: 'auth-resend-code', userId: user._id, ip, meta: { email } });
+      logEvent(db, { event: 'auth-resend-code', userId: user._id, ip, meta: { email, purpose } });
 
       res.json({ status: 'code_sent', email });
     } catch (err) {

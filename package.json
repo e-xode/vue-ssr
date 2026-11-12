@@ -1,31 +1,66 @@
 {
   "name": "@e-xode/vue-ssr",
-  "version": "5.5.3",
-  "description": "Vue 3 SSR Starter Kit with Authentication",
+  "version": "5.6.0",
+  "description": "Production-ready Vue 3 + Express 5 SSR starter kit: email-code authentication, admin panel, i18n (EN/FR), Vuetify 4, MongoDB and Docker",
+  "homepage": "https://vue-ssr.e-xode.net",
   "repository": {
     "type": "git",
-    "url": "https://github.com/e-xode/vue-ssr"
+    "url": "git+https://github.com/e-xode/vue-ssr.git"
   },
+  "bugs": {
+    "url": "https://github.com/e-xode/vue-ssr/issues"
+  },
+  "author": "e-xode (https://github.com/e-xode)",
   "type": "module",
   "imports": {
     "#src/*": "./src/*"
   },
+  "files": [
+    "src",
+    "public",
+    "!public/uploads",
+    "docker",
+    "docs",
+    "scripts",
+    "server.js",
+    "index.html",
+    "vite.config.js",
+    "vitest.config.js",
+    "eslint.config.js",
+    "docker-compose.yml",
+    "docker-compose.local.yml",
+    "docker-compose.network.yml",
+    ".env.example",
+    ".nvmrc",
+    ".prettierrc.json",
+    ".prettierignore",
+    ".dockerignore",
+    "CONTRIBUTING.md",
+    "TESTING.md",
+    "README.fr.md"
+  ],
   "scripts": {
     "dev": "node --env-file-if-exists=.env --watch-path=./server.js server.js",
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build --outDir dist/client --ssrManifest",
     "build:server": "vite build --ssr src/entry-server.js --outDir dist/server",
     "prod": "cross-env NODE_ENV=production node server.js",
+    "start": "npm run prod",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint --cache . --fix",
+    "lint:fix": "npm run lint",
     "lint:check": "eslint --cache .",
     "format": "prettier --cache --cache-strategy content --write .",
+    "format:write": "npm run format",
     "format:check": "prettier --cache --cache-strategy content --check .",
     "validate": "node scripts/validate.mjs",
+    "validate:changed": "node scripts/validate.mjs --changed",
+    "seed:admin": "node --env-file-if-exists=.env scripts/make-admin.mjs",
+    "seed:dev-user": "node --env-file-if-exists=.env scripts/seed-dev-user.mjs",
     "screenshots": "node .claude/skills/brand-art-direction/scripts/screenshots.mjs"
   },
   "dependencies": {
@@ -37,7 +72,6 @@
     "compression": "^1.8.1",
     "cors": "^2.8.6",
     "cross-env": "^10.1.0",
-    "dompurify": "^3.4.11",
     "express": "^5.2.1",
     "express-rate-limit": "^8.5.2",
     "express-session": "^1.19.0",
@@ -46,7 +80,6 @@
     "multer": "^2.2.0",
     "nodemailer": "^10.0.15",
     "pinia": "^3.0.4",
-    "sanitize-html": "^2.17.6",
     "session-file-store": "^1.5.0",
     "sirv": "^3.0.2",
     "vite": "^8.0.16",
@@ -57,7 +90,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@testing-library/vue": "^8.1.0",
     "@vitest/ui": "^4.1.12",
     "@vue/test-utils": "^2.4.10",
     "eslint": "^10.4.0",
@@ -79,10 +111,20 @@
   },
   "keywords": [
     "vue",
+    "vue3",
     "ssr",
+    "vite",
+    "express",
+    "vuetify",
+    "pinia",
+    "vue-i18n",
+    "mongodb",
+    "authentication",
+    "admin-panel",
+    "i18n",
+    "docker",
     "starter-kit",
-    "boilerplate",
-    "authentication"
+    "boilerplate"
   ],
   "license": "MIT"
 }

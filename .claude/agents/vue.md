@@ -106,7 +106,7 @@ Client-safe (isomorphic) only — `src/shared/dbHelpers.js`, `mongo.js`, `email.
 
 - `apiFetch` — HTTP client for API calls
 - `escapeHtml` — XSS prevention
-- `analytics` — `trackPageView`/`trackEvent`/etc., SSR-guarded gtag calls
+- `analytics` — `initAnalytics`/`trackPageView`, SSR-guarded gtag calls
 - `log` — `logInfo`/`logWarn`/`logError`/`logDebug` console wrappers
 
 ## Testing guidance

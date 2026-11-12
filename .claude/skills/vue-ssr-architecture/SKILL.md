@@ -49,18 +49,17 @@ See [references/ssr-lifecycle.md](./references/ssr-lifecycle.md).
 
 | Module         | Exports                                                                                       |
 | -------------- | --------------------------------------------------------------------------------------------- |
-| `const.js`     | BCRYPT_ROUNDS, SECURITY_CODE_*, RESEND_COOLDOWN_MS, SESSION_* (cookie name/options, SESSION_ABSOLUTE_MAX_AGE_MS, SESSION_DIR), AVATAR_*, LOG_LEVELS/DEFAULT_LOG_LEVEL, USER_SAFE_PROJECTION, USER_TYPES, EMAIL_REGEX, SUPPORTED_LOCALES, DEFAULT_LOCALE, LOCALE_CODES, LOCALE_ROUTE_REGEX, isAdmin(), getIntlLocale(), getOgLocale() |
+| `const.js`     | BCRYPT_ROUNDS, SECURITY_CODE_*, RESEND_COOLDOWN_MS, SESSION_* (cookie name/options, SESSION_ABSOLUTE_MAX_AGE_MS, SESSION_DIR), AVATAR_*, LOG_LEVELS/DEFAULT_LOG_LEVEL, USER_SAFE_PROJECTION + ADMIN_USER_PROJECTION (allowlists), SECURITY_CODE_PURPOSES, CODE_LOCKOUT_*, CAPTCHA_TIMEOUT_MS, LOG_RETENTION_DAYS, USER_TYPES, EMAIL_REGEX, SUPPORTED_LOCALES, DEFAULT_LOCALE, LOCALE_CODES, LOCALE_ROUTE_REGEX, isAdmin(), getOgLocale() |
 | `clientConstants.js` | Browser-facing constants: meta names (`ga-id`, `recaptcha-site-key`), script URLs, `SSR_STATE_ELEMENT_ID`, reveal/reduced-motion settings |
 | `seoConstants.js` | Sitemap/robots TTLs and disallowed paths, site image/logo/favicon paths, theme colors, DEFAULT_APP_NAME |
-| `dbHelpers.js` | parseObjectId(), parsePagination(), findUserSafe(), getUserWithCounts()                       |
-| `email.js`     | generateSecurityCode(), hashCode(), verifyCode(), sendSecurityCodeEmail(), sendContactEmail() |
-| `security.js`  | getClientIp() (`req.ip`), isIpBlocked(), assertNotBanned(), startUserSession(), isSessionExpired(), recordLoginIp(), destroyUserSessions() |
+| `dbHelpers.js` | parseObjectId(), parsePagination(), findUserSafe(), isDuplicateKeyError(), promoteToAdmin() (used by `npm run seed:admin`) |
+| `email.js`     | generateSecurityCode(), hashCode(), verifyCode(), sendSecurityCodeEmail(), sendContactEmail(); isDevMailMode()/createMailTransport(): without `MAILER_HOST` outside production nothing is sent and codes are logged |
+| `security.js`  | getClientIp() (`req.ip`), isIpBlocked(), assertNotBanned(), startUserSession(), destroySession(), isSessionExpired(), createSecurityCode(purpose), hasPendingCode(), checkSubmittedCode() (lockout + atomic attempt + compare), claimCodeAttempt(), isCodeLocked(), recordCodeFailure(), recordLoginIp(), destroyUserSessions() |
 | `api.js`       | apiFetch() — client fetch wrapper (AbortController, configurable `timeout` default 15s, rate-limit detection) |
 | `mongo.js`     | mongoConnect(), mongoClose() — MongoClient singleton with connection pooling; returns `{ client, db, error }` |
-| `analytics.js` | Client-only GA4: `initAnalytics()` reads `<meta name="ga-id">`, loads gtag with consent defaults; trackPageView/trackEvent/... |
-| `captcha.js`   | Server-side reCAPTCHA v3 verify (expectedAction check, RECAPTCHA_MIN_SCORE, `{success,score,reason}`); passes in dev, fails closed in production |
-| `sanitize.js`  | sanitize(), isEmptyHtml() — curated sanitize-html allowlist for XSS-safe rich HTML            |
-| `utils.js`     | escapeHtml(), readString(), readEmail(), escapeRegex()                                        |
+| `analytics.js` | Client-only GA4: `initAnalytics()` reads `<meta name="ga-id">`, loads gtag with consent defaults; trackPageView() |
+| `captcha.js`   | Server-side reCAPTCHA v3 verify (expectedAction check, RECAPTCHA_MIN_SCORE, `{success,score,reason}`); passes in dev, fails closed in production (5 s timeout, reason `timeout`); missingCaptchaKeys(env) feeds the production boot warning |
+| `utils.js`     | escapeHtml(), readString(), readTrimmed(), readEmail(), escapeRegex()                         |
 | `serialize.js` | serializeForScript() — JSON safe to embed in `<script>` (escapes `<`, `>`, `&`, U+2028/2029)  |
 | `title.js`     | buildTitle(pageTitle, appName) — `Page — App` titles, shared by SSR head and client          |
 | `localizedRoutes.js` | PAGES (localized slugs), pageSlugs(), findPageBySlug(), localizedPath(), localizeSubPath(), pathLocaleMismatch() |

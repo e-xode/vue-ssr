@@ -2,6 +2,7 @@
 
 ```
 COMPOSE_FILE=docker-compose.yml:docker-compose.local.yml   # unset/commented = remote MongoDB
+SHARED_NETWORK=                        # with :docker-compose.network.yml in COMPOSE_FILE: existing network to join
 NODE_ENV=development
 NODE_PORT=3002
 NODE_HOST=http://localhost:3002        # public https origin in production
@@ -10,7 +11,7 @@ BASE=/                                 # public base path when served below the 
 LOG_LEVEL=info                         # error | warn | info | debug
 BIND_ADDRESS=127.0.0.1                 # host interface for published dev ports
 VITE_USE_POLLING=false                 # true when bind mounts miss inotify events
-COOKIE_SECRET=your-secret              # MUST be set in production
+COOKIE_SECRET=                         # production: random, 32+ chars (openssl rand -hex 32)
 
 MONGO_TYPE=mongodb                     # mongodb (local) | mongodb+srv (Atlas)
 MONGO_HOST=mongo                       # container name (local) or Atlas host
@@ -18,7 +19,7 @@ MONGO_USER=user
 MONGO_PWD=password
 MONGO_DB=vue-ssr
 
-MAILER_HOST=smtp.example.com
+MAILER_HOST=smtp.example.com           # unset in dev = nothing sent, codes logged to the console
 MAILER_PORT=587
 MAILER_SSL=false
 MAILER_LOGIN=user@example.com
@@ -42,7 +43,10 @@ See the `vue-ssr-deployment` skill for the full local-vs-remote mechanics.
 
 ## Production requirements
 
-- `COOKIE_SECRET`: the server refuses to start if it is missing in production
+- `COOKIE_SECRET`: the server refuses to start in production if it is missing, shorter than 32
+  characters or one of the documented placeholders (`assertProductionSecret`)
+- `MAILER_HOST`: required in production; the console mail transport (`isDevMailMode`) never
+  activates when `NODE_ENV=production`
 - `NODE_HOST`: must be a public `https` origin (not localhost/127.0.0.1/::1, not `http`), or the
   server refuses to boot (`assertProductionSiteUrl`). Used for the CORS allowlist, email links,
   canonical URLs, sitemap and absolute SEO metadata

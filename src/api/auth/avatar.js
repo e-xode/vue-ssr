@@ -10,6 +10,7 @@ import {
   AVATAR_UPLOAD_ERRORS,
 } from '#src/shared/const.js';
 
+const PUBLIC_DIR = 'public';
 const AVATAR_DIR = 'public/uploads/avatars';
 
 fs.mkdirSync(AVATAR_DIR, { recursive: true });
@@ -44,9 +45,23 @@ export function uploadAvatar(req, res, next) {
   });
 }
 
-function deleteFile(filePath) {
-  const fullPath = path.join('public', filePath);
-  if (fs.existsSync(fullPath)) fs.unlinkSync(fullPath);
+export function resolveAvatarPath(avatarUrl) {
+  if (typeof avatarUrl !== 'string' || !avatarUrl) return null;
+  const avatarRoot = path.resolve(AVATAR_DIR) + path.sep;
+  const filePath = path.resolve(PUBLIC_DIR, `.${path.posix.sep}${avatarUrl}`);
+  return filePath.startsWith(avatarRoot) ? filePath : null;
+}
+
+export async function removeAvatarFile(avatarUrl) {
+  const filePath = resolveAvatarPath(avatarUrl);
+  if (!filePath) return false;
+  try {
+    await fs.promises.unlink(filePath);
+    return true;
+  } catch (err) {
+    if (err?.code !== 'ENOENT') console.error(err);
+    return false;
+  }
 }
 
 export function setupAvatarRoute(app, db) {
@@ -57,7 +72,7 @@ export function setupAvatarRoute(app, db) {
       const user = await db
         .collection('users')
         .findOne({ _id: req.userId }, { projection: { avatar: 1 } });
-      if (user?.avatar) deleteFile(user.avatar);
+      await removeAvatarFile(user?.avatar);
 
       const avatar = `/uploads/avatars/${req.file.filename}`;
       await db.collection('users').updateOne({ _id: req.userId }, { $set: { avatar } });
@@ -76,7 +91,7 @@ export function setupAvatarRoute(app, db) {
       const user = await db
         .collection('users')
         .findOne({ _id: req.userId }, { projection: { avatar: 1 } });
-      if (user?.avatar) deleteFile(user.avatar);
+      await removeAvatarFile(user?.avatar);
 
       await db.collection('users').updateOne({ _id: req.userId }, { $unset: { avatar: '' } });
 

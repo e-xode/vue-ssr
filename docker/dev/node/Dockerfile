@@ -50,7 +50,6 @@ USER node
 WORKDIR /app
 
 RUN mkdir /home/node/.npm-global
-RUN npm install -g npm@latest
 
 USER root
 

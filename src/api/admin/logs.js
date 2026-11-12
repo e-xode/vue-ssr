@@ -133,19 +133,13 @@ async function handleBulkDeleteLogs(req, res, db) {
 }
 
 export function setupAdminLogsRoute(app, db) {
-  app.get('/api/admin/logs', requireAuth, requireAdmin(db), (req, res) =>
-    handleListLogs(req, res, db)
-  );
+  const adminOnly = [requireAuth, requireAdmin];
 
-  app.get('/api/admin/logs/events', requireAuth, requireAdmin(db), (req, res) =>
-    handleListLogEvents(req, res, db)
-  );
+  app.get('/api/admin/logs', ...adminOnly, (req, res) => handleListLogs(req, res, db));
 
-  app.delete('/api/admin/logs/:id', requireAuth, requireAdmin(db), (req, res) =>
-    handleDeleteLog(req, res, db)
-  );
+  app.get('/api/admin/logs/events', ...adminOnly, (req, res) => handleListLogEvents(req, res, db));
 
-  app.delete('/api/admin/logs', requireAuth, requireAdmin(db), (req, res) =>
-    handleBulkDeleteLogs(req, res, db)
-  );
+  app.delete('/api/admin/logs/:id', ...adminOnly, (req, res) => handleDeleteLog(req, res, db));
+
+  app.delete('/api/admin/logs', ...adminOnly, (req, res) => handleBulkDeleteLogs(req, res, db));
 }

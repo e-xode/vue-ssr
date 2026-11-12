@@ -13,6 +13,8 @@ eslint.config.js                # Flat config ESLint 10
 vitest.config.js                # Vitest: `server` (node) and `client` (happy-dom) projects
 docker-compose.yml              # Dev base: app only (remote DB via .env)
 docker-compose.local.yml        # Dev override: local mongo + redirect (COMPOSE_FILE)
+docker-compose.network.yml      # Optional override: attach node to an existing network (SHARED_NETWORK)
+scripts/                        # validate.mjs, make-admin.mjs (seed:admin), seed-dev-user.mjs (seed:dev-user)
 docker/build/Dockerfile         # Multi-stage production build (there is no root Dockerfile)
 
 src/
@@ -26,12 +28,13 @@ src/
 
   api/
     router.js                   # exports createApiRouter(db) -> express.Router (rate limiters + routes)
-    middleware.js               # requireAuth (session lifetime + blocked check), requireAdmin
+    middleware.js               # resolveSession (single session resolver), requireAuth, requireAdmin (after requireAuth)
     emailDelivery.js            # deliverEmail(res, sending) -> 502 error.emailFailed on failure
     http/                       # HTTP-host modules wired by server.js
       constants.js csp.js hardening.js session.js indexes.js
       readiness.js shutdown.js redirects.js seo.js static.js
       dev.js ssr.js template.js
+      errors.js                 # ensureRequestBody, apiNotFoundHandler (JSON 404), apiErrorHandler (JSON errors)
     auth/                       # 12 auth endpoints (signup, signin, verify, etc.)
     contact/send.js             # POST /api/contact (rate limited 3/15min)
     admin/                      # users.js + logs.js
@@ -42,13 +45,12 @@ src/
     captcha.js                  # Server-side reCAPTCHA v3 verification
     clientConstants.js          # Meta names, script URLs, SSR state id, reveal settings
     const.js                    # Constants (sessions, security codes, avatars, log levels, locales)
-    dbHelpers.js                # parseObjectId, parsePagination, findUserSafe, getUserWithCounts
-    email.js                    # Code gen/hash/verify, email sending
+    dbHelpers.js                # parseObjectId, parsePagination, findUserSafe, promoteToAdmin
+    email.js                    # Code gen/hash/verify, email sending, console transport in dev without MAILER_HOST
     localizedRoutes.js          # PAGES (localized slugs) + path helpers, shared by router/redirects/sitemap/head
     log.js                      # logInfo, logWarn, logError, logDebug (LOG_LEVEL)
     logger.js                   # logEvent(db, { event, userId, ip, meta })
     mongo.js                    # mongoConnect(), mongoClose() - pooled singleton client
-    sanitize.js                 # sanitize(), isEmptyHtml() - sanitize-html allowlist wrapper
     security.js                 # getClientIp, ban checks, session helpers, recordLoginIp, destroyUserSessions
     seoConstants.js             # Sitemap/robots/icon/theme-color constants
     serialize.js                # serializeForScript() for JSON embedded in <script>
@@ -80,8 +82,7 @@ src/
     _typography.scss             # Base typography (injected)
     _reveal.scss                 # Styles for the v-reveal directive
     _inject.scss                 # SCSS auto-inject entry (variables + typography + mixins)
-  translate/                     # en.json, fr.json, emails/en.js, emails/fr.js
-  json/                          # Static JSON fixtures (e.g. users.json)
+  translate/                     # en.json, fr.json, emails/layout.js (shared HTML shell), emails/en.js, emails/fr.js
 
   components/
     AuthShell.vue + .scss        # Shared shell wrapping every Auth/ view except VerifyCodeView

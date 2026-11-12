@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
-import { sendSecurityCodeEmail, generateSecurityCode, hashCode } from '#src/shared/email.js';
-import { SECURITY_CODE_EXPIRY_MS, EMAIL_REGEX } from '#src/shared/const.js';
-import { getClientIp, isIpBlocked } from '#src/shared/security.js';
+import { sendSecurityCodeEmail } from '#src/shared/email.js';
+import { EMAIL_REGEX, SECURITY_CODE_PURPOSES } from '#src/shared/const.js';
+import { createSecurityCode, getClientIp, isIpBlocked } from '#src/shared/security.js';
 import { logEvent } from '#src/shared/logger.js';
 import { readEmail, readString } from '#src/shared/utils.js';
 import { deliverEmail } from '#src/api/emailDelivery.js';
@@ -55,20 +55,8 @@ export function setupSigninRoute(app, db) {
         return res.status(401).json({ error: 'error.auth.invalidCredentials' });
       }
 
-      const code = generateSecurityCode();
-      const codeHash = hashCode(code);
-      const codeExpires = new Date(Date.now() + SECURITY_CODE_EXPIRY_MS);
-
-      await db.collection('users').updateOne(
-        { _id: user._id },
-        {
-          $set: {
-            securityCode: codeHash,
-            securityCodeExpires: codeExpires,
-            securityCodeAttempts: 0,
-          },
-        }
-      );
+      const { code, fields } = createSecurityCode(SECURITY_CODE_PURPOSES.LOGIN);
+      await db.collection('users').updateOne({ _id: user._id }, { $set: fields });
 
       const sending = sendSecurityCodeEmail(email, code, locale || user.locale || 'en');
       if (!(await deliverEmail(res, sending))) return;

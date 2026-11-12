@@ -1,11 +1,11 @@
 ---
 name: vue-ssr-validation
-description: "Post-task validation pipeline for the Vue SSR Starter Kit: the validation agent's format/lint/build/test battery behind the single `npm run validate` orchestrator, on user opt-in only (never automatic). Trigger on: validation failures, why a stage ran or was skipped, changing the pipeline, or phrasings like 'run the checks', 'npm run validate', 'lint is failing', 'the build broke', 'format check', 'did the tests pass'. Don't use for: Claude config governance and audit.py (→ governance), native Claude Code hooks — none exist in this project (→ governance), Vue's lifecycle hooks — a framework concept (→ vue3-composition), app architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), deployment (→ vue-ssr-deployment)."
+description: "Post-task validation pipeline for the Vue SSR Starter Kit: the validation agent's format/lint/build/test battery behind `scripts/validate.mjs` (`npm run validate -- --changed` after a task, plain `npm run validate` for the full battery), on user opt-in only (never automatic). Trigger on: validation failures, why a stage ran or was skipped, changing the pipeline, or phrasings like 'run the checks', 'npm run validate', 'lint is failing', 'the build broke', 'format check', 'did the tests pass'. Don't use for: Claude config governance and audit.py (→ governance), native Claude Code hooks — none exist in this project (→ governance), Vue's lifecycle hooks — a framework concept (→ vue3-composition), app architecture (→ vue-ssr-architecture), auth (→ vue-ssr-auth), deployment (→ vue-ssr-deployment)."
 ---
 
 # Vue SSR Validation (post-task battery)
 
-> Owns the post-task validation pipeline: format → lint → build → test, executed by the `validation` agent through `npm run validate`.
+> Owns the post-task validation pipeline: format → lint → build → test, executed by the `validation` agent through `npm run validate -- --changed`.
 
 ## Division of responsibilities
 
@@ -27,21 +27,30 @@ Validation is **never automatic**. Per the Task completion protocol in CLAUDE.md
 
 Never otherwise. Normal turns stay fast and token-light; the battery fires only when the user wants it.
 
-## The orchestrator: `npm run validate`
+## The orchestrator: `scripts/validate.mjs`, two modes
 
-`scripts/validate.mjs` is the single entry point. The `validation` agent runs it once and judges success by exit code (0 = pass), never piping it. It:
+| Command | Mode | Scope | Lint stage | Use |
+| --- | --- | --- | --- | --- |
+| `npm run validate` | `full` | whole repo, always all four stages, no cache | `lint:check` (non-mutating) | CI parity, releases, fleet campaigns, any clean tree |
+| `npm run validate -- --changed` (= `npm run validate:changed`) | `changed` | stages picked from the dirty files, cached by digest | `lint` (`eslint --fix`, mutating) | the `validation` agent after a task |
+
+Both run lint as a serial prefix, then `format:check`, `build` and `test:run` **in parallel**, exit non-zero on any stage failure, and print only the failing stage's output tail (last 40 lines) with a `reproduce: npm run <script>` line. The agent judges success by exit code (0 = pass), never piping the command.
+
+The full mode exists because the changed mode validates nothing on a clean tree: it prints `mode: skipped (no validatable files)` and exits 0. Never use `--changed` to prove that a commit, a release or a campaign worktree is green.
+
+Changed mode, in order:
 
 1. Derives the dirty-list itself (`git diff --name-only HEAD`, `--cached`, `ls-files --others --exclude-standard`).
 2. Applies the short-circuit table below in code to select stages.
-3. Runs the mutating `lint` (`eslint --cache . --fix`) as a serial prefix, then `format:check`, `build` and `test:run` **in parallel**, aggregating every result.
+3. Runs the selected stages (mutating `lint` first).
 4. Stores a git-content SHA digest sentinel under the git dir; when the tree is unchanged since the last run it prints `mode: cached` and returns the previous verdict instantly, so a re-delegation after no edits is near-free.
-5. Exits non-zero on any stage failure, printing only the failing stage's output tail (last 40 lines) and a `reproduce: npm run <script>` line to rerun that stage alone. A failing `git` call also fails the run (it never degrades to "nothing to validate").
+5. A failing `git` call fails the run (it never degrades to "nothing to validate").
 
-Prettier and ESLint run with `--cache` (`.eslintcache` is gitignored), so repeat runs only re-process changed files. Prettier also uses `--cache-strategy content`. The individual scripts stay runnable on their own: `format:check`, `lint`, `build`, `test:run`. `npm test` now runs once (`vitest run`, same as `test:run`); `npm run test:watch` is the watch mode, and `test:run` is what the validator and CI call.
+Prettier and ESLint run with `--cache` (`.eslintcache` is gitignored), so repeat runs only re-process changed files. Prettier also uses `--cache-strategy content`. The individual scripts stay runnable on their own: `format:check`, `lint:check`, `build`, `test:run` (`lint:fix` and `format:write` are aliases of the mutating `lint` and `format`). `npm test` runs once (`vitest run`, same as `test:run`); `npm run test:watch` is the watch mode.
 
 ## Short-circuit table
 
-Enforced in `scripts/validate.mjs` (the table is the reference spec, the script is the enforcement):
+Changed mode only (the full mode ignores it). Enforced in `scripts/validate.mjs` (the table is the reference spec, the script is the enforcement):
 
 | Files modified                       | format:check | lint | build | test |
 | ------------------------------------ | ------------ | ---- | ----- | ---- |
@@ -56,7 +65,7 @@ The `build` stage compiles both SSR bundles (`build:client` + `build:server`). I
 
 ## The `validation` agent
 
-The `validation` agent (model `haiku`, tools `Bash`) is the sole validation executor and the only sub-agent allowed to run validation. It runs `npm run validate`, relays the report, and distinguishes a pre-existing baseline failure from a regression introduced by the current change. It never fixes code. See `.claude/agents/validation.md`.
+The `validation` agent (model `haiku`, tools `Bash`) is the sole validation executor and the only sub-agent allowed to run validation. It runs `npm run validate -- --changed`, relays the report, and distinguishes a pre-existing baseline failure from a regression introduced by the current change. It never fixes code. See `.claude/agents/validation.md`.
 
 ## History
 

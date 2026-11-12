@@ -1,5 +1,77 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { generateSecurityCode, hashCode, verifyCode } from '#src/shared/email';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import {
+  createMailTransport,
+  generateSecurityCode,
+  hashCode,
+  isDevMailMode,
+  verifyCode,
+} from '#src/shared/email';
+
+function loggedLines() {
+  return vi.mocked(console.log).mock.calls.map(([line]) => line);
+}
+
+describe('shared/email.js development transport', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.doUnmock('nodemailer');
+    vi.resetModules();
+  });
+
+  it('is active only outside production and without MAILER_HOST', () => {
+    expect(isDevMailMode({ NODE_ENV: 'development' })).toBe(true);
+    expect(isDevMailMode({ NODE_ENV: 'development', MAILER_HOST: 'smtp.example.com' })).toBe(false);
+    expect(isDevMailMode({ NODE_ENV: 'production' })).toBe(false);
+    expect(isDevMailMode({ NODE_ENV: 'production', MAILER_HOST: '' })).toBe(false);
+  });
+
+  it('builds a transport that sends nothing over the network', async () => {
+    const transport = createMailTransport({ NODE_ENV: 'development' });
+
+    const info = await transport.sendMail({ to: 'user@example.com', subject: 'Hi', html: '' });
+
+    expect(JSON.parse(info.message).subject).toBe('Hi');
+  });
+
+  it('keeps the SMTP transport when MAILER_HOST is set', () => {
+    const transport = createMailTransport({
+      NODE_ENV: 'development',
+      MAILER_HOST: 'smtp.example.com',
+    });
+
+    expect(transport.options.host).toBe('smtp.example.com');
+    expect(transport.options.jsonTransport).toBeUndefined();
+  });
+
+  it('prints the security code to the console in development mode', async () => {
+    vi.stubEnv('NODE_ENV', 'development');
+    vi.stubEnv('MAILER_HOST', '');
+    vi.resetModules();
+    const { sendSecurityCodeEmail } = await import('#src/shared/email');
+
+    const result = await sendSecurityCodeEmail('user@example.com', '123456', 'en');
+
+    expect(result).toEqual({ success: true });
+    expect(loggedLines().some((line) => line.includes('code for user@example.com: 123456'))).toBe(
+      true
+    );
+  });
+
+  it('never prints the security code in production', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('MAILER_HOST', '');
+    vi.resetModules();
+    const sendMail = vi.fn().mockResolvedValue({});
+    vi.doMock('nodemailer', () => ({ default: { createTransport: () => ({ sendMail }) } }));
+    const { sendSecurityCodeEmail } = await import('#src/shared/email');
+
+    const result = await sendSecurityCodeEmail('user@example.com', '123456', 'en');
+
+    expect(result).toEqual({ success: true });
+    expect(sendMail).toHaveBeenCalledTimes(1);
+    expect(loggedLines().some((line) => String(line).includes('123456'))).toBe(false);
+  });
+});
 
 describe('shared/email.js', () => {
   beforeEach(() => {

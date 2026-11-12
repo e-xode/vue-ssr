@@ -1,0 +1,9 @@
+services:
+  node:
+    networks:
+      - default
+      - shared
+networks:
+  shared:
+    name: ${SHARED_NETWORK:?set SHARED_NETWORK to the name of an existing Docker network}
+    external: true

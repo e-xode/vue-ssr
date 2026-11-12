@@ -2,6 +2,16 @@ export const SESSION_IDLE_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 
 export const SESSION_FALLBACK_SECRET = 'change-me-in-production';
 
+export const SESSION_SECRET_MIN_LENGTH = 32;
+
+export const SESSION_PLACEHOLDER_SECRETS = [
+  SESSION_FALLBACK_SECRET,
+  'your-secret-key-change-in-production',
+];
+
+export const SESSION_SECRET_FIX_HINT =
+  'Set COOKIE_SECRET to a random value of at least 32 characters, for example with: openssl rand -hex 32';
+
 export const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
 
 export const API_RATE_LIMIT_MAX = 300;
@@ -26,6 +36,19 @@ export const SHUTDOWN_TIMEOUT_MS = 10 * 1000;
 
 export const HEALTH_PATH = '/healthz';
 
+export const API_PATH_PREFIX = '/api';
+
+export const API_ERROR_KEYS = {
+  401: 'error.unauthorized',
+  403: 'error.forbidden',
+  404: 'error.notFound',
+  429: 'error.rateLimit',
+};
+
+export const DEFAULT_CLIENT_ERROR_KEY = 'error.validation';
+
+export const DEFAULT_SERVER_ERROR_KEY = 'error.server';
+
 export const REDIRECTABLE_METHODS = ['GET', 'HEAD'];
 
 export const REDIRECT_SKIPPED_PREFIXES = [
@@ -38,6 +61,8 @@ export const REDIRECT_SKIPPED_PREFIXES = [
 ];
 
 export const HOME_REDIRECT_STATUS = 302;
+
+export const ROUTE_REDIRECT_STATUS = 302;
 
 export const CANONICAL_REDIRECT_STATUS = 301;
 

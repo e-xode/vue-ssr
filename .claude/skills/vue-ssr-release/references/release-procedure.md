@@ -1,174 +1,159 @@
 # Release procedure — step by step
 
-Contents: [Step 1 — Verify branch](#step-1--verify-branch) · [Step 2 — Ensure clean working tree](#step-2--ensure-clean-working-tree) · [Step 3 — Ask bump type](#step-3--ask-bump-type) · [Step 4 — Create release branch](#step-4--create-release-branch) · [Step 5 — Bump version in package.json](#step-5--bump-version-in-packagejson) · [Step 6 — Sync lockfile](#step-6--sync-lockfile) · [Step 7 — Gather unreleased changes](#step-7--gather-unreleased-changes) · [Step 8 — Present CHANGELOG draft](#step-8--present-changelog-draft) · [Step 9 — Write CHANGELOG](#step-9--write-changelog) · [Step 10 — Propose commit](#step-10--propose-commit) · [Step 11 — Propose push + PR + merge](#step-11--propose-push--pr--merge) · [Step 12 — Verify the merge, then tag](#step-12--verify-the-merge-then-tag) · [Step 13 — Pipeline check and hand-off to ops](#step-13--pipeline-check-and-hand-off-to-ops) · [CHANGELOG format reference](#changelog-format-reference) · [Edge cases](#edge-cases)
+Contents: [Roles](#roles) · [Steps 1-14](#steps) · [Bump rule](#bump-rule) · [Hand-off message](#hand-off-message) · [Edge cases](#edge-cases)
 
-Full step-by-step release procedure for the Vue SSR Starter Kit. Hard constraints, the commit-category table, and the in/out-of-scope routing table live in the parent `vue-ssr-release/SKILL.md` — read that first.
+Hard constraints and the continuous `[Unreleased]` update live in the parent `vue-ssr-release/SKILL.md`; the CHANGELOG format lives in the rule `.claude/rules/changelog.md`. Read both first.
 
-## Step 1 — Verify branch
+## Roles
 
-```bash
-git branch --show-current
-```
+| Who | Does |
+| --- | --- |
+| `release` agent | Steps 1-14, read-only steps directly, every git write only on a relayed approval |
+| Orchestrator | Relays each proposal to the owner and the answer back; delegates Step 6 to the `validation` agent |
+| Owner | Approves the bump, the CHANGELOG, the commit + merge, the tag |
+| Ops session | Deploys after the hand-off. The project agent never deploys and never uses SSH |
 
-Must be `main` or `master`. If not, abort: "You must be on main/master to start a release."
+The session clone (`~/workspace/e-xode.vue-ssr`) is never switched to another branch or tag. Everything happens in a throw-away worktree or through commands that do not check anything out.
 
-## Step 2 — Ensure clean working tree
+## Steps
 
-```bash
-git status --porcelain
-```
-
-If dirty, abort: "Working tree is not clean. Please commit or stash your changes first."
-
-## Step 3 — Ask bump type
-
-Ask the user: **patch**, **minor**, or **major**.
-
-Compute new version from current `package.json` version:
-
-- `patch`: 3.0.2 → 3.0.3
-- `minor`: 3.0.2 → 3.1.0
-- `major`: 3.0.2 → 4.0.0
-
-## Step 4 — Create release branch
+### 1. Preflight (read-only)
 
 ```bash
-git checkout -b release/vX.Y.Z
+git -C ~/workspace/e-xode.vue-ssr fetch origin --tags
+git -C ~/workspace/e-xode.vue-ssr log --oneline "$(git -C ~/workspace/e-xode.vue-ssr describe --tags --abbrev=0 origin/master)"..origin/master
+gh run list --branch master --limit 5
 ```
 
-## Step 5 — Bump version in package.json
+Abort when: `## [Unreleased]` in `origin/master`'s `CHANGELOG.md` is empty or absent and the log shows no changelog-worthy commit ("No unreleased changes found"); or the latest `npm-test` run on `master` is not green (fix first).
 
-Edit `package.json` → update `"version": "X.Y.Z"`.
+### 2. Bump proposal
 
-## Step 6 — Sync lockfile
+Compute the new version from `package.json` on `origin/master` with the [Bump rule](#bump-rule) and return it as a proposal. The owner confirms or overrides.
+
+### 3. Worktree
 
 ```bash
-npm install
+git -C ~/workspace/e-xode.vue-ssr worktree add ~/worktrees/vue-ssr-release -b release/vX.Y.Z origin/master
 ```
 
-This updates `package-lock.json` to match the new version.
+Every later edit and command runs in `~/worktrees/vue-ssr-release`.
 
-## Step 7 — Gather unreleased changes
-
-If a `## [Unreleased]` section already exists in `CHANGELOG.md` (maintained continuously — see the "Continuous `[Unreleased]` update" section in `SKILL.md`), use it as the primary source and only cross-check git log for anything missed. Otherwise gather from git log:
+### 4. Version
 
 ```bash
-git log --oneline $(git describe --tags --abbrev=0)..HEAD
+npm version X.Y.Z --no-git-tag-version
 ```
 
-Parse commit messages and group them using the commit-category table in `SKILL.md`. If commits don't follow conventional format, list them as bullet points and let the user categorize.
+It updates `package.json` and `package-lock.json` together, without installing, committing or tagging. The diff must touch only the `version` fields.
 
-## Step 8 — Present CHANGELOG draft
+### 5. CHANGELOG
 
-Show the user the formatted CHANGELOG section:
+Rename `## [Unreleased]` to `## X.Y.Z`, cross-check it against the Step 1 log, fix the categories to the set of the `changelog` rule, and leave no empty `[Unreleased]` behind. Return the section as a draft; the owner approves, edits or corrects.
 
-```markdown
-## X.Y.Z
+### 6. Validation
 
-### New Features
+Offer it; on acceptance the orchestrator has the `validation` agent run `npm ci` then the full battery (`npm run validate`, not `--changed`: the tree is committed-clean, so the changed mode would check nothing) in the worktree. A red result stops the release.
 
-- Description of feature
-
-### Improvements
-
-- Description of improvement
-
-### Bug Fixes
-
-- Description of fix
-```
-
-Ask the user to **approve**, **edit**, or **provide corrections**.
-
-## Step 9 — Write CHANGELOG
-
-If a `## [Unreleased]` section exists, rename its header to `## X.Y.Z` (merging any additions from Steps 7–8). Otherwise insert the approved `## X.Y.Z` section at the top of `CHANGELOG.md`, below `# Changelog` and any blank line, above the first existing `## X.Y.Z` entry. Either way, leave no empty `[Unreleased]` section behind.
-
-## Step 10 — Propose commit
-
-Present the exact command to the user:
+### 7. Commit (on approval)
 
 ```bash
 git add package.json package-lock.json CHANGELOG.md
 git commit -m "[release/vX.Y.Z] release vX.Y.Z"
 ```
 
-**Wait for user confirmation** before executing.
+No trailer, no mention of a non-human contributor.
 
-## Step 11 — Propose push + PR + merge
-
-Present:
+### 8. Merge (same approval covers push, PR and merge)
 
 ```bash
-git push -u origin release/vX.Y.Z
-gh pr create --base master --head release/vX.Y.Z --title "release vX.Y.Z" --body "..."
-gh pr merge --admin --squash --delete-branch
+~/workspace/e-xode.ops/infra/fleet-pr.e-xode.dev.sh e-xode.vue-ssr ~/worktrees/vue-ssr-release "release vX.Y.Z"
 ```
 
-**Wait for user confirmation** before executing each operation. This repo requires 1 approving
-review to land on `master`; self-approval is forbidden, so `--admin` is required to merge your own
-release PR. `--squash` matches the repo's merge-method restriction (squash/rebase only) and keeps
-history linear.
+The script pushes the branch, opens the PR, waits for the checks, squash-merges (admin merge: self-approval is impossible on this repo), deletes the branch, fast-forwards the session clone and removes the worktree. Exit 0 means merged and clone at `0 0`. A failed check stops it with the PR open: fix in the worktree, commit, rerun.
 
-## Step 12 — Verify the merge, then tag
+### 9. Tag (on approval, in a throw-away worktree)
 
-**Tag only after the release branch has merged into `master` — never on the still-unmerged release
-branch.** A squash-merge rewrites the SHA, so the commit you just pushed on `release/vX.Y.Z` is
-never the one that ends up on `master`; tagging it there would tag a commit `master` doesn't
-contain.
-
-Once the merge from Step 11 is confirmed, re-fetch and check that `master`'s HEAD actually reflects
-it before tagging:
+State before asking: **pushing the tag publishes `X.Y.Z` to npm (irreversible) and builds the GHCR image.**
 
 ```bash
-git checkout master
-git pull
+git -C ~/workspace/e-xode.vue-ssr fetch origin
+git -C ~/workspace/e-xode.vue-ssr worktree add --detach ~/worktrees/vue-ssr-tag origin/master
+cd ~/worktrees/vue-ssr-tag
+grep '"version"' package.json
 git tag -a vX.Y.Z -m "vX.Y.Z"
+git cat-file -t vX.Y.Z
 git push origin vX.Y.Z
+git -C ~/workspace/e-xode.vue-ssr worktree remove ~/worktrees/vue-ssr-tag
 ```
 
-**Wait for user confirmation** before executing.
+`package.json` must read `X.Y.Z` and `cat-file -t` must print `tag` (annotated), otherwise stop before the push. Never tag the release branch: the squash-merge changed the SHA. The session clone is not checked out to the tag.
 
-## Step 13 — Pipeline check and hand-off to ops
+### 10. Pipeline
 
-Wait for the pipeline of the tag. Red: fix and re-release, nothing is sent to ops. Green: hand off to the ops session (cross-session message to `e-xode.ops`, else tell the owner): project, tag, green run, what changed, migration/data step if any, and "nothing deployed". The release ends here: the project agent never deploys to production or uses SSH to a host. Canonical chain: `e-xode.ops/.claude/reference/release-handoff.md`.
-
-**Clone alignment (2026-11-03)**: a release, tag, deployment or campaign runs in a throw-away `git worktree` (`git worktree add ~/worktrees/<project>-<op> origin/master`), never in the clone a session has open; no local-only commit survives the operation (pushed, or PR merged, before it is declared done); at the end, `git fetch` then `git pull --ff-only` in the session clone if it is clean and on `master`, otherwise leave it alone and say why. The report gives `git rev-list --left-right --count origin/master...HEAD` (expected `0 0`). Run Steps 9-12 in that worktree rather than checking out `master` in the session clone.
-
-## CHANGELOG format reference
-
-Match the existing project style:
-
-```markdown
-# Changelog
-
-## X.Y.Z
-
-### New Features
-
-- **component/scope** — Description of the change
-
-### Improvements
-
-- Description
-
-### Bug Fixes
-
-- Description
-
----
-
-## previous version...
+```bash
+gh run list --event push --branch vX.Y.Z
+gh run watch <run-id>
 ```
 
-- Use `---` separator between versions
-- Use `###` for categories
-- Use `- ` bullet points with optional `**scope**` prefix
-- No date in header (project convention — dates are in older entries but dropped from v3.0.0+)
-- An `## [Unreleased]` section may sit at the very top between releases; it uses the same category structure and is converted to `## X.Y.Z` at release time (Step 9)
+Both `docker-build` and `npm-publish` must be green. **Red: nothing is sent to ops.** Fix through a normal PR, then release the next patch version from Step 1; a version published to npm is never reused and a tag is never moved.
+
+### 11. GitHub Release
+
+```bash
+gh release create vX.Y.Z --title "vX.Y.Z" --notes-file <file holding the X.Y.Z CHANGELOG section>
+```
+
+### 12. GitHub Actions unavailable
+
+If the tag pipeline cannot run (Actions disabled, quota, outage): **stop and tell the owner.** The agent does not build or push the image by hand and never runs `npm publish` (denied in settings). Building and pushing the GHCR image manually is an owner or ops decision; the hand-off waits for it.
+
+### 13. Hand-off to ops
+
+Send the [Hand-off message](#hand-off-message) to the `e-xode.ops` session (cross-session message, else give it to the owner). The release ends here. Canonical chain: `e-xode.ops/.claude/reference/release-handoff.md`.
+
+### 14. Report
+
+```bash
+git -C ~/workspace/e-xode.vue-ssr rev-list --left-right --count origin/master...HEAD
+git -C ~/workspace/e-xode.vue-ssr worktree list
+```
+
+Expected `0 0` and no `vue-ssr-release` or `vue-ssr-tag` worktree left. If the session clone was dirty or off `master`, leave it alone and say why.
+
+## Bump rule
+
+Read the `## [Unreleased]` section:
+
+| Content | Bump |
+| --- | --- |
+| A removed or incompatible public behaviour a fork cannot absorb without code changes (removed route, changed response shape, raised Node.js major) | major |
+| Any ⚠️ entry (action required from a deployment or a fork), or any `### Added` entry | minor |
+| Only `Security`, `Fixed`, `Changed`, `Removed`, `Package Updates` without ⚠️ | patch |
+
+When in doubt between two levels, propose the higher one and say why.
+
+## Hand-off message
+
+```
+Release hand-off: vue-ssr vX.Y.Z
+Tag: vX.Y.Z (annotated) on master <short sha>
+Pipeline: docker-build <run URL> green, npm-publish <run URL> green
+Image: ghcr.io/e-xode/vue-ssr:X.Y.Z
+What changed: <3-6 lines from the CHANGELOG section, ⚠️ entries first>
+Nothing deployed.
+
+POST-DEPLOY CHECKS (from .claude/reference/post-deploy-checks.md)
+- Env vars: <new or changed names, "required in production: boot throws without it" when so, host file> | none
+- Readiness: GET /healthz -> 200 {"status":"ok"}
+- Data: <new/changed indexes, TTL, migrations or manual steps and who runs them> | none
+- Order: single container, no ordering
+- After "deployed", the project agent checks: <public routes it will call> ; production DB access: none, owner reads indexes if listed above
+```
 
 ## Edge cases
 
-- **No commits since last tag:** Abort with "No unreleased changes found."
-- **No existing tags:** Use first commit as baseline: `git log --oneline --all`
-- **User cancels at any step:** Offer to delete the release branch: `git checkout master && git branch -D release/vX.Y.Z`. If a PR was already opened (Step 11) but not yet merged, also offer `gh pr close release/vX.Y.Z --delete-branch`.
+- **Cancel before the merge:** `git -C ~/workspace/e-xode.vue-ssr worktree remove --force ~/worktrees/vue-ssr-release`, delete the local branch, and if a PR is open `gh pr close release/vX.Y.Z --delete-branch`. The session clone was never touched.
+- **Cancel after the merge, before the tag:** nothing is published. `master` carries version `X.Y.Z` untagged; the next release starts from it.
+- **No existing tag:** use the first commit as the baseline in Step 1.
+- **A stale `~/worktrees/vue-ssr-release` exists:** it belongs to an unfinished release. Report it; do not reuse or delete it without the owner's word.

@@ -8,13 +8,12 @@ body:
   - type: markdown
     attributes:
       value: |
-        Do you have a question about how to use e-xode-vue-ssr?
+        Do you have a question about how to use the Vue SSR Starter Kit?
 
         Before asking a question, check:
-        - README.en.md or README.fr.md
+        - README.md (or README.fr.md)
         - [Troubleshooting Guide](../../docs/TROUBLESHOOTING.md)
-        - [FAQ](../../docs/TROUBLESHOOTING.md#faq)
-        - Existing discussions
+        - Existing issues
 
   - type: textarea
     attributes:
@@ -87,6 +86,6 @@ body:
         - Describe what you are trying to accomplish (your end goal)
 
         **Useful links:**
-        - [Documentation](../../docs/INDEX.md)
-        - [Existing Discussions](https://github.com/e-xode/e-xode-vue-ssr/discussions)
+        - [Documentation](../../README.md#documentation)
+        - [Existing issues](https://github.com/e-xode/vue-ssr/issues)
         - [Stack Overflow tag: vue-ssr](https://stackoverflow.com/questions/tagged/vue-ssr)

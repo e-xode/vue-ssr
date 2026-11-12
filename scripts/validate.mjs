@@ -6,7 +6,10 @@ import { promisify } from 'node:util';
 
 const sentinelNamespace = 'vue-ssr-validate-state';
 
-const serialStages = [{ name: 'lint', script: 'lint' }];
+const changedOnly = process.argv.includes('--changed');
+
+const fullSerialStages = [{ name: 'lint', script: 'lint:check' }];
+const changedSerialStages = [{ name: 'lint', script: 'lint' }];
 const parallelStages = [
   { name: 'format', script: 'format:check' },
   { name: 'build', script: 'build' },
@@ -138,14 +141,35 @@ const clearSentinel = (sentinel) => {
   }
 };
 
-const main = async () => {
+const runStages = async (serial, parallel, root) => {
+  const results = [];
+  for (const stage of serial) {
+    const result = await runStage(stage, root);
+    results.push(result);
+    if (result.code !== 0) return results;
+  }
+  results.push(...(await Promise.all(parallel.map((stage) => runStage(stage, root)))));
+  return results;
+};
+
+const hasFailure = (results) => results.some((result) => result.code !== 0);
+
+const validateEverything = async () => {
+  const root = await resolveRoot();
+  const order = [...fullSerialStages, ...parallelStages].map((stage) => stage.name);
+  const results = await runStages(fullSerialStages, parallelStages, root);
+  printReport('full', order, results);
+  process.exit(hasFailure(results) ? 1 : 0);
+};
+
+const validateChangedFiles = async () => {
   const root = await resolveRoot();
   const gitDir = await resolveGitDir(root);
   const stateDir = resolve(root, gitDir, sentinelNamespace);
   const sentinel = join(stateDir, 'state.json');
 
   const active = selectStages(new Set((await dirtyFiles(root)).map(extensionOf)));
-  const serial = serialStages.filter((stage) => active.has(stage.name));
+  const serial = changedSerialStages.filter((stage) => active.has(stage.name));
   const parallel = parallelStages.filter((stage) => active.has(stage.name));
   const order = [...serial, ...parallel].map((stage) => stage.name);
   const digest = await computeDigest(root);
@@ -162,27 +186,22 @@ const main = async () => {
     process.exit(0);
   }
 
-  const results = [];
-  for (const stage of serial) {
-    const result = await runStage(stage, root);
-    results.push(result);
-    if (result.code !== 0) {
-      printReport('full', order, results);
-      clearSentinel(sentinel);
-      process.exit(1);
-    }
+  const results = await runStages(serial, parallel, root);
+  const failed = hasFailure(results);
+  printReport('changed', order, results);
+
+  if (results.length < order.length) {
+    clearSentinel(sentinel);
+    process.exit(1);
   }
-
-  results.push(...(await Promise.all(parallel.map((stage) => runStage(stage, root)))));
-
-  const failed = results.some((result) => result.code !== 0);
-  printReport('full', order, results);
 
   const finalDigest = await computeDigest(root);
   writeSentinel(sentinel, stateDir, { digest: finalDigest, order, results, failed });
 
   process.exit(failed ? 1 : 0);
 };
+
+const main = changedOnly ? validateChangedFiles : validateEverything;
 
 main().catch((err) => {
   console.error(err);

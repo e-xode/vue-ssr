@@ -66,4 +66,9 @@ EXPOSE $NODE_PORT
 RUN chown -R node:node /app /home/node
 USER node
 
+# Container health follows the readiness route: 200 once the server listens, 503 while it starts
+# or shuts down. Node's built-in fetch keeps the image free of curl/wget.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
+    CMD ["node", "-e", "fetch('http://127.0.0.1:' + process.env.NODE_PORT + '/healthz').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

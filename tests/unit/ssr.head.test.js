@@ -98,6 +98,40 @@ describe('ssr/head.js', () => {
     expect(head).toContain('hreflang="x-default" href="https://www.example.com/en/contact"');
   });
 
+  it.each([404, 410])('marks a %i page noindex without canonical or alternates', (statusCode) => {
+    const head = generateHead(options({ statusCode }));
+
+    expect(head).toContain('<meta name="robots" content="noindex, follow">');
+    expect(head).not.toContain('rel="canonical"');
+    expect(head).not.toContain('hreflang');
+    expect(head).not.toContain('application/ld+json');
+  });
+
+  it.each(['requiresAuth', 'requiresAdmin'])(
+    'marks a %s route noindex even when the route forgot the robots meta',
+    (flag) => {
+      const route = { path: '/en/private', name: 'Private', meta: { [flag]: true } };
+
+      const head = generateHead(options({ route }));
+
+      expect(head).toContain('<meta name="robots" content="noindex, nofollow">');
+    }
+  );
+
+  it('keeps the robots meta a protected route declares when it already forbids indexing', () => {
+    const meta = { requiresAuth: true, robots: 'noindex, follow' };
+    const route = { path: '/en/private', name: 'Private', meta };
+
+    expect(generateHead(options({ route }))).toContain('content="noindex, follow"');
+  });
+
+  it('overrides an indexable robots meta on a protected route', () => {
+    const meta = { requiresAuth: true, robots: 'index, follow' };
+    const route = { path: '/en/private', name: 'Private', meta };
+
+    expect(generateHead(options({ route }))).toContain('content="noindex, nofollow"');
+  });
+
   it('drops canonical and alternates on a 404', () => {
     const head = generateHead(options({ statusCode: 404 }));
 

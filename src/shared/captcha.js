@@ -1,4 +1,13 @@
+import { CAPTCHA_TIMEOUT_MS } from '#src/shared/const.js';
+
 const isProduction = process.env.NODE_ENV === 'production';
+
+const REQUIRED_CAPTCHA_KEYS = ['RECAPTCHA_SITE_KEY', 'RECAPTCHA_SECRET_KEY'];
+
+export function missingCaptchaKeys(env = process.env) {
+  if (env.NODE_ENV !== 'production') return [];
+  return REQUIRED_CAPTCHA_KEYS.filter((key) => !env[key]);
+}
 
 export async function verifyCaptcha(token, expectedAction) {
   if (!isProduction) return { success: true, score: 1.0 };
@@ -16,6 +25,7 @@ export async function verifyCaptcha(token, expectedAction) {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: `secret=${encodeURIComponent(secretKey)}&response=${encodeURIComponent(token)}`,
+      signal: AbortSignal.timeout(CAPTCHA_TIMEOUT_MS),
     });
 
     const data = await response.json();
@@ -30,6 +40,6 @@ export async function verifyCaptcha(token, expectedAction) {
     return { success: true, score: data.score };
   } catch (err) {
     console.error('reCAPTCHA verification error:', err);
-    return { success: false, reason: 'unavailable' };
+    return { success: false, reason: err?.name === 'TimeoutError' ? 'timeout' : 'unavailable' };
   }
 }

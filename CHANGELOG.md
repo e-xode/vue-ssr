@@ -1,5 +1,99 @@
 # Changelog
 
+## 5.6.0
+
+### Security
+
+- **Pending email-change codes no longer leave the server.** API responses about a user are now
+  built from an allowlist (`USER_SAFE_PROJECTION`: `email`, `name`, `type`, `avatar`, `isBlocked`,
+  `createdAt`, `updatedAt`; admin responses add `blockedAt` and `loginHistory`). The previous
+  denylist named fields that did not exist and missed the real ones, so `/api/auth/me`, the
+  `verify-code` response and the admin user endpoints returned the SHA-256 of a pending 6-digit
+  email-change code, which can be brute-forced offline in milliseconds. ⚠️ A field added by a fork
+  is now private until it is added to the allowlist.
+- **Code attempts are counted atomically, and failures lock the account.** The attempt counter of
+  login, password-reset and email-change codes is incremented by one conditional update before the
+  code is compared, so parallel requests can no longer exceed 3 attempts. Ten wrong codes within an
+  hour now lock code verification for the account until the hour has passed, even when new codes
+  are requested.
+- **A code only works for the flow that issued it.** A password-reset code is refused at sign-in
+  and a login code is refused by the password reset; resending a pending reset code sends the reset
+  email. ⚠️ Codes issued before the upgrade are refused once; users request a new one.
+- **`COOKIE_SECRET` must be strong in production.** ⚠️ The server now refuses to start in
+  production when the secret is shorter than 32 characters or is a documented placeholder
+  (generate one with `openssl rand -hex 32`).
+- **Less account enumeration.** `verify-code` answers an unknown address like a wrong code, and
+  `forgot-password` answers `sent` for a blocked account.
+- **`/api/auth/me` applies the same session checks as protected routes**: an expired session, a
+  blocked user or a deleted user gets `user: null` and the session is destroyed.
+- **Admin safeguards.** An admin cannot remove their own admin role, and an admin account cannot be
+  blocked or deleted before its role is removed. Avatar files are deleted only inside the avatars
+  directory.
+- **reCAPTCHA verification times out after 5 seconds** and fails closed; the server logs a warning
+  at production startup when a reCAPTCHA key is missing.
+
+### Fixed
+
+- **API errors are always JSON.** A malformed JSON body (400), a refused CORS origin (403, was 500),
+  an unknown `/api` path (404) and an uncaught route error (500) now answer `{ error }` instead of
+  an HTML page. A request without a JSON body no longer crashes the route that reads it.
+- **A listen error stops the process.** A port already in use left a live process that served
+  nothing; it now exits with a non-zero code.
+- **A failing index creation no longer aborts the startup**; it is logged as a warning.
+- **A sign-up or email-change race on the same address answers `emailAlreadyUsed`**, not a 500.
+- **Names and codes are trimmed** before validation and storage: a code pasted with a trailing
+  space is accepted, and a name is stored without surrounding spaces.
+- **Route-level redirects are real redirects during SSR.** `/en/admin` answered 200 with the
+  content of `/en/admin/users`; it now answers 302. Pages answered with 404 or 410 and routes that
+  require authentication are always `noindex` and carry no canonical link.
+- **Static files no longer consume the global rate limit** in production.
+- **Blocking a user with their IP blocks the most recent login IP only**, instead of up to 50.
+- **Deleting a user also removes** their IP blocks, their audit log entries and their avatar file.
+- Documentation: every guide was rewritten against the code (Node.js version, clone URL, 30
+  endpoints instead of 6, real environment variable names, 10-minute codes) and is in English.
+
+### Changed
+
+- ⚠️ **`npm run validate` now runs the full battery** on the whole repository (lint check, format
+  check, build, tests) and never modifies files. The previous behaviour, which only checked
+  uncommitted changes and fixed lint errors, is `npm run validate:changed`
+  (`npm run validate -- --changed`).
+- `.nvmrc` added (Node 26, the version CI and the Docker images use); `engines` stays at `>=24.0.0`.
+- ⚠️ **Audit log entries expire after 90 days** (TTL index on `logs.createdAt`,
+  `LOG_RETENTION_DAYS`). Existing entries older than that are removed after the upgrade.
+- ⚠️ **Docker development no longer needs a pre-created network.** `docker compose up` works on a
+  fresh clone. To attach the container to an existing network, add `docker-compose.network.yml` to
+  `COMPOSE_FILE` and set `SHARED_NETWORK`.
+- `requireAdmin` is a plain middleware used after `requireAuth` (`requireAuth, requireAdmin`); it no
+  longer takes `db`.
+- The development MongoDB image is pinned to `mongo:8`; the development Node.js image uses the npm
+  bundled with Node.js.
+- Dependabot groups minor and patch updates into one pull request per ecosystem.
+- npm package metadata (description, keywords, homepage, bugs) and a `files` allowlist: the
+  published package no longer contains `.claude/`, `.github/`, `.impeccable/` or the tests.
+
+### Added
+
+- **Emails in the console during development.** Without `MAILER_HOST` and outside production, no
+  email is sent and security codes are printed in the server log, so a fresh clone can sign up and
+  sign in without an SMTP server.
+- **`npm run seed:admin -- <email>`** promotes an existing account to admin; `npm run seed:dev-user`
+  creates the development QA account.
+- Script aliases `npm start`, `lint:fix` and `format:write`.
+- `HEALTHCHECK` on `/healthz` in the production image.
+- i18n keys `error.notFound`, `error.admin.cannotDemoteSelf`, `error.admin.cannotModifyAdmin`.
+
+### Removed
+
+- Unused code: `src/shared/sanitize.js`, `sendWelcomeEmail` and the welcome email template,
+  `getUserWithCounts`, `getIntlLocale`, the unused analytics helpers (`trackEvent`, `trackSignup`,
+  `trackLogin`, `trackContactForm`) and the `src/json/users.json` fixture.
+- `README.en.md`, `DOCUMENTATION.md` and `docs/INDEX.md`: `README.md` is the single entry point.
+
+### Package Updates
+
+- Removed unused dependencies: `sanitize-html`, `dompurify`, `@testing-library/vue`.
+
 ## 5.5.3
 
 ### Improvements
@@ -116,26 +210,24 @@
 
 ### Fixed
 
-- **Le routeur est créé par requête, plus partagé entre elles.** `src/router.js` exportait un
-  singleton (`export const router`), réutilisé par toutes les requêtes SSR, avec un
-  `createMemoryHistory()` créé une seule fois au niveau module. Chaque `router.push()` empilait donc
-  dans un historique jamais réinitialisé, qui grossissait sans borne et retenait les arbres
-  applicatifs des requêtes précédentes. Mesuré sur la flotte (`e-xode/ops#17`) : 5 applications
-  bâties sur ce starter mouraient en boucle sur `JavaScript heap out of memory` — jusqu'à 113 fois
-  en 6 semaines — la seule épargnée étant la seule à créer son routeur par requête. Remplacé par une
-  fabrique `createAppRouter()`, appelée depuis `createApp()` comme le sont déjà Pinia, Vuetify et
-  i18n. ⚠️ Corrige aussi une **course entre requêtes concurrentes**, qui partageaient
-  `router.currentRoute` : une requête pouvait lire la route poussée par une autre.
+- **The router is created per request, no longer shared between requests.** `src/router.js`
+  exported a singleton (`export const router`) reused by every SSR request, with a
+  `createMemoryHistory()` created once at module level. Each `router.push()` therefore piled onto a
+  history that was never reset, growing without bound and retaining the application trees of earlier
+  requests. Measured across the fleet (`e-xode/ops#17`): 5 applications built on this starter kept
+  dying on `JavaScript heap out of memory`, up to 113 times in 6 weeks; the only one spared was the
+  only one creating its router per request. Replaced by a `createAppRouter()` factory called from
+  `createApp()`, as Pinia, Vuetify and i18n already were. ⚠️ Also fixes a **race between concurrent
+  requests**, which shared `router.currentRoute`: one request could read the route pushed by another.
 
 ### Security
 
-- **Vulnérabilités des dépendances de production ramenées à zéro** — `multer` 2.4.0 (DoS par noms de
-  champs imbriqués) et `nodemailer` 9.1.1 (lecture de fichier arbitraire + SSRF via l'option `raw`,
-  injection CRLF d'en-têtes), les deux *high* que `e-xode/ops#9` suivait depuis juillet, plus 6
-  correctifs *moderate*/*low* transitifs. `npm audit --omit=dev` : **0 vulnérabilité**. Aucun
-  changement de `package.json` — lockfile uniquement, donc aucune montée de version majeure. Les 3
-  vulnérabilités restantes visent l'outillage de test (`vitest`), retiré de l'image par
-  `npm prune --production`.
+- **Production dependency vulnerabilities brought down to zero**: `multer` 2.4.0 (DoS through
+  nested field names) and `nodemailer` 9.1.1 (arbitrary file read and SSRF through the `raw` option,
+  CRLF header injection), the two *high* advisories `e-xode/ops#9` had tracked since July, plus 6
+  transitive *moderate*/*low* fixes. `npm audit --omit=dev`: **0 vulnerabilities**. No `package.json`
+  change, lockfile only, so no major version bump. The 3 remaining advisories target the test
+  tooling (`vitest`), removed from the image by `npm prune --production`.
 
 ### Changed
 

@@ -40,15 +40,16 @@ Add a new HTTP-host concern as a module in `src/api/http/` and wire it from `ser
 Each endpoint is a file exporting `setupXRoute(app, db)`:
 
 ```javascript
-import { getUserWithCounts } from '#src/shared/dbHelpers.js';
+import { requireAuth } from '#src/api/middleware.js';
+import { findUserSafe } from '#src/shared/dbHelpers.js';
 
-export function setupMeRoute(app, db) {
-  app.get('/api/auth/me', async (req, res) => {
+export function setupProfileRoute(app, db) {
+  app.get('/api/profile', requireAuth, async (req, res) => {
     try {
-      const user = await getUserWithCounts(db, req.session.userId);
+      const user = await findUserSafe(db, { _id: req.userId });
       res.json({ user });
     } catch (err) {
-      console.error('Me endpoint error:', err);
+      console.error('Profile endpoint error:', err);
       res.status(500).json({ error: 'error.server' });
     }
   });
@@ -75,11 +76,12 @@ src/api/
 ## Middleware guards (`src/api/middleware.js`)
 
 - `requireAuth` — 401 if no valid `req.session.userId`, or if the session is past `SESSION_ABSOLUTE_MAX_AGE_MS` / has no `createdAt` (`isSessionExpired`); destroys the session on unknown user (401) or `user.isBlocked` (403); sets `req.userId` (ObjectId) and `req.authUser`.
-- `requireAdmin(db)` — factory middleware; 401 without a session user, 403 unless `user.type === 'admin'`.
+- `requireAdmin` — plain middleware, always after `requireAuth`; 401 when `requireAuth` did not run, 403 unless `req.authUser.type === 'admin'`. It does not query the database.
+- `resolveSession(req, db, projection)` — the resolver behind `requireAuth` and `/api/auth/me`; destroys an expired, orphaned or blocked session before answering.
 - `setMiddlewareDb(db)` — call once from `createApiRouter` before `requireAuth` is used.
 
 ```javascript
-app.get('/api/admin/users', requireAdmin(db), async (req, res) => { ... });
+app.get('/api/admin/users', requireAuth, requireAdmin, async (req, res) => { ... });
 ```
 
 ## MongoDB access
@@ -87,8 +89,13 @@ app.get('/api/admin/users', requireAdmin(db), async (req, res) => { ... });
 - Single shared client from `src/shared/mongo.js`: `mongoConnect()` returns `{ db, error }`; `mongoClose()` on shutdown.
 - Inject the existing `db` into every route — never open a client per request.
 - Validate ids with `parseObjectId(str)` from `src/shared/dbHelpers.js` (returns ObjectId or null) before any `_id` query.
-- `parsePagination(req.query)` for list endpoints; richer accessors (e.g. `getUserWithCounts(db, id)`) live in `dbHelpers.js`.
-- Indexes are declared in `ensureIndexes(db)` in `src/api/http/indexes.js` (users.email unique, blockedIps.ip unique, logs `createdAt`/`event`/`userId`).
+- `parsePagination(req.query)` for list endpoints; user reads that reach a response go through `findUserSafe(db, filter)` (`USER_SAFE_PROJECTION`), never a bare `findOne`.
+- Indexes are declared in `ensureIndexes(db)` in `src/api/http/indexes.js` (users.email unique, blockedIps.ip unique, logs `event`/`userId`, logs `createdAt` as a TTL of `LOG_RETENTION_DAYS`). A failing index logs a warning and never stops the boot.
+- A unique-index race surfaces as error 11000: catch it with `isDuplicateKeyError(err)` and answer the same 4xx key as the pre-check.
+- Admin routes: `requireAuth, requireAdmin` (no `db` argument). User documents in responses use `USER_SAFE_PROJECTION` / `ADMIN_USER_PROJECTION` (allowlists).
+- `server.js` order in production: helmet, `/healthz`, static files, rate limits, SEO routes, session, CORS, `express.json`, `ensureRequestBody`, API router, `/api` JSON 404, locale redirects, SSR, `apiErrorHandler`. Static files stay before the rate limiter.
+- Errors that escape a route (malformed JSON body, refused CORS origin, a thrown handler) are answered as `{ error }` JSON by `apiErrorHandler` (`src/api/http/errors.js`), mounted last in `server.js`.
+- Code attempts: count with `claimCodeAttempt(db, userId, field)` before comparing the code; never read-then-`$set` a counter.
 - Client IP: `getClientIp(req)` (`req.ip`, which honours `trust proxy`); never read `x-forwarded-for` by hand.
 - A failed email send is reported with `deliverEmail(res, sending)` from `src/api/emailDelivery.js` (502 `error.emailFailed`), not swallowed.
 

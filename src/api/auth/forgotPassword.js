@@ -1,6 +1,12 @@
-import { generateSecurityCode, hashCode, sendResetPasswordEmail } from '#src/shared/email.js';
-import { SECURITY_CODE_EXPIRY_MS } from '#src/shared/const.js';
-import { assertNotBanned, getClientIp, resendWaitSeconds } from '#src/shared/security.js';
+import { sendResetPasswordEmail } from '#src/shared/email.js';
+import { SECURITY_CODE_PURPOSES } from '#src/shared/const.js';
+import {
+  assertNotBanned,
+  createSecurityCode,
+  getClientIp,
+  hasPendingCode,
+  resendWaitSeconds,
+} from '#src/shared/security.js';
 import { logEvent } from '#src/shared/logger.js';
 import { readEmail, readString } from '#src/shared/utils.js';
 import { deliverEmail } from '#src/api/emailDelivery.js';
@@ -22,27 +28,23 @@ export function setupForgotPasswordRoute(app, db) {
         return res.json({ status: 'sent' });
       }
 
-      if (!(await assertNotBanned(db, res, { ip, user }))) return;
-
-      if (user.resetPasswordPending && resendWaitSeconds(user) > 0) {
+      if (user.isBlocked) {
+        logEvent(db, {
+          event: 'user-forgot-password',
+          userId: user._id,
+          ip,
+          meta: { email, blocked: true },
+        });
         return res.json({ status: 'sent' });
       }
 
-      const code = generateSecurityCode();
-      const codeHash = hashCode(code);
-      const codeExpires = new Date(Date.now() + SECURITY_CODE_EXPIRY_MS);
+      const resetPending = hasPendingCode(user, SECURITY_CODE_PURPOSES.RESET_PASSWORD);
+      if (resetPending && resendWaitSeconds(user) > 0) {
+        return res.json({ status: 'sent' });
+      }
 
-      await db.collection('users').updateOne(
-        { _id: user._id },
-        {
-          $set: {
-            securityCode: codeHash,
-            securityCodeExpires: codeExpires,
-            securityCodeAttempts: 0,
-            resetPasswordPending: true,
-          },
-        }
-      );
+      const { code, fields } = createSecurityCode(SECURITY_CODE_PURPOSES.RESET_PASSWORD);
+      await db.collection('users').updateOne({ _id: user._id }, { $set: fields });
 
       const sending = sendResetPasswordEmail(email, code, locale || user.locale || 'en');
       if (!(await deliverEmail(res, sending))) return;

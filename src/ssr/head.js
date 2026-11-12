@@ -95,6 +95,19 @@ export function getSchemaMarkup(ctx) {
   return schemas.map(jsonLdScript).join('\n');
 }
 
+const MISSING_PAGE_STATUS_CODES = [404, 410];
+const MISSING_PAGE_ROBOTS = 'noindex, follow';
+const PROTECTED_PAGE_ROBOTS = 'noindex, nofollow';
+const DEFAULT_ROBOTS = 'index, follow';
+
+function resolveRobots(route, isMissing) {
+  const declared = route.meta?.robots;
+  if (isMissing) return declared?.includes('noindex') ? declared : MISSING_PAGE_ROBOTS;
+  const isProtected = Boolean(route.meta?.requiresAuth || route.meta?.requiresAdmin);
+  if (isProtected && !declared?.includes('noindex')) return PROTECTED_PAGE_ROBOTS;
+  return declared || DEFAULT_ROBOTS;
+}
+
 function readIntegrations(env) {
   const gaId = env.GA_MEASUREMENT_ID || '';
   const recaptchaSiteKey = env.RECAPTCHA_SITE_KEY || '';
@@ -109,23 +122,23 @@ function readIntegrations(env) {
 export function buildHeadContext({ route, router, locale, t, theme, statusCode, env }) {
   const siteUrl = resolveSiteUrl(env);
   const appName = env.APP_NAME || DEFAULT_APP_NAME;
-  const is404 = statusCode === 404;
+  const isMissing = MISSING_PAGE_STATUS_CODES.includes(statusCode);
   const canonical = `${siteUrl}${route.path}`;
   const pageMeta = resolvePageMeta(route, t);
 
   const ctx = {
     siteUrl,
     appName,
-    is404,
+    isMissing,
     canonical,
     locale,
-    robots: route.meta?.robots || 'index, follow',
+    robots: resolveRobots(route, isMissing),
     title: buildTitle(pageMeta.title, appName),
     description: pageMeta.description,
     keywords: pageMeta.keywords,
     imageUrl: `${siteUrl}${SITE_IMAGE_PATH}`,
     logoUrl: `${siteUrl}${SITE_LOGO_PATH}`,
-    ogUrl: is404 ? siteUrl : canonical,
+    ogUrl: isMissing ? siteUrl : canonical,
     subPath: stripLocalePrefix(route.path),
     ...readIntegrations(env),
     themeColor: theme === 'dark' ? DARK_THEME_COLOR : LIGHT_THEME_COLOR,
@@ -136,7 +149,7 @@ export function buildHeadContext({ route, router, locale, t, theme, statusCode, 
 }
 
 function buildAlternateTags(ctx) {
-  if (ctx.is404) return [];
+  if (ctx.isMissing) return [];
   const hreflangLink = (hreflang, locale) =>
     `<link rel="alternate" hreflang="${hreflang}" href="${ctx.siteUrl}/${locale}${localizeSubPath(ctx.subPath, locale)}">`;
   return [

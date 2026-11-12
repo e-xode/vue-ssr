@@ -31,6 +31,8 @@ export async function render(url, db, theme) {
   await router.isReady();
 
   const route = router.currentRoute.value;
+  if (route.redirectedFrom) return { redirect: route.fullPath };
+
   const locale = route.params.locale || localeFromUrl(url);
   setLocale(locale);
 

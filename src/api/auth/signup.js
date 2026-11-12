@@ -1,22 +1,23 @@
 import bcrypt from 'bcryptjs';
-import { sendSecurityCodeEmail, generateSecurityCode, hashCode } from '#src/shared/email.js';
+import { sendSecurityCodeEmail } from '#src/shared/email.js';
 import {
   USER_TYPES,
-  SECURITY_CODE_EXPIRY_MS,
   BCRYPT_ROUNDS,
   EMAIL_REGEX,
+  SECURITY_CODE_PURPOSES,
 } from '#src/shared/const.js';
-import { assertNotBanned, getClientIp } from '#src/shared/security.js';
+import { assertNotBanned, createSecurityCode, getClientIp } from '#src/shared/security.js';
+import { isDuplicateKeyError } from '#src/shared/dbHelpers.js';
 import { logEvent } from '#src/shared/logger.js';
 import { verifyCaptcha } from '#src/shared/captcha.js';
-import { readEmail, readString } from '#src/shared/utils.js';
+import { readEmail, readString, readTrimmed } from '#src/shared/utils.js';
 import { deliverEmail } from '#src/api/emailDelivery.js';
 
 export function setupSignupRoute(app, db) {
   app.post('/api/auth/signup', async (req, res) => {
     const email = readEmail(req.body.email);
     const password = readString(req.body.password);
-    const name = readString(req.body.name);
+    const name = readTrimmed(req.body.name);
     const locale = readString(req.body.locale);
     const { captchaToken } = req.body;
 
@@ -32,7 +33,7 @@ export function setupSignupRoute(app, db) {
       return res.status(400).json({ error: 'error.auth.passwordTooShort' });
     }
 
-    if (name.trim().length < 2) {
+    if (name.length < 2) {
       return res.status(400).json({ error: 'error.auth.nameTooShort' });
     }
 
@@ -49,18 +50,14 @@ export function setupSignupRoute(app, db) {
       }
 
       const hashedPassword = await bcrypt.hash(password, BCRYPT_ROUNDS);
-      const code = generateSecurityCode();
-      const codeHash = hashCode(code);
-      const codeExpires = new Date(Date.now() + SECURITY_CODE_EXPIRY_MS);
+      const { code, fields } = createSecurityCode(SECURITY_CODE_PURPOSES.LOGIN);
 
       const user = {
         email,
         password: hashedPassword,
         name,
         type: USER_TYPES.USER,
-        securityCode: codeHash,
-        securityCodeExpires: codeExpires,
-        securityCodeAttempts: 0,
+        ...fields,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -74,6 +71,9 @@ export function setupSignupRoute(app, db) {
 
       res.json({ status: 'verification_pending', email });
     } catch (err) {
+      if (isDuplicateKeyError(err)) {
+        return res.status(400).json({ error: 'error.auth.emailAlreadyUsed' });
+      }
       console.error('Signup error:', err);
       res.status(500).json({ error: 'error.auth.signupFailed' });
     }

@@ -12,7 +12,7 @@ fi
 LOCK_HASH=$(md5sum "$LOCK_FILE" | cut -d' ' -f1)
 
 if [ ! -f "$LOCK_STAMP" ] || [ "$(cat "$LOCK_STAMP")" != "$LOCK_HASH" ]; then
-    npm install --production=false
+    npm install
     printf '%s' "$LOCK_HASH" > "$LOCK_STAMP"
 else
     echo "dependencies up to date, skipping npm install"
