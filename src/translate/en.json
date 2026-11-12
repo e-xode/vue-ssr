@@ -263,12 +263,14 @@
       "search": "Search by event or IP",
       "date": "Date",
       "deleteSelected": "Delete selected ({count})",
+      "deleteLog": "Delete this log entry",
       "event": "Event",
       "ip": "IP",
       "user": "User",
       "meta": "Details",
       "viewDetails": "View details",
       "empty": "No logs found",
+      "refresh": "Refresh",
       "metaDialog": {
         "close": "Close",
         "title": "Event details"

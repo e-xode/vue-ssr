@@ -8,17 +8,24 @@
     padding-left: $spacing-lg;
     padding-right: $spacing-lg;
   }
+
+  td,
+  th {
+    white-space: nowrap;
+  }
 }
 
 .log-summary {
-  display: block;
-  min-width: 0;
-  max-width: $container-sm * 0.75;
-  overflow-wrap: anywhere;
+  display: inline-block;
+  vertical-align: middle;
+  width: $spacing-unit * 30;
+  max-width: $spacing-unit * 30;
   line-height: $line-height-normal;
+  @include truncate;
 
   @include respond-to('lg') {
-    max-width: $container-md;
+    width: $spacing-unit * 45;
+    max-width: $spacing-unit * 45;
   }
 
   &__action {

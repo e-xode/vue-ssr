@@ -41,10 +41,10 @@ async function handleSubmit() {
   <v-container class="contact-page">
     <v-row justify="center">
       <v-col cols="12" md="8" lg="6">
-        <h1 class="text-display-small mb-2">
+        <h1 class="contact-page__title mb-2">
           {{ t('contact.title') }}
         </h1>
-        <p class="text-body-large text-medium-emphasis mb-8">
+        <p class="contact-page__lead mb-8">
           {{ t('contact.subtitle') }}
         </p>
 

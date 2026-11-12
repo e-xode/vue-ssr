@@ -136,7 +136,7 @@ onMounted(() => {
               {{ t('admin.logs.deleteSelected', { count: selected.length }) }}
             </v-btn>
             <v-btn :prepend-icon="mdiRefresh" variant="tonal" :loading="loading" @click="fetchLogs">
-              {{ t('form.loading') }}
+              {{ t('admin.logs.refresh') }}
             </v-btn>
           </div>
         </div>
@@ -144,7 +144,7 @@ onMounted(() => {
         <v-card class="mb-4">
           <v-card-text>
             <v-row>
-              <v-col cols="12" sm="4">
+              <v-col cols="12" sm="6" lg="3">
                 <v-text-field
                   v-model="filters.search"
                   :label="t('admin.logs.search')"
@@ -152,7 +152,7 @@ onMounted(() => {
                   @keyup.enter="applyFilters"
                 />
               </v-col>
-              <v-col cols="12" sm="3">
+              <v-col cols="12" sm="6" lg="2">
                 <v-select
                   v-model="filters.event"
                   :label="t('admin.logs.event')"
@@ -160,17 +160,17 @@ onMounted(() => {
                   clearable
                 />
               </v-col>
-              <v-col cols="12" sm="2">
+              <v-col cols="12" sm="6" lg="2">
                 <v-text-field
                   v-model="filters.from"
                   :label="t('admin.logs.filter.from')"
                   type="date"
                 />
               </v-col>
-              <v-col cols="12" sm="2">
+              <v-col cols="12" sm="6" lg="2">
                 <v-text-field v-model="filters.to" :label="t('admin.logs.filter.to')" type="date" />
               </v-col>
-              <v-col cols="12" sm="1" class="d-flex align-center ga-2">
+              <v-col cols="12" lg="3" class="d-flex align-center ga-2">
                 <v-btn color="primary" @click="applyFilters">
                   {{ t('form.submit') }}
                 </v-btn>
@@ -252,6 +252,7 @@ onMounted(() => {
                   variant="text"
                   color="error"
                   size="small"
+                  :aria-label="t('admin.logs.deleteLog')"
                   @click="deleteLog(log._id)"
                 />
               </td>

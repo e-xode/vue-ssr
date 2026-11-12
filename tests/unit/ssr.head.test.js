@@ -132,6 +132,26 @@ describe('ssr/head.js', () => {
     expect(generateHead(options({ route }))).toContain('content="noindex, nofollow"');
   });
 
+  it.each(['requiresAuth', 'requiresAdmin'])(
+    'omits canonical and hreflang alternates on a %s route',
+    (flag) => {
+      const route = { path: '/en/private', name: 'Private', meta: { [flag]: true } };
+
+      const head = generateHead(options({ route }));
+
+      expect(head).toContain('<meta name="robots" content="noindex, nofollow">');
+      expect(head).not.toContain('rel="canonical"');
+      expect(head).not.toContain('hreflang');
+    }
+  );
+
+  it('keeps canonical and alternates on a public indexable route', () => {
+    const head = generateHead(options());
+
+    expect(head).toContain('rel="canonical"');
+    expect(head).toContain('hreflang="x-default"');
+  });
+
   it('drops canonical and alternates on a 404', () => {
     const head = generateHead(options({ statusCode: 404 }));
 

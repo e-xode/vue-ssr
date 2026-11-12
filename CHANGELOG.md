@@ -45,10 +45,20 @@
   space is accepted, and a name is stored without surrounding spaces.
 - **Route-level redirects are real redirects during SSR.** `/en/admin` answered 200 with the
   content of `/en/admin/users`; it now answers 302. Pages answered with 404 or 410 and routes that
-  require authentication are always `noindex` and carry no canonical link.
+  require authentication are always `noindex` and carry no canonical link or hreflang alternates.
 - **Static files no longer consume the global rate limit** in production.
 - **Blocking a user with their IP blocks the most recent login IP only**, instead of up to 50.
 - **Deleting a user also removes** their IP blocks, their audit log entries and their avatar file.
+- **Admin activity log and user detail.** A refused block or unblock (for example on another admin)
+  now shows the API error instead of freezing the dialog. The refresh button is labelled
+  "Refresh", the delete button has an accessible name, the log table stays compact at 320 and
+  768 px, and the filter row is no longer clipped.
+- **The password visibility toggle works** on the sign-in and sign-up forms: it was bound to an
+  event that never fired, and is now a real button reachable with the keyboard.
+- **Contact page typography** uses Inter like the rest of the site instead of a fallback font.
+- **Dark theme:** primary buttons use dark text (about 6.6:1 against the indigo, was 3:1). Auth
+  links, the footer logo and dialog padding follow the design tokens; text fields get a rounded
+  indigo focus ring; long French titles wrap instead of being cut with an ellipsis.
 - Documentation: every guide was rewritten against the code (Node.js version, clone URL, 30
   endpoints instead of 6, real environment variable names, 10-minute codes) and is in English.
 
@@ -164,7 +174,7 @@
 
 - **Server:** `/healthz` readiness endpoint, server-side 302 for `/` by `Accept-Language` and 301
   for trailing slashes, bare page paths and wrong-locale slugs, long-lived immutable cache headers
-  for hashed assets, a sitemap module with real `lastmod`, and a production boot check that
+  for hashed assets, a sitemap module that emits `<lastmod>` for entries that carry a real modification date (static pages have none, so none is emitted), and a production boot check that
   requires `NODE_HOST` to be a public https origin. `server.js` is now thin wiring over
   `src/api/http/`.
 - Leveled logger (`LOG_LEVEL`) with timestamps; Vite file polling is opt-in (`VITE_USE_POLLING`).

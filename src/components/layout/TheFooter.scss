@@ -17,6 +17,7 @@
     align-items: center;
     gap: $spacing-sm;
     text-decoration: none;
+    color: rgb(var(--v-theme-on-background));
     margin-bottom: $spacing-md;
 
     span {

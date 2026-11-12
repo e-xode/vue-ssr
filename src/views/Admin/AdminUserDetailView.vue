@@ -80,42 +80,47 @@ async function handleSave() {
   }
 }
 
+async function sendBlockAction(action, payload) {
+  const response = await fetch(`/api/admin/users/${route.params.userId}/${action}`, {
+    method: 'PUT',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(data.error || 'error.server');
+  }
+}
+
 async function blockUser() {
   blocking.value = true;
+  error.value = '';
+  successMessage.value = '';
   try {
-    const response = await fetch(`/api/admin/users/${route.params.userId}/block`, {
-      method: 'PUT',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ blockIps: blockIps.value }),
-    });
-    if (response.ok) {
-      user.value = { ...user.value, isBlocked: true };
-      blockDialog.value = false;
-      successMessage.value = t('admin.users.blockSuccess');
-    }
+    await sendBlockAction('block', { blockIps: blockIps.value });
+    user.value = { ...user.value, isBlocked: true };
+    successMessage.value = t('admin.users.blockSuccess');
   } catch (err) {
     console.error(err);
+    error.value = translateError(err);
   } finally {
+    blockDialog.value = false;
     blocking.value = false;
   }
 }
 
 async function unblockUser() {
   blocking.value = true;
+  error.value = '';
+  successMessage.value = '';
   try {
-    const response = await fetch(`/api/admin/users/${route.params.userId}/unblock`, {
-      method: 'PUT',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ unblockIps: false }),
-    });
-    if (response.ok) {
-      user.value = { ...user.value, isBlocked: false };
-      successMessage.value = t('admin.users.unblockSuccess');
-    }
+    await sendBlockAction('unblock', { unblockIps: false });
+    user.value = { ...user.value, isBlocked: false };
+    successMessage.value = t('admin.users.unblockSuccess');
   } catch (err) {
     console.error(err);
+    error.value = translateError(err);
   } finally {
     blocking.value = false;
   }
