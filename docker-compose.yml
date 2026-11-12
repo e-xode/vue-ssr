@@ -19,9 +19,3 @@ services:
     shm_size: '2gb'
     tty: false
     stdin_open: false
-    networks:
-      - e-xode
-networks:
-  e-xode:
-    driver: bridge
-    external: true

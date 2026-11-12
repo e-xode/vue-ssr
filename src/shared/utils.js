@@ -9,6 +9,12 @@ export function readString(value) {
   return typeof value === 'string' ? value : null;
 }
 
+export function readTrimmed(value) {
+  const text = readString(value);
+  if (text === null) return null;
+  return text.trim() || null;
+}
+
 export function readEmail(value) {
   const text = readString(value);
   if (text === null) return null;

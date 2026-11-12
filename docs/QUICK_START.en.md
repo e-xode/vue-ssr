@@ -1,314 +1,96 @@
-# Quick Start
+# Quick start
 
-Get up and running in 5 minutes! 🚀
+Version française : [QUICK_START.fr.md](./QUICK_START.fr.md)
 
-## 📋 Prerequisites
+## With Docker (recommended)
 
-- Node.js >= 18.0.0
-- npm >= 8.0.0
-- MongoDB (local or Docker)
-
-## Option 1: Without Docker (Simplest)
-
-### 1. Clone and install
+Requirements: Docker with the Compose plugin (`docker compose version`).
 
 ```bash
-git clone https://github.com/yourusername/e-xode-vue-ssr.git
-cd e-xode-vue-ssr
-npm install
+git clone https://github.com/e-xode/vue-ssr.git
+cd vue-ssr
+cp .env.example .env
+docker compose up
 ```
 
-### 2. Configure environment
+`COMPOSE_FILE` in `.env` selects two files: `docker-compose.yml` (the Node.js container) and
+`docker-compose.local.yml` (a MongoDB 8 container, whose application user is created on first start
+from `MONGO_USER`, `MONGO_PWD` and `MONGO_DB`). The application listens on <http://localhost:3002>
+and MongoDB on `127.0.0.1:27017`; both ports are published on the loopback interface only.
+
+The Node.js container runs `npm install` on its first start (and again whenever
+`package-lock.json` changes), then `npm run dev`.
+
+### First account and first admin
+
+1. Open <http://localhost:3002/en/signup> and create an account.
+2. The security code is printed in the server logs, because no SMTP server is configured:
+
+   ```
+   [mail:dev] … code for you@example.com: 123456
+   ```
+
+3. Promote the account, then sign out and sign in again:
+
+   ```bash
+   docker compose exec node npm run seed:admin -- you@example.com
+   ```
+
+There is no default admin account and no default password.
+
+### Why the development container has extra privileges
+
+`docker-compose.yml` grants the Node.js container `SYS_ADMIN`, an unconfined seccomp profile and
+2 GB of shared memory. They exist only so that headless Chromium (Playwright, used by the optional
+screenshot tooling) can run inside the container. They are not needed to run the application:
+remove the `cap_add`, `security_opt` and `shm_size` keys if you do not use Playwright. The
+production image has none of them.
+
+### Useful variations
+
+| Need                                   | What to change in `.env`                                                                 |
+| -------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Port 27017 or 3002 already taken       | `MONGO_PORT=27018`, `NODE_PORT=3003` (and `NODE_HOST` to match)                          |
+| Remote MongoDB (Atlas, another server) | Comment out `COMPOSE_FILE`, set `MONGO_HOST` and `MONGO_TYPE=mongodb+srv`                |
+| Reach the dev server from another host | `BIND_ADDRESS=0.0.0.0`                                                                   |
+| Join an existing Docker network        | Append `:docker-compose.network.yml` to `COMPOSE_FILE` and set `SHARED_NETWORK=<name>`   |
+| Send real emails                       | Uncomment and fill the `MAILER_*` variables                                              |
+
+## Without Docker
+
+Requirements: Node.js 26 (`.nvmrc` is provided) and a MongoDB server you can reach.
 
 ```bash
+git clone https://github.com/e-xode/vue-ssr.git
+cd vue-ssr
+npm install
 cp .env.example .env
 ```
 
-Edit `.env` with your settings (or leave defaults for dev):
+Edit `.env`:
 
-```env
-NODE_PORT=3002
-NODE_HOST=http://localhost:3002
-MONGO_HOST=localhost
-MONGO_DB=app
-MONGO_USER=root
-MONGO_PWD=password
-```
+- Comment out `COMPOSE_FILE` (it only matters to Docker Compose).
+- Point `MONGO_HOST` at your server (`localhost` or `localhost:27017`).
+- For a local MongoDB **without authentication**, leave `MONGO_USER` and `MONGO_PWD` empty.
+- For a MongoDB **with authentication**, the user must be defined in the `MONGO_DB` database
+  itself: the connection string is `mongodb://user:password@host/app`, so MongoDB authenticates
+  against `app`, not against `admin`. A root user created with `MONGO_INITDB_ROOT_USERNAME` lives
+  in `admin` and will be refused. Create the application user once:
 
-### 3. Start MongoDB
+  ```bash
+  mongosh "mongodb://localhost/app" --eval \
+    'db.createUser({ user: "user", pwd: "password", roles: [{ role: "readWrite", db: "app" }] })'
+  ```
 
-```bash
-# With Homebrew (macOS)
-brew services start mongodb-community
-
-# Or with Docker
-docker run -d -p 27017:27017 \
-  -e MONGO_INITDB_ROOT_USERNAME=root \
-  -e MONGO_INITDB_ROOT_PASSWORD=password \
-  mongo:latest
-
-# Or with Docker Compose
-docker-compose up mongo
-```
-
-### 4. Start the app
+Then:
 
 ```bash
 npm run dev
+npm run seed:admin -- you@example.com
 ```
 
-✅ Application accessible at: **http://localhost:3002**
-
----
-
-## Option 2: With Docker Compose (Recommended)
-
-### Local vs remote MongoDB
-
-The compose setup is split in two files so you can switch the database target without editing config:
-
-- `docker-compose.yml` (base) — runs the `node` app only and reads `.env`, connecting to a **remote** MongoDB (e.g. Atlas) via `MONGO_HOST` / `MONGO_TYPE`.
-- `docker-compose.local.yml` (override) — adds a local `mongo` container and redirects the app to it.
-
-Toggle via `COMPOSE_FILE` in `.env` (already set in `.env.example`):
-
-```env
-# Local (node + mongo): keep uncommented
-COMPOSE_FILE=docker-compose.yml:docker-compose.local.yml
-# Remote (e.g. Atlas): comment the line out
-```
-
-Then `docker compose up` follows the toggle. Explicit equivalents: `docker compose -f docker-compose.yml -f docker-compose.local.yml up` (local) vs `docker compose -f docker-compose.yml up` (remote).
-
-### 1. Docker Prerequisites
-
-```bash
-# Create Docker network
-docker network create e-xode
-
-# Verify Docker & Docker Compose
-docker --version
-docker-compose --version
-```
-
-### 2. Clone and configure
-
-```bash
-git clone https://github.com/yourusername/e-xode-vue-ssr.git
-cd e-xode-vue-ssr
-cp .env.example .env
-```
-
-### 3. Start services
-
-```bash
-docker-compose up -d
-```
-
-### 4. Verify everything works
-
-```bash
-# View logs
-docker-compose logs -f node
-
-# Check MongoDB
-docker-compose logs mongo
-```
-
-✅ Application accessible at: **http://localhost:3002**
-
----
-
-## Test Authentication
-
-### 1. Go to signup page
-
-Visit: http://localhost:3002/signup
-
-### 2. Sign up
-
-- Email: `test@example.com`
-- Password: `TestPassword123!`
-- Name: `Test User`
-
-Click "Sign Up"
-
-### 3. Configure email (OPTIONAL)
-
-By default, emails are not sent. To enable them:
-
-```env
-MAILER_HOST=smtp.gmail.com
-MAILER_PORT=587
-MAILER_FROM=your-email@gmail.com
-MAILER_LOGIN=your-email@gmail.com
-MAILER_PASSWORD=app_specific_password
-```
-
-💡 **Note**: Gmail requires "App Specific Passwords" (not your regular password)
-
-### 4. Verification (for dev without email)
-
-1. Click "Resend Code" to see the code in logs
-2. Or access MongoDB directly:
-
-```bash
-mongosh mongodb://root:password@localhost:27017/app
-
-# In MongoDB shell:
-db.auth('admin', 'password')
-db.users.findOne({email: 'test@example.com'})
-```
-
-⚠️ You'll see the hashed code in `securityCode`
-In server logs you'll see: `Email send error` (normal if not configured)
-
----
-
-## Available npm Scripts
-
-```bash
-# Development
-npm run dev              # Start dev server
-
-# Build
-npm run build            # Compile for production
-npm run build:client     # Compile client only
-npm run build:server     # Compile server only
-
-# Production
-npm run prod             # Start production server
-```
-
----
-
-## Docker Commands
-
-```bash
-# Start
-docker-compose up -d
-
-# Stop
-docker-compose down
-
-# View logs
-docker-compose logs -f node    # App logs
-docker-compose logs -f mongo   # MongoDB logs
-
-# Access container terminal
-docker-compose exec node bash
-
-# Restart a service
-docker-compose restart node
-```
-
----
-
-## Explore the app
-
-### Available pages
-
-- **`/`** - Home
-- **`/signup`** - Sign up
-- **`/signin`** - Sign in
-- **`/auth/verify-code`** - Verify code (after signup/signin)
-- **`/dashboard`** - Dashboard (when authenticated)
-
-### Code Explorer
-
-```
-src/
-├── views/                # Pages
-│   ├── Index/IndexView.vue
-│   ├── Auth/SignupView.vue
-│   ├── Auth/SigninView.vue
-│   └── ...
-├── components/           # Components
-│   └── layout/TheHeader.vue
-├── stores/               # State (Pinia)
-│   └── auth.js
-├── api/                  # API routes
-│   └── auth/signup.js
-└── translate/            # Translations
-    └── en.json
-```
-
----
-
-## Common Issues
-
-### ❌ "Port 3002 already in use"
-
-```bash
-# Kill the process
-lsof -i :3002
-kill -9 <PID>
-
-# Or change the port
-# Edit .env: NODE_PORT=5174
-```
-
-### ❌ "MongoDB connection refused"
-
-```bash
-# Check if MongoDB is running
-docker ps | grep mongo
-
-# Restart
-docker-compose restart mongo
-
-# Or start MongoDB
-docker run -d -p 27017:27017 mongo:latest
-```
-
-### ❌ "Cannot GET /"
-
-```bash
-# Wait for server to fully start (can take 10-20s)
-# Check logs
-docker-compose logs node
-```
-
-### ❌ Hot reload not working
-
-```bash
-# This is Vite, it needs many watchers in Docker
-# Solution: edit file and reload browser
-
-# Or: increase limits
-echo "fs.inotify.max_user_watches=524288" | sudo tee -a /etc/sysctl.conf
-sudo sysctl -p
-```
-
----
-
-## Next Steps
-
-- 📖 Read [README.en.md](../README.en.md) for complete documentation
-- 🏗️ Check [ARCHITECTURE.md](./ARCHITECTURE.md) for architecture details
-- 🔌 Explore [API.md](./API.md) for endpoints
-- 🚀 See [DEPLOYMENT.md](./DEPLOYMENT.md) for deployment
-
----
-
-## Need Help?
-
-```bash
-# View all logs
-docker-compose logs -f
-
-# Stop and clean up
-docker-compose down
-docker-compose down -v  # Also remove volumes
-
-# Rebuild images
-docker-compose down
-docker-compose build --no-cache
-docker-compose up -d
-```
-
-Good luck! 🎉
-
----
-
-**Made with ❤️**
+## Next steps
+
+- [Developer guide](./DEVELOPER_GUIDE.md): add a page, an API route, a translation.
+- [Deployment](./DEPLOYMENT.md): what production requires.
+- [Troubleshooting](./TROUBLESHOOTING.md): when something does not start.

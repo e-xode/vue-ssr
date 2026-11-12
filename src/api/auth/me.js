@@ -1,13 +1,11 @@
-import { getUserWithCounts } from '#src/shared/dbHelpers.js';
+import { USER_SAFE_PROJECTION } from '#src/shared/const.js';
+import { resolveSession, SESSION_STATE } from '#src/api/middleware.js';
 
 export function setupMeRoute(app, db) {
   app.get('/api/auth/me', async (req, res) => {
-    if (!req.session?.userId) {
-      return res.json({ user: null });
-    }
     try {
-      const user = await getUserWithCounts(db, req.session.userId);
-      res.json({ user });
+      const session = await resolveSession(req, db, USER_SAFE_PROJECTION);
+      res.json({ user: session.state === SESSION_STATE.ACTIVE ? session.user : null });
     } catch (err) {
       console.error('Me endpoint error:', err);
       res.status(500).json({ error: 'error.server' });

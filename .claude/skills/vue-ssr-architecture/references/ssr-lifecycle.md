@@ -27,6 +27,10 @@ npm run build:server    # dist/server/ (Node.js bundle)
 - `<meta name="ga-id">` and `<meta name="recaptcha-site-key">` expose `GA_MEASUREMENT_ID` / `RECAPTCHA_SITE_KEY` (only when they match the expected pattern); client code reads them (`analytics.js`, `useCaptcha.js`) and loads gtag / reCAPTCHA itself, so no inline script is needed (CSP)
 - `escapeHtml()` on all dynamic meta values
 
+## SSR redirects and missing pages
+
+When the router resolved the URL through a route-level `redirect` (`route.redirectedFrom`), `render()` returns `{ redirect }` and `ssr.js` answers `ROUTE_REDIRECT_STATUS` (302) to the target (base path kept) instead of rendering. `head.js` forces `noindex` and drops canonical/hreflang/JSON-LD for status 404 and 410, and forces `noindex, nofollow` on routes with `requiresAuth`/`requiresAdmin` whose meta does not already forbid indexing.
+
 ## SSR 404
 
 NotFound route has `meta.statusCode: 404`; a component can also set `ssrContext.statusCode` via `useSsrStatus().setStatusCode(code)`. The status is propagated through entry-server → `ssr.js`.

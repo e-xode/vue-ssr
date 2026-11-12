@@ -101,9 +101,8 @@ describe('shared/analytics.js', () => {
   });
 
   it('does not throw when gtag is absent', async () => {
-    const { trackPageView, trackEvent } = await loadAnalytics();
+    const { trackPageView } = await loadAnalytics();
 
     expect(() => trackPageView('/en', 'Home')).not.toThrow();
-    expect(() => trackEvent('x')).not.toThrow();
   });
 });

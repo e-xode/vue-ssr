@@ -1,461 +1,106 @@
-# 🧪 Testing Guide
+# Testing
 
-Guide complet pour exécuter et écrire des tests avec Vitest.
+Unit tests run on [Vitest](https://vitest.dev) 4. About 50 test files in `tests/unit/`
+covering the API routes, the HTTP modules, the shared helpers, the composables, the store and the
+SSR head.
 
-## Table des matières
-
-- [Installation](#installation)
-- [Exécution des tests](#exécution-des-tests)
-- [Structure des tests](#structure-des-tests)
-- [Écrire de nouveaux tests](#écrire-de-nouveaux-tests)
-- [Couverture de code](#couverture-de-code)
-- [Mocking](#mocking)
-- [Conseils et bonnes pratiques](#conseils-et-bonnes-pratiques)
-
----
-
-## Installation
-
-Les dépendances de test sont déjà installées. Pour les installer manuellement:
+## Running
 
 ```bash
-npm install
+npm test                  # run everything once (same as npm run test:run)
+npm run test:watch        # re-run on change
+npm run test:ui           # browser UI
+npm run test:coverage     # coverage report (text, JSON, HTML)
+npx vitest run tests/unit/api.auth.test.js     # one file
+npx vitest run -t "refuses a blocked IP"       # by test name
 ```
 
-Dépendances de test incluses:
+With Docker: `docker compose exec node npm test`. The tests need neither MongoDB nor SMTP.
 
-- `vitest` - Framework de test
-- `@vitest/ui` - Interface utilisateur pour Vitest
-- `@vue/test-utils` - Utilitaires pour tester les composants Vue
-- `@testing-library/vue` - Bibliothèque de test accessibilité
-- `happy-dom` - Environnement DOM léger
-
----
-
-## Exécution des tests
-
-### Single run
-
-```bash
-npm test
-```
-
-`npm test` runs the whole suite once (`vitest run`). `npm run test:run` is the same command and is what CI and `npm run validate` call.
-
-### Watch mode (development)
-
-```bash
-npm run test:watch
-```
-
-Tests re-run automatically when you modify a file.
-
-### Two Vitest projects
+## Two projects
 
 `vitest.config.js` defines two projects, selected by file name:
 
-- `server` (node environment): `tests/unit/api.*.test.js` and `tests/unit/shared.*.test.js`, except `shared.analytics*`, `shared.theme*` and `shared.ssrState*`, which need a DOM.
-- `client` (happy-dom environment): every other test.
+| Project  | Environment | Files                                                                         |
+| -------- | ----------- | ----------------------------------------------------------------------------- |
+| `server` | `node`      | `tests/unit/api.*.test.js`, `tests/unit/shared.*.test.js`                     |
+| `client` | `happy-dom` | everything else (`composables.*`, `stores.*`, `views.*`, `ssr.*`, `router`…), plus the browser-dependent `shared.analytics`, `shared.theme` and `shared.ssrState` |
 
-Name a new test after its target (`api.<module>`, `shared.<module>`, `stores.<module>`, `composables.<module>`, ...) so it lands in the right project.
+Name a new file after the module it tests: `src/api/http/errors.js` is tested by
+`tests/unit/api.http.errors.test.js`, `src/shared/security.js` by
+`tests/unit/shared.security.test.js`.
 
-### Interface utilisateur
+`tests/setup.js` sets a test environment (`NODE_ENV=test`, placeholder SMTP and MongoDB values)
+and replaces `console` with mocks, so a test can assert on `console.error`. Mocks are reset
+between tests (`mockReset`, `restoreMocks`).
 
-```bash
-npm run test:ui
-```
+## Testing an API route
 
-Ouvre une interface web pour visualiser les tests en temps réel.
+`tests/fixtures/routeHarness.js` runs a route handler without Express or MongoDB:
 
-### Couverture de code
+```js
+import { describe, it, expect, vi } from 'vitest';
+import { setupResendCodeRoute } from '#src/api/auth/resendCode.js';
+import {
+  callRoute,
+  createCollection,
+  createDb,
+  createReq,
+  createRouteApp,
+} from '../fixtures/routeHarness.js';
 
-```bash
-npm run test:coverage
-```
+describe('api/auth resend-code', () => {
+  it('answers the generic response for an unknown email', async () => {
+    const users = createCollection({ findOne: vi.fn().mockResolvedValue(null) });
+    const { app, routes } = createRouteApp();
+    setupResendCodeRoute(app, createDb({ users }));
 
-Génère un rapport de couverture de code.
+    const req = createReq({ body: { email: 'nobody@example.com' } });
+    const res = await callRoute(routes, 'POST /api/auth/resend-code', req);
 
----
-
-## Structure des tests
-
-Les tests sont organisés par type:
-
-```
-tests/
-├── setup.js              # Configuration globale des tests
-├── fixtures/
-│   ├── mockData.js       # Données de test et mocks
-│   └── routeHarness.js   # createRouteApp / createReq / createRes for API route handlers
-└── unit/
-    ├── api.auth.test.js         # API route handlers (node project)
-    ├── api.http.csp.test.js     # HTTP-host modules (src/api/http)
-    ├── shared.log.test.js       # Tests pour shared/log.js
-    ├── shared.email.test.js     # Tests pour shared/email.js
-    ├── stores.auth.test.js      # Tests pour Pinia auth store
-    ├── router.test.js           # Tests pour le routeur
-    ├── views.index.test.js      # Tests pour les vues
-    ├── components.header.test.js # Tests pour les composants
-    └── ssr.head.test.js         # Tests for the SSR <head> generation
-```
-
----
-
-## Écrire de nouveaux tests
-
-### Structure de base
-
-```javascript
-// tests/unit/myFeature.test.js
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { myFunction } from '#src/my/module';
-
-describe('my/module.js', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  describe('myFunction', () => {
-    it('should do something specific', () => {
-      const result = myFunction('input');
-      expect(result).toBe('expected output');
-    });
-
-    it('should handle edge cases', () => {
-      expect(() => myFunction(null)).not.toThrow();
-    });
+    expect(res.body).toEqual({ status: 'code_sent', email: 'nobody@example.com' });
   });
 });
 ```
 
-### Exemple: Tester une fonction async
+- `createCollection(overrides)` is a fake MongoDB collection; override the methods the route calls.
+- `callRoute` invokes the last handler of the route, so middleware such as `requireAuth` is
+  skipped: set what it would have set (`createReq({ userId, authUser })`).
+- Mock side effects at the module boundary, keeping the rest real:
 
-```javascript
-import { describe, it, expect } from 'vitest';
-import { fetchData } from '#src/api/data';
-
-describe('API Functions', () => {
-  it('should fetch data successfully', async () => {
-    const data = await fetchData();
-
-    expect(data).toBeDefined();
-    expect(data.id).toBeDefined();
-  });
-});
-```
-
-### Exemple: Tester un composant Vue
-
-```javascript
-import { describe, it, expect } from 'vitest';
-import { mount } from '@vue/test-utils';
-import MyComponent from '#src/components/MyComponent.vue';
-
-describe('MyComponent.vue', () => {
-  it('should render properly', () => {
-    const wrapper = mount(MyComponent, {
-      props: { message: 'Test' },
-      global: {
-        stubs: {
-          VButton: true,
-          VContainer: true,
-        },
-      },
-    });
-
-    expect(wrapper.text()).toContain('Test');
-  });
-
-  it('should emit event on button click', async () => {
-    const wrapper = mount(MyComponent);
-
-    await wrapper.find('button').trigger('click');
-
-    expect(wrapper.emitted('click')).toBeTruthy();
-  });
-});
-```
-
----
-
-## Couverture de code
-
-### Générer un rapport
-
-```bash
-npm run test:coverage
-```
-
-Cela génère un rapport HTML dans `coverage/index.html`.
-
-### Augmenter la couverture
-
-1. **Identifier les zones non couvertes**
-
-   ```bash
-   npm run test:coverage
-   # Ouvrir coverage/index.html dans un navigateur
-   ```
-
-2. **Écrire des tests pour les lignes manquantes**
-   - Concentrez-vous sur les chemins critiques
-   - Les cas d'erreur et les cas limites
-
-3. **Vérifier la couverture**
-   ```bash
-   npm run test:coverage
-   ```
-
-### Objectifs de couverture recommandés
-
-| Type         | Couverture |
-| ------------ | ---------- |
-| Déclarations | > 70%      |
-| Branches     | > 65%      |
-| Fonctions    | > 70%      |
-| Lignes       | > 70%      |
-
----
-
-## Mocking
-
-### Mocking de modules
-
-```javascript
-import { vi } from 'vitest';
-
-// Mock complet d'un module
-vi.mock('mongodb', () => ({
-  MongoClient: class {
-    connect() {
-      return Promise.resolve();
-    }
-  },
-}));
-```
-
-### Mocking de fonctions
-
-```javascript
-import { vi } from 'vitest';
-
-const mockFunction = vi.fn();
-
-// Vérifier que la fonction a été appelée
-expect(mockFunction).toHaveBeenCalled();
-
-// Vérifier les arguments
-expect(mockFunction).toHaveBeenCalledWith('arg1', 'arg2');
-
-// Retourner une valeur spécifique
-mockFunction.mockReturnValue('result');
-
-// Retourner une promise
-mockFunction.mockResolvedValue({ data: 'result' });
-```
-
-### Mocking de fetch
-
-```javascript
-import { vi } from 'vitest';
-
-global.fetch = vi.fn();
-
-fetch.mockResolvedValueOnce({
-  ok: true,
-  json: async () => ({ user: { id: 1 } }),
-});
-```
-
----
-
-## Assertions courantes
-
-```javascript
-// Égalité
-expect(value).toBe(expectedValue);
-expect(value).toEqual(expectedValue);
-
-// Vérité
-expect(value).toBeTruthy();
-expect(value).toBeFalsy();
-
-// Types
-expect(value).toBeNull();
-expect(value).toBeUndefined();
-expect(typeof value).toBe('string');
-
-// Comparaisons
-expect(number).toBeGreaterThan(5);
-expect(number).toBeLessThan(10);
-
-// Contenu
-expect(text).toContain('substring');
-expect(array).toContain('element');
-
-// Tableaux
-expect(array).toHaveLength(3);
-expect(array).toEqual([1, 2, 3]);
-
-// Erreurs
-expect(() => throw new Error()).toThrow();
-expect(() => action()).not.toThrow();
-
-// Mocking
-expect(mockFn).toHaveBeenCalled();
-expect(mockFn).toHaveBeenCalledTimes(2);
-expect(mockFn).toHaveBeenCalledWith('arg');
-```
-
----
-
-## Conseils et bonnes pratiques
-
-### ✅ À faire
-
-- **Nommer les tests clairement**
-
-  ```javascript
-  it('should return hashed password when signupHandler is called');
+  ```js
+  vi.mock('#src/shared/email.js', async (importOriginal) => ({
+    ...(await importOriginal()),
+    sendSecurityCodeEmail: vi.fn(),
+  }));
   ```
 
-- **Tester un comportement unique par test**
+## Testing a composable or a component
 
-  ```javascript
-  it('should validate email format', () => {
-    expect(isValidEmail('test@example.com')).toBe(true);
-  });
-  ```
+Client tests run in `happy-dom` with `@vue/test-utils`. Mount with the plugins the component needs
+(i18n, Pinia, a stubbed router); see `tests/unit/views.index.test.js` and
+`tests/unit/components.header.test.js`. Composables that need a component context are called
+inside a small host component; pure ones are called directly.
 
-- **Utiliser beforeEach pour la configuration**
+## What to test
 
-  ```javascript
-  beforeEach(() => {
-    vi.clearAllMocks();
-    store = createTestStore();
-  });
-  ```
+- Every behaviour change comes with a test that fails without it.
+- For API routes: the success path, each refusal (status and error key), and that nothing is
+  queried or sent when validation fails.
+- For security-sensitive code: hostile input (operator objects instead of strings, path traversal,
+  oversized values), not only the happy path.
+- Assert behaviour, not implementation details; no snapshot of large HTML.
 
-- **Grouper les tests avec describe**
-  ```javascript
-  describe('AuthStore', () => {
-    describe('signup', () => {
-      it('should...', () => {});
-    });
-  });
-  ```
+## Conventions
 
-### ❌ À éviter
+- No comments in test files; the test name says what is verified.
+- `describe` names the module, `it` states the expected behaviour in plain words.
+- No network, no real database, no timers left running. Use `vi.stubEnv` and `vi.stubGlobal`, and
+  undo them in `afterEach`.
+- `max-lines` rules are relaxed for tests, the other lint rules apply.
 
-- **Tester plusieurs comportements dans un test**
+## Continuous integration
 
-  ```javascript
-  // Mauvais
-  it('should validate and save user', () => {
-    expect(isValid(user)).toBe(true);
-    expect(save(user)).toBe(true);
-  });
-  ```
-
-- **Tester les détails d'implémentation**
-
-  ```javascript
-  // Mauvais - dépend du détail interne
-  it('should call formatData', () => {
-    expect(formatDataMock).toHaveBeenCalled();
-  });
-  ```
-
-- **Avoir des tests qui dépendent l'un de l'autre**
-  ```javascript
-  // Mauvais - test 2 dépend du test 1
-  it('test 1', () => { setup() })
-  it('test 2', () => { expect(data).toBe(setup result) })
-  ```
-
----
-
-## Exécution dans CI/CD
-
-### GitHub Actions
-
-```yaml
-- name: Run tests
-  run: npm run test:run
-
-- name: Generate coverage
-  run: npm run test:coverage
-
-- name: Upload coverage
-  uses: codecov/codecov-action@v3
-  with:
-    files: ./coverage/coverage-final.json
-```
-
-### Pre-commit hooks
-
-```bash
-npm install husky --save-dev
-npx husky install
-npx husky add .husky/pre-commit "npm run test:run"
-```
-
----
-
-## Débogage des tests
-
-### Exécuter un seul test
-
-```javascript
-// Utiliser .only pour exécuter un seul test
-it.only('should test this feature', () => {
-  expect(true).toBe(true);
-});
-```
-
-### Ignorer un test temporairement
-
-```javascript
-// Utiliser .skip pour ignorer temporairement
-it.skip('should test this feature', () => {
-  // ...
-});
-```
-
-### Afficher les logs
-
-```javascript
-import { describe, it, expect } from 'vitest';
-
-describe('Debug test', () => {
-  it('should log information', () => {
-    console.log('Debug info:', data);
-    expect(data).toBeDefined();
-  });
-});
-```
-
-Exécutez avec:
-
-```bash
-npm run test:run -- --reporter=verbose
-```
-
----
-
-## Ressources
-
-- [Documentation Vitest](https://vitest.dev/)
-- [Vue Test Utils](https://test-utils.vuejs.org/)
-- [Testing Library](https://testing-library.com/)
-- [Pinia Testing](https://pinia.vuejs.org/cookbook/testing.html)
-
----
-
-**Besoin d'aide?**
-
-- Consultez les tests existants dans `tests/unit/`
-- Vérifiez la configuration dans `vitest.config.js`
-- Lisez la documentation de Vitest officielle
-
-Happy testing! 🎉
+`.github/workflows/npm-test.yml` runs four separate jobs on every push and pull request: `format`
+(`format:check`), `lint` (`lint:check`), `test` (`test:run`) and `build`. `npm run validate` runs
+the same four locally.

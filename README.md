@@ -1,241 +1,133 @@
-# Vue 3 SSR Starter Kit
+# Vue SSR Starter Kit
 
-A comprehensive Vue 3 Server-Side Rendering (SSR) starter kit with authentication, i18n, Vuetify, MongoDB, and email capabilities.
+[![npm](https://img.shields.io/npm/v/@e-xode/vue-ssr)](https://www.npmjs.com/package/@e-xode/vue-ssr)
+[![tests](https://github.com/e-xode/vue-ssr/actions/workflows/npm-test.yml/badge.svg)](https://github.com/e-xode/vue-ssr/actions/workflows/npm-test.yml)
+[![license](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
 
-## Features
+A production-ready starting point for server-rendered Vue 3 applications: Express 5 SSR, email-code
+authentication, an admin panel, English/French i18n, Vuetify 4, MongoDB and Docker, with the security
+hardening and the tests already written.
 
-- **Vue 3** - Latest Vue features with Composition API
-- **Server-Side Rendering (SSR)** - SEO-friendly with optimal performance
-- **Vite** - Fast build tool and dev server
-- **Vuetify 4** - Material Design components
-- **Vue Router 5** - Client-side routing
-- **Pinia** - State management
-- **Vue i18n** - Internationalization (EN, FR)
-- **MongoDB** - NoSQL database
-- **Authentication** - Email/password signup, signin with security code verification
-- **Email** - Support for sending emails via Nodemailer
-- **Locale-Prefixed Routing** - SEO-friendly `/:locale/` URL prefix
-- **Contact Page** - Built-in contact form with rate limiting
-- **Security** - Helmet CSP, SHA-256 codes, timingSafeEqual, session destruction
-- **Cookie Consent (GDPR)** - Consent banner with Google Consent Mode, choice persisted in localStorage
-- **SCSS** - Advanced styling with variables and mixins
-- **Express.js** - Server framework
-- **Session Management** - File-based session storage
-- **Testing** - Vitest with 50+ unit tests and comprehensive test suites
-- **Linting** - ESLint + Prettier for code quality and consistency
+Live demo: <https://vue-ssr.e-xode.net> · Version française : [README.fr.md](./README.fr.md)
 
-## Project Structure
+## Why this kit
 
-```
-src/
-├── api/                    # API routes
-│   ├── auth/              # Authentication endpoints
-│   ├── contact/           # Contact form endpoints
-│   │   └── send.js        # Contact form submission
-│   └── router.js          # API routes registry
-├── components/            # Vue components
-│   └── layout/            # Layout components (Header, Footer)
-├── stores/                # Pinia stores
-│   └── auth.js            # Authentication store
-├── views/                 # Page components
-│   ├── Index/
-│   ├── Auth/              # Signup, Signin, VerifyCode
-│   ├── Account/
-│   ├── Contact/
-│   ├── Dashboard/
-│   └── NotFound/
-├── composables/           # Vue composables
-│   └── useLocalePath.js   # Locale path utility
-├── plugins/               # Vue plugins
-│   └── vuetify.js         # Vuetify configuration
-├── shared/                # Shared utilities
-│   ├── utils.js           # Utility functions
-│   ├── dbHelpers.js       # Database helpers
-│   ├── log.js             # Logger
-│   ├── mongo.js           # MongoDB connection
-│   └── email.js           # Email utilities
-├── styles/                # Global styles
-│   ├── variables.scss
-│   └── mixins.scss
-├── translate/             # i18n translations
-│   ├── en.json
-│   ├── fr.json
-│   └── emails/            # Email templates
-├── App.vue                # Root component
-├── main.js                # App initialization
-├── router.js              # Vue Router configuration
-├── entry-client.js        # Client entry point
-└── entry-server.js        # Server entry point
-```
+Most Vue SSR templates stop at "hello world rendered on the server". This one ships the parts every
+real project ends up writing:
 
-## Setup
+- **Authentication that is finished.** Sign-up, sign-in with a 6-digit email code, password reset,
+  email change, avatar upload, session rotation, idle and absolute session lifetimes, IP and account
+  blocking.
+- **An admin panel.** Users (search, edit, block, delete), blocked IPs, and a filterable audit log.
+- **SEO-ready SSR.** Locale-prefixed routes (`/en/…`, `/fr/…`), canonical and `hreflang` links,
+  Open Graph, JSON-LD, `sitemap.xml` and `robots.txt`, correct HTTP status codes.
+- **Security by default.** Helmet CSP without `unsafe-inline` scripts in production, rate limiting,
+  reCAPTCHA v3, hashed codes compared in constant time, typed inputs against NoSQL operator injection.
+- **A codebase you can read.** Small modules, no dead code, a thin `server.js`, and 300+ unit tests.
 
-### 1. Install dependencies
+## Stack
+
+| Layer    | Technology                                                             |
+| -------- | ---------------------------------------------------------------------- |
+| Frontend | Vue 3 (`<script setup>`), Vue Router 5, Pinia 3, Vuetify 4, vue-i18n 11 |
+| Server   | Node.js 26, Express 5, Vite 8 (SSR build and dev middleware)           |
+| Data     | MongoDB (official driver), file-based sessions                          |
+| Email    | Nodemailer (SMTP), console transport in development                     |
+| Quality  | Vitest 4, ESLint 10, Prettier 3, GitHub Actions                         |
+
+## Quick start (5 minutes)
+
+Requirements: Docker with the Compose plugin. Nothing else: Node.js and MongoDB run in containers.
 
 ```bash
-npm install
-```
-
-### 2. Configure environment
-
-Copy `.env.example` to `.env` and update with your values:
-
-```bash
+git clone https://github.com/e-xode/vue-ssr.git
+cd vue-ssr
 cp .env.example .env
+docker compose up
 ```
 
-### 3. MongoDB Setup
+Open <http://localhost:3002>. The first start installs the dependencies and takes a minute or two.
 
-Make sure MongoDB is running and accessible at the configured host.
+1. **Create an account** on the sign-up page.
+2. **Read the security code in the server logs.** No SMTP server is configured in development, so
+   emails are not sent: the code is printed in the `docker compose up` output
+   (look for a line ending with `code for you@example.com: 123456`).
+3. **Make yourself an admin**, then sign out and in again:
 
-### 4. Email Configuration
+   ```bash
+   docker compose exec node npm run seed:admin -- you@example.com
+   ```
 
-Configure your mail service credentials in `.env` (MAILER\_\* variables).
+The defaults in `.env.example` work as they are. See [docs/QUICK_START.en.md](./docs/QUICK_START.en.md)
+for running without Docker, using a remote MongoDB, or sending real emails.
 
-## Development
+## Scripts
 
-### Start dev server
+| Command                    | What it does                                                             |
+| -------------------------- | ------------------------------------------------------------------------ |
+| `npm run dev`              | Development server with Vite HMR (loads `.env`)                          |
+| `npm run build`            | Client and server production bundles into `dist/`                        |
+| `npm start`                | Production server (alias of `npm run prod`); expects production env vars |
+| `npm test`                 | Unit tests, once (`npm run test:run` is the same; `test:watch` watches)  |
+| `npm run test:coverage`    | Unit tests with a coverage report                                        |
+| `npm run lint:check`       | ESLint, read-only (`npm run lint` / `lint:fix` also fixes)               |
+| `npm run format:check`     | Prettier, read-only (`npm run format` / `format:write` also writes)      |
+| `npm run validate`         | The full battery: lint, format, build and tests, without changing files  |
+| `npm run validate:changed` | Same checks limited to what your uncommitted changes touch, with autofix |
+| `npm run seed:admin -- <email>` | Promote an existing account to admin                                |
 
-```bash
-npm run dev
+With Docker, prefix a command with `docker compose exec node`, for example
+`docker compose exec node npm test`.
+
+## Project layout
+
+```
+server.js            Thin Express wiring; the logic lives in src/api/http/
+src/api/             REST API: auth/, admin/, contact/, http/ (CSP, sessions, SSR, health…)
+src/shared/          Code shared by server and client (constants, helpers, MongoDB, email)
+src/views/           Pages; src/components/ holds the layout and shared components
+src/stores/          Pinia stores; src/composables/ holds reusable Composition API logic
+src/translate/       en.json, fr.json and the email templates
+src/styles/          SCSS design tokens (variables.scss) and mixins
+tests/unit/          Vitest suites (server and client projects)
+docker/              Development and production images
+docs/                Guides listed below
 ```
 
-The app will be available at `http://localhost:3002`
+## Documentation
 
-### Running Tests
+| Guide                                           | Content                                              |
+| ----------------------------------------------- | ---------------------------------------------------- |
+| [Quick start](./docs/QUICK_START.en.md)         | Docker and non-Docker setup, first admin, real email |
+| [Architecture](./docs/ARCHITECTURE.md)          | Request lifecycle, SSR, routing, file structure      |
+| [Developer guide](./docs/DEVELOPER_GUIDE.md)    | Adding a page, an API route, a translation, a store  |
+| [API reference](./docs/API.md)                  | Every endpoint, with payloads, errors and limits     |
+| [Authentication](./docs/AUTHENTICATION.md)      | Flows, sessions, codes, blocking                     |
+| [Deployment](./docs/DEPLOYMENT.md)              | Environment variables, Docker image, production traps |
+| [Troubleshooting](./docs/TROUBLESHOOTING.md)    | Common errors and their fixes                        |
+| [Testing](./TESTING.md)                         | Running and writing tests                            |
+| [Contributing](./CONTRIBUTING.md)               | Conventions and pull request process                 |
+| [Security policy](./.github/SECURITY.md)        | Reporting a vulnerability                            |
 
-```bash
-# Run tests once
-npm test
+## Before going to production
 
-# Run tests in watch mode
-npm run test:watch
+The server refuses to start in production until the configuration is safe, and two behaviours
+surprise newcomers. Read [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md); the short version:
 
-# Run tests once (CI/CD, same as npm test)
-npm run test:run
+- `NODE_HOST` must be the public `https` origin and `COOKIE_SECRET` a random value of 32+ characters.
+- SMTP (`MAILER_*`) is required: security codes are only ever logged in development.
+- **reCAPTCHA v3 keys are required.** Without `RECAPTCHA_SECRET_KEY`, sign-up and the contact form
+  are refused.
+- **Every restart signs all users out.** Sessions are files that are cleared at boot, and the store
+  supports a single instance.
 
-# View interactive test interface
-npm run test:ui
+## Using the kit for your project
 
-# Generate coverage report
-npm run test:coverage
-```
-
-See [TESTING.md](./TESTING.md) for more details on writing and running tests.
-
-### Code Quality & Linting
-
-```bash
-# Check linting issues
-npm run lint:check
-
-# Fix linting issues automatically
-npm run lint
-```
-
-The project uses ESLint + Prettier for code quality with Vue 3 best practices.
-
-### Full Validation
-
-```bash
-# Run the full validation battery (format, lint, build, test)
-npm run validate
-```
-
-`npm run validate` chains format, lint, build, and test in one pass, with caching for faster repeated runs.
-
-## Building
-
-### Build for production
-
-```bash
-npm run build
-```
-
-This creates:
-
-- `dist/client/` - Client bundle
-- `dist/server/` - Server bundle
-
-### Run production build
-
-```bash
-npm run prod
-```
-
-## Translation
-
-All user-facing text is localized in JSON files under `src/translate/`. The app supports English (en) and French (fr).
-
-### Adding new translations
-
-1. Add the key-value pair to both `en.json` and `fr.json`
-2. Use in components: `{{ t('key.name') }}`
-
-## Authentication Flow
-
-1. User signs up/in with email and password
-2. Security code is sent via email
-3. User verifies code
-4. Session is created and user can access protected routes
-
-## Database Collections
-
-### users
-
-```javascript
-{
-  _id: ObjectId,
-  email: string,
-  password: string (hashed),
-  name: string,
-  createdAt: Date,
-  updatedAt: Date,
-  securityCode: string (hashed),
-  securityCodeExpires: Date,
-  securityCodeAttempts: number
-}
-```
-
-## Customization
-
-### Change Theme Colors
-
-Edit `src/plugins/vuetify.js` to customize Vuetify theme colors.
-
-### Add New Routes
-
-1. Create a new component in `src/views/`
-2. Add route to `src/router.js`
-3. Add i18n entries to translation files
-
-### Add New API Endpoints
-
-1. Create endpoint file in `src/api/`
-2. Export a setup function following the pattern
-3. Register in `src/api/router.js`
-
-## Production Checklist
-
-- [ ] Update `COOKIE_SECRET` to a strong random value
-- [ ] Configure production database connection
-- [ ] Set up email service with production credentials
-- [ ] Update `NODE_HOST` for prod domain
-- [ ] Enable secure cookies (set `secure: true` when using HTTPS)
-- [ ] Add error logging/monitoring
-- [ ] Configure backup strategy for MongoDB
-- [ ] Review and update security policies
-- [ ] Run all tests: `npm run test:run`
-- [ ] Check code quality: `npm run lint:check`
-- [ ] Generate coverage report: `npm run test:coverage`
-
-## Additional Resources
-
-- **[Testing Guide](./TESTING.md)** - Comprehensive testing setup and examples
-- **[Contributing Guide](./CONTRIBUTING.md)** - Code standards and contribution process
-- **[Security Checklist](./SECURITY_CHECKLIST.md)** - Security best practices
-- **[Complete Documentation](./DOCUMENTATION.md)** - Full architecture and API reference
+Fork or clone the repository, then rename it: `APP_NAME` in `.env`, the `name` in `package.json`,
+the texts in `src/translate/`, the icons in `public/`, and the theme in `src/plugins/vuetify.js`.
+The repository also ships a [Claude Code](https://claude.com/claude-code) configuration (`CLAUDE.md`,
+`.claude/`) describing the conventions to AI assistants; delete it if you do not use it.
 
 ## License
 
-MIT
+[MIT](./LICENSE)

@@ -7,11 +7,29 @@ import {
   SESSION_COOKIE_BASE_OPTIONS,
   SESSION_DIR,
 } from '#src/shared/const.js';
-import { SESSION_IDLE_MAX_AGE_MS, SESSION_FALLBACK_SECRET } from '#src/api/http/constants.js';
+import {
+  SESSION_IDLE_MAX_AGE_MS,
+  SESSION_FALLBACK_SECRET,
+  SESSION_SECRET_MIN_LENGTH,
+  SESSION_PLACEHOLDER_SECRETS,
+  SESSION_SECRET_FIX_HINT,
+} from '#src/api/http/constants.js';
+
+export function isStrongSessionSecret(secret) {
+  return (
+    typeof secret === 'string' &&
+    secret.length >= SESSION_SECRET_MIN_LENGTH &&
+    !SESSION_PLACEHOLDER_SECRETS.includes(secret)
+  );
+}
 
 export function assertProductionSecret(env) {
-  if (env.NODE_ENV === 'production' && !env.COOKIE_SECRET) {
-    throw new Error('COOKIE_SECRET environment variable is required in production');
+  if (env.NODE_ENV !== 'production') return;
+  if (!env.COOKIE_SECRET) {
+    throw new Error(`COOKIE_SECRET is required in production. ${SESSION_SECRET_FIX_HINT}`);
+  }
+  if (!isStrongSessionSecret(env.COOKIE_SECRET)) {
+    throw new Error(`COOKIE_SECRET is too weak for production. ${SESSION_SECRET_FIX_HINT}`);
   }
 }
 

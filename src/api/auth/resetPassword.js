@@ -1,23 +1,34 @@
 import bcrypt from 'bcryptjs';
-import { verifyCode } from '#src/shared/email.js';
-import { BCRYPT_ROUNDS, SECURITY_CODE_MAX_ATTEMPTS } from '#src/shared/const.js';
-import { assertNotBanned, destroyUserSessions, getClientIp } from '#src/shared/security.js';
+import { BCRYPT_ROUNDS, SECURITY_CODE_PURPOSES } from '#src/shared/const.js';
+import {
+  assertNotBanned,
+  checkSubmittedCode,
+  CODE_CHECK,
+  CODE_FAILURES_UNSET,
+  destroyUserSessions,
+  getClientIp,
+  hasPendingCode,
+  SECURITY_CODE_UNSET,
+} from '#src/shared/security.js';
 import { logEvent } from '#src/shared/logger.js';
-import { readEmail, readString } from '#src/shared/utils.js';
+import { readEmail, readString, readTrimmed } from '#src/shared/utils.js';
 
-function getResetCodeError(user) {
-  if (!user.securityCode || !user.securityCodeExpires) return 'error.auth.codeExpired';
+const CODE_CHECK_ERRORS = {
+  [CODE_CHECK.LOCKED]: 'error.auth.tooManyAttempts',
+  [CODE_CHECK.EXHAUSTED]: 'error.auth.tooManyAttempts',
+  [CODE_CHECK.INVALID]: 'error.auth.invalidCode',
+};
+
+async function getResetCodeError(db, user, code) {
   if (new Date() > new Date(user.securityCodeExpires)) return 'error.auth.codeExpired';
-  if ((user.securityCodeAttempts || 0) >= SECURITY_CODE_MAX_ATTEMPTS) {
-    return 'error.auth.tooManyAttempts';
-  }
-  return null;
+  const outcome = await checkSubmittedCode(db, user, { code, storedHash: user.securityCode });
+  return CODE_CHECK_ERRORS[outcome] ?? null;
 }
 
 export function setupResetPasswordRoute(app, db) {
   app.post('/api/auth/reset-password', async (req, res) => {
     const email = readEmail(req.body.email);
-    const code = readString(req.body.code);
+    const code = readTrimmed(req.body.code);
     const password = readString(req.body.password);
 
     if (!email || !code || !password) {
@@ -34,28 +45,21 @@ export function setupResetPasswordRoute(app, db) {
 
       const user = await db.collection('users').findOne({ email });
 
-      if (!user || !user.resetPasswordPending) {
+      if (!hasPendingCode(user, SECURITY_CODE_PURPOSES.RESET_PASSWORD)) {
         return res.status(400).json({ error: 'error.auth.invalidResetRequest' });
       }
 
-      if (!(await assertNotBanned(db, res, { ip, user }))) return;
+      if (!(await assertNotBanned(db, res, { user }))) return;
 
-      const codeError = getResetCodeError(user);
+      const codeError = await getResetCodeError(db, user, code);
       if (codeError) {
-        return res.status(400).json({ error: codeError });
-      }
-
-      if (!verifyCode(user.securityCode, code)) {
-        await db
-          .collection('users')
-          .updateOne({ _id: user._id }, { $inc: { securityCodeAttempts: 1 } });
         logEvent(db, {
           event: 'auth-code-failed',
           userId: user._id,
           ip,
           meta: { reason: 'reset-password' },
         });
-        return res.status(400).json({ error: 'error.auth.invalidCode' });
+        return res.status(400).json({ error: codeError });
       }
 
       const hashedPassword = await bcrypt.hash(password, BCRYPT_ROUNDS);
@@ -64,12 +68,7 @@ export function setupResetPasswordRoute(app, db) {
         { _id: user._id },
         {
           $set: { password: hashedPassword, updatedAt: new Date() },
-          $unset: {
-            securityCode: '',
-            securityCodeExpires: '',
-            securityCodeAttempts: '',
-            resetPasswordPending: '',
-          },
+          $unset: { ...SECURITY_CODE_UNSET, ...CODE_FAILURES_UNSET },
         }
       );
 

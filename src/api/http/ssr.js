@@ -9,7 +9,12 @@ import {
   SSR_DEV_ENTRY_PATH,
   DEV_INDEX_HTML_PATH,
   PROD_INDEX_HTML_PATH,
+  ROUTE_REDIRECT_STATUS,
 } from '#src/api/http/constants.js';
+
+function withBase(base, target) {
+  return `${base.replace(/\/+$/, '')}${target}`;
+}
 
 export async function readProductionTemplate() {
   return fs.readFile(PROD_INDEX_HTML_PATH, 'utf-8');
@@ -42,6 +47,10 @@ export function createSsrRenderer({ isProduction, vite, templateHtml, base, db }
       const { template, render } = await loadTemplateAndRender(url);
       const theme = parseThemeCookie(req.headers.cookie);
       const rendered = await render(url, db, theme);
+
+      if (rendered.redirect) {
+        return res.redirect(ROUTE_REDIRECT_STATUS, withBase(base, rendered.redirect));
+      }
 
       const html = fillTemplate(template, {
         lang: rendered.locale || DEFAULT_LOCALE,

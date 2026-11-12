@@ -51,6 +51,12 @@ export default [
     },
   },
   {
+    files: ['docker/dev/mongo/init-scripts/*.js'],
+    languageOptions: {
+      globals: { db: 'readonly' },
+    },
+  },
+  {
     files: ['src/composables/**/*.js', 'src/stores/**/*.js'],
     rules: {
       'max-lines-per-function': [

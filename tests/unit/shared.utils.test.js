@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { escapeHtml, escapeRegex, readEmail, readString } from '#src/shared/utils';
+import { escapeHtml, escapeRegex, readEmail, readString, readTrimmed } from '#src/shared/utils';
 
 describe('shared/utils.js', () => {
   describe('escapeHtml', () => {
@@ -35,6 +35,20 @@ describe('shared/utils.js', () => {
       expect(readString(12)).toBeNull();
       expect(readString(null)).toBeNull();
       expect(readString(undefined)).toBeNull();
+    });
+  });
+
+  describe('readTrimmed', () => {
+    it('trims a string and turns a blank one into null', () => {
+      expect(readTrimmed(' 123456 ')).toBe('123456');
+      expect(readTrimmed('   ')).toBeNull();
+      expect(readTrimmed('')).toBeNull();
+    });
+
+    it('rejects non-strings', () => {
+      expect(readTrimmed({ $ne: null })).toBeNull();
+      expect(readTrimmed(123456)).toBeNull();
+      expect(readTrimmed(undefined)).toBeNull();
     });
   });
 

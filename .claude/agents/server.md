@@ -34,7 +34,7 @@ The path-scoped rules `server-scope-guard`, `server-security`, and `api-error-ha
 
 ## Route-module pattern
 
-See the `vue-ssr-server` skill for the `setupXRoute` route-module pattern, `createApiRouter(db)` wiring in `src/api/router.js`, and the `requireAuth` / `requireAdmin(db)` middleware guards.
+See the `vue-ssr-server` skill for the `setupXRoute` route-module pattern, `createApiRouter(db)` wiring in `src/api/router.js`, and the `requireAuth` / `requireAdmin` middleware guards.
 
 ## Scope and delegation
 

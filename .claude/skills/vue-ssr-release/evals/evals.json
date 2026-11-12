@@ -9,7 +9,7 @@
       "prompt": "release",
       "assertions": [
         {
-          "text": "Verifies branch is main/master and tree is clean, asks for bump type (patch/minor/major), and never auto-commits/pushes/tags"
+          "text": "Runs the preflight on origin/master (unreleased changes, green CI), proposes a bump from the bump rule, works in a throw-away worktree without switching the session clone, and never auto-commits/merges/tags"
         }
       ]
     },
@@ -20,7 +20,7 @@
       "prompt": "Let's cut a minor version",
       "assertions": [
         {
-          "text": "Creates release/vX.Y.Z branch, bumps package.json, syncs the lockfile, generates a CHANGELOG draft from git log, and proposes the commit waiting for confirmation"
+          "text": "Creates the worktree and the release/vX.Y.Z branch from origin/master, runs npm version --no-git-tag-version, converts [Unreleased] into the version section, and proposes the commit and the fleet PR script waiting for confirmation"
         }
       ]
     },

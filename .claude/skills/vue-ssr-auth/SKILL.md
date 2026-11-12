@@ -41,12 +41,17 @@ here.
 
 - Code generation: `crypto.randomInt` (not Math.random)
 - Code hashing: SHA-256 hex (not base64)
-- Code verification: `timingSafeEqual` (not string compare)
+- Code verification: `timingSafeEqual` (not string compare), always through `checkSubmittedCode(db, user, { code, storedHash, attemptsField })` (`src/shared/security.js`): lockout check, atomic attempt claim (`claimCodeAttempt`, conditional `$inc`), comparison, failure recording
+- Attempts: 3 per code; account lockout after `CODE_LOCKOUT_MAX_FAILURES` (10) wrong codes within `CODE_LOCKOUT_WINDOW_MS` (1 h), across re-issued codes (`codeFailures`, `codeFailuresSince`)
+- Code purpose: codes are created with `createSecurityCode(purpose)` (`SECURITY_CODE_PURPOSES.LOGIN` / `RESET_PASSWORD`, stored in `securityCodePurpose`); `verify-code` accepts only login codes, `reset-password` only reset codes (`hasPendingCode(user, purpose)`); `resend-code` keeps the pending purpose
+- User data in responses: allowlist `USER_SAFE_PROJECTION` (admin: `ADMIN_USER_PROJECTION`); a new user field is private until listed there
+- Enumeration: `verify-code` answers 401 `error.auth.invalidCode` for an unknown email or no pending login code; `forgot-password` answers `sent` for unknown, blocked and cooling-down accounts
+- Inputs: names and codes through `readTrimmed`, emails through `readEmail`
 - Session id regenerated at login (`startUserSession`) and on password/email change; the other sessions of the user are destroyed (`destroyUserSessions(userId, req.sessionID)`); a password reset destroys all of them
 - Absolute session lifetime: `SESSION_ABSOLUTE_MAX_AGE_MS` (30 days from `createdAt`), checked by `requireAuth`; a session without `createdAt` is rejected, so logins from before this check must sign in again once
 - Email send failures surface as 502 `error.emailFailed` (`deliverEmail`)
 - Rate limiting per endpoint type
-- COOKIE_SECRET required in production; `NODE_HOST` must be a public https origin or boot fails
+- COOKIE_SECRET required in production (32+ characters, placeholders refused); `NODE_HOST` must be a public https origin or boot fails
 - IP blocking for brute-force prevention
 
 ## Session management
@@ -64,8 +69,9 @@ here.
 
 ## Middleware
 
-- `requireAuth` — valid `req.session.userId`, session inside its absolute lifetime, user exists and is not blocked
-- `requireAdmin` — checks user type via `isAdmin()`
+- `resolveSession(req, db, projection)` (`src/api/middleware.js`) — the single session resolver: parses `req.session.userId`, checks the absolute lifetime, that the user exists and is not blocked; an invalid session is destroyed (awaited) before it answers. Used by `requireAuth` and `GET /api/auth/me`
+- `requireAuth` — 401/403 from the resolver, else sets `req.userId` and `req.authUser`
+- `requireAdmin` — plain middleware placed after `requireAuth` (`requireAuth, requireAdmin`, no `db` argument); 401 without `req.authUser`, 403 unless `type` is admin
 
 ## Where to look
 

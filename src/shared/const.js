@@ -49,20 +49,33 @@ export const SECURITY_CODE_MAX_ATTEMPTS = 3;
 
 export const RESEND_COOLDOWN_MS = 30 * 1000;
 
+export const SECURITY_CODE_PURPOSES = {
+  LOGIN: 'login',
+  RESET_PASSWORD: 'reset-password',
+};
+
+export const CODE_LOCKOUT_MAX_FAILURES = 10;
+
+export const CODE_LOCKOUT_WINDOW_MS = 60 * 60 * 1000;
+
+export const CAPTCHA_TIMEOUT_MS = 5 * 1000;
+
+export const LOG_RETENTION_DAYS = 90;
+
 export const USER_SAFE_PROJECTION = {
-  password: 0,
-  securityCode: 0,
-  securityCodeHash: 0,
-  securityCodeExpires: 0,
-  securityCodeAttempts: 0,
-  emailChangeCode: 0,
-  emailChangeHash: 0,
-  emailChangeExpires: 0,
-  emailChangeTo: 0,
-  resetPasswordCode: 0,
-  resetPasswordHash: 0,
-  resetPasswordExpires: 0,
-  loginHistory: 0,
+  email: 1,
+  name: 1,
+  type: 1,
+  avatar: 1,
+  isBlocked: 1,
+  createdAt: 1,
+  updatedAt: 1,
+};
+
+export const ADMIN_USER_PROJECTION = {
+  ...USER_SAFE_PROJECTION,
+  blockedAt: 1,
+  loginHistory: 1,
 };
 
 export const EMAIL_REGEX = /^[^\s@]{1,64}@[^\s@]{1,255}\.[^\s@]{1,63}$/;
@@ -82,11 +95,6 @@ export const DEFAULT_LOCALE = 'en';
 export const LOCALE_CODES = SUPPORTED_LOCALES.map((l) => l.code);
 
 export const LOCALE_ROUTE_REGEX = LOCALE_CODES.join('|');
-
-export function getIntlLocale(locale) {
-  const found = SUPPORTED_LOCALES.find((l) => l.code === locale);
-  return found ? found.intl : 'en-US';
-}
 
 export function getOgLocale(locale) {
   const found = SUPPORTED_LOCALES.find((l) => l.code === locale);

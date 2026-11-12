@@ -1,811 +1,101 @@
-# Authentication Guide
-
-Guide complet du système d'authentification de e-xode-vue-ssr.
-
-## 📋 Table des Matières
-
-- [Overview](#overview)
-- [Flux d'Authentification](#flux-dauthentification)
-- [Architecture](#architecture)
-- [Security](#security)
-- [API Reference](#api-reference)
-- [Frontend Integration](#frontend-integration)
-- [Customization](#customization)
-- [Troubleshooting](#troubleshooting)
-
----
-
-## 🎯 Overview
-
-Le système d'authentification utilise une approche **email + code de sécurité**:
-
-1. **Signup/Signin:** Utilisateur fournit email et mot de passe
-2. **Code Generation:** Serveur génère un code 6 chiffres
-3. **Email Delivery:** Code envoyé par email à l'utilisateur
-4. **Verification:** Utilisateur rentre le code
-5. **Session Creation:** Session créée après vérification
-6. **Protected Routes:** Routes protégées vérifiées par session
-
-**Avantages:**
-
-- ✅ Sans 2FA supplémentaire
-- ✅ Protection contre brute force
-- ✅ Audit trail via emails
-- ✅ Compatible avec tous les clients
-- ✅ Recovery option intégrée
-
----
-
-## 🔄 Flux d'Authentification
-
-### Signup Flow
-
-```
-┌─────────────────────────────────────────────────────┐
-│ 1. USER FILLS SIGNUP FORM                           │
-│    - Email: user@example.com                        │
-│    - Password: SecurePass123!                       │
-│    - Name: John Doe                                 │
-└────────────────┬────────────────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────────────────┐
-│ 2. POST /api/auth/signup                            │
-│    - Validate email/password/name                   │
-│    - Hash password with bcrypt (salt: 10)           │
-│    - Generate 6-digit code (123456)                 │
-│    - Hash code with SHA-256                         │
-│    - Save to DB:                                    │
-│      {                                              │
-│        email: 'user@example.com',                   │
-│        passwordHash: '$2b$10$...',                  │
-│        name: 'John Doe',                            │
-│        securityCode: 'sha256_hash',                 │
-│        securityCodeExpires: Date + 5min,            │
-│        verified: false,                             │
-│        createdAt: now                               │
-│      }                                              │
-└────────────────┬────────────────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────────────────┐
-│ 3. EMAIL SENT TO USER                               │
-│    Subject: "Votre code de vérification"            │
-│    Body: "Votre code: 123456"                       │
-│           "Valide pendant 5 minutes"                │
-│           "N'a été demandé par quelqu'un             │
-│            d'autre, ignorez ce message"             │
-└────────────────┬────────────────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────────────────┐
-│ 4. USER RECEIVES EMAIL & INPUT CODE                 │
-│    Enter: 123456                                    │
-└────────────────┬────────────────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────────────────┐
-│ 5. POST /api/auth/verify-code                       │
-│    - Get user by email                              │
-│    - Check code not expired                         │
-│    - Compare submitted code with stored hash        │
-│    - If valid:                                      │
-│      • req.session.userId = user._id                │
-│      • Mark user verified: true                     │
-│      • Return user data                             │
-│      • Redirect to dashboard                        │
-│    - If invalid:                                    │
-│      • Return error: "invalid code"                 │
-│      • User can resend code                         │
-└─────────────────────────────────────────────────────┘
-```
-
-### Signin Flow
-
-```
-┌─────────────────────────────────────────────────────┐
-│ 1. USER FILLS SIGNIN FORM                           │
-│    - Email: user@example.com                        │
-│    - Password: SecurePass123!                       │
-└────────────────┬────────────────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────────────────┐
-│ 2. POST /api/auth/signin                            │
-│    - Find user by email                             │
-│    - Compare password with bcrypt hash              │
-│    - If no user or password wrong: error            │
-│    - Generate 6-digit code                          │
-│    - Update DB with new code & expiry               │
-└────────────────┬────────────────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────────────────┐
-│ 3. EMAIL SENT (same as signup step 3)               │
-│    Subject: "Code de connexion: 123456"             │
-│    "Valide pendant 5 minutes"                       │
-└────────────────┬────────────────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────────────────┐
-│ 4. VERIFY CODE (same as signup step 5)              │
-└─────────────────────────────────────────────────────┘
-```
-
-### Authentication State
-
-```javascript
-// Frontend Pinia Store (stores/auth.js)
-{
-  user: null,              // Current user object
-  pendingEmail: null,      // Email waiting for code
-  verificationContext: null, // 'signup' | 'signin' | 'recover'
-  loading: false,
-  error: null
-}
-
-// Computed
-isAuthenticated: user !== null
-
-// Actions
-signup(email, password, name)
-signin(email, password)
-verifyCode(code)
-resendCode()
-fetchCurrentUser()
-signout()
-```
-
----
-
-## 🏗️ Architecture
-
-### Directory Structure
-
-```
-src/api/auth/
-├── signup.js              # POST /api/auth/signup
-├── signin.js              # POST /api/auth/signin
-├── verify-code.js         # POST /api/auth/verify-code
-├── resend-code.js         # POST /api/auth/resend-code
-├── me.js                  # GET /api/auth/me
-└── signout.js             # POST /api/auth/signout
-
-src/stores/
-└── auth.js                # Pinia store
-
-src/views/Auth/
-├── SignupView.vue         # Signup form
-├── SigninView.vue         # Signin form
-└── VerifyCodeView.vue     # Code verification
-
-src/shared/
-├── email.js               # Email/code generation
-└── mongo.js               # Database connection
-```
-
-### Database Schema
-
-**users collection:**
-
-```javascript
-{
-  _id: ObjectId,
-  email: "user@example.com",        // Unique index
-  passwordHash: "$2b$10$...",       // bcrypt hash
-  name: "John Doe",
-  verified: true,                   // Verified user
-  securityCode: "sha256_hash",      // Temporary
-  securityCodeExpires: Date,        // Temporary
-  createdAt: Date,
-  updatedAt: Date,
-  lastSigninAt: Date,               // Optional tracking
-  failedAttempts: 0,                // Optional rate limiting
-  lockedUntil: null                 // Optional lockout
-}
-```
-
-### Middleware Stack
-
-```
-Express Request
-    ↓
-┌─────────────────────────────────┐
-│ 1. Session Middleware           │ ← Loads req.session
-│    express-session              │   & req.session.userId
-└─────────────────────────────────┘
-    ↓
-┌─────────────────────────────────┐
-│ 2. CORS Middleware              │ ← Allows credentials
-│    credentials: include         │   from cross-origin
-└─────────────────────────────────┘
-    ↓
-┌─────────────────────────────────┐
-│ 3. Body Parser                  │ ← Parses JSON
-│    application/json             │
-└─────────────────────────────────┘
-    ↓
-┌─────────────────────────────────┐
-│ 4. Auth Routes                  │ ← /api/auth/*
-│    (optional protection)        │
-└─────────────────────────────────┘
-    ↓
-Response
-```
-
-### Session Management
-
-```javascript
-// server.js
-app.use(
-  session({
-    secret: process.env.COOKIE_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: process.env.NODE_ENV === 'production', // HTTPS only
-      httpOnly: true, // No JS access
-      sameSite: 'strict', // CSRF protection
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    },
-  })
-);
-
-// Usage:
-app.post('/api/auth/verify-code', async (req, res) => {
-  // ... verification logic
-  req.session.userId = user._id; // Create session
-  res.json({ user });
-});
-
-// Getting session:
-const userId = req.session?.userId;
-const isAuthenticated = !!userId;
-```
-
----
-
-## 🔐 Security
-
-### Password Security
-
-**Bcrypt Hashing:**
-
-```javascript
-import bcryptjs from 'bcryptjs';
-
-// Signup: hash password
-const salt = 10; // Cost factor
-const passwordHash = await bcryptjs.hash(password, salt);
-
-// Signin: compare
-const isValid = await bcryptjs.compare(inputPassword, passwordHash);
-```
-
-**Why bcryptjs:**
-
-- ✅ Salted hashing (prevents rainbow tables)
-- ✅ Adaptive cost (slow = brute force protection)
-- ✅ No plaintext storage
-- ✅ Industry standard
-
-### Code Security
-
-**Generation:**
-
-```javascript
-// Generate 6-digit random code
-const code = Math.floor(100000 + Math.random() * 900000).toString();
-// Example: "548293"
-
-// Hash for storage
-const hashedCode = createHash('sha256').update(code).digest('hex');
-
-// Store in DB with expiry
-user.securityCode = hashedCode;
-user.securityCodeExpires = new Date(Date.now() + 5 * 60 * 1000);
-
-// Email actual code (readable, not hash)
-await sendEmail({
-  to: email,
-  text: `Your code: ${code}`,
-});
-```
-
-**Why hash the code:**
-
-- ✅ DB compromise doesn't leak codes
-- ✅ Prevents code reuse if DB accessed
-- ✅ Codes still human-readable in emails
-
-### Session Security
-
-```javascript
-cookie: {
-  secure: true,              // HTTPS only, prevents MITM
-  httpOnly: true,            // No JavaScript access, prevents XSS
-  sameSite: 'strict'         // CSRF protection
-  // maxAge set per deployment
-}
-```
-
-**Session Lifetime:**
-
-- Development: 7 days
-- Production: Consider 24-48 hours
-- Requires re-auth for sensitive operations
-
-### Rate Limiting (Optional)
-
-```javascript
-// src/shared/rateLimit.js
-import rateLimit from 'express-rate-limit';
-
-export const signupLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 min
-  max: 5, // 5 requests
-  message: 'Too many signups, try again later',
-});
-
-export const verifyCodeLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 min
-  max: 5, // 5 attempts
-  message: 'Too many attempts, try again later',
-});
-
-// server.js
-app.post('/api/auth/signup', signupLimiter, setupSignupRoute);
-app.post('/api/auth/verify-code', verifyCodeLimiter, setupVerifyCodeRoute);
-```
-
-### Account Lockout (Optional)
-
-```javascript
-// Add to user schema
-failedAttempts: 0,
-lockedUntil: null
-
-// In verify-code.js:
-const THREE_FAILED_ATTEMPTS = 3
-const LOCKOUT_DURATION = 15 * 60 * 1000  // 15 min
-
-if (user.lockedUntil && user.lockedUntil > new Date()) {
-  return res.status(429).json({
-    error: 'Account temporarily locked. Try again later.'
-  })
-}
-
-if (!codeValid) {
-  user.failedAttempts = (user.failedAttempts || 0) + 1
-
-  if (user.failedAttempts >= THREE_FAILED_ATTEMPTS) {
-    user.lockedUntil = new Date(Date.now() + LOCKOUT_DURATION)
-    await db.collection('users').updateOne(
-      { _id: user._id },
-      { $set: { failedAttempts: user.failedAttempts, lockedUntil: user.lockedUntil } }
-    )
-  }
-}
-
-// Reset on successful verify
-if (codeValid) {
-  await db.collection('users').updateOne(
-    { _id: user._id },
-    { $set: {
-      failedAttempts: 0,
-      lockedUntil: null,
-      verified: true
-    } }
-  )
-}
-```
-
----
-
-## 📡 API Reference
-
-### POST /api/auth/signup
-
-**Request:**
-
-```json
-{
-  "email": "user@example.com",
-  "password": "SecurePass123!",
-  "name": "John Doe"
-}
-```
-
-**Response (201):**
-
-```json
-{
-  "message": "Signup successful. Check your email for verification code.",
-  "pendingEmail": "user@example.com"
-}
-```
-
-**Errors:**
-
-- 400: Invalid input (missing field, invalid email format)
-- 400: Email already exists
-- 500: Server error (email sending failed, DB error)
-
-### POST /api/auth/signin
-
-**Request:**
-
-```json
-{
-  "email": "user@example.com",
-  "password": "SecurePass123!"
-}
-```
-
-**Response (200):**
-
-```json
-{
-  "message": "Signin code sent to your email.",
-  "pendingEmail": "user@example.com"
-}
-```
-
-**Errors:**
-
-- 400: Invalid email or password
-- 400: User not found
-
-### POST /api/auth/verify-code
-
-**Request:**
-
-```json
-{
-  "email": "user@example.com",
-  "code": "123456"
-}
-```
-
-**Response (200):**
-
-```json
-{
-  "user": {
-    "_id": "507f1f77bcf86cd799439011",
-    "email": "user@example.com",
-    "name": "John Doe",
-    "verified": true,
-    "createdAt": "2024-01-15T10:30:00Z"
-  },
-  "message": "Verification successful. Session created."
-}
-```
-
-**Errors:**
-
-- 400: Invalid or expired code
-- 404: User not found
-- 500: Server error
-
-### POST /api/auth/resend-code
-
-**Request:**
-
-```json
-{
-  "email": "user@example.com"
-}
-```
-
-**Response (200):**
-
-```json
-{
-  "message": "Verification code resent to your email.",
-  "expiresIn": 300
-}
-```
-
-**Errors:**
-
-- 400: User not found
-- 429: Too many resend attempts (rate limited)
-
-### GET /api/auth/me
-
-**Request:**
-
-```
-GET /api/auth/me
-Cookie: connect.sid=...
-```
-
-**Response (200) - if authenticated:**
-
-```json
-{
-  "user": {
-    "_id": "507f1f77bcf86cd799439011",
-    "email": "user@example.com",
-    "name": "John Doe",
-    "verified": true,
-    "createdAt": "2024-01-15T10:30:00Z"
-  }
-}
-```
-
-**Response (200) - if not authenticated:**
-
-```json
-{
-  "user": null
-}
-```
-
-### POST /api/auth/signout
-
-**Request:**
-
-```
-POST /api/auth/signout
-Cookie: connect.sid=...
-```
-
-**Response (200):**
-
-```json
-{
-  "message": "Signed out successfully."
-}
-```
-
----
-
-## 🎨 Frontend Integration
-
-### Auth Store Usage
-
-**In a Composable:**
-
-```javascript
-// composables/useAuth.js
-import { useAuthStore } from '@/stores/auth';
-import { ref, computed } from 'vue';
-
-export function useAuth() {
-  const authStore = useAuthStore();
-
-  return {
-    user: computed(() => authStore.user),
-    isAuthenticated: computed(() => authStore.isAuthenticated),
-    loading: computed(() => authStore.loading),
-    error: computed(() => authStore.error),
-
-    signup: (email, password, name) => authStore.signup(email, password, name),
-    signin: (email, password) => authStore.signin(email, password),
-    verifyCode: (code) => authStore.verifyCode(code),
-    resendCode: () => authStore.resendCode(),
-    signout: () => authStore.signout(),
-  };
-}
-```
-
-**In a Component:**
-
-```vue
-<script setup>
-import { useAuth } from '@/composables/useAuth';
-
-const { user, isAuthenticated, loading, signup } = useAuth();
-
-async function handleSignup(formData) {
-  await signup(formData.email, formData.password, formData.name);
-}
-</script>
-
-<template>
-  <div v-if="!isAuthenticated">
-    <p>Not signed in</p>
-    <button @click="signup(...)">Sign Up</button>
-  </div>
-  <div v-else>
-    <p>Welcome {{ user.name }}!</p>
-  </div>
-</template>
-```
-
-### Route Protection
-
-```javascript
-// router.js
-import { useAuthStore } from '@/stores/auth'
-
-router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore()
-
-  // Check if route requires auth
-  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    next('/signin')
-  } else if (to.meta.layout === 'app' && !authStore.isAuthenticated) {
-    // Redirect non-auth users away from protectedroutes
-    next('/')
-  } else {
-    next()
-  }
-})
-
-// Route definition
-{
-  path: '/dashboard',
-  component: () => import('@/views/Dashboard/DashboardView.vue'),
-  meta: {
-    layout: 'app',
-    requiresAuth: true
-  }
-}
-```
-
-### Initialize Auth on App Load
-
-```javascript
-// main.js or entry-client.js
-import { useAuthStore } from '@/stores/auth';
-
-const app = createApp(App);
-const authStore = useAuthStore();
-
-// Fetch current user on app init
-await authStore.fetchCurrentUser();
-
-app.mount('#app');
-```
-
----
-
-## 🔧 Customization
-
-### Extend User Schema
-
-```javascript
-// src/api/auth/signup.js
-const user = {
-  email,
-  passwordHash,
-  name,
-  verified: false,
-
-  // Add custom fields:
-  phone: null,
-  avatar: null,
-  bio: null,
-  preferences: {
-    language: 'en',
-    newsletter: true,
-  },
-
-  securityCode,
-  securityCodeExpires,
-  createdAt: new Date(),
-  updatedAt: new Date(),
-};
-```
-
-### Modify Code Expiry
-
-```javascript
-// src/shared/email.js
-const CODE_EXPIRES_IN = 5 * 60 * 1000; // 5 minutes
-
-// Change to 10 minutes:
-const CODE_EXPIRES_IN = 10 * 60 * 1000;
-```
-
-### Custom Email Template
-
-```javascript
-// src/translate/emails/en.js
-export default {
-  securityCode: {
-    subject: () => 'Your Security Code',
-    html: ({ code, email }) => `
-      <h1>Verify Your Email</h1>
-      <p>Hi,</p>
-      <p>Your security code is: <strong>${code}</strong></p>
-      <p>This code expires in 5 minutes.</p>
-      <p>If you didn't request this code, please ignore this email.</p>
-      <hr>
-      <small>This is an automated message, please don't reply.</small>
-    `,
-  },
-};
-```
-
-### Add OAuth/Social Auth
-
-```javascript
-// src/api/auth/oauth-google.js
-import { google } from 'googleapis';
-
-export function setupOAuthGoogleRoute(app, db) {
-  app.get('/api/auth/oauth/google', async (req, res) => {
-    // Redirect to Google OAuth consent screen
-    // Get auth code → exchange for token → get user info
-    // Create/update user in DB
-    // Create session
-  });
-}
-```
-
-### Two-Factor Authentication
-
-```javascript
-// src/api/auth/setup-2fa.js
-import QRCode from 'qrcode';
-import speakeasy from 'speakeasy';
-
-export function setupTwoFactorRoute(app, db) {
-  app.post('/api/auth/setup-2fa', async (req, res) => {
-    const secret = speakeasy.generateSecret();
-    const qrCode = await QRCode.toDataURL(secret.otpauth_url);
-
-    res.json({
-      secret: secret.base32,
-      qrCode, // URL to show user
-    });
-  });
-}
-```
-
----
-
-## 🐛 Troubleshooting
-
-### "Invalid code" error
-
-**Causes:**
-
-1. Code expired (> 5 minutes)
-2. Code doesn't match
-3. DB record deleted
-
-**Solution:**
+# Authentication
+
+Authentication is session-based and two-step: a password, then a 6-digit code sent by email. There
+are no JWTs and no third-party identity provider. Endpoint details are in [API.md](./API.md).
+
+## Flows
+
+**Sign-up.** `POST /api/auth/signup` validates the input, checks the reCAPTCHA token (production),
+stores the user with a bcrypt password hash (10 rounds) and a login code, and emails the code. The
+session opens only once the code has been verified.
+
+**Sign-in.** `POST /api/auth/signin` checks the password, stores a new login code and emails it.
+`POST /api/auth/verify-code` then opens the session.
+
+**Password reset.** `POST /api/auth/forgot-password` emails a reset code;
+`POST /api/auth/reset-password` checks it, stores the new password and ends every session of the
+account.
+
+**Email change.** `POST /api/auth/change-email` emails a code to the new address;
+`POST /api/auth/verify-email-change` applies the change, ends the other sessions and rotates the
+current one.
+
+## Security codes
+
+| Property        | Value                                                                              |
+| --------------- | ---------------------------------------------------------------------------------- |
+| Format          | 6 digits from `crypto.randomInt`                                                   |
+| Storage         | SHA-256 hash only, compared with `timingSafeEqual`                                 |
+| Lifetime        | 10 minutes (`SECURITY_CODE_EXPIRY_MS`)                                             |
+| Attempts        | 3 per code (`SECURITY_CODE_MAX_ATTEMPTS`), counted atomically in MongoDB           |
+| Account lockout | 10 wrong codes within 1 hour lock verification until the hour has passed           |
+| Resend cooldown | 30 seconds (`RESEND_COOLDOWN_MS`)                                                  |
+| Purpose         | `login` or `reset-password`; a code is refused by the other flow                   |
+
+The attempt counter is incremented by a conditional update before the code is compared, so
+parallel requests cannot exceed the limit. The lockout counter survives new codes: asking for a
+fresh code does not reset it. All constants are in `src/shared/const.js`; the helpers
+(`createSecurityCode`, `checkSubmittedCode`, `claimCodeAttempt`) are in `src/shared/security.js`.
+
+In development, when `MAILER_HOST` is not set, no email is sent and every code is written to the
+server console. This never happens when `NODE_ENV=production`.
+
+## Sessions
+
+- `express-session` with a file store under `logs/sessions/`; cookie `app.sid`, `HttpOnly`,
+  `SameSite=Lax`, `Secure` in production.
+- **Idle lifetime** 7 days (cookie `maxAge`), **absolute lifetime** 30 days from sign-in.
+- The session id is regenerated when a code is verified (no session fixation) and rotated after a
+  password or email change.
+- One function, `resolveSession()` in `src/api/middleware.js`, decides whether a session is valid
+  for `requireAuth`, `requireAdmin` and `GET /api/auth/me`: the user must exist, must not be
+  blocked, and the session must be younger than the absolute lifetime. An invalid session is
+  destroyed.
+- In production, session files are cleared at every server start: **a restart signs everyone
+  out**. The file store also means a single server instance. Replace the store in
+  `src/api/http/session.js` if you need persistence or several instances.
+
+## What the API returns about a user
+
+Responses use an allowlist, `USER_SAFE_PROJECTION`: `_id`, `email`, `name`, `type`, `avatar`,
+`isBlocked`, `createdAt`, `updatedAt`. Admin responses add `blockedAt` and `loginHistory`
+(`ADMIN_USER_PROJECTION`). A new field is private until it is added to one of these lists.
+
+## Blocking
+
+- **Accounts.** An admin can block a user: their sessions end at once and sign-in answers 403
+  `error.auth.blocked`.
+- **IP addresses.** Blocked IPs are refused on every authentication route. The client IP is
+  `req.ip` with `trust proxy` set to 1; the `X-Forwarded-For` header is never read directly.
+- The last 50 sign-in IPs of each user are kept in `loginHistory` for the admin panel.
+
+## Account enumeration
+
+`forgot-password`, `resend-code` and `verify-code` answer the same way whether or not the address
+has an account. `signup` does reveal that an address is taken (400
+`error.auth.emailAlreadyUsed`); this is a deliberate usability trade-off, limited by the sign-up
+rate limit and reCAPTCHA.
+
+## Roles and the first admin
+
+Users have a `type`: `user` or `admin`. New accounts are always `user`. Promote the first admin
+from the command line, then manage roles in the admin panel:
 
 ```bash
-# Check DB:
-mongosh mongodb://root:password@localhost:27017/app
-> db.users.findOne({email: 'test@example.com'})
-> // Check securityCodeExpires is in future
+npm run seed:admin -- you@example.com
 ```
 
-### "Email not received"
+## reCAPTCHA v3
 
-See [Troubleshooting Guide - Email Section](./TROUBLESHOOTING.md#email)
+Sign-up and the contact form verify a reCAPTCHA v3 token server-side (`src/shared/captcha.js`):
+the action must match, and the score must reach `RECAPTCHA_MIN_SCORE` (default 0.5). The check is
+skipped outside production. **In production it fails closed**: without `RECAPTCHA_SECRET_KEY`,
+when Google does not answer within 5 seconds, or on any error, the request is refused. The server
+logs a warning at startup when a key is missing.
 
-### Session expires immediately
+## Development sign-in for automated tools
 
-Check [Troubleshooting Guide - Session Section](./TROUBLESHOOTING.md#session-expire-trop-vite--pas-du-tout)
-
-### User lockout (too many attempts)
-
-```javascript
-// Reset lockout manually:
-mongosh mongodb://root:password@localhost:27017/app
-> db.users.updateOne(
-    { email: 'user@example.com' },
-    { $set: { failedAttempts: 0, lockedUntil: null } }
-  )
-```
-
----
-
-## 📚 Related Docs
-
-- [API Reference](./API.md)
-- [Quick Start Guide](./QUICK_START.en.md)
-- [Troubleshooting](./TROUBLESHOOTING.md)
-- [Developer Guide](./DEVELOPER_GUIDE.md)
-
----
-
-**Questions? Create an issue or open a discussion!**
+`POST /api/dev/login` signs in one fixed test account without a password, for visual QA and
+automation. It exists only when `NODE_ENV` is not `production`, `DEV_LOGIN_ENABLED=true` and
+`DEV_LOGIN_TOKEN` is at least 32 characters, sent in the `x-dev-login-token` header. Create the
+account with `npm run seed:dev-user`. See `.env.example`.

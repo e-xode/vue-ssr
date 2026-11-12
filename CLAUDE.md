@@ -86,7 +86,7 @@ At most two end-of-task questions are sanctioned, each firing only when its cond
 
 These rules override any contrary suggestion from a skill or tool documentation. A user instruction in the current turn always wins.
 
-1. **Validation is centralized and opt-in** — NEVER run `npm test/lint/format/build/validate` yourself. Only the **`validation` agent** validates, and only when the user opts in per the Task completion protocol. No other agent may run validation. Pipeline: `vue-ssr-validation`.
+1. **Validation is centralized and opt-in** — NEVER run `npm test/lint/format/build/validate` yourself. Only the **`validation` agent** validates (`npm run validate -- --changed` after a task; plain `npm run validate` is the full battery), and only when the user opts in per the Task completion protocol. No other agent may run validation. Pipeline: `vue-ssr-validation`.
 2. **Sub-agent contract** — Scoped work → no validation → no comments → structured summary (what/files/skipped-with-reason/unverified/blockers) → stay in scope. Report out-of-scope discoveries, don't act on them. An item skipped in silence is a reporting defect, not saved words.
 3. **Fleet** — Split by independent file boundaries, self-contained prompts (no prior context); fleet members never run validation and never delegate to another sub-agent (flat only — see `governance` rule 16). Analysis delegated for model routing goes to the built-in Plan/Explore agents, not the 10-agent fleet.
 4. **Reuse before writing** — Search `src/shared/`, `src/composables/`, existing modules before adding utility code. Key shared: `apiFetch`, `parseObjectId`, `parsePagination`, `findUserSafe`, `generateSecurityCode`, `escapeHtml`.
@@ -117,14 +117,15 @@ never add it to `required_status_checks`. The PR gate is `deps-review`. Call `np
 | `test` | `npm run test:run` |
 | `lint` | `npm run lint:check` |
 | `build` | `npm run build` |
-| `full` | `npm run validate` (lint serially, then format:check + build + test:run in parallel) |
+| `full` | `npm run validate` (always the whole repo: lint:check serially, then format:check + build + test:run in parallel; never add `--changed`, which checks dirty files only and passes on a clean tree) |
+| `publish` | tag push `v*` → `npm-publish.yml` (npm, irreversible) + `docker-build.yml` (GHCR image) |
 | `server` | vps671607 |
 | `container` | `e-xode.vue-ssr` (port 3002, behind `e-xode.proxy`) |
 | `deploy` | `cd /home/e-xode.vue-ssr && ./deploy.sh` (symlink → `e-xode/ops`) — run by ops, never by the project agent |
 | `smoke` | `curl -sf https://vue-ssr.e-xode.net/` → 200 |
 | `rollback` | ⚠️ no direct lever — `deploy.sh` runs `docker pull …:latest` unpinned. Rolling back means rebuilding an earlier commit via CI. See `e-xode/ops#10`. |
 
-**Release chain:** merge → annotated tag → green pipeline → hand-off to the ops session. The project agent never deploys to production and never uses SSH to a host; ops confirms with the owner, deploys and verifies (`e-xode.ops` → `.claude/reference/release-handoff.md`). The publication gate of this repo is unchanged.
+**Release chain:** merge → annotated tag → green pipeline → hand-off to the ops session. Pushing the tag publishes the version to npm, which cannot be undone: a failed release is fixed by a new patch version, never by moving the tag. The project agent never deploys to production and never uses SSH to a host; ops confirms with the owner, deploys and verifies (`e-xode.ops` → `.claude/reference/release-handoff.md`). The publication gate of this repo is unchanged.
 
 ---
 

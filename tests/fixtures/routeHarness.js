@@ -35,7 +35,8 @@ export function createDb(collections = {}) {
 export function createCollection(overrides = {}) {
   return {
     findOne: async () => null,
-    updateOne: async () => ({}),
+    updateOne: async () => ({ modifiedCount: 1 }),
+    findOneAndUpdate: async () => null,
     insertOne: async () => ({}),
     deleteOne: async () => ({}),
     deleteMany: async () => ({}),

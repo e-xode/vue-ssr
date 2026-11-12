@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
+import path from 'node:path';
 import { AVATAR_MAX_BYTES, AVATAR_MIME_EXTENSIONS } from '#src/shared/const.js';
 import { createRes } from '../fixtures/routeHarness.js';
 
@@ -18,7 +19,7 @@ vi.mock('node:fs', async (importOriginal) => {
   return { ...original, default: { ...original.default, mkdirSync: () => undefined } };
 });
 
-const { uploadAvatar } = await import('#src/api/auth/avatar.js');
+const { resolveAvatarPath, uploadAvatar } = await import('#src/api/auth/avatar.js');
 
 function runUpload(error) {
   multerState.nextError = error;
@@ -27,6 +28,26 @@ function runUpload(error) {
   uploadAvatar({}, res, next);
   return { res, next };
 }
+
+describe('api/auth/avatar.js resolveAvatarPath', () => {
+  it('resolves a stored avatar URL inside the avatars directory', () => {
+    const resolved = resolveAvatarPath('/uploads/avatars/a.png');
+
+    expect(resolved).toBe(path.resolve('public/uploads/avatars/a.png'));
+  });
+
+  it.each([
+    '/uploads/avatars/../../../.env',
+    '/../server.js',
+    '/uploads/other/a.png',
+    '/uploads/avatars',
+    '',
+    null,
+    { $ne: null },
+  ])('refuses %j', (avatarUrl) => {
+    expect(resolveAvatarPath(avatarUrl)).toBeNull();
+  });
+});
 
 describe('api/auth/avatar.js', () => {
   it('limits the upload to one file of the configured size', () => {

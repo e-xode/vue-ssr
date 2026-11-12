@@ -19,7 +19,6 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PWD}
     volumes:
       - ./docker/dev/mongo/init-scripts:/docker-entrypoint-initdb.d
-      - ./src/json:/json
       - mongo-data:/data/db
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/${MONGO_DB} --quiet
@@ -28,11 +27,5 @@ services:
       retries: 10
     ports:
       - ${BIND_ADDRESS:-127.0.0.1}:${MONGO_PORT:-27017}:27017
-    networks:
-      - e-xode
 volumes:
   mongo-data:
-networks:
-  e-xode:
-    driver: bridge
-    external: true

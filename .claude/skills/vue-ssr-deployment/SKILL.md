@@ -22,6 +22,8 @@ description: "Deployment and CI/CD reference for the Vue SSR Starter Kit: Docker
   root-level `Dockerfile`.
 - **docker-compose.yml** (base): dev env, runs the `node` app only and reads `.env` → connects to a **remote** MongoDB (e.g. Atlas) via `MONGO_HOST`/`MONGO_TYPE`
 - **docker-compose.local.yml** (override): adds a local `mongo` container and redirects the app to it (`MONGO_HOST=mongo`, `MONGO_TYPE=mongodb`, overriding `.env`)
+- **docker-compose.network.yml** (optional override): attaches `node` to an existing Docker network named by `SHARED_NETWORK` (a reverse proxy network, for example); append it to `COMPOSE_FILE`. Without it the stack uses its own default network and needs no pre-created network
+- **Image health**: the production image declares a `HEALTHCHECK` that fetches `/healthz` with Node
 - **Switch local ↔ remote**: via the `COMPOSE_FILE` variable in `.env` (set in `.env.example`). Uncommented = local (node + mongo); commented = remote. See `references/docker-ci.md`
 
 ## GitHub Actions (6 workflows)
@@ -42,7 +44,7 @@ publishes to both GHCR and npm in the same action.
 
 ## Production requirements
 
-- `COOKIE_SECRET`: Must be set (server refuses to start if missing)
+- `COOKIE_SECRET`: Must be a random value of at least 32 characters (server refuses to start if missing, shorter, or a documented placeholder)
 - `NODE_HOST`: Must be the public https origin (server refuses to start on a missing, `http` or localhost value; the Dockerfile default is a placeholder to override)
 - `RECAPTCHA_SECRET_KEY`: Must be set, reCAPTCHA verification fails closed in production
 - Helmet CSP: active everywhere; production `script-src` has no `'unsafe-inline'`, dev relaxes it for HMR
@@ -64,7 +66,7 @@ On SIGTERM and SIGINT (`src/api/http/shutdown.js`):
 
 ## Dependabot
 
-Weekly updates (`dependabot.yml`): npm (increasing version strategy), GitHub Actions and the Docker base image.
+Weekly updates (`dependabot.yml`): npm (increasing version strategy), GitHub Actions and the Docker base image. Minor and patch version updates are grouped into one PR per ecosystem (npm, actions); majors and security updates stay individual.
 
 ## SEO artifacts
 

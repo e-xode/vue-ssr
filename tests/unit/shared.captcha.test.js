@@ -144,5 +144,39 @@ describe('shared/captcha.js verifyCaptcha', () => {
       expect(errorSpy).toHaveBeenCalled();
       errorSpy.mockRestore();
     });
+
+    it('bounds the verify request with a timeout and fails closed with its own reason', async () => {
+      vi.stubEnv('NODE_ENV', 'production');
+      vi.stubEnv('RECAPTCHA_SECRET_KEY', 'secret');
+      const timeout = Object.assign(new Error('timed out'), { name: 'TimeoutError' });
+      const fetchMock = vi.fn().mockRejectedValue(timeout);
+      vi.stubGlobal('fetch', fetchMock);
+
+      const verifyCaptcha = await loadVerifyCaptcha();
+      const result = await verifyCaptcha('token', 'signup');
+
+      expect(result).toEqual({ success: false, reason: 'timeout' });
+      expect(fetchMock.mock.calls[0][1].signal).toBeInstanceOf(AbortSignal);
+    });
+  });
+});
+
+describe('shared/captcha.js missingCaptchaKeys', () => {
+  it('reports nothing outside production', async () => {
+    const { missingCaptchaKeys } = await import('#src/shared/captcha.js');
+
+    expect(missingCaptchaKeys({ NODE_ENV: 'development' })).toEqual([]);
+  });
+
+  it('lists the keys that are absent in production', async () => {
+    const { missingCaptchaKeys } = await import('#src/shared/captcha.js');
+    const production = { NODE_ENV: 'production' };
+
+    const withSiteKey = { ...production, RECAPTCHA_SITE_KEY: 'site' };
+    const complete = { ...withSiteKey, RECAPTCHA_SECRET_KEY: 'secret' };
+
+    expect(missingCaptchaKeys(production)).toEqual(['RECAPTCHA_SITE_KEY', 'RECAPTCHA_SECRET_KEY']);
+    expect(missingCaptchaKeys(withSiteKey)).toEqual(['RECAPTCHA_SECRET_KEY']);
+    expect(missingCaptchaKeys(complete)).toEqual([]);
   });
 });

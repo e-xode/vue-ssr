@@ -8,7 +8,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for the suggestion! We love ideas to improve e-xode-vue-ssr. Please give as much context as possible.
+        Thanks for the suggestion! We love ideas to improve the Vue SSR Starter Kit. Please give as much context as possible.
 
   - type: checkboxes
     attributes:
@@ -123,4 +123,4 @@ body:
         ---
         **Thank you!** We will review this suggestion and give feedback as soon as possible.
 
-        For more information, see [CONTRIBUTING.md](../../CONTRIBUTING.md#proposer-une-feature).
+        For more information, see [CONTRIBUTING.md](../../CONTRIBUTING.md#before-you-start).

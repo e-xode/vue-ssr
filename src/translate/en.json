@@ -189,7 +189,9 @@
     },
     "admin": {
       "invalidUserType": "Invalid user type",
-      "cannotDeleteSelf": "You cannot delete your own account"
+      "cannotDeleteSelf": "You cannot delete your own account",
+      "cannotDemoteSelf": "You cannot remove your own admin role",
+      "cannotModifyAdmin": "An admin account cannot be blocked or deleted. Remove its admin role first"
     },
     "emailFailed": "The email could not be sent, please try again later",
     "invalidEmail": "Invalid email address",
@@ -197,7 +199,8 @@
     "missingFields": "Please fill in all required fields",
     "messageTooLong": "Message is too long",
     "rateLimit": "Too many requests, please try again later",
-    "validation": "Invalid request"
+    "validation": "Invalid request",
+    "notFound": "Not found"
   },
   "form": {
     "email": "Email",

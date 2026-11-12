@@ -189,7 +189,9 @@
     },
     "admin": {
       "invalidUserType": "Type d'utilisateur invalide",
-      "cannotDeleteSelf": "Vous ne pouvez pas supprimer votre propre compte"
+      "cannotDeleteSelf": "Vous ne pouvez pas supprimer votre propre compte",
+      "cannotDemoteSelf": "Vous ne pouvez pas retirer votre propre rôle administrateur",
+      "cannotModifyAdmin": "Un compte administrateur ne peut pas être bloqué ou supprimé. Retirez d'abord son rôle administrateur"
     },
     "emailFailed": "L'email n'a pas pu être envoyé, veuillez réessayer plus tard",
     "invalidEmail": "Adresse email invalide",
@@ -197,7 +199,8 @@
     "missingFields": "Veuillez remplir tous les champs obligatoires",
     "messageTooLong": "Le message est trop long",
     "rateLimit": "Trop de requêtes, veuillez réessayer plus tard",
-    "validation": "Requête invalide"
+    "validation": "Requête invalide",
+    "notFound": "Introuvable"
   },
   "form": {
     "email": "Email",

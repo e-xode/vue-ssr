@@ -1,7 +1,8 @@
 import { requireAuth, requireAdmin } from '../middleware.js';
-import { USER_TYPES } from '#src/shared/const.js';
+import { ADMIN_USER_PROJECTION, USER_TYPES } from '#src/shared/const.js';
 import { parseObjectId, parsePagination } from '#src/shared/dbHelpers.js';
-import { escapeRegex, readString } from '#src/shared/utils.js';
+import { escapeRegex, readString, readTrimmed } from '#src/shared/utils.js';
+import { removeAvatarFile } from '#src/api/auth/avatar.js';
 import { destroyUserSessions } from '#src/shared/security.js';
 import { logEvent } from '#src/shared/logger.js';
 
@@ -16,7 +17,7 @@ async function handleListUsers(req, res, db) {
     const [users, total] = await Promise.all([
       db
         .collection('users')
-        .find(filter, { projection: { password: 0, securityCode: 0, securityCodeExpires: 0 } })
+        .find(filter, { projection: ADMIN_USER_PROJECTION })
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
@@ -36,12 +37,7 @@ async function handleGetUser(req, res, db) {
   if (!userId) return res.status(400).json({ error: 'error.invalidId' });
   try {
     const [user, recentLogs] = await Promise.all([
-      db
-        .collection('users')
-        .findOne(
-          { _id: userId },
-          { projection: { password: 0, securityCode: 0, securityCodeExpires: 0 } }
-        ),
+      db.collection('users').findOne({ _id: userId }, { projection: ADMIN_USER_PROJECTION }),
       db.collection('logs').find({ userId }).sort({ createdAt: -1 }).limit(10).toArray(),
     ]);
 
@@ -56,11 +52,32 @@ async function handleGetUser(req, res, db) {
   }
 }
 
+const TARGET_PROJECTION = { type: 1, avatar: 1, loginHistory: { $slice: -1 } };
+
+function userBlockReason(userId) {
+  return `user:${userId}`;
+}
+
+async function loadModifiableTarget(res, db, userId) {
+  const target = await db
+    .collection('users')
+    .findOne({ _id: userId }, { projection: TARGET_PROJECTION });
+  if (!target) {
+    res.status(404).json({ error: 'error.auth.userNotFound' });
+    return null;
+  }
+  if (target.type === USER_TYPES.ADMIN) {
+    res.status(400).json({ error: 'error.admin.cannotModifyAdmin' });
+    return null;
+  }
+  return target;
+}
+
 async function handleUpdateUser(req, res, db) {
   const userId = parseObjectId(req.params.userId);
   if (!userId) return res.status(400).json({ error: 'error.invalidId' });
   try {
-    const name = readString(req.body.name);
+    const name = readTrimmed(req.body.name);
     const type = readString(req.body.type);
 
     const allowedTypes = Object.values(USER_TYPES);
@@ -68,19 +85,22 @@ async function handleUpdateUser(req, res, db) {
       return res.status(400).json({ error: 'error.admin.invalidUserType' });
     }
 
+    if (type && type !== USER_TYPES.ADMIN && userId.equals(req.userId)) {
+      return res.status(400).json({ error: 'error.admin.cannotDemoteSelf' });
+    }
+
     const update = {};
     if (name !== null) update.name = name;
     if (type) update.type = type;
     update.updatedAt = new Date();
 
-    const result = await db.collection('users').findOneAndUpdate(
-      { _id: userId },
-      { $set: update },
-      {
-        returnDocument: 'after',
-        projection: { password: 0, securityCode: 0, securityCodeExpires: 0 },
-      }
-    );
+    const result = await db
+      .collection('users')
+      .findOneAndUpdate(
+        { _id: userId },
+        { $set: update },
+        { returnDocument: 'after', projection: ADMIN_USER_PROJECTION }
+      );
 
     if (!result) {
       return res.status(404).json({ error: 'error.auth.userNotFound' });
@@ -100,21 +120,16 @@ async function handleUpdateUser(req, res, db) {
   }
 }
 
-async function blockUserLoginIps(db, userId) {
-  const user = await db
-    .collection('users')
-    .findOne({ _id: userId }, { projection: { loginHistory: 1 } });
-  const ips = [...new Set((user?.loginHistory || []).map((h) => h.ip))];
-  if (ips.length > 0) {
-    const ops = ips.map((ip) => ({
-      updateOne: {
-        filter: { ip },
-        update: { $set: { ip, blockedAt: new Date(), reason: `user:${userId}` } },
-        upsert: true,
-      },
-    }));
-    await db.collection('blockedIps').bulkWrite(ops);
-  }
+async function blockLastLoginIp(db, userId, target) {
+  const ip = target.loginHistory?.at(-1)?.ip;
+  if (!ip) return;
+  await db
+    .collection('blockedIps')
+    .updateOne(
+      { ip },
+      { $set: { ip, blockedAt: new Date(), reason: userBlockReason(userId) } },
+      { upsert: true }
+    );
 }
 
 async function handleBlockUser(req, res, db) {
@@ -123,12 +138,15 @@ async function handleBlockUser(req, res, db) {
   try {
     const { blockIps } = req.body;
 
+    const target = await loadModifiableTarget(res, db, userId);
+    if (!target) return;
+
     await db
       .collection('users')
       .updateOne({ _id: userId }, { $set: { isBlocked: true, blockedAt: new Date() } });
 
     if (blockIps) {
-      await blockUserLoginIps(db, userId);
+      await blockLastLoginIp(db, userId, target);
     }
 
     await destroyUserSessions(userId);
@@ -158,7 +176,7 @@ async function handleUnblockUser(req, res, db) {
       .updateOne({ _id: userId }, { $set: { isBlocked: false }, $unset: { blockedAt: '' } });
 
     if (unblockIps) {
-      await db.collection('blockedIps').deleteMany({ reason: `user:${userId}` });
+      await db.collection('blockedIps').deleteMany({ reason: userBlockReason(userId) });
     }
 
     logEvent(db, {
@@ -183,12 +201,16 @@ async function handleDeleteUser(req, res, db) {
       return res.status(400).json({ error: 'error.admin.cannotDeleteSelf' });
     }
 
-    await destroyUserSessions(userId);
-    const result = await db.collection('users').deleteOne({ _id: userId });
+    const target = await loadModifiableTarget(res, db, userId);
+    if (!target) return;
 
-    if (result.deletedCount === 0) {
-      return res.status(404).json({ error: 'error.auth.userNotFound' });
-    }
+    await destroyUserSessions(userId);
+    await db.collection('users').deleteOne({ _id: userId });
+    await Promise.all([
+      db.collection('blockedIps').deleteMany({ reason: userBlockReason(userId) }),
+      db.collection('logs').deleteMany({ userId }),
+      removeAvatarFile(target.avatar),
+    ]);
 
     logEvent(db, {
       event: 'admin-user-delete',
@@ -261,7 +283,7 @@ async function handleUnblockIp(req, res, db) {
 }
 
 export function setupAdminUsersRoutes(app, db) {
-  const adminMiddleware = [requireAuth, requireAdmin(db)];
+  const adminMiddleware = [requireAuth, requireAdmin];
 
   app.get('/api/admin/users', ...adminMiddleware, (req, res) => handleListUsers(req, res, db));
 
