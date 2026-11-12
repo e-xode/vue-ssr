@@ -247,6 +247,7 @@
       "blockSuccess": "User blocked successfully",
       "unblockSuccess": "User unblocked successfully",
       "recentActivity": "Recent Activity",
+      "deleteUser": "Delete user",
       "deleteConfirm": {
         "title": "Delete user",
         "message": "Are you sure you want to delete {name}? This action cannot be undone."
@@ -264,6 +265,8 @@
       "date": "Date",
       "deleteSelected": "Delete selected ({count})",
       "deleteLog": "Delete this log entry",
+      "selectAll": "Select all log entries",
+      "selectRow": "Select this log entry",
       "event": "Event",
       "ip": "IP",
       "user": "User",

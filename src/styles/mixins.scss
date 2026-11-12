@@ -71,6 +71,26 @@
   border-width: 0;
 }
 
+@mixin scroll-edge-cue {
+  background-image:
+    linear-gradient(to right, rgb(var(--v-theme-surface)) 30%, transparent),
+    linear-gradient(to left, rgb(var(--v-theme-surface)) 30%, transparent),
+    radial-gradient(farthest-side at 0 50%, rgba(var(--v-theme-on-surface), 0.16), transparent),
+    radial-gradient(farthest-side at 100% 50%, rgba(var(--v-theme-on-surface), 0.16), transparent);
+  background-repeat: no-repeat;
+  background-position:
+    left center,
+    right center,
+    left center,
+    right center;
+  background-size:
+    $spacing-xl 100%,
+    $spacing-xl 100%,
+    $spacing-md 100%,
+    $spacing-md 100%;
+  background-attachment: local, local, scroll, scroll;
+}
+
 @mixin respond-to($breakpoint) {
   @if $breakpoint == 'sm' {
     @media (min-width: $breakpoint-sm) {
