@@ -16,11 +16,6 @@
   td,
   th {
     white-space: nowrap;
-
-    @include respond-to('lg') {
-      white-space: normal;
-      overflow-wrap: anywhere;
-    }
   }
 
   td {
@@ -32,24 +27,21 @@
     min-width: $spacing-unit * 9;
   }
 
-  td:nth-child(3) {
-    white-space: nowrap;
-  }
-
   td:last-child:not([colspan]),
   th:last-child {
     position: sticky;
     right: 0;
     z-index: $z-base;
     background: rgb(var(--v-theme-surface));
+    box-shadow: (-$spacing-sm) 0 $spacing-sm (-$spacing-xs) rgba(var(--v-theme-on-surface), 0.16);
   }
 }
 
 .log-summary {
   display: inline-block;
   vertical-align: middle;
-  width: $spacing-unit * 30;
-  max-width: $spacing-unit * 30;
+  width: $spacing-unit * 27;
+  max-width: $spacing-unit * 27;
   line-height: $line-height-normal;
   @include truncate;
 

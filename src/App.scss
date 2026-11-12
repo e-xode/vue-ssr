@@ -62,9 +62,10 @@ a.link {
     outline: none;
   }
 
-  &--focused {
-    outline: $border-width-hairline * 2 solid rgb(var(--v-theme-primary));
-    outline-offset: $border-width-hairline * 2;
+  &--focused:not(.v-field--error) .v-field__outline {
+    --v-field-border-width: #{$border-width-hairline * 2};
+    --v-field-border-opacity: 1;
+    color: rgb(var(--v-theme-primary));
   }
 
   .v-field-label:not(.v-field-label--floating) {

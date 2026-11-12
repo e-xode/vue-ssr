@@ -56,7 +56,8 @@
 - **Form labels keep Vuetify's floating size**, French titles no longer hyphenate, the admin log
   table fits at 1280 px with its delete column always reachable, and the admin tables show a
   scroll-edge cue (new `scroll-edge-cue` mixin). Icon-only buttons and log checkboxes have
-  accessible names.
+  accessible names. The focus indicator of text fields no longer crosses the floating label, and the
+  French "Confirm password" label is shortened so it is no longer truncated.
 - **The password visibility toggle works** on the sign-in and sign-up forms: it was bound to an
   event that never fired, and is now a real button reachable with the keyboard.
 - **Contact page typography** uses Inter like the rest of the site instead of a fallback font.
